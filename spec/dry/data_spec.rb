@@ -3,9 +3,13 @@ require 'spec_helper'
 RSpec.describe Dry::Data do
   describe '.register' do
     it 'registers a new type constructor' do
-      constructor = -> input { Array[input] }
+      class CustomArray
+        def self.new(input)
+          Array(input)
+        end
+      end
 
-      Dry::Data.register('CustomArray', constructor)
+      Dry::Data.register(CustomArray, CustomArray.method(:new))
 
       type = Dry::Data.new { |t| t['CustomArray'] }
 

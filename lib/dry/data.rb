@@ -6,36 +6,62 @@ require 'dry/data/struct'
 
 module Dry
   module Data
-    TypeError = Class.new(StandardError)
-
     class Type
       attr_reader :constructor
 
-      attr_reader :types
+      attr_reader :primitive
 
-      def initialize(constructor, types)
+      def initialize(constructor, primitive)
         @constructor = constructor
-        @types = types
+        @primitive = primitive
       end
 
       def call(input)
         constructor[input]
       end
       alias_method :[], :call
+
+      def valid?(input)
+        input.instance_of?(primitive)
+      end
+
+      def |(other)
+        SumType.new(self, other)
+      end
+    end
+
+    class SumType
+      attr_reader :left
+
+      attr_reader :right
+
+      def initialize(left, right)
+        @left, @right = left, right
+      end
+
+      def call(input)
+        if valid?(input)
+          input
+        else
+          raise TypeError, "#{input.inspect} has invalid type"
+        end
+      end
+      alias_method :[], :call
+
+      def valid?(input)
+        left.valid?(input) || right.valid?(input)
+      end
     end
 
     class DSL
-      attr_reader :types
-
       attr_reader :registry
 
       def initialize(registry)
-        @types = []
         @registry = registry
       end
 
       def [](name)
-        Type.new(registry[name], registry.types(name))
+        Type.new(*registry[name])
       end
     end
 
@@ -45,22 +71,17 @@ module Dry
       attr_reader :index
 
       def initialize
-        @index = BUILT_IN
-          .map(&:name)
-          .map(&:freeze)
-          .each_with_object({}) { |name, result| result[name] = Object.method(name) }
+        @index = BUILT_IN.each_with_object({}) { |const, result|
+          result[const.name.freeze] = [Object.method(const.name), const]
+        }
       end
 
-      def []=(name, constructor)
-        index[name] = constructor
+      def []=(name, args)
+        index[name.freeze] = args
       end
 
       def [](name)
-        index[name]
-      end
-
-      def types(type)
-        [index.keys.detect { |name| name.equal?(type) }]
+        index.fetch(name)
       end
     end
 
@@ -68,22 +89,17 @@ module Dry
       @registry ||= Registry.new
     end
 
-    def self.register(name, constructor)
-      registry[name] = constructor
+    def self.register(const, constructor)
+      registry[const.name] = [constructor, const]
     end
 
     def self.new(*args, &block)
-      if block
-        dsl = DSL.new(registry)
-        yield(dsl)
-      else
-        Class.new(Type) { types(args) }
-      end
+      yield(DSL.new(registry))
     end
 
     # register built-in types that are non-coercible through kernel methods
-    [Date, DateTime, Time].each do |const|
-      register(const.name, -> input { input })
+    [TrueClass, FalseClass, Date, DateTime, Time].each do |const|
+      register(const, -> input { input })
     end
   end
 end
