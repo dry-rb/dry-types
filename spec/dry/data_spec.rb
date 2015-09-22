@@ -1,11 +1,15 @@
 require 'spec_helper'
 
-describe Dry::Data do
-  it 'has a version number' do
-    expect(Dry::Data::VERSION).not_to be nil
-  end
+RSpec.describe Dry::Data do
+  describe '.register' do
+    it 'registers a new type constructor' do
+      constructor = -> input { Array[input] }
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+      Dry::Data.register('CustomArray', constructor)
+
+      type = Dry::Data.new { |t| t['CustomArray'] }
+
+      expect(type['foo']).to eql(['foo'])
+    end
   end
 end
