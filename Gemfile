@@ -1,4 +1,8 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in dry-data.gemspec
 gemspec
+
+group :tools do
+  gem 'benchmark-ips'
+  gem 'byebug'
+end
