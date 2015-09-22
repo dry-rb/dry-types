@@ -1,4 +1,5 @@
 require 'bigdecimal'
+require 'date'
 
 require 'dry/data/version'
 require 'dry/data/struct'
@@ -78,6 +79,11 @@ module Dry
       else
         Class.new(Type) { types(args) }
       end
+    end
+
+    # register built-in types that are non-coercible through kernel methods
+    [Date, DateTime, Time].each do |const|
+      register(const.name, -> input { input })
     end
   end
 end

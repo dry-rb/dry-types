@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Dry::Data::Type do
   let(:string) { Dry::Data.new { |t| t['String'] } }
   let(:hash) { Dry::Data.new { |t| t['Hash'] } }
@@ -19,6 +17,36 @@ RSpec.describe Dry::Data::Type do
       expect {
         hash['foo']
       }.to raise_error(TypeError)
+    end
+  end
+
+  describe 'with Date' do
+    let(:datetime) { Dry::Data.new { |t| t['Date'] } }
+
+    it 'accepts a date object' do
+      input = Date.new
+
+      expect(datetime[input]).to be(input)
+    end
+  end
+
+  describe 'with DateTime' do
+    let(:datetime) { Dry::Data.new { |t| t['DateTime'] } }
+
+    it 'accepts a date-time object' do
+      input = DateTime.new
+
+      expect(datetime[input]).to be(input)
+    end
+  end
+
+  describe 'with Time' do
+    let(:datetime) { Dry::Data.new { |t| t['Time'] } }
+
+    it 'accepts a time object' do
+      input = Time.new
+
+      expect(datetime[input]).to be(input)
     end
   end
 end
