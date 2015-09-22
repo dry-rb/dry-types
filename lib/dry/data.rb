@@ -1,6 +1,7 @@
 require 'bigdecimal'
 
 require 'dry/data/version'
+require 'dry/data/struct'
 
 module Dry
   module Data
