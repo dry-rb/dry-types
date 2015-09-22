@@ -9,10 +9,10 @@ module Dry
 
       module Mixin
         def attributes(type_def)
-          type_def.each do |const, name|
+          type_def.each do |name, const|
             constructors[name] = Dry::Data.new { |t| t[const.name] }
           end
-          attr_reader(*type_def.values)
+          attr_reader(*type_def.keys)
           self
         end
 
