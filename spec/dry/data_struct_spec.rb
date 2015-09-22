@@ -10,7 +10,7 @@ RSpec.describe Dry::Data::Struct do
       class User
         include Dry::Data::Struct
 
-        attributes name: String, age: Integer, address: Address
+        attributes name: String, age: Integer, active: Bool, address: Address
       end
 
       user_type = Dry::Data.new { |t| t['User'] }

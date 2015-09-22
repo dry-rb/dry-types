@@ -16,6 +16,10 @@ module Dry
         @primitive = primitive
       end
 
+      def name
+        primitive.name
+      end
+
       def call(input)
         constructor[input]
       end
@@ -37,6 +41,10 @@ module Dry
 
       def initialize(left, right)
         @left, @right = left, right
+      end
+
+      def name
+        [left, right].map(&:name).join(' | ')
       end
 
       def call(input)
@@ -94,12 +102,19 @@ module Dry
     end
 
     def self.new(*args, &block)
-      yield(DSL.new(registry))
+      type = yield(DSL.new(registry))
+      types[args.first || type.name] = type
+    end
+
+    def self.types
+      @types ||= {}
     end
 
     # register built-in types that are non-coercible through kernel methods
     [TrueClass, FalseClass, Date, DateTime, Time].each do |const|
       register(const, -> input { input })
     end
+
+    Bool = Data.new('Bool') { |t| t['TrueClass'] | t['FalseClass'] }
   end
 end
