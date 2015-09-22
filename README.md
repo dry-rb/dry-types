@@ -56,7 +56,7 @@ array[:foo] # => [:foo]
 class User
   include Dry::Data::Struct
 
-  attributes String => :name, Integer => :age
+  attributes name: String, age: Integer
 end
 
 # becomes available like any other type
