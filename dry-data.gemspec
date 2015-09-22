@@ -5,7 +5,7 @@ require 'dry/data/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "dry-data"
-  spec.version       = Dry::Data::VERSION
+  spec.version       = Dry::Data::VERSION.dup
   spec.authors       = ["Piotr Solnica"]
   spec.email         = ["piotr.solnica@gmail.com"]
 
