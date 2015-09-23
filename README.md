@@ -1,4 +1,10 @@
-# Dry::Data
+# Dry::Data <a href="https://gitter.im/dryrb/chat" target="_blank">![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)</a>
+
+<a href="https://rubygems.org/gems/dry-data" target="_blank">![Gem Version](https://badge.fury.io/rb/dry-data.svg)</a>
+<a href="https://travis-ci.org/dryrb/dry-data" target="_blank">![Build Status](https://travis-ci.org/dryrb/dry-data.svg?branch=master)</a>
+<a href="https://gemnasium.com/dryrb/dry-data" target="_blank">![Dependency Status](https://gemnasium.com/dryrb/dry-data.svg)</a>
+<a href="https://codeclimate.com/github/dryrb/dry-data" target="_blank">![Code Climate](https://codeclimate.com/github/dryrb/dry-data/badges/gpa.svg)</a>
+<a href="http://inch-ci.org/github/dryrb/dry-data" target="_blank">![Documentation Status](http://inch-ci.org/github/dryrb/dry-data.svg?branch=master&style=flat)</a>
 
 A simple type-system for Ruby respecting ruby's built-in coercion mechanisms.
 
