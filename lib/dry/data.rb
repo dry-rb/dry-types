@@ -123,14 +123,12 @@ module Dry
 
     # Register built-in primitive types with kernel coercion methods
     Registry::BUILT_IN.each do |const|
-      register_constructor(const, Kernel.method(const.name))
-      register_type(new(const.name))
+      register(const, Kernel.method(const.name))
     end
 
     # Register built-in types that are non-coercible through kernel methods
     [TrueClass, FalseClass, Date, DateTime, Time].each do |const|
-      register_constructor(const, -> input { input })
-      register_type(new(const.name))
+      register(const, -> input { input })
     end
 
     # Register Bool since it's common and not a built-in Ruby type :(
