@@ -79,9 +79,7 @@ module Dry
       attr_reader :index
 
       def initialize
-        @index = BUILT_IN.each_with_object({}) { |const, result|
-          result[const.name.freeze] = [Object.method(const.name), const]
-        }
+        @index = {}
       end
 
       def []=(name, args)
@@ -110,11 +108,20 @@ module Dry
       @types ||= {}
     end
 
+    # Register built-in primitive types with kernel coercion methods
+    Registry::BUILT_IN.each do |const|
+      register(const, Kernel.method(const.name))
+    end
+
     # register built-in types that are non-coercible through kernel methods
     [TrueClass, FalseClass, Date, DateTime, Time].each do |const|
       register(const, -> input { input })
     end
 
+    # Register Bool since it's common and not a built-in Ruby type :(
+    #
+    # We store it under a constant in case somebody would like to refer to it
+    # explicitly
     Bool = Data.new('Bool') { |t| t['TrueClass'] | t['FalseClass'] }
   end
 end
