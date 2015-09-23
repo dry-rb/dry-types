@@ -18,6 +18,11 @@ RSpec.describe Dry::Data::Type do
         hash['foo']
       }.to raise_error(TypeError)
     end
+
+    it 'raises type-error when non-coercible type is used and input does not match' do
+      expect { Dry::Data['Date']['nopenopenope'] }
+        .to raise_error(TypeError, /"nopenopenope" has invalid type/)
+    end
   end
 
   describe 'with Bool' do

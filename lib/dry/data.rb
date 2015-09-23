@@ -128,7 +128,16 @@ module Dry
 
     # Register built-in types that are non-coercible through kernel methods
     [TrueClass, FalseClass, Date, DateTime, Time].each do |const|
-      register(const, -> input { input })
+      register(
+        const,
+        -> input {
+          if input.instance_of?(const)
+            input
+          else
+            raise(TypeError, "#{input.inspect} has invalid type")
+          end
+        }
+      )
     end
 
     # Register Bool since it's common and not a built-in Ruby type :(
