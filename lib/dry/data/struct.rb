@@ -6,7 +6,7 @@ module Dry
       def self.included(klass)
         super
         klass.extend(Mixin)
-        Dry::Data.register(klass, klass.method(:new))
+        Data.register(klass, klass.method(:new))
       end
 
       module Mixin

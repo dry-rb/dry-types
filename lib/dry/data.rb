@@ -96,12 +96,21 @@ module Dry
     end
 
     def self.register(const, constructor)
+      register_constructor(const, constructor)
+      register_type(Data.new(const.name))
+    end
+
+    def self.register_type(type, name = type.name)
+      types[name.freeze] = type
+    end
+
+    def self.register_constructor(const, constructor)
       registry[const.name] = [constructor, const]
     end
 
     def self.new(*args, &block)
-      type = yield(DSL.new(registry))
-      types[args.first || type.name] = type
+      dsl = DSL.new(registry)
+      block ? yield(dsl) : dsl[args.first]
     end
 
     def self.types
@@ -114,18 +123,21 @@ module Dry
 
     # Register built-in primitive types with kernel coercion methods
     Registry::BUILT_IN.each do |const|
-      register(const, Kernel.method(const.name))
+      register_constructor(const, Kernel.method(const.name))
+      register_type(new(const.name))
     end
 
-    # register built-in types that are non-coercible through kernel methods
+    # Register built-in types that are non-coercible through kernel methods
     [TrueClass, FalseClass, Date, DateTime, Time].each do |const|
-      register(const, -> input { input })
+      register_constructor(const, -> input { input })
+      register_type(new(const.name))
     end
 
     # Register Bool since it's common and not a built-in Ruby type :(
     #
     # We store it under a constant in case somebody would like to refer to it
     # explicitly
-    Bool = Data.new('Bool') { |t| t['TrueClass'] | t['FalseClass'] }
+    Bool = Data.new { |t| t['TrueClass'] | t['FalseClass'] }
+    register_type(Bool, 'Bool')
   end
 end
