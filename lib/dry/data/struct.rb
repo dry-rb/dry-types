@@ -1,3 +1,5 @@
+require 'dry/data/typed_hash'
+
 module Dry
   module Data
     module Struct
@@ -9,20 +11,17 @@ module Dry
 
       module Mixin
         def attributes(type_def)
-          type_def.each do |name, const|
-            constructors[name] =
-              if const.is_a?(Class)
-                Data.types.fetch(name) { Dry::Data.new { |t| t[const.name] } }
-              else
-                const
-              end
+          schema = type_def.each_with_object({}) do |(name, const), result|
+            result[name] = const.is_a?(Class) ? const.name : const
           end
-          attr_reader(*type_def.keys)
+
+          @constructor = TypedHash.new(schema)
+          attr_reader(*schema.keys)
           self
         end
 
-        def constructors
-          @constructors ||= {}
+        def constructor
+          @constructor
         end
 
         # OH DEAR LORD NOT AGAIN :(
@@ -32,10 +31,8 @@ module Dry
       end
 
       def initialize(attributes)
-        constructors = self.class.constructors
-
-        attributes.each do |key, value|
-          instance_variable_set("@#{key}", constructors[key][value])
+        self.class.constructor[attributes].each do |key, value|
+          instance_variable_set("@#{key}", value)
         end
       end
     end
