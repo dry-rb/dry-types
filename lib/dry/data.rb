@@ -108,6 +108,10 @@ module Dry
       @types ||= {}
     end
 
+    def self.[](name)
+      types[name] # silly delegation for now TODO: raise nice error if type is not found
+    end
+
     # Register built-in primitive types with kernel coercion methods
     Registry::BUILT_IN.each do |const|
       register(const, Kernel.method(const.name))

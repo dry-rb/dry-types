@@ -9,7 +9,7 @@ module Dry
             if type_id.respond_to?(:call)
               type_id
             else
-              Dry::Data.types[type_id] || Dry::Data.new { |t| t[type_id] }
+              Dry::Data[type_id] || Dry::Data.new { |t| t[type_id] }
             end
         }
       end
