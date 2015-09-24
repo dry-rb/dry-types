@@ -1,32 +1,18 @@
-require 'dry/data/typed_hash'
-
 module Dry
   module Data
     module Struct
       def self.included(klass)
         super
-        klass.extend(Mixin)
-        Data.register(klass, klass.method(:new))
+        klass.extend(ClassMethods)
       end
 
-      module Mixin
-        def attributes(type_def)
-          schema = type_def.each_with_object({}) do |(name, const), result|
-            result[name] = const.is_a?(Class) ? const.name : const
-          end
+      module ClassMethods
+        attr_reader :constructor
 
-          @constructor = TypedHash.new(schema)
+        def attributes(schema)
+          @constructor = Dry::Data::Hash.new(schema)
           attr_reader(*schema.keys)
           self
-        end
-
-        def constructor
-          @constructor
-        end
-
-        # OH DEAR LORD NOT AGAIN :(
-        def const_missing(name)
-          Data.types[name.to_s] || super
         end
       end
 

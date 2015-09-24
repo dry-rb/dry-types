@@ -1,44 +1,29 @@
 require 'bigdecimal'
 require 'date'
 
-require 'dry/data/version'
-require 'dry/data/registry'
-require 'dry/data/type'
+require 'dry-container'
+
+require 'dry/data/container'
+require 'dry/data/hash'
+require 'dry/data/error'
 require 'dry/data/struct'
-require 'dry/data/dsl'
+require 'dry/data/type'
+require 'dry/data/version'
 
 module Dry
   module Data
-    def self.registry
-      @registry ||= Registry.new
+    @container = Container.new
+
+    class << self
+      extend Forwardable
+      def_delegators :@container, :register, :[]
     end
 
-    def self.register(const, constructor)
-      register_constructor(const, constructor)
-      register_type(Data.new(const.name))
-    end
-
-    def self.register_type(type, name = type.name)
-      types[name.freeze] = type
-    end
-
-    def self.register_constructor(const, constructor)
-      registry[const.name] = [constructor, const]
-    end
-
-    def self.new(*args, &block)
-      dsl = DSL.new(registry)
-      block ? yield(dsl) : dsl[args.first]
-    end
-
-    def self.types
-      @types ||= {}
-    end
-
-    def self.[](name)
-      types[name] # silly delegation for now TODO: raise nice error if type is not found
-    end
+    register(:string, Kernel.method(:String))
+    register(:int, Kernel.method(:Integer), coerces_from: String)
+    register(:float, Kernel.method(:Float))
+    register(:decimal, Kernel.method(:BigDecimal))
+    register(:array, Kernel.method(:Array))
+    register(:hash, Kernel.method(:Hash))
   end
 end
-
-require 'dry/data/types' # load built-in types
