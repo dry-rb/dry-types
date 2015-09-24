@@ -29,7 +29,7 @@ Or install it yourself as:
 Unlike seemingly similar libraries like virtus, attrio, fast_attrs, attribs etc.
 `Dry::Data` provides you an interface to explicitly specify data types you want
 to use in your application domain which gives you type-safety and *simple* coercion
-mechanism using built-in coercion methods on the kernel.
+mechanism using simple procs for coercion.
 
 Main difference is that `Dry::Data` is not designed to handle all kinds of complex
 coercions that are typically required when dealing with, let's say, form params
@@ -44,16 +44,13 @@ will work with. The interface consists of lower-level type definitions and a hig
 virtus-like interface for defining structs.
 
 
-### Defining types
+### Using built-in types
 
 For now the usage is very simple, more features will be built upon this interface:
 
 ``` ruby
-string = Dry::Data.new { |t| t['String'] }
-array = Dry::Data.new { |t| t['Array'] }
-
-string[:foo] # => 'foo'
-array[:foo] # => [:foo]
+Dry::Data[:string][:foo] # => 'foo'
+Dry::Data[:array][:foo] # => [:foo]
 ```
 
 ### Defining a struct
@@ -62,13 +59,13 @@ array[:foo] # => [:foo]
 class User
   include Dry::Data::Struct
 
-  attributes name: String, age: Integer
+  attributes name: :string, age: :int
 end
 
-# becomes available like any other type
-user_type = Dry::Data.new { |t| t['User'] }
+# you can register this type with the Dry::Data container
+Dry::Data.register(:user, User.method(:new), coercible_from: Hash)
 
-user = user_type[name: :Jane, age: '21']
+user = Dry::Data[:user][name: :Jane, age: '21']
 
 user.name # => "Jane"
 user.age # => 21
@@ -86,7 +83,18 @@ This is early alpha with a rough plan to:
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+### Benchmarks
+
+You can run the benchmarks by running `bin/benchmark` from the console, you will note that we are slower than `fast_attributes`, and we probably always will be, however, we are not willing to stoop to the levels[<sup><a href="#fast_attributes">1</a></sup>] that they have in order for a slight performance gain, and feel that `dry-data` offers much more flexibility.
+
+<sup><a name="fast_attributes">1</a></sup> fast_attributes generates code that gets `eval`'d to generate a class with setter methods containing a `case` statement to check each type and handle coercion individually. Further reading:
+
+1. <a href="https://github.com/applift/fast_attributes/blob/master/lib/fast_attributes.rb#L53-L57" target="_blank">FastAttributes.attribute</a>
+2. <a href="https://github.com/applift/fast_attributes/blob/master/lib/fast_attributes/builder.rb#L48-L59" target="_blank">FastAttributes::Builder#compile_setter</a>
+3. <a href="https://github.com/applift/fast_attributes/blob/master/lib/fast_attributes/type_cast.rb#L72-L78" target="_blank">FastAttributes::TypeCast.compile_method_body</a>
+4. <a href="https://github.com/applift/fast_attributes/blob/master/lib/fast_attributes/type_cast.rb#L45-L62" target="_blank">FastAttributes::TypeCast.type_casting_template</a>
+5. <a href="https://github.com/applift/fast_attributes/blob/master/lib/fast_attributes/builder.rb#L21-L34" target="_blank">FastAttributes::Builder#compile!</a>
+6. <a href="https://github.com/applift/fast_attributes/blob/master/lib/fast_attributes/builder.rb#L84-L91" target="_blank">FastAttributes::Builder#include_methods</a>
 
 ## Contributing
 
