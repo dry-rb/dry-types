@@ -15,7 +15,7 @@ module Dry
 
     def self.register(const, constructor)
       register_constructor(const, constructor)
-      register_type(Data.new(const.name))
+      register_type(Data.type(const.name))
     end
 
     def self.register_type(type, name = type.name)
@@ -26,7 +26,7 @@ module Dry
       registry[const.name] = [constructor, const]
     end
 
-    def self.new(*args, &block)
+    def self.type(*args, &block)
       dsl = DSL.new(registry)
       block ? yield(dsl) : dsl[args.first]
     end

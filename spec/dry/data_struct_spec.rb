@@ -13,7 +13,7 @@ RSpec.describe Dry::Data::Struct do
         attributes name: String, age: Integer, active: Bool, address: Address
       end
 
-      user_type = Dry::Data.new { |t| t['User'] }
+      user_type = Dry::Data.type { |t| t['User'] }
 
       user = user_type[name: :Jane, age: '21', address: { city: 'NYC', zipcode: 123 }]
 

@@ -1,6 +1,6 @@
 RSpec.describe Dry::Data::Type do
-  let(:string) { Dry::Data.new { |t| t['String'] } }
-  let(:hash) { Dry::Data.new { |t| t['Hash'] } }
+  let(:string) { Dry::Data.type { |t| t['String'] } }
+  let(:hash) { Dry::Data.type { |t| t['Hash'] } }
 
   describe '#[]' do
     it 'returns input when type matches' do
@@ -26,7 +26,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with Bool' do
-    let(:bool) { Dry::Data.new { |t| t['TrueClass'] | t['FalseClass'] } }
+    let(:bool) { Dry::Data.type { |t| t['TrueClass'] | t['FalseClass'] } }
 
     it 'accepts true object' do
       expect(bool[true]).to be(true)
@@ -42,7 +42,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with Date' do
-    let(:date) { Dry::Data.new { |t| t['Date'] } }
+    let(:date) { Dry::Data.type { |t| t['Date'] } }
 
     it 'accepts a date object' do
       input = Date.new
@@ -52,7 +52,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with DateTime' do
-    let(:datetime) { Dry::Data.new { |t| t['DateTime'] } }
+    let(:datetime) { Dry::Data.type { |t| t['DateTime'] } }
 
     it 'accepts a date-time object' do
       input = DateTime.new
@@ -62,7 +62,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with Time' do
-    let(:time) { Dry::Data.new { |t| t['Time'] } }
+    let(:time) { Dry::Data.type { |t| t['Time'] } }
 
     it 'accepts a time object' do
       input = Time.new

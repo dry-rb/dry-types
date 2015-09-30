@@ -26,7 +26,7 @@ module Dry
     #
     # We store it under a constant in case somebody would like to refer to it
     # explicitly
-    Bool = Data.new { |t| t['TrueClass'] | t['FalseClass'] }
+    Bool = Data.type { |t| t['TrueClass'] | t['FalseClass'] }
     register_type(Bool, 'Bool')
   end
 end

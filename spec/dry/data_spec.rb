@@ -11,7 +11,7 @@ RSpec.describe Dry::Data do
 
       Dry::Data.register(CustomArray, CustomArray.method(:new))
 
-      type = Dry::Data.new { |t| t['CustomArray'] }
+      type = Dry::Data.type { |t| t['CustomArray'] }
 
       expect(type['foo']).to eql(['foo'])
     end
