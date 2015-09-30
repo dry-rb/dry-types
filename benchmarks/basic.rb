@@ -51,9 +51,9 @@ puts DryDataUser.new(name: 'Jane', age: '21').inspect
 
 Benchmark.ips do |x|
   x.report('virtus') { VirtusUser.new(name: 'Jane', age: '21') }
-  x.report('fast_attributes') { DryDataUser.new(name: 'Jane', age: '21') }
+  x.report('fast_attributes') { FastUser.new(name: 'Jane', age: '21') }
   x.report('attrio') { AttrioUser.new(name: 'Jane', age: '21') }
-  x.report('dry-data') { FastUser.new(name: 'Jane', age: '21') }
+  x.report('dry-data') { DryDataUser.new(name: 'Jane', age: '21') }
 
   x.compare!
 end
