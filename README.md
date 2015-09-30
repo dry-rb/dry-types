@@ -49,8 +49,8 @@ virtus-like interface for defining structs.
 For now the usage is very simple, more features will be built upon this interface:
 
 ``` ruby
-string = Dry::Data.new { |t| t['String'] }
-array = Dry::Data.new { |t| t['Array'] }
+string = Dry::Data.type { |t| t['String'] }
+array = Dry::Data.type { |t| t['Array'] }
 
 string[:foo] # => 'foo'
 array[:foo] # => [:foo]
@@ -66,7 +66,7 @@ class User
 end
 
 # becomes available like any other type
-user_type = Dry::Data.new { |t| t['User'] }
+user_type = Dry::Data.type { |t| t['User'] }
 
 user = user_type[name: :Jane, age: '21']
 
