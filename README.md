@@ -56,17 +56,47 @@ string[:foo] # => 'foo'
 array[:foo] # => [:foo]
 ```
 
+### Optional type
+
+You can explicitly define that something can be either nil or something else:
+
+``` ruby
+optional_string = Dry::Data[:nil] | Dry::Data[:string]
+
+optional_string[nil]
+# => None
+
+optional_string[nil].fmap(&:upcase)
+# => None
+
+optional_string['something']
+# => Some('something')
+
+optional_string['something'].fmap(&:upcase)
+# => Some('SOMETHING')
+
+optional_string['something'].fmap(&:upcase).value
+# => "SOMETHING"
+```
+
 ### Defining a struct
 
 ``` ruby
+Dry::Data.register(:optional_string, Dry::Data[:nil] | Dry::Data[:string])
+
 class User
   include Dry::Data::Struct
 
-  attributes name: :string, age: :integer
+  attributes name: :optional_string, age: :int
 end
 
 # becomes available like any other type
 user_type = Dry::Data[:user]
+
+user = user_type[name: nil, age: '21']
+
+user.name # None
+user.age # 21
 
 user = user_type[name: :Jane, age: '21']
 
