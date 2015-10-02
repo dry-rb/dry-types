@@ -8,15 +8,15 @@ RSpec.describe Dry::Data::TypedHash do
       end
 
       Dry::Data.register(
-        :phone,
+        "phone",
         Dry::Data::Type.new(-> args { phone.new(*args) }, phone)
       )
 
       hash = Dry::Data::TypedHash.new(
-        name: :string,
-        age: :int,
-        active: :bool,
-        phone: :phone
+        name: "coercible.string",
+        age: "coercible.int",
+        active: "strict.bool",
+        phone: "phone"
       )
 
       user_hash = hash[

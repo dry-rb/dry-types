@@ -7,7 +7,7 @@ module Dry
         super
         klass.extend(Mixin)
         # TODO: we need inflector for underscore here
-        Data.register(klass.name.downcase.to_sym, Type.new(klass.method(:new), klass))
+        Data.register(klass.name.downcase, Type.new(klass.method(:new), klass))
       end
 
       module Mixin

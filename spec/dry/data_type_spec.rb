@@ -1,6 +1,6 @@
 RSpec.describe Dry::Data::Type do
-  let(:string) { Dry::Data[:string] }
-  let(:hash) { Dry::Data[:hash] }
+  let(:string) { Dry::Data["coercible.string"] }
+  let(:hash) { Dry::Data["coercible.hash"] }
 
   describe '#[]' do
     it 'returns input when type matches' do
@@ -20,13 +20,13 @@ RSpec.describe Dry::Data::Type do
     end
 
     it 'raises type-error when non-coercible type is used and input does not match' do
-      expect { Dry::Data[:date]['nopenopenope'] }
+      expect { Dry::Data["strict.date"]['nopenopenope'] }
         .to raise_error(TypeError, /"nopenopenope" has invalid type/)
     end
   end
 
   describe 'with Bool' do
-    let(:bool) { Dry::Data[:bool] }
+    let(:bool) { Dry::Data["strict.bool"] }
 
     it 'accepts true object' do
       expect(bool[true]).to be(true)
@@ -42,7 +42,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with Date' do
-    let(:date) { Dry::Data[:date] }
+    let(:date) { Dry::Data["strict.date"] }
 
     it 'accepts a date object' do
       input = Date.new
@@ -52,7 +52,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with DateTime' do
-    let(:datetime) { Dry::Data[:date_time] }
+    let(:datetime) { Dry::Data["strict.date_time"] }
 
     it 'accepts a date-time object' do
       input = DateTime.new
@@ -62,7 +62,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with Time' do
-    let(:time) { Dry::Data[:time] }
+    let(:time) { Dry::Data["strict.time"] }
 
     it 'accepts a time object' do
       input = Time.new
@@ -72,7 +72,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'defining Optional String' do
-    let(:maybe_string) { Dry::Data[:nil] | Dry::Data[:string] }
+    let(:maybe_string) { Dry::Data["strict.nil"] | Dry::Data["strict.string"] }
 
     it 'accepts nil and returns None instance' do
       value = maybe_string[nil]

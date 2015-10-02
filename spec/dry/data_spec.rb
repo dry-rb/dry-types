@@ -22,8 +22,8 @@ RSpec.describe Dry::Data do
 
   describe '.[]' do
     it 'returns registered type' do
-      expect(Dry::Data[:string]).to be_a(Dry::Data::Type)
-      expect(Dry::Data[:string].name).to eql('String')
+      expect(Dry::Data['string']).to be_a(Dry::Data::Type)
+      expect(Dry::Data['string'].name).to eql('String')
     end
   end
 end
