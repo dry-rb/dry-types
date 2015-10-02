@@ -44,9 +44,10 @@ will work with. The interface consists of lower-level type definitions and a hig
 virtus-like interface for defining structs.
 
 
-### Defining types
+### Accessing built-in types
 
-For now the usage is very simple, more features will be built upon this interface:
+You have access to all primitive built-in types. Currently all type custructors
+uses kernel coercion methods:
 
 ``` ruby
 string = Dry::Data[:string]

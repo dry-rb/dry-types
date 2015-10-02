@@ -44,7 +44,7 @@ end
 class DryDataUser
   include Dry::Data::Struct
 
-  attributes(name: String, age: Integer)
+  attributes(name: :string, age: :int)
 end
 
 puts DryDataUser.new(name: 'Jane', age: '21').inspect
