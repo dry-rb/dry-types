@@ -25,7 +25,7 @@ module Dry
 
     # Register built-in types that are non-coercible through kernel methods
     NON_COERCIBLE.each do |name, primitive|
-      register(name, Type.new(method(:constructor).curry.(primitive), primitive))
+      register(name, Type.new(method(:constructor).to_proc.curry.(primitive), primitive))
     end
 
     # Register :bool since it's common and not a built-in Ruby type :(
