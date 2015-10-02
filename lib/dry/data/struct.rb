@@ -6,15 +6,12 @@ module Dry
       def self.included(klass)
         super
         klass.extend(Mixin)
-        Data.register(klass, klass.method(:new))
+        # TODO: we need inflector for underscore here
+        Data.register(klass.name.downcase.to_sym, Type.new(klass.method(:new), klass))
       end
 
       module Mixin
-        def attributes(type_def)
-          schema = type_def.each_with_object({}) do |(name, const), result|
-            result[name] = const.is_a?(Class) ? const.name : const
-          end
-
+        def attributes(schema)
           @constructor = TypedHash.new(schema)
           attr_reader(*schema.keys)
           self
@@ -22,11 +19,6 @@ module Dry
 
         def constructor
           @constructor
-        end
-
-        # OH DEAR LORD NOT AGAIN :(
-        def const_missing(name)
-          Data.types[name.to_s] || super
         end
       end
 

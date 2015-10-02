@@ -1,14 +1,14 @@
 module Dry
   module Data
     class DSL
-      attr_reader :registry
+      attr_reader :container
 
-      def initialize(registry)
-        @registry = registry
+      def initialize(container)
+        @container = container
       end
 
       def [](name)
-        Type.new(*registry[name])
+        container[name]
       end
     end
   end

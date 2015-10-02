@@ -5,12 +5,7 @@ module Dry
 
       def initialize(schema)
         @schema = schema.each_with_object({}) { |(name, type_id), result|
-          result[name] =
-            if type_id.respond_to?(:call)
-              type_id
-            else
-              Dry::Data[type_id]
-            end
+          result[name] = Data[type_id]
         }
       end
 

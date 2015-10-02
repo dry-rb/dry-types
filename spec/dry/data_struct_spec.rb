@@ -4,16 +4,16 @@ RSpec.describe Dry::Data::Struct do
       class Address
         include Dry::Data::Struct
 
-        attributes city: String, zipcode: String
+        attributes city: :string, zipcode: :string
       end
 
       class User
         include Dry::Data::Struct
 
-        attributes name: String, age: Integer, active: Bool, address: Address
+        attributes name: :string, age: :int, active: :bool, address: :address
       end
 
-      user_type = Dry::Data.type { |t| t['User'] }
+      user_type = Dry::Data[:user]
 
       user = user_type[name: :Jane, age: '21', address: { city: 'NYC', zipcode: 123 }]
 

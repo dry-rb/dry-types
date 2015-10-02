@@ -1,42 +1,31 @@
+require 'dry-container'
+
 require 'bigdecimal'
 require 'date'
 
 require 'dry/data/version'
-require 'dry/data/registry'
+require 'dry/data/container'
 require 'dry/data/type'
 require 'dry/data/struct'
 require 'dry/data/dsl'
 
 module Dry
   module Data
-    def self.registry
-      @registry ||= Registry.new
+    def self.container
+      @container ||= Container.new
     end
 
-    def self.register(const, constructor)
-      register_constructor(const, constructor)
-      register_type(Data.type(const.name))
-    end
-
-    def self.register_type(type, name = type.name)
-      types[name.freeze] = type
-    end
-
-    def self.register_constructor(const, constructor)
-      registry[const.name] = [constructor, const]
-    end
-
-    def self.type(*args, &block)
-      dsl = DSL.new(registry)
-      block ? yield(dsl) : dsl[args.first]
-    end
-
-    def self.types
-      @types ||= {}
+    def self.register(name, type)
+      container.register(name, type)
     end
 
     def self.[](name)
-      types[name] # silly delegation for now TODO: raise nice error if type is not found
+      container[name]
+    end
+
+    def self.type(*args, &block)
+      dsl = DSL.new(container)
+      block ? yield(dsl) : registry[args.first]
     end
   end
 end
