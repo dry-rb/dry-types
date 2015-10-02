@@ -26,7 +26,7 @@ module Dry
       end
 
       def |(other)
-        SumType.new(self, other)
+        Data.SumType(self, other)
       end
     end
   end

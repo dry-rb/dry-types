@@ -15,7 +15,7 @@ module Dry
 
     NON_COERCIBLE = {
       true: TrueClass, false: FalseClass, date: Date,
-      date_time: DateTime, time: Time
+      date_time: DateTime, time: Time, nil: NilClass
     }.freeze
 
     # Register built-in primitive types with kernel coercion methods

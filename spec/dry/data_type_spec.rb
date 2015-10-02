@@ -70,4 +70,22 @@ RSpec.describe Dry::Data::Type do
       expect(time[input]).to be(input)
     end
   end
+
+  describe 'defining Optional String' do
+    let(:maybe_string) { Dry::Data[:nil] | Dry::Data[:string] }
+
+    it 'accepts nil and returns None instance' do
+      value = maybe_string[nil]
+
+      expect(value).to be_instance_of(Kleisli::Maybe::None)
+      expect(value.fmap(&:downcase).fmap(&:upcase).value).to be(nil)
+    end
+
+    it 'accepts a string and returns Some instance' do
+      value = maybe_string['SomeThing']
+
+      expect(value).to be_instance_of(Kleisli::Maybe::Some)
+      expect(value.fmap(&:downcase).fmap(&:upcase).value).to eql('SOMETHING')
+    end
+  end
 end
