@@ -71,6 +71,18 @@ RSpec.describe Dry::Data::Type do
     end
   end
 
+  describe 'defining coercible Optional String' do
+    let(:maybe_string) { Dry::Data["strict.nil"] | Dry::Data["coercible.string"] }
+
+    it 'accepts nil' do
+      expect(maybe_string[nil].value).to be(nil)
+    end
+
+    it 'accepts an object coercible to a string' do
+      expect(maybe_string[123].value).to eql('123')
+    end
+  end
+
   describe 'defining Optional String' do
     let(:maybe_string) { Dry::Data["strict.nil"] | Dry::Data["strict.string"] }
 

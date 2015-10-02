@@ -33,10 +33,10 @@ module Dry
       end
 
       def call(input)
-        if valid?(input)
-          input
-        else
-          raise TypeError, "#{input.inspect} has invalid type"
+        begin
+          left[input]
+        rescue TypeError
+          right[input]
         end
       end
       alias_method :[], :call
