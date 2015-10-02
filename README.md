@@ -50,8 +50,8 @@ You have access to all primitive built-in types. Currently all type custructors
 uses kernel coercion methods:
 
 ``` ruby
-string = Dry::Data[:string]
-array = Dry::Data[:array]
+string = Dry::Data["string"]
+array = Dry::Data["array"]
 
 string[:foo] # => 'foo'
 array[:foo] # => [:foo]
@@ -62,7 +62,7 @@ array[:foo] # => [:foo]
 You can explicitly define that something can be either nil or something else:
 
 ``` ruby
-optional_string = Dry::Data[:nil] | Dry::Data[:string]
+optional_string = Dry::Data["nil"] | Dry::Data["string"]
 
 optional_string[nil]
 # => None
@@ -83,12 +83,12 @@ optional_string['something'].fmap(&:upcase).value
 ### Defining a struct
 
 ``` ruby
-Dry::Data.register(:optional_string, Dry::Data[:nil] | Dry::Data[:string])
+Dry::Data.register("optional_string", Dry::Data["nil"] | Dry::Data["string"])
 
 class User
   include Dry::Data::Struct
 
-  attributes name: :optional_string, age: :int
+  attributes name: "optional_string", age: "coercible.int"
 end
 
 # becomes available like any other type
@@ -99,7 +99,7 @@ user = user_type[name: nil, age: '21']
 user.name # None
 user.age # 21
 
-user = user_type[name: :Jane, age: '21']
+user = user_type[name: 'Jane', age: '21']
 
 user.name # => "Jane"
 user.age # => 21
