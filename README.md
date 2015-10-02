@@ -46,12 +46,29 @@ virtus-like interface for defining structs.
 
 ### Accessing built-in types
 
-You have access to all primitive built-in types. Currently all type custructors
-uses kernel coercion methods:
+You have access to all primitive built-in types. Types are categorized into 3
+groups:
+
+- default: pass-through without any checks
+- `strict` - doesn't coerce and checks the input type against the primitive class
+- `coercible` - tries to coerce and raises type-error if it failed
 
 ``` ruby
-string = Dry::Data["string"]
-array = Dry::Data["array"]
+# default passthrough group
+float = Dry::Data["float"]
+
+float[3.2] # => 3.2
+float["3.2"] # "3.2"
+
+# strict type-check group
+int = Dry::Data["strict.int"]
+
+int[1] # => 1
+int['1'] # => raises TypeError
+
+# coercible type-check group
+string = Dry::Data["coercible.string"]
+array = Dry::Data["coercible.array"]
 
 string[:foo] # => 'foo'
 array[:foo] # => [:foo]
