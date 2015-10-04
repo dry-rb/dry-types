@@ -20,7 +20,7 @@ module Dry
       end
 
       def self.initialize_constructor
-        @constructor = Data['strict.hash'].schema(schema)
+        @constructor = Data['coercible.hash'].schema(schema)
       end
 
       def self.schema
