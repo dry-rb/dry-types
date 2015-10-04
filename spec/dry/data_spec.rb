@@ -25,5 +25,9 @@ RSpec.describe Dry::Data do
       expect(Dry::Data['string']).to be_a(Dry::Data::Type)
       expect(Dry::Data['string'].name).to eql('String')
     end
+
+    it 'caches dynamically built types' do
+      expect(Dry::Data['array<string>']).to be(Dry::Data['array<string>'])
+    end
   end
 end

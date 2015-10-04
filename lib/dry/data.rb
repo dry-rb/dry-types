@@ -23,19 +23,28 @@ module Dry
     end
 
     def self.[](name)
-      result = name.match(TYPE_SPEC_REGEX)
+      type_map.fetch(name) do
+        result = name.match(TYPE_SPEC_REGEX)
 
-      if result
-        type_id, member_id = result[1..2]
-        container[type_id].member(self[member_id])
-      else
-        container[name]
+        type =
+          if result
+            type_id, member_id = result[1..2]
+            container[type_id].member(self[member_id])
+          else
+            container[name]
+          end
+
+        type_map[name] = type
       end
     end
 
     def self.type(*args, &block)
       dsl = DSL.new(container)
       block ? yield(dsl) : registry[args.first]
+    end
+
+    def self.type_map
+      @type_map ||= {}
     end
   end
 end
