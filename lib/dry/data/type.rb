@@ -23,8 +23,10 @@ module Dry
           }
 
           hash_constructor = -> input {
-            constructor[input].each_with_object({}) { |(key, value), result|
-              result[key] = constructors[key][value]
+            attributes = constructor[input]
+
+            constructors.each_with_object({}) { |(key, val_constructor), result|
+              result[key] = val_constructor[attributes.fetch(key)]
             }
           }
 

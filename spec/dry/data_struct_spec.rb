@@ -10,7 +10,6 @@ RSpec.describe Dry::Data::Struct do
           attributes(
             name: "coercible.string",
             age: "coercible.int",
-            active: "strict.bool",
             address: "structs.address"
           )
         end
@@ -25,6 +24,15 @@ RSpec.describe Dry::Data::Struct do
 
       user = user_type[
         name: :Jane, age: '21', address: { city: 'NYC', zipcode: 123 }
+      ]
+
+      expect(user.name).to eql('Jane')
+      expect(user.age).to be(21)
+      expect(user.address.city).to eql('NYC')
+      expect(user.address.zipcode).to eql('123')
+
+      user = user_type[
+        name: :Jane, age: '21', address: { city: 'NYC', zipcode: 123 }, invalid: 'foo'
       ]
 
       expect(user.name).to eql('Jane')
