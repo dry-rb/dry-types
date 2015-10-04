@@ -46,13 +46,6 @@ virtus-like interface for defining structs.
 
 ### Accessing built-in types
 
-You have access to all primitive built-in types. Types are grouped under 3
-categories:
-
-- default: pass-through without any checks
-- `strict` - doesn't coerce and checks the input type against the primitive class
-- `coercible` - tries to coerce and raises type-error if it failed
-
 Coercible types using kernel coercion methods:
 
 - `string`
@@ -72,6 +65,13 @@ Non-coercible:
 - `time`
 
 More types will be added soon.
+
+Types are grouped under 4 categories:
+
+- default: pass-through without any checks
+- `strict` - doesn't coerce and checks the input type against the primitive class
+- `coercible` - tries to coerce and raises type-error if it failed
+- `maybe` - accepts either a nil or something else
 
 ``` ruby
 # default passthrough category
