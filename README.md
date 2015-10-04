@@ -136,7 +136,8 @@ maybe_string['something'].fmap(&:upcase).value
 
 ``` ruby
 class User < Dry::Data::Struct
-  attributes name: "maybe.strict.string", age: "coercible.int"
+  attribute :name, "maybe.coercible.string"
+  attribute :age, "coercible.int"
 end
 
 # becomes available like any other type
@@ -149,7 +150,7 @@ user.age # 21
 
 user = user_type[name: 'Jane', age: '21']
 
-user.name # => "Jane"
+user.name # => Some("Jane")
 user.age # => 21
 ```
 
