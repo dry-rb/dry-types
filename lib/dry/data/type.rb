@@ -20,6 +20,18 @@ module Dry
         end
       end
 
+      def self.strict_constructor(primitive, input)
+        if input.is_a?(primitive)
+          input
+        else
+          raise TypeError, "#{input.inspect} has invalid type"
+        end
+      end
+
+      def self.passthrough_constructor(input)
+        input
+      end
+
       def initialize(constructor, primitive)
         @constructor = constructor
         @primitive = primitive

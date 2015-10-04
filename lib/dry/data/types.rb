@@ -1,17 +1,5 @@
 module Dry
   module Data
-    def self.strict_constructor(primitive, input)
-      if input.is_a?(primitive)
-        input
-      else
-        raise TypeError, "#{input.inspect} has invalid type"
-      end
-    end
-
-    def self.passthrough_constructor(input)
-      input
-    end
-
     COERCIBLE = {
       string: String,
       int: Integer,
@@ -44,7 +32,7 @@ module Dry
     ALL_PRIMITIVES.each do |name, primitive|
       register(
         "strict.#{name}",
-        Type[primitive].new(method(:strict_constructor).to_proc.curry.(primitive), primitive)
+        Type[primitive].new(Type.method(:strict_constructor).to_proc.curry.(primitive), primitive)
       )
     end
 
@@ -52,7 +40,7 @@ module Dry
     ALL_PRIMITIVES.each do |name, primitive|
       register(
         name.to_s,
-        Type[primitive].new(method(:passthrough_constructor), primitive)
+        Type[primitive].new(Type.method(:passthrough_constructor), primitive)
       )
     end
 
