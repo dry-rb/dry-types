@@ -46,21 +46,41 @@ virtus-like interface for defining structs.
 
 ### Accessing built-in types
 
-You have access to all primitive built-in types. Types are categorized into 3
-groups:
+You have access to all primitive built-in types. Types are grouped under 3
+categories:
 
 - default: pass-through without any checks
 - `strict` - doesn't coerce and checks the input type against the primitive class
 - `coercible` - tries to coerce and raises type-error if it failed
 
+Coercible types using kernel coercion methods:
+
+- `string`
+- `int`
+- `float`
+- `decimal`
+- `array`
+- `hash`
+
+Non-coercible:
+
+- `nil`
+- `true`
+- `false`
+- `date`
+- `date_time`
+- `time`
+
+More types will be added soon.
+
 ``` ruby
-# default passthrough group
+# default passthrough category
 float = Dry::Data["float"]
 
 float[3.2] # => 3.2
 float["3.2"] # "3.2"
 
-# strict type-check group
+# strict type-check category
 int = Dry::Data["strict.int"]
 
 int[1] # => 1
@@ -74,42 +94,50 @@ string[:foo] # => 'foo'
 array[:foo] # => [:foo]
 ```
 
-### Optional type
+### Optional types
 
-You can explicitly define that something can be either nil or something else:
+All built-in types have their optional versions too, you can access them under
+`"maybe.strict"` and `"maybe.coercible"` categories:
 
 ``` ruby
-optional_string = Dry::Data["nil"] | Dry::Data["string"]
+maybe_int = Dry::Data["maybe.strict.int"]
 
-optional_string[nil]
+maybe_int[nil] # None
+maybe_int[123] # Some(123)
+```
+
+You can define your own optional types too:
+
+``` ruby
+maybe_string = Dry::Data["nil"] | Dry::Data["string"]
+
+maybe_string[nil]
 # => None
 
-optional_string[nil].fmap(&:upcase)
+maybe_string[nil].fmap(&:upcase)
 # => None
 
-optional_string['something']
+maybe_string['something']
 # => Some('something')
 
-optional_string['something'].fmap(&:upcase)
+maybe_string['something'].fmap(&:upcase)
 # => Some('SOMETHING')
 
-optional_string['something'].fmap(&:upcase).value
+maybe_string['something'].fmap(&:upcase).value
 # => "SOMETHING"
 ```
 
 ### Defining a struct
 
 ``` ruby
-Dry::Data.register("optional_string", Dry::Data["nil"] | Dry::Data["string"])
-
 class User
   include Dry::Data::Struct
 
-  attributes name: "optional_string", age: "coercible.int"
+  attributes name: "maybe.strict.string", age: "coercible.int"
 end
 
 # becomes available like any other type
-user_type = Dry::Data[:user]
+user_type = Dry::Data["user"]
 
 user = user_type[name: nil, age: '21']
 
@@ -127,7 +155,6 @@ user.age # => 21
 This is early alpha with a rough plan to:
 
 * Add constrained types (ie a string with a strict length, a number with a strict range etc.)
-* Add support for `Optional`/`Maybe` type to be able to explicitly specify that a given value could be nil (aka ActiveSupport `try` done right)
 * Benchmark against other libs and make sure it's fast enough
 
 ## Development
