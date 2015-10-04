@@ -11,6 +11,10 @@ module Dry
         Data.register(name, Type.new(klass.method(:new), klass))
       end
 
+      def self.attribute(*args)
+        attributes(Hash[[args]])
+      end
+
       def self.attributes(new_schema)
         prev_schema = schema || {}
         @schema = prev_schema.merge(new_schema)

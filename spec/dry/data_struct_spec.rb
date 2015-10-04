@@ -3,15 +3,14 @@ RSpec.describe Dry::Data::Struct do
     it 'defines an attribute for the constructor' do
       module Structs
         class Address < Dry::Data::Struct
-          attributes city: "strict.string", zipcode: "coercible.string"
+          attribute :city, "strict.string"
+          attribute :zipcode, "coercible.string"
         end
 
         class User < Dry::Data::Struct
-          attributes(
-            name: "coercible.string",
-            age: "coercible.int",
-            address: "structs.address"
-          )
+          attribute :name, "coercible.string"
+          attribute :age, "coercible.int"
+          attribute :address, "structs.address"
         end
 
         class SuperUser < User
