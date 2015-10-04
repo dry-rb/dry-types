@@ -34,17 +34,26 @@ module Dry
 
     # Register built-in primitive types with kernel coercion methods
     COERCIBLE.each do |name, primitive|
-      register("coercible.#{name}", Type.new(Kernel.method(primitive.name), primitive))
+      register(
+        "coercible.#{name}",
+        Type[primitive].new(Kernel.method(primitive.name), primitive)
+      )
     end
 
     # Register built-in types that are non-coercible through kernel methods
     ALL_PRIMITIVES.each do |name, primitive|
-      register("strict.#{name}", Type.new(method(:strict_constructor).to_proc.curry.(primitive), primitive))
+      register(
+        "strict.#{name}",
+        Type[primitive].new(method(:strict_constructor).to_proc.curry.(primitive), primitive)
+      )
     end
 
     # Register built-in types that are non-coercible through kernel methods
     ALL_PRIMITIVES.each do |name, primitive|
-      register(name.to_s, Type.new(method(:passthrough_constructor), primitive))
+      register(
+        name.to_s,
+        Type[primitive].new(method(:passthrough_constructor), primitive)
+      )
     end
 
     # Register non-coercible maybe types

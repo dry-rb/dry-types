@@ -7,6 +7,23 @@ module Dry
 
       attr_reader :primitive
 
+      class Array < Type
+        def member(type)
+          self.class.new(
+            -> input { constructor[input].map(&type.constructor) },
+            primitive
+          )
+        end
+      end
+
+      def self.[](primitive)
+        if primitive == ::Array
+          Type::Array
+        else
+          Type
+        end
+      end
+
       def initialize(constructor, primitive)
         @constructor = constructor
         @primitive = primitive

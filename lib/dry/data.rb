@@ -2,6 +2,7 @@ require 'dry-container'
 
 require 'bigdecimal'
 require 'date'
+require 'set'
 
 require 'dry/data/version'
 require 'dry/data/container'
