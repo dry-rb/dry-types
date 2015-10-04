@@ -72,7 +72,7 @@ RSpec.describe Dry::Data::Type do
   end
 
   describe 'with built-in optional types' do
-    context 'with string' do
+    context 'with strict string' do
       let(:string) { Dry::Data["maybe.strict.string"] }
 
       it 'accepts nil' do
@@ -81,6 +81,18 @@ RSpec.describe Dry::Data::Type do
 
       it 'accepts a string' do
         expect(string['something'].value).to eql('something')
+      end
+    end
+
+    context 'with coercible string' do
+      let(:string) { Dry::Data["maybe.coercible.string"] }
+
+      it 'accepts nil' do
+        expect(string[nil].value).to be(nil)
+      end
+
+      it 'accepts a string' do
+        expect(string[:something].value).to eql('something')
       end
     end
   end

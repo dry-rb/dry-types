@@ -53,6 +53,11 @@ module Dry
       register("maybe.strict.#{name}", self["strict.nil"] | self["strict.#{name}"])
     end
 
+    # Register coercible maybe types
+    COERCIBLE.each do |name, primitive|
+      register("maybe.coercible.#{name}", self["strict.nil"] | self["coercible.#{name}"])
+    end
+
     # Register :bool since it's common and not a built-in Ruby type :(
     register("strict.bool", self["strict.true"] | self["strict.false"])
   end
