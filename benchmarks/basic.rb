@@ -41,9 +41,7 @@ class AttrioUser
   end
 end
 
-class DryDataUser
-  include Dry::Data::Struct
-
+class DryDataUser < Dry::Data::Struct
   attributes(name: 'coercible.string', age: 'coercible.int')
 end
 
