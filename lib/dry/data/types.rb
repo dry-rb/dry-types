@@ -1,7 +1,7 @@
 module Dry
   module Data
     def self.strict_constructor(primitive, input)
-      if input.instance_of?(primitive)
+      if input.is_a?(primitive)
         input
       else
         raise TypeError, "#{input.inspect} has invalid type"
