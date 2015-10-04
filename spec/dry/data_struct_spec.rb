@@ -1,15 +1,11 @@
 RSpec.describe Dry::Data::Struct do
   describe '.attribute' do
     it 'defines an attribute for the constructor' do
-      class Address
-        include Dry::Data::Struct
-
+      class Address < Dry::Data::Struct
         attributes city: "strict.string", zipcode: "coercible.string"
       end
 
-      class User
-        include Dry::Data::Struct
-
+      class User < Dry::Data::Struct
         attributes(
           name: "coercible.string",
           age: "coercible.int",
