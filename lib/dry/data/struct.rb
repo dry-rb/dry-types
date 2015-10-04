@@ -17,14 +17,13 @@ module Dry
 
       def self.attributes(new_schema)
         prev_schema = schema || {}
-        @schema = prev_schema.merge(new_schema)
-        attr_reader(*(new_schema.keys - prev_schema.keys))
-        initialize_constructor
-        self
-      end
 
-      def self.initialize_constructor
+        @schema = prev_schema.merge(new_schema)
         @constructor = Data['coercible.hash'].schema(schema)
+
+        attr_reader(*(new_schema.keys - prev_schema.keys))
+
+        self
       end
 
       def self.schema
