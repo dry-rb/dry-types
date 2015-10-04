@@ -47,6 +47,12 @@ module Dry
       register(name.to_s, Type.new(method(:passthrough_constructor), primitive))
     end
 
+    # Register non-coercible maybe types
+    ALL_PRIMITIVES.each do |name, primitive|
+      next if name == :nil
+      register("maybe.strict.#{name}", self["strict.nil"] | self["strict.#{name}"])
+    end
+
     # Register :bool since it's common and not a built-in Ruby type :(
     register("strict.bool", self["strict.true"] | self["strict.false"])
   end
