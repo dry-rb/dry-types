@@ -135,9 +135,7 @@ maybe_string['something'].fmap(&:upcase).value
 ### Defining a struct
 
 ``` ruby
-class User
-  include Dry::Data::Struct
-
+class User < Dry::Data::Struct
   attributes name: "maybe.strict.string", age: "coercible.int"
 end
 
