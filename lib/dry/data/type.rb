@@ -16,9 +16,27 @@ module Dry
         end
       end
 
+      class Hash < Type
+        def schema(type_map)
+          constructors = type_map.each_with_object({}) { |(name, type_id), result|
+            result[name] = Data[type_id]
+          }
+
+          hash_constructor = -> input {
+            constructor[input].each_with_object({}) { |(key, value), result|
+              result[key] = constructors[key][value]
+            }
+          }
+
+          self.class.new(hash_constructor, primitive)
+        end
+      end
+
       def self.[](primitive)
         if primitive == ::Array
           Type::Array
+        elsif primitive == ::Hash
+          Type::Hash
         else
           Type
         end

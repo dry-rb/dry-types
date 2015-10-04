@@ -1,5 +1,5 @@
-RSpec.describe Dry::Data::TypedHash do
-  describe '.new' do
+RSpec.describe Dry::Data::Type::Hash do
+  describe '#schema' do
     it 'builds hash using provided schema' do
       phone = Struct.new(:prefix, :number) do
         def self.name
@@ -12,7 +12,7 @@ RSpec.describe Dry::Data::TypedHash do
         Dry::Data::Type.new(-> args { phone.new(*args) }, phone)
       )
 
-      hash = Dry::Data::TypedHash.new(
+      hash = Dry::Data['coercible.hash'].schema(
         name: "coercible.string",
         age: "coercible.int",
         active: "strict.bool",

@@ -1,5 +1,3 @@
-require 'dry/data/typed_hash'
-
 module Dry
   module Data
     class Struct
@@ -10,7 +8,7 @@ module Dry
       end
 
       def self.attributes(schema)
-        @constructor = TypedHash.new(schema)
+        @constructor = Data['strict.hash'].schema(schema)
         attr_reader(*schema.keys)
         self
       end
