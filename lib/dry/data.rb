@@ -3,6 +3,7 @@ require 'date'
 require 'set'
 
 require 'dry-container'
+require 'inflecto'
 
 require 'dry/data/version'
 require 'dry/data/container'
