@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Dry::Data::VERSION.dup
   spec.authors       = ["Piotr Solnica"]
   spec.email         = ["piotr.solnica@gmail.com"]
+  spec.license       = 'MIT'
 
   spec.summary       = 'Simple type-system for Ruby'
   spec.description   = spec.summary
