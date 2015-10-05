@@ -11,6 +11,8 @@ module Dry
               result[key] = value_constructor[value]
             rescue TypeError
               raise SchemaError.new(key, value)
+            rescue KeyError
+              raise SchemaKeyError.new(key)
             end
           end
         end

@@ -19,6 +19,12 @@ module Dry
       end
     end
 
+    class SchemaKeyError < KeyError
+      def initialize(key)
+        super(":#{key} is missing in Hash input")
+      end
+    end
+
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
     def self.container

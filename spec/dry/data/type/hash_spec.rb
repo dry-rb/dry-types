@@ -43,5 +43,13 @@ RSpec.describe Dry::Data::Type::Hash do
         Dry::Data::SchemaError, '"true" (String) has invalid type for :active'
       )
     end
+
+    it 'raises SchemaKeyError if input is missing a key' do
+      expect {
+        hash[name: :Jane, active: true, phone: ['+48', '123-456-789']]
+      }.to raise_error(
+        Dry::Data::SchemaKeyError, /:age is missing in Hash input/
+      )
+    end
   end
 end
