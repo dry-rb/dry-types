@@ -13,6 +13,12 @@ require 'dry/data/dsl'
 
 module Dry
   module Data
+    class SchemaError < TypeError
+      def initialize(key, value)
+        super("#{value.inspect} (#{value.class}) has invalid type for :#{key}")
+      end
+    end
+
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
     def self.container

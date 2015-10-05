@@ -27,8 +27,11 @@ RSpec.describe Dry::Data::Type::Hash do
         name: 'Jane', age: 21, active: true, phone: phone.new('+48', '123-456-789')
       )
 
-      expect { hash[name: 'Jane', age: 21, active: 'true', phone: nil] }
-        .to raise_error(TypeError, /"true" has invalid type/)
+      expect {
+        hash[name: 'Jane', age: 21, active: 'true', phone: nil]
+      }.to raise_error(
+        Dry::Data::SchemaError, '"true" (String) has invalid type for :active'
+      )
     end
   end
 end
