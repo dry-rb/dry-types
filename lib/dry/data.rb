@@ -25,6 +25,8 @@ module Dry
       end
     end
 
+    StructError = Class.new(TypeError)
+
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
     def self.container

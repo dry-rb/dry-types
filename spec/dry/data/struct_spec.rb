@@ -1,4 +1,7 @@
 RSpec.describe Dry::Data::Struct do
+  let(:user_type) { Dry::Data["structs.user"] }
+  let(:root_type) { Dry::Data["structs.super_user"] }
+
   before :all do
     module Structs
       class Address < Dry::Data::Struct
@@ -18,6 +21,24 @@ RSpec.describe Dry::Data::Struct do
     end
   end
 
+  describe '.new' do
+    it 'raises StructError when attribute constructor failed' do
+      expect {
+        user_type[age: {}]
+      }.to raise_error(
+        Dry::Data::StructError,
+        "[Structs::User.new] :name is missing in Hash input"
+      )
+
+      expect {
+        user_type[name: :Jane, age: '21', address: nil]
+      }.to raise_error(
+        Dry::Data::StructError,
+        "[Structs::User.new] nil (NilClass) has invalid type for :address"
+      )
+    end
+  end
+
   describe '.attribute' do
     def assert_valid_struct(user)
       expect(user.name).to eql('Jane')
@@ -25,9 +46,6 @@ RSpec.describe Dry::Data::Struct do
       expect(user.address.city).to eql('NYC')
       expect(user.address.zipcode).to eql('123')
     end
-
-    let(:user_type) { Dry::Data["structs.user"] }
-    let(:root_type) { Dry::Data["structs.super_user"] }
 
     it 'defines attributes for the constructor' do
       user = user_type[

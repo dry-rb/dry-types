@@ -31,10 +31,14 @@ module Dry
         super_schema.merge(@schema || {})
       end
 
+      def self.new(attributes)
+        super(constructor[attributes])
+      rescue SchemaError, SchemaKeyError => e
+        raise StructError, "[#{self}.new] #{e.message}"
+      end
+
       def initialize(attributes)
-        self.class.constructor[attributes].each do |key, value|
-          instance_variable_set("@#{key}", value)
-        end
+        attributes.each { |key, value| instance_variable_set("@#{key}", value) }
       end
     end
   end
