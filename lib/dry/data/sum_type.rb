@@ -33,11 +33,15 @@ module Dry
       end
 
       def call(input)
-        begin
-          left[input]
-        rescue TypeError
+        result = left[input]
+
+        if left.valid?(result)
+          result
+        else
           right[input]
         end
+      rescue TypeError
+        right[input]
       end
       alias_method :[], :call
 

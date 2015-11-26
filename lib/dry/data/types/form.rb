@@ -14,8 +14,16 @@ module Dry
       Type.new(Coercions::Form.method(:to_time), Time)
     end
 
+    register('form.true') do
+      Type.new(Coercions::Form.method(:to_true), TrueClass)
+    end
+
+    register('form.false') do
+      Type.new(Coercions::Form.method(:to_true), FalseClass)
+    end
+
     register('form.bool') do
-      Type.new(Coercions::Form.method(:to_bool), TrueClass)
+      self['form.true'] | self['form.false']
     end
 
     register('form.int') do
