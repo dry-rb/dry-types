@@ -33,8 +33,8 @@ module Dry
       @container ||= Container.new
     end
 
-    def self.register(name, type)
-      container.register(name, type)
+    def self.register(name, type = nil, &block)
+      container.register(name, type || block.call)
     end
 
     def self.[](name)
