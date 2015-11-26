@@ -25,8 +25,9 @@ module Dry
         end
       end
 
-      def visit_hash(nodes)
-        types['hash'].schema(nodes.map { |node| visit(node) }.reduce(:merge))
+      def visit_hash(node)
+        constructor, schema = node
+        types['hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
       end
 
       def visit_key(node)
