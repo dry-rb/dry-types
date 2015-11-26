@@ -59,3 +59,5 @@ module Dry
     register("strict.bool", self["strict.true"] | self["strict.false"])
   end
 end
+
+require 'dry/data/types/form'
