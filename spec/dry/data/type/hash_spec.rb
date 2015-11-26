@@ -1,6 +1,6 @@
 RSpec.describe Dry::Data::Type::Hash do
   subject(:hash) do
-    Dry::Data['coercible.hash'].schema(
+    Dry::Data['coercible.hash'].strict(
       name: "coercible.string",
       age: "coercible.int",
       active: "strict.bool",

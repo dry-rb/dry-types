@@ -19,7 +19,7 @@ module Dry
         prev_schema = schema || {}
 
         @schema = prev_schema.merge(new_schema)
-        @constructor = Data['coercible.hash'].schema(schema)
+        @constructor = Data['coercible.hash'].strict(schema)
 
         attr_reader(*(new_schema.keys - prev_schema.keys))
 
