@@ -7,8 +7,7 @@ module Dry
 
       def self.inherited(klass)
         super
-        name = Inflecto.underscore(klass).gsub('/', '.')
-        Data.register(name, Type.new(klass.method(:new), klass))
+        Data.register_class(klass)
       end
 
       def self.attribute(*args)

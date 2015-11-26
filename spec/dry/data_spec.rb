@@ -20,6 +20,18 @@ RSpec.describe Dry::Data do
     end
   end
 
+  describe '.register_class' do
+    it 'registers a class and uses `.new` method as default constructor' do
+      module Test
+        User = Struct.new(:name)
+      end
+
+      Dry::Data.register_class(Test::User)
+
+      expect(Dry::Data['test.user'].primitive).to be(Test::User)
+    end
+  end
+
   describe '.[]' do
     it 'returns registered type for "string"' do
       expect(Dry::Data['string']).to be_a(Dry::Data::Type)

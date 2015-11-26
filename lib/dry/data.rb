@@ -37,6 +37,13 @@ module Dry
       container.register(name, type || block.call)
     end
 
+    def self.register_class(klass)
+      container.register(
+        Inflecto.underscore(klass).gsub('/', '.'),
+        Type.new(klass.method(:new), klass)
+      )
+    end
+
     def self.[](name)
       type_map.fetch(name) do
         result = name.match(TYPE_SPEC_REGEX)
