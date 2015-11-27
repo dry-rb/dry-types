@@ -49,6 +49,10 @@ RSpec.describe Dry::Data::Compiler, '#call' do
     expect(hash[foo: 'bar', email: 'jane@doe.org', age: '20', admin: '1']).to eql(
       email: 'jane@doe.org', age: 20, admin: true
     )
+
+    expect(hash[foo: 'bar', age: '20', admin: '1']).to eql(
+      age: 20, admin: true
+    )
   end
 
   it 'builds a coercible hash with symbolized keys' do

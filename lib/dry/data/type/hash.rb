@@ -6,7 +6,9 @@ module Dry
           attributes = hash_constructor[input]
 
           value_constructors.each_with_object({}) do |(key, value_constructor), result|
-            result[key] = value_constructor[attributes[key]]
+            if attributes.key?(key)
+              result[key] = value_constructor[attributes[key]]
+            end
           end
         end
 
