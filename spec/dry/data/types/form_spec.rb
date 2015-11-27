@@ -77,7 +77,7 @@ RSpec.describe Dry::Data::Type do
     subject(:type) { Dry::Data['form.float'] }
 
     it 'coerces to a float' do
-      expect(type['3.12']).to be(3.12)
+      expect(type['3.12']).to eql(3.12)
     end
 
     it 'coerces empty string to nil' do
