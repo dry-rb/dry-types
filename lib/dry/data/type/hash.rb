@@ -10,6 +10,18 @@ module Dry
           end
         end
 
+        def self.symbolized_constructor(hash_constructor, value_constructors, input)
+          attributes = hash_constructor[input]
+
+          value_constructors.each_with_object({}) do |(key, value_constructor), result|
+            key_name = key.to_s
+
+            if attributes.key?(key_name)
+              result[key.to_sym] = value_constructor[attributes[key_name]]
+            end
+          end
+        end
+
         def self.strict_constructor(hash_constructor, value_constructors, input)
           attributes = hash_constructor[input]
 
@@ -27,6 +39,10 @@ module Dry
 
         def strict(type_map)
           schema(type_map, :strict_constructor)
+        end
+
+        def symbolized(type_map)
+          schema(type_map, :symbolized_constructor)
         end
 
         def schema(type_map, meth = :safe_constructor)
