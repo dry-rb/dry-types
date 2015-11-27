@@ -135,7 +135,53 @@ maybe_string['something'].fmap(&:upcase).value
 # => "SOMETHING"
 ```
 
+### Defining a hash with explicit schema
+
+The built-in hash type has constructors that you can use to define hashes with
+explicit schemas and coercible values using the built-in types.
+
+### Hash Schema
+
+``` ruby
+# using simple kernel coercions
+hash = Dry::Data['hash'].schema(name: 'string', age: 'coercible.int')
+
+hash[name: 'Jane', age: '21']
+# => { :name => "Jane", :age => 21 }
+
+# using form param coercions
+hash = Dry::Data['hash'].schema(name: 'string', birthdate: 'form.date')
+
+hash[name: 'Jane', birthdate: '1994-11-11']
+# => { :name => "Jane", :birthdate => #<Date: 1994-11-11 ((2449668j,0s,0n),+0s,2299161j)> }
+```
+
+### Strict Hash
+
+Strict hash will raise errors when keys are missing or value types are incorrect.
+
+``` ruby
+hash = Dry::Data['hash'].strict(name: 'string', age: 'coercible.int')
+
+hash[email: 'jane@doe.org', name: 'Jane', age: 21]
+# => Dry::Data::SchemaKeyError: :email is missing in Hash input
+```
+
+### Symbolized Hash
+
+Symbolized hash will turn string key names into symbols
+
+``` ruby
+hash = Dry::Data['hash'].symbolized(name: 'string', age: 'coercible.int')
+
+hash['name' => 'Jane', 'age' => '21']
+# => { :name => "Jane", :age => 21 }
+```
+
 ### Defining a struct
+
+You can define struct objects which will have attribute readers for specified
+attributes using a simple dsl:
 
 ``` ruby
 class User < Dry::Data::Struct
