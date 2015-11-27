@@ -24,36 +24,30 @@ Or install it yourself as:
 
     $ gem install dry-data
 
-## Why?
-
-Unlike seemingly similar libraries like virtus, attrio, fast_attrs, attribs etc.
-`Dry::Data` provides you an interface to explicitly specify data types you want
-to use in your application domain which gives you type-safety and *simple* coercion
-mechanism using built-in coercion methods on the kernel.
-
-Main difference is that `Dry::Data` is not designed to handle all kinds of complex
-coercions that are typically required when dealing with, let's say, form params
-in a web application. Its primary focus is to allow you to specify the exact shape
-of the custom application data types to avoid silly bugs that are often hard to debug
-(`NoMethodError: undefined method `size' for nil:NilClass` anyone?).
-
 ## Usage
 
-Primary usage of this library is defining domain data types that your application
-will work with. The interface consists of lower-level type definitions and a higher-level
-virtus-like interface for defining structs.
+You can use `dry-data` for defining various data types in your application, like
+domain entities and value objects or hashes with coercible values used to handle
+params.
 
+Built-in types are grouped under 5 categories:
 
-### Accessing built-in types
+- default: pass-through without any checks
+- `strict` - doesn't coerce and checks the input type against the primitive class
+- `coercible` - tries to coerce and raises type-error if it failed
+- `form` - non-strict coercion types suitable for form params
+- `maybe` - accepts either a nil or something else
+
+### Built-in Type Categories
 
 Coercible types using kernel coercion methods:
 
-- `string`
-- `int`
-- `float`
-- `decimal`
-- `array`
-- `hash`
+- `coercible.string`
+- `coercible.int`
+- `coercible.float`
+- `coercible.decimal`
+- `coercible.array`
+- `coercible.hash`
 
 Non-coercible:
 
@@ -64,14 +58,19 @@ Non-coercible:
 - `date_time`
 - `time`
 
-More types will be added soon.
+Form-coercible types:
 
-Types are grouped under 4 categories:
+- `form.date`
+- `form.date_time`
+- `form.time`
+- `form.true`
+- `form.false`
+- `form.bool`
+- `form.int`
+- `form.float`
+- `form.decimal`
 
-- default: pass-through without any checks
-- `strict` - doesn't coerce and checks the input type against the primitive class
-- `coercible` - tries to coerce and raises type-error if it failed
-- `maybe` - accepts either a nil or something else
+### Accessing Built-in Types
 
 ``` ruby
 # default passthrough category
@@ -92,6 +91,10 @@ array = Dry::Data["coercible.array"]
 
 string[:foo] # => 'foo'
 array[:foo] # => [:foo]
+
+# form group
+date = Dry::Data["form.date"]
+date['2015-11-29'] # => #<Date: 2015-11-29 ((2457356j,0s,0n),+0s,2299161j)>
 ```
 
 ### Optional types
