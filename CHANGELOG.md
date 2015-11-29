@@ -3,6 +3,7 @@
 ## Added
 
 * `form.nil` which coerces empty strings to `nil` (solnic)
+* `bool` sum-type (true | false) (solnic)
 * Type compiler supports sum-types now (solnic)
 
 ## Changed
