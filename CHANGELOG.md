@@ -1,3 +1,16 @@
+# v0.2.0 2015-11-29
+
+## Added
+
+* `form.nil` which coerces empty strings to `nil` (solnic)
+* Type compiler supports sum-types now (solnic)
+
+## Changed
+
+* Constructing optional types uses the new `Dry::Data["optional"]` built-in type (solnic)
+
+[Compare v0.1.0...HEAD](https://github.com/dryrb/dry-data/compare/v0.1.0...HEAD)
+
 # v0.1.0 2015-11-27
 
 ## Added
