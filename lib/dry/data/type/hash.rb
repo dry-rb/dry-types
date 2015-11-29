@@ -48,8 +48,8 @@ module Dry
         end
 
         def schema(type_map, meth = :safe_constructor)
-          value_constructors = type_map.each_with_object({}) { |(name, type_id), result|
-            result[name] = Data[type_id]
+          value_constructors = type_map.each_with_object({}) { |(name, type), result|
+            result[name] = type.is_a?(String) ? Data[type] : type
           }
 
           self.class.new(

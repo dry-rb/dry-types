@@ -2,6 +2,10 @@ require 'dry/data/coercions/form'
 
 module Dry
   module Data
+    register('form.nil') do
+      Type.new(Coercions::Form.method(:to_nil), NilClass)
+    end
+
     register('form.date') do
       Type.new(Coercions::Form.method(:to_date), Date)
     end

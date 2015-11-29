@@ -1,10 +1,10 @@
 module Dry
   module Data
     class Compiler
-      attr_reader :types
+      attr_reader :registry
 
-      def initialize(types)
-        @types = types
+      def initialize(registry)
+        @registry = registry
       end
 
       def call(ast)
@@ -21,18 +21,18 @@ module Dry
         if args
           send(:"visit_#{type}", args)
         else
-          types[type]
+          registry[type]
         end
       end
 
       def visit_hash(node)
         constructor, schema = node
-        types['hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
+        registry['hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
       end
 
       def visit_key(node)
-        name, type = node
-        { name => type }
+        name, types = node
+        { name => types.map { |id| registry[id] }.reduce(:|) }
       end
     end
   end

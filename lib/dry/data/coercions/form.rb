@@ -10,6 +10,14 @@ module Dry
         FALSE_VALUES = %w[0 off f false n no].freeze
         BOOLEAN_MAP = Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
 
+        def self.to_nil(input)
+          if input.is_a?(String) && input == ''
+            nil
+          else
+            input
+          end
+        end
+
         def self.to_date(input)
           Date.parse(input)
         rescue ArgumentError

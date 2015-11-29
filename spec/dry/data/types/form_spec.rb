@@ -1,6 +1,18 @@
 require 'dry/data/types/form'
 
 RSpec.describe Dry::Data::Type do
+  describe 'form.nil' do
+    subject(:type) { Dry::Data['form.nil'] }
+
+    it 'coerces empty string to nil' do
+      expect(type['']).to be(nil)
+    end
+
+    it 'returns original value when it is not an empty string' do
+      expect(type[['foo']]).to eql(['foo'])
+    end
+  end
+
   describe 'form.date' do
     subject(:type) { Dry::Data['form.date'] }
 
