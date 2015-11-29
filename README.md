@@ -1,10 +1,18 @@
-# Dry::Data <a href="https://gitter.im/dryrb/chat" target="_blank">![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)</a>
+[gem]: https://rubygems.org/gems/dry-data
+[travis]: https://travis-ci.org/dryrb/dry-data
+[gemnasium]: https://gemnasium.com/dryrb/dry-data
+[codeclimate]: https://codeclimate.com/github/dryrb/dry-data
+[coveralls]: https://coveralls.io/r/dryrb/dry-data
+[inchpages]: http://inch-ci.org/github/dryrb/dry-data
 
-<a href="https://rubygems.org/gems/dry-data" target="_blank">![Gem Version](https://badge.fury.io/rb/dry-data.svg)</a>
-<a href="https://travis-ci.org/dryrb/dry-data" target="_blank">![Build Status](https://travis-ci.org/dryrb/dry-data.svg?branch=master)</a>
-<a href="https://gemnasium.com/dryrb/dry-data" target="_blank">![Dependency Status](https://gemnasium.com/dryrb/dry-data.svg)</a>
-<a href="https://codeclimate.com/github/dryrb/dry-data" target="_blank">![Code Climate](https://codeclimate.com/github/dryrb/dry-data/badges/gpa.svg)</a>
-<a href="http://inch-ci.org/github/dryrb/dry-data" target="_blank">![Documentation Status](http://inch-ci.org/github/dryrb/dry-data.svg?branch=master&style=flat)</a>
+# dry-data [![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dryrb/chat)
+
+[![Gem Version](https://badge.fury.io/rb/dry-data.svg)][gem]
+[![Build Status](https://travis-ci.org/dryrb/dry-data.svg?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/dryrb/dry-data.svg)][gemnasium]
+[![Code Climate](https://codeclimate.com/github/dryrb/dry-data/badges/gpa.svg)][codeclimate]
+[![Test Coverage](https://codeclimate.com/github/dryrb/dry-data/badges/coverage.svg)][codeclimate]
+[![Inline docs](http://inch-ci.org/github/dryrb/dry-data.svg?branch=master)][inchpages]
 
 A simple type system for Ruby with support for coercions.
 
