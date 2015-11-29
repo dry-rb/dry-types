@@ -10,7 +10,7 @@
 
 * Constructing optional types uses the new `Dry::Data["optional"]` built-in type (solnic)
 
-[Compare v0.1.0...HEAD](https://github.com/dryrb/dry-data/compare/v0.1.0...HEAD)
+[Compare v0.1.0...v0.2.0](https://github.com/dryrb/dry-data/compare/v0.1.0...v0.2.0)
 
 # v0.1.0 2015-11-27
 
