@@ -13,6 +13,8 @@ require 'dry/data/dsl'
 
 module Dry
   module Data
+    Optional = Object.new.freeze
+
     class SchemaError < TypeError
       def initialize(key, value)
         super("#{value.inspect} (#{value.class}) has invalid type for :#{key}")

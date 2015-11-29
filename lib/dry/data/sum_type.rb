@@ -4,7 +4,7 @@ module Dry
   module Data
     def self.SumType(left, right)
       klass =
-        if left.primitive == NilClass
+        if left.is_a?(Type::Optional)
           SumType::Optional
         else
           SumType
@@ -33,15 +33,17 @@ module Dry
       end
 
       def call(input)
-        result = left[input]
+        begin
+          value = left[input]
 
-        if left.valid?(result)
-          result
-        else
+          if left.valid?(value)
+            value
+          else
+            right[value]
+          end
+        rescue TypeError
           right[input]
         end
-      rescue TypeError
-        right[input]
       end
       alias_method :[], :call
 

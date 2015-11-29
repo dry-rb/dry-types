@@ -1,3 +1,4 @@
+require 'dry/data/type/optional'
 require 'dry/data/type/hash'
 require 'dry/data/type/array'
 
@@ -47,7 +48,7 @@ module Dry
       alias_method :[], :call
 
       def valid?(input)
-        input.instance_of?(primitive)
+        input.is_a?(primitive)
       end
 
       def |(other)

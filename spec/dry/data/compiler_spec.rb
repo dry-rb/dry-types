@@ -48,15 +48,11 @@ RSpec.describe Dry::Data::Compiler, '#call' do
 
     result = hash[foo: 'bar', email: 'jane@doe.org', age: '20', admin: '1']
 
-    expect(result).to include(email: 'jane@doe.org', admin: true)
-
-    expect(result[:age].value).to be(20)
+    expect(result).to eql(email: 'jane@doe.org', age: 20, admin: true)
 
     result = hash[foo: 'bar', email: 'jane@doe.org', age: '', admin: '1']
 
-    expect(result).to include(email: 'jane@doe.org', admin: true)
-
-    expect(result[:age].value).to be(nil)
+    expect(result).to eql(email: 'jane@doe.org', age: nil, admin: true)
 
     result = hash[foo: 'bar', email: 'jane@doe.org', admin: '1']
 
