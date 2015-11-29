@@ -8,20 +8,38 @@ RSpec.describe Dry::Data::Compiler, '#call' do
       :type, [
         'hash', [
           :strict, [
-            [:key, [:email, ['string']]],
-            [:key, [:age, ['form.int']]],
-            [:key, [:admin, ['form.bool']]]
+            [:key, [:email, [:type, 'string']]],
+            [:key, [:age, [:type, 'form.int']]],
+            [:key, [:admin, [:type, 'form.bool']]],
+            [:key, [:address, [
+              :type, [
+                'hash', [
+                  :strict, [
+                    [:key, [:city, [:type, 'string']]],
+                    [:key, [:street, [:type, 'string']]]
+                  ]
+                ]
+              ]
+            ]
           ]
         ]
       ]
-    ]
+    ]]]
 
     hash = compiler.(ast)
 
     expect(hash).to be_instance_of(Dry::Data::Type::Hash)
 
-    expect(hash[email: 'jane@doe.org', age: '20', admin: '1']).to eql(
-      email: 'jane@doe.org', age: 20, admin: true
+    result = hash[
+      email: 'jane@doe.org',
+      age: '20',
+      admin: '1',
+      address: { city: 'NYC', street: 'Street 1/2' }
+    ]
+
+    expect(result).to eql(
+      email: 'jane@doe.org', age: 20, admin: true,
+      address: { city: 'NYC', street: 'Street 1/2' }
     )
 
     expect { hash[foo: 'jane@doe.org', age: '20', admin: '1'] }.to raise_error(
@@ -34,9 +52,9 @@ RSpec.describe Dry::Data::Compiler, '#call' do
       :type, [
         'hash', [
           :schema, [
-            [:key, [:email, ['string']]],
-            [:key, [:age, ['form.nil', 'form.int']]],
-            [:key, [:admin, ['form.bool']]]
+            [:key, [:email, [:type, 'string']]],
+            [:key, [:age, [:sum_type, ['form.nil', 'form.int']]]],
+            [:key, [:admin, [:type, 'form.bool']]]
           ]
         ]
       ]
@@ -64,9 +82,9 @@ RSpec.describe Dry::Data::Compiler, '#call' do
       :type, [
         'hash', [
           :symbolized, [
-            [:key, [:email, ['string']]],
-            [:key, [:age, ['form.int']]],
-            [:key, [:admin, ['form.bool']]]
+            [:key, [:email, [:type, 'string']]],
+            [:key, [:age, [:type, 'form.int']]],
+            [:key, [:admin, [:type, 'form.bool']]]
           ]
         ]
       ]

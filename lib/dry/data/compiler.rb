@@ -18,11 +18,15 @@ module Dry
       def visit_type(node)
         type, args = node
 
-        if args
+        if respond_to?(:"visit_#{type}")
           send(:"visit_#{type}", args)
         else
           registry[type]
         end
+      end
+
+      def visit_sum_type(types)
+        types.map { |name| registry[name] }.reduce(:|)
       end
 
       def visit_hash(node)
@@ -32,7 +36,7 @@ module Dry
 
       def visit_key(node)
         name, types = node
-        { name => types.map { |id| registry[id] }.reduce(:|) }
+        { name => visit(types) }
       end
     end
   end
