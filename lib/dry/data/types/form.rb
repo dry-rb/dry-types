@@ -23,7 +23,7 @@ module Dry
     end
 
     register('form.false') do
-      Type.new(Coercions::Form.method(:to_true), FalseClass)
+      Type.new(Coercions::Form.method(:to_false), FalseClass)
     end
 
     register('form.bool') do

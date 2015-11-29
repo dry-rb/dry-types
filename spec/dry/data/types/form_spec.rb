@@ -69,6 +69,34 @@ RSpec.describe Dry::Data::Type do
     end
   end
 
+  describe 'form.true' do
+    subject(:type) { Dry::Data['form.true'] }
+
+    it 'coerces to true' do
+      %w[1 on  t true  y yes].each do |value|
+        expect(type[value]).to be(true)
+      end
+    end
+
+    it 'returns original value when it is not supported' do
+      expect(type['huh?']).to eql('huh?')
+    end
+  end
+
+  describe 'form.false' do
+    subject(:type) { Dry::Data['form.false'] }
+
+    it 'coerces to false' do
+      %w[0 off f false n no].each do |value|
+        expect(type[value]).to be(false)
+      end
+    end
+
+    it 'returns original value when it is not supported' do
+      expect(type['huh?']).to eql('huh?')
+    end
+  end
+
   describe 'form.int' do
     subject(:type) { Dry::Data['form.int'] }
 
