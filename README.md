@@ -6,7 +6,7 @@
 <a href="https://codeclimate.com/github/dryrb/dry-data" target="_blank">![Code Climate](https://codeclimate.com/github/dryrb/dry-data/badges/gpa.svg)</a>
 <a href="http://inch-ci.org/github/dryrb/dry-data" target="_blank">![Documentation Status](http://inch-ci.org/github/dryrb/dry-data.svg?branch=master&style=flat)</a>
 
-A simple type-system for Ruby respecting ruby's built-in coercion mechanisms.
+A simple type system for Ruby with support for coercions.
 
 ## Installation
 
@@ -40,15 +40,6 @@ Built-in types are grouped under 5 categories:
 
 ### Built-in Type Categories
 
-Coercible types using kernel coercion methods:
-
-- `coercible.string`
-- `coercible.int`
-- `coercible.float`
-- `coercible.decimal`
-- `coercible.array`
-- `coercible.hash`
-
 Non-coercible:
 
 - `nil`
@@ -58,8 +49,36 @@ Non-coercible:
 - `date_time`
 - `time`
 
-Form-coercible types:
+Coercible types using kernel coercion methods:
 
+- `coercible.string`
+- `coercible.int`
+- `coercible.float`
+- `coercible.decimal`
+- `coercible.array`
+- `coercible.hash`
+
+Optional strict types:
+
+- `maybe.strict.string`
+- `maybe.strict.int`
+- `maybe.strict.float`
+- `maybe.strict.decimal`
+- `maybe.strict.array`
+- `maybe.strict.hash`
+
+Optional coercible types:
+
+- `maybe.coercible.string`
+- `maybe.coercible.int`
+- `maybe.coercible.float`
+- `maybe.coercible.decimal`
+- `maybe.coercible.array`
+- `maybe.coercible.hash`
+
+Coercible types suitable for form param processing:
+
+- `form.nil`
 - `form.date`
 - `form.date_time`
 - `form.time`
