@@ -117,7 +117,7 @@ maybe_int['12.3'] # Some(12.3)
 You can define your own optional types too:
 
 ``` ruby
-maybe_string = Dry::Data["nil"] | Dry::Data["string"]
+maybe_string = Dry::Data["optional"] | Dry::Data["string"]
 
 maybe_string[nil]
 # => None
