@@ -1,5 +1,9 @@
 # v0.2.1 2015-11-30
 
+## Added
+
+* Type compiler supports nested hashes now (solnic)
+
 ## Fixed
 
 * `form.bool` sum is using correct right-side `form.false` type (solnic)
