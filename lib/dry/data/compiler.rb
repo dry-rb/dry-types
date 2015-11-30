@@ -25,8 +25,8 @@ module Dry
         end
       end
 
-      def visit_sum_type(types)
-        types.map { |name| registry[name] }.reduce(:|)
+      def visit_sum(node)
+        node.map { |type| visit(type) }.reduce(:|)
       end
 
       def visit_hash(node)

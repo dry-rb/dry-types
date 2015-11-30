@@ -53,7 +53,7 @@ RSpec.describe Dry::Data::Compiler, '#call' do
         'hash', [
           :schema, [
             [:key, [:email, [:type, 'string']]],
-            [:key, [:age, [:sum_type, ['form.nil', 'form.int']]]],
+            [:key, [:age, [:sum, [[:type, 'form.nil'], [:type, 'form.int']]]]],
             [:key, [:admin, [:type, 'form.bool']]]
           ]
         ]
