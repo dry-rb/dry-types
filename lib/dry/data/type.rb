@@ -9,8 +9,22 @@ module Dry
   module Data
     class Type
       attr_reader :constructor
-
       attr_reader :primitive
+
+      class Enum
+        attr_reader :values
+        attr_reader :type
+
+        def initialize(values, type)
+          @values = values
+          @type = type
+        end
+
+        def call(input)
+          type[input]
+        end
+        alias_method :[], :call
+      end
 
       class Constrained < Type
         attr_reader :rule
@@ -61,6 +75,10 @@ module Dry
 
       def constrained(options)
         Constrained.new(constructor, primitive, Data.Rule(primitive, options))
+      end
+
+      def enum(*values)
+        Enum.new(values.freeze, constrained(inclusion: values))
       end
 
       def name
