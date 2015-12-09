@@ -12,6 +12,7 @@ module Dry
     NON_COERCIBLE = {
       nil: NilClass,
       symbol: Symbol,
+      class: Class,
       true: TrueClass,
       false: FalseClass,
       date: Date,
