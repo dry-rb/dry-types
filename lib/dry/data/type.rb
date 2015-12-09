@@ -4,12 +4,46 @@ require 'dry/data/type/array'
 
 require 'dry/data/sum_type'
 
+require 'dry-validation'
+
 module Dry
   module Data
+    def self.Rule(primitive, options)
+      rule_compiler.(
+        options.map { |key, val|
+          [:val, [primitive, [:predicate, [:"#{key}?", [val]]]]]
+        }
+      ).reduce(:and)
+    end
+
+    def self.rule_compiler
+      @rule_compiler ||= Validation::RuleCompiler.new(Validation::Predicates)
+    end
+
     class Type
       attr_reader :constructor
 
       attr_reader :primitive
+
+      class Constrained < Type
+        attr_reader :rule
+
+        def initialize(constructor, primitive, rule)
+          super(constructor, primitive)
+          @rule = rule
+        end
+
+        def call(input)
+          result = super(input)
+
+          if rule.(result).success?
+            result
+          else
+            raise ConstraintError, "#{input.inspect} violates constraints"
+          end
+        end
+        alias_method :[], :call
+      end
 
       def self.[](primitive)
         if primitive == ::Array
@@ -36,6 +70,10 @@ module Dry
       def initialize(constructor, primitive)
         @constructor = constructor
         @primitive = primitive
+      end
+
+      def constrained(options)
+        Constrained.new(constructor, primitive, Data.Rule(primitive, options))
       end
 
       def name

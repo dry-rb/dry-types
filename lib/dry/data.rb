@@ -27,6 +27,7 @@ module Dry
     end
 
     StructError = Class.new(TypeError)
+    ConstraintError = Class.new(TypeError)
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
