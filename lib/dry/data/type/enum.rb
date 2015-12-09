@@ -1,9 +1,6 @@
 module Dry
   module Data
     class Type
-      attr_reader :constructor
-      attr_reader :primitive
-
       class Enum
         attr_reader :values
         attr_reader :type
@@ -13,8 +10,14 @@ module Dry
           @type = type
         end
 
+        def primitive
+          type.primitive
+        end
+
         def call(input)
-          type[input]
+          case input
+          when Fixnum then type[values[input]]
+          else type[input] end
         end
         alias_method :[], :call
       end

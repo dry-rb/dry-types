@@ -5,3 +5,5 @@ require 'dry/data'
 begin
   require 'byebug'
 rescue LoadError; end
+
+Dir[Pathname(__dir__).join('shared/*.rb')].each(&method(:require))
