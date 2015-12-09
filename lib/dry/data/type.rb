@@ -1,6 +1,7 @@
 require 'dry/data/type/optional'
 require 'dry/data/type/hash'
 require 'dry/data/type/array'
+require 'dry/data/type/enum'
 
 require 'dry/data/sum_type'
 require 'dry/data/constraints'
