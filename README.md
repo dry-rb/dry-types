@@ -257,7 +257,7 @@ class Post < Dry::Data::Struct
   Statuses = Types::Strict::String.enum('draft', 'published', 'archived')
 
   attribute :title, Types::Strict::String
-  attribute :body, Types::String::String
+  attribute :body, Types::Strict::String
   attribute :status, Statuses
 end
 
