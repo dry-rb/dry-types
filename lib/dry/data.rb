@@ -14,6 +14,10 @@ require 'dry/data/dsl'
 
 module Dry
   module Data
+    extend Dry::Configurable
+
+    setting :namespace, self
+
     class SchemaError < TypeError
       def initialize(key, value)
         super("#{value.inspect} (#{value.class}) has invalid type for :#{key}")
@@ -30,6 +34,10 @@ module Dry
     ConstraintError = Class.new(TypeError)
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
+
+    def self.finalize
+      define_constants(config.namespace, container._container.keys)
+    end
 
     def self.container
       @container ||= Container.new
@@ -72,8 +80,11 @@ module Dry
       end
 
       names.map do |(klass, parts)|
-        mod = parts.reduce(namespace) { |a, e| a.const_set(e, Module.new) }
-        mod.const_set(klass, self[identifier("#{parts.join('::')}::#{klass}")])
+        mod = parts.reduce(namespace) do |a, e|
+          a.constants.include?(e.to_sym) ? a.const_get(e) : a.const_set(e, Module.new)
+        end
+
+        mod.const_set(klass, self[identifier((parts + [klass]).join('::'))])
       end
     end
 

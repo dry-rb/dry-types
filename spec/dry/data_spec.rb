@@ -10,13 +10,13 @@ RSpec.describe Dry::Data do
       end
 
       Dry::Data.register(
-        :custom_array,
+        'custom_array',
         Dry::Data::Type.new(FlatArray.method(:constructor), Array)
       )
 
       input = [[1], [2]]
 
-      expect(Dry::Data[:custom_array][input]).to eql([1, 2])
+      expect(Dry::Data['custom_array'][input]).to eql([1, 2])
     end
   end
 
@@ -50,6 +50,17 @@ RSpec.describe Dry::Data do
 
       expect(constants).to eql([Dry::Data['coercible.string']])
       expect(Test::Coercible::String).to be(Dry::Data['coercible.string'])
+    end
+  end
+
+  describe '.finalize' do
+    it 'defines all registered types under configured namespace' do
+      Dry::Data.configure { |config| config.namespace = Test }
+      Dry::Data.finalize
+
+      expect(Test::Strict::String).to be(Dry::Data['strict.string'])
+      expect(Test::Coercible::String).to be(Dry::Data['coercible.string'])
+      expect(Test::Maybe::Coercible::Int).to be(Dry::Data['maybe.coercible.int'])
     end
   end
 end
