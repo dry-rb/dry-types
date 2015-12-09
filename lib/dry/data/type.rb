@@ -4,7 +4,9 @@ require 'dry/data/type/array'
 
 require 'dry/data/sum_type'
 
-require 'dry-validation'
+require 'dry-equalizer' # FIXME: this should not be needed
+require 'dry/validation/rule_compiler'
+require 'dry/validation/predicates'
 
 module Dry
   module Data
