@@ -253,7 +253,7 @@ class Post < Dry::Data::Struct
 
   attribute :title, Types::Strict::String
   attribute :body, Types::String::String
-  attribute :status, Types::Statuses
+  attribute :status, Statuses
 end
 
 # enum values are frozen, let's be paranoid, doesn't hurt and have potential to
