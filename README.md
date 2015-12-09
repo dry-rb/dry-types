@@ -176,6 +176,9 @@ particular primitive, it's up to you to set up constraints that make sense.
 Under the hood it uses `dry-validation`[https://github.com/dryrb/dry-validation]
 and all of its predicates are supported.
 
+IMPORTANT: `dry-data` does not have a runtime dependency on `dry-validation` so
+if you want to use contrained types you need to add it to your Gemfile
+
 ``` ruby
 string = Dry::Data["strict.string"].constrained(min_size: 3)
 
