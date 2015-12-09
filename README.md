@@ -51,6 +51,8 @@ Built-in types are grouped under 5 categories:
 Non-coercible:
 
 - `nil`
+- `symbol`
+- `class`
 - `true`
 - `false`
 - `date`

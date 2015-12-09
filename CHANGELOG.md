@@ -5,8 +5,8 @@
 * `Type#constrained` interface for defining constrained types (solnic)
 * `Dry::Data` can be configured with a type namespace (solnic)
 * `Dry::Data.finalize` can be used to define types as constants under configured namespace (solnic)
-* `Dry::Data::Struct.[]` interface that can be used to infer a custom struct subclass
-  based on attributes (solnic)
+* `Dry::Data::Type#enum` for defining an enum from a specific type (solnic)
+* New types: `symbol` and `class` along with their `strict` versions (solnic)
 
 [Compare v0.2.1...v0.3.0](https://github.com/dryrb/dry-data/compare/v0.2.1...v0.3.0)
 
