@@ -5,7 +5,7 @@ RSpec.describe Dry::Data::Type::Constrained do
 
       expect(string['hello']).to eql('hello')
 
-      expect { string['he'] }.to raise_error(TypeError, /he/)
+      expect { string['he'] }.to raise_error(Dry::Data::ConstraintError, /he/)
     end
   end
 end
