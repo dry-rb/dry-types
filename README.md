@@ -162,6 +162,38 @@ maybe_string['something'].fmap(&:upcase).value
 # => "SOMETHING"
 ```
 
+### Constrained Types
+
+You can create constrained types that will use validation rules to check if the
+input is not violating any of the configured contraints. You can treat it as
+a lower level guarantee that you're not instantiating objects that are broken.
+
+All types support constraints API, but not all constraints are suitable for a
+particular primitive, it's up to you to set up constraints that make sense.
+
+Under the hood it uses `dry-validation`[https://github.com/dryrb/dry-validation]
+and all of its predicates are supported.
+
+``` ruby
+string = Dry::Data["strict.string"].constrained(min_size: 3)
+
+string['foo']
+# => "foo"
+
+string['fo']
+# => Dry::Data::ConstraintError: "fo" violates constraints
+
+email = Dry::Data['strict.string'].constrained(
+  format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+)
+
+email["jane@doe.org"]
+# => "jane@doe.org"
+
+email["jane"]
+# => Dry::Data::ConstraintError: "fo" violates constraints
+```
+
 ### Defining a hash with explicit schema
 
 The built-in hash type has constructors that you can use to define hashes with
@@ -230,12 +262,12 @@ user.name # => Some("Jane")
 user.age # => 21
 ```
 
-## WIP
+## Status and Roadmap
 
-This is early alpha with a rough plan to:
+This library is in an early stage of development but you are encauraged to try it
+out and provide feedback.
 
-* Add constrained types (ie a string with a strict length, a number with a strict range etc.)
-* Benchmark against other libs and make sure it's fast enough
+For planned features check out [the issues](https://github.com/dryrb/dry-data/labels/feature).
 
 ## Development
 
