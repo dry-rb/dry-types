@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'dry/data'
+require 'dry-data'
+require 'dry/data/type/constrained'
 
 begin
   require 'byebug'

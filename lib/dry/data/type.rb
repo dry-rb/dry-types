@@ -4,7 +4,6 @@ require 'dry/data/type/array'
 require 'dry/data/type/enum'
 
 require 'dry/data/sum_type'
-require 'dry/data/constraints'
 
 module Dry
   module Data
@@ -57,10 +56,6 @@ module Dry
       def initialize(constructor, primitive)
         @constructor = constructor
         @primitive = primitive
-      end
-
-      def constrained(options)
-        Constrained.new(constructor, primitive, Data.Rule(primitive, options))
       end
 
       def enum(*values)
