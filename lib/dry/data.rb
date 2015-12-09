@@ -37,11 +37,14 @@ module Dry
       container.register(name, type || block.call)
     end
 
-    def self.register_class(klass)
+    def self.register_class(klass, constructor = :new)
       container.register(
-        Inflecto.underscore(klass).gsub('/', '.'),
-        Type.new(klass.method(:new), klass)
+        identifier(klass), Type.new(klass.method(constructor), klass)
       )
+    end
+
+    def self.identifier(klass)
+      Inflecto.underscore(klass).gsub('/', '.')
     end
 
     def self.[](name)

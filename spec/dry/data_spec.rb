@@ -23,7 +23,8 @@ RSpec.describe Dry::Data do
   describe '.register_class' do
     it 'registers a class and uses `.new` method as default constructor' do
       module Test
-        User = Struct.new(:name)
+        class User < Struct.new(:name)
+        end
       end
 
       Dry::Data.register_class(Test::User)
