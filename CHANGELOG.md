@@ -1,4 +1,4 @@
-# v0.3.0 to-be-released
+# v0.3.0 2015-12-09
 
 ## Added
 
