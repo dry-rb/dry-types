@@ -1,9 +1,13 @@
 module Dry
   module Data
     class Struct
+      class << self
+        attr_reader :constructor
+      end
+
       def self.inherited(klass)
         super
-        Data.register_class(klass, :constructor)
+        Data.register_class(klass)
       end
 
       def self.attribute(*args)
@@ -14,20 +18,11 @@ module Dry
         prev_schema = schema || {}
 
         @schema = prev_schema.merge(new_schema)
+        @constructor = Data['coercible.hash'].strict(schema)
 
         attr_reader(*(new_schema.keys - prev_schema.keys))
 
         self
-      end
-
-      def self.attribute_hash
-        @attribute_hash ||= Data['coercible.hash'].strict(schema)
-      end
-
-      def self.constructor(attributes)
-        self[attributes].new(attribute_hash[attributes])
-      rescue SchemaError, SchemaKeyError => e
-        raise StructError, "[#{self}.new] #{e.message}"
       end
 
       def self.schema
@@ -35,8 +30,10 @@ module Dry
         super_schema.merge(@schema || {})
       end
 
-      def self.[](_)
-        self
+      def self.new(attributes)
+        super(constructor[attributes])
+      rescue SchemaError, SchemaKeyError => e
+        raise StructError, "[#{self}.new] #{e.message}"
       end
 
       def initialize(attributes)
