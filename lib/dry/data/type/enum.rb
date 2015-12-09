@@ -6,8 +6,9 @@ module Dry
         attr_reader :type
 
         def initialize(values, type)
-          @values = values
+          @values = values.freeze
           @type = type
+          values.each(&:freeze)
         end
 
         def primitive

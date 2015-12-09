@@ -7,13 +7,13 @@ RSpec.describe Dry::Data::Type::Enum do
   it_behaves_like Dry::Data::Type
 
   it 'allows defining an enum from a specific type' do
-    expect(type['draft']).to eql('draft')
-    expect(type['published']).to eql('published')
-    expect(type['archived']).to eql('archived')
+    expect(type['draft']).to eql(values[0])
+    expect(type['published']).to eql(values[1])
+    expect(type['archived']).to eql(values[2])
 
-    expect(type[0]).to eql('draft')
-    expect(type[1]).to eql('published')
-    expect(type[2]).to eql('archived')
+    expect(type[0]).to be(values[0])
+    expect(type[1]).to be(values[1])
+    expect(type[2]).to eql(values[2])
 
     expect(type.values).to eql(values)
 

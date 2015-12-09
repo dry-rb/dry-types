@@ -64,7 +64,7 @@ module Dry
       end
 
       def enum(*values)
-        Enum.new(values.freeze, constrained(inclusion: values))
+        Enum.new(values, constrained(inclusion: values))
       end
 
       def name
