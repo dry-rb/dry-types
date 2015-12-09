@@ -194,6 +194,47 @@ email["jane"]
 # => Dry::Data::ConstraintError: "fo" violates constraints
 ```
 
+### Setting Type Constants
+
+Types can be stored as easily accessible constants in a configured namespace:
+
+``` ruby
+module Types; end
+
+Dry::Data.configure do |config|
+  config.namespace = Types
+end
+
+# after defining your custom types (if you've got any) you can finalize setup
+Dry::Data.finalize
+
+# this defines all types under your namespace
+Types::Coercible::String
+# => #<Dry::Data::Type:0x007feffb104aa8 @constructor=#<Method: Kernel.String>, @primitive=String>
+```
+
+With types accessible as constants you can easily compose more complex types,
+like sum-types or constrained types, in hash schemas or structs:
+
+``` ruby
+Dry::Data.configure do |config|
+  config.namespace = Types
+end
+
+Dry::Data.finalize
+
+module Types
+  Email = String.constrained(format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
+  Age = Int.constrained(gt: 18)
+end
+
+class User < Dry::Data::Struct
+  attribute :name, Types::String
+  attribute :email, Types::Email
+  attribute :age, Types::Age
+end
+```
+
 ### Defining a hash with explicit schema
 
 The built-in hash type has constructors that you can use to define hashes with
