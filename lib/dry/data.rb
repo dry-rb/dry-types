@@ -76,7 +76,7 @@ module Dry
     def self.define_constants(namespace, identifiers)
       names = identifiers.map do |id|
         parts = id.split('.')
-        [Inflecto.classify(parts.pop), parts.map(&Inflecto.method(:classify))]
+        [Inflecto.camelize(parts.pop), parts.map(&Inflecto.method(:camelize))]
       end
 
       names.map do |(klass, parts)|
