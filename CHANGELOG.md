@@ -1,3 +1,11 @@
+# v0.3.1 2015-12-09
+
+## Changed
+
+* Removed require of constrained type and make it optional (solnic)
+
+[Compare v0.3.0...v0.3.1](https://github.com/dryrb/dry-data/compare/v0.3.0...v0.3.1)
+
 # v0.3.0 2015-12-09
 
 ## Added
