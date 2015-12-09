@@ -235,6 +235,45 @@ class User < Dry::Data::Struct
 end
 ```
 
+### Defining Enums
+
+In many cases you may want to define an enum. For example in a blog application
+a post may have a finite list of statuses. Apart from accessing the current status
+value it is useful to have all possible values accessible too. Furthermore an
+enum is a `int => value` map, so you can store integers somewhere and have them
+mapped to enum values conveniently.
+
+You can define enums for every type but it probably only makes sense for `string`:
+
+``` ruby
+# assuming we have types loaded into `Types` namespace
+# we can easily define an enum for our post struct
+class Post < Dry::Data::Struct
+  Statuses = Types::Strict::String.enum('draft', 'published', 'archived')
+
+  attribute :title, Types::Strict::String
+  attribute :body, Types::String::String
+  attribute :status, Types::Statuses
+end
+
+# enum values are frozen, let's be paranoid, doesn't hurt and have potential to
+# eliminate silly bugs
+Post::Statuses.values.frozen? # => true
+Post::Statuses.values.all?(&:frozen?) # => true
+
+# you can access values using indices or actual values
+Post::Statuses[0] # => "draft"
+Post::Statuses['draft'] # => "draft"
+
+# it'll raise if something silly was passed in
+Post::Statuses['something silly']
+# => Dry::Data::ConstraintError: "something silly" violates constraints
+
+# nil is considered as something silly too
+Post::Statuses[nil]
+# => Dry::Data::ConstraintError: nil violates constraints
+```
+
 ### Defining a hash with explicit schema
 
 The built-in hash type has constructors that you can use to define hashes with
