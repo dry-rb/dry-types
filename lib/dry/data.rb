@@ -65,6 +65,18 @@ module Dry
       end
     end
 
+    def self.define_constants(namespace, identifiers)
+      names = identifiers.map do |id|
+        parts = id.split('.')
+        [Inflecto.classify(parts.pop), parts.map(&Inflecto.method(:classify))]
+      end
+
+      names.map do |(klass, parts)|
+        mod = parts.reduce(namespace) { |a, e| a.const_set(e, Module.new) }
+        mod.const_set(klass, self[identifier("#{parts.join('::')}::#{klass}")])
+      end
+    end
+
     def self.type(*args, &block)
       dsl = DSL.new(container)
       block ? yield(dsl) : registry[args.first]

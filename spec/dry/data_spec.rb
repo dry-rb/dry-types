@@ -43,4 +43,13 @@ RSpec.describe Dry::Data do
       expect(Dry::Data['array<string>']).to be(Dry::Data['array<string>'])
     end
   end
+
+  describe '.define_constants' do
+    it 'defines types under constants in the provided namespace' do
+      constants = Dry::Data.define_constants(Test, ['coercible.string'])
+
+      expect(constants).to eql([Dry::Data['coercible.string']])
+      expect(Test::Coercible::String).to be(Dry::Data['coercible.string'])
+    end
+  end
 end
