@@ -4,6 +4,7 @@ require 'set'
 
 require 'dry-container'
 require 'inflecto'
+require 'thread_safe/cache'
 
 require 'dry/data/version'
 require 'dry/data/container'
@@ -48,7 +49,7 @@ module Dry
     end
 
     def self.[](name)
-      type_map.fetch(name) do
+      type_map.fetch_or_store(name) do
         result = name.match(TYPE_SPEC_REGEX)
 
         type =
@@ -69,7 +70,7 @@ module Dry
     end
 
     def self.type_map
-      @type_map ||= {}
+      @type_map ||= ThreadSafe::Cache.new
     end
   end
 end
