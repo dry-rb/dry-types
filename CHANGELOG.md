@@ -8,7 +8,7 @@
 * `Dry::Data::Struct.[]` interface that can be used to infer a custom struct subclass
   based on attributes (solnic)
 
-[Compare v0.2.1...v0.3.0](https://github.com/dryrb/dry-data/compare/v0.2.0...v0.3.0)
+[Compare v0.2.1...v0.3.0](https://github.com/dryrb/dry-data/compare/v0.2.1...v0.3.0)
 
 # v0.2.1 2015-11-30
 
