@@ -22,7 +22,9 @@ module Dry
         end
 
         def call(input)
-          type[input]
+          case input
+          when Fixnum then type[values[input]]
+          else type[input] end
         end
         alias_method :[], :call
       end
