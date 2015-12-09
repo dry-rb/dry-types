@@ -179,6 +179,12 @@ and all of its predicates are supported.
 IMPORTANT: `dry-data` does not have a runtime dependency on `dry-validation` so
 if you want to use contrained types you need to add it to your Gemfile
 
+If you want to use constrained type you need to require it explicitly:
+
+``` ruby
+require "dry/data/type/constrained"
+```
+
 ``` ruby
 string = Dry::Data["strict.string"].constrained(min_size: 3)
 
