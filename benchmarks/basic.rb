@@ -42,7 +42,7 @@ class AttrioUser
 end
 
 class DryDataUser < Dry::Data::Struct
-  attributes(name: 'coercible.string', age: 'coercible.int')
+  attributes(name: 'string', age: 'form.int')
 end
 
 puts DryDataUser.new(name: 'Jane', age: '21').inspect
