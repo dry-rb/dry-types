@@ -4,6 +4,10 @@
 
 * `Dry::Data::Value` which works like a struct but is a value object with equalizer (solnic)
 
+## Fixed
+
+* Added missing require for `dry-equalizer` (solnic)
+
 [Compare v0.3.1...v0.3.2](https://github.com/dryrb/dry-data/compare/v0.3.1...v0.3.2)
 
 # v0.3.1 2015-12-09
