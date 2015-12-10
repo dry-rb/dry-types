@@ -3,7 +3,7 @@ require 'date'
 require 'set'
 
 require 'inflecto'
-require 'thread_safe/cache'
+require 'thread_safe'
 
 require 'dry-container'
 require 'dry-equalizer'
