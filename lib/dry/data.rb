@@ -2,14 +2,17 @@ require 'bigdecimal'
 require 'date'
 require 'set'
 
-require 'dry-container'
 require 'inflecto'
 require 'thread_safe/cache'
+
+require 'dry-container'
+require 'dry-equalizer'
 
 require 'dry/data/version'
 require 'dry/data/container'
 require 'dry/data/type'
 require 'dry/data/struct'
+require 'dry/data/value'
 require 'dry/data/dsl'
 
 module Dry

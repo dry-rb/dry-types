@@ -7,7 +7,7 @@ module Dry
 
       def self.inherited(klass)
         super
-        Data.register_class(klass)
+        Data.register_class(klass) unless klass == Value
       end
 
       def self.attribute(*args)

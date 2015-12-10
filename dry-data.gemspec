@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'thread_safe', '~> 0.3'
   spec.add_runtime_dependency 'dry-container', '~> 0.2'
+  spec.add_runtime_dependency 'dry-equalizer', '~> 0.2'
   spec.add_runtime_dependency 'dry-configurable', '~> 0.1'
   spec.add_runtime_dependency 'inflecto', '~> 0.0.0', '>= 0.0.2'
   spec.add_runtime_dependency 'kleisli', '~> 0.2'
