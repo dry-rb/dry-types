@@ -1,5 +1,3 @@
-require 'dry-equalizer' # FIXME: this should not be needed
-
 require 'dry/validation/rule_compiler'
 require 'dry/validation/predicates'
 
