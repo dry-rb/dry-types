@@ -73,4 +73,14 @@ RSpec.describe Dry::Data::Struct do
       expect(user.root).to be(true)
     end
   end
+
+  describe '#to_h' do
+    it 'returns hash with attributes' do
+      attributes = {
+        name: 'Jane', age: 21, address: { city: 'NYC', zipcode: '123' }
+      }
+
+      expect(user_type[attributes].to_h).to eql(attributes)
+    end
+  end
 end

@@ -39,6 +39,18 @@ module Dry
       def initialize(attributes)
         attributes.each { |key, value| instance_variable_set("@#{key}", value) }
       end
+
+      def [](name)
+        public_send(name)
+      end
+
+      def to_hash
+        self.class.schema.keys.each_with_object({}) { |key, result|
+          value = self[key]
+          result[key] = value.respond_to?(:to_hash) ? value.to_hash : value
+        }
+      end
+      alias_method :to_h, :to_hash
     end
   end
 end
