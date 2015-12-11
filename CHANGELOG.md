@@ -1,3 +1,16 @@
+# v0.4.0 2015-12-11
+
+## Added
+
+* Support for sum-types with constraint type (solnic)
+* `Dry::Data::Type#optional` for defining optional types (solnic)
+
+## Changed
+
+* `Dry::Data['optional']` was **removed** in favor of `Dry::Data::Type#optional` (solnic)
+
+[Compare v0.3.2...v0.4.0](https://github.com/dryrb/dry-data/compare/v0.3.2...v0.4.0)
+
 # v0.3.2 2015-12-10
 
 ## Added
