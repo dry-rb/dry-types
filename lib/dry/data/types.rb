@@ -22,12 +22,6 @@ module Dry
 
     ALL_PRIMITIVES = COERCIBLE.merge(NON_COERCIBLE).freeze
 
-    # Register optional type
-    register(
-      'optional',
-      Type::Optional.new(Type.method(:passthrough_constructor), NilClass)
-    )
-
     # Register built-in primitive types with kernel coercion methods
     COERCIBLE.each do |name, primitive|
       register(
@@ -55,12 +49,12 @@ module Dry
     # Register non-coercible maybe types
     ALL_PRIMITIVES.each do |name, primitive|
       next if name == :nil
-      register("maybe.strict.#{name}", self["optional"] | self["strict.#{name}"])
+      register("maybe.strict.#{name}", self["strict.#{name}"].optional)
     end
 
     # Register coercible maybe types
     COERCIBLE.each do |name, primitive|
-      register("maybe.coercible.#{name}", self["optional"] | self["coercible.#{name}"])
+      register("maybe.coercible.#{name}", self["coercible.#{name}"].optional)
     end
 
     # Register :bool since it's common and not a built-in Ruby type :(

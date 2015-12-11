@@ -1,9 +1,9 @@
-require 'dry/data/type/optional'
 require 'dry/data/type/hash'
 require 'dry/data/type/array'
 require 'dry/data/type/enum'
 
 require 'dry/data/sum_type'
+require 'dry/data/optional'
 
 module Dry
   module Data
@@ -62,6 +62,10 @@ module Dry
         Enum.new(values, constrained(inclusion: values))
       end
 
+      def optional
+        Optional.new(Data['nil'] | self)
+      end
+
       def name
         primitive.name
       end
@@ -76,7 +80,7 @@ module Dry
       end
 
       def |(other)
-        Data.SumType(self, other)
+        SumType.new(self, other)
       end
     end
   end

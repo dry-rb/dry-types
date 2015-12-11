@@ -14,13 +14,17 @@ module Dry
         def call(input)
           result = super(input)
 
-          if rule.(result).success?
+          if valid?(result)
             result
           else
             raise ConstraintError, "#{input.inspect} violates constraints"
           end
         end
         alias_method :[], :call
+
+        def valid?(input)
+          super && rule.(input).success?
+        end
       end
 
       def constrained(options)

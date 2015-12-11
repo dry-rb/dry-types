@@ -24,14 +24,5 @@ RSpec.describe Dry::Data::SumType do
 
       expect { type[{}] }.to raise_error(TypeError)
     end
-
-    it 'works with optional and strict types' do
-      type = Dry::Data['optional'] | Dry::Data['strict.string']
-
-      expect(type[nil].value).to be(nil)
-      expect(type['312'].value).to eql('312')
-
-      expect { type[{}] }.to raise_error(TypeError)
-    end
   end
 end
