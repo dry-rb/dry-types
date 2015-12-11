@@ -1,9 +1,9 @@
 RSpec.describe Dry::Data::Struct do
-  let(:user_type) { Dry::Data["structs.user"] }
-  let(:root_type) { Dry::Data["structs.super_user"] }
+  let(:user_type) { Dry::Data["test.user"] }
+  let(:root_type) { Dry::Data["test.super_user"] }
 
-  before :all do
-    module Structs
+  before do
+    module Test
       class Address < Dry::Data::Struct
         attribute :city, "strict.string"
         attribute :zipcode, "coercible.string"
@@ -12,7 +12,7 @@ RSpec.describe Dry::Data::Struct do
       class User < Dry::Data::Struct
         attribute :name, "coercible.string"
         attribute :age, "coercible.int"
-        attribute :address, "structs.address"
+        attribute :address, "test.address"
       end
 
       class SuperUser < User
@@ -27,14 +27,14 @@ RSpec.describe Dry::Data::Struct do
         user_type[age: {}]
       }.to raise_error(
         Dry::Data::StructError,
-        "[Structs::User.new] :name is missing in Hash input"
+        "[Test::User.new] :name is missing in Hash input"
       )
 
       expect {
         user_type[name: :Jane, age: '21', address: nil]
       }.to raise_error(
         Dry::Data::StructError,
-        "[Structs::User.new] nil (NilClass) has invalid type for :address"
+        "[Test::User.new] nil (NilClass) has invalid type for :address"
       )
     end
   end
