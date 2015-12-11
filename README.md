@@ -191,7 +191,7 @@ a lower level guarantee that you're not instantiating objects that are broken.
 All types support constraints API, but not all constraints are suitable for a
 particular primitive, it's up to you to set up constraints that make sense.
 
-Under the hood it uses `dry-validation`[https://github.com/dryrb/dry-validation]
+Under the hood it uses [`dry-validation`](https://github.com/dryrb/dry-validation)
 and all of its predicates are supported.
 
 IMPORTANT: `dry-data` does not have a runtime dependency on `dry-validation` so
