@@ -146,7 +146,7 @@ maybe_int['12.3'] # Some(12.3)
 You can define your own optional types too:
 
 ``` ruby
-maybe_string = Dry::Data["optional"] | Dry::Data["string"]
+maybe_string = Dry::Data["string"].optional
 
 maybe_string[nil]
 # => None
@@ -162,6 +162,24 @@ maybe_string['something'].fmap(&:upcase)
 
 maybe_string['something'].fmap(&:upcase).value
 # => "SOMETHING"
+```
+
+### Sum-types
+
+You can specify sum types using `|` operator, it is an explicit way of defining
+what are the valid types of a value.
+
+In example `dry-data` defines `bool` type which is a sum-type consisting of `true`
+and `false` types which is expressed as `Dry::Data['true'] | Dry::Data['false']`
+(and it has its strict version, too).
+
+Another common case is defining that something can be either `nil` or something else:
+
+``` ruby
+nil_or_string = Dry::Data['strict.nil'] | Dry::Data['strict.string']
+
+nil_or_string[nil] # => nil
+nil_or_string["hello"] # => "hello"
 ```
 
 ### Constrained Types
