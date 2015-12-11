@@ -4,7 +4,8 @@ RSpec.describe Dry::Data::Type::Hash do
       name: "coercible.string",
       age: "coercible.int",
       active: "strict.bool",
-      phone: "phone"
+      phone: Dry::Data['phone'],
+      loc: Test::Location
     )
   end
 
@@ -12,10 +13,16 @@ RSpec.describe Dry::Data::Type::Hash do
     Dry::Data['phone'].primitive
   end
 
-  before :all do
+  before do
     phone = Struct.new(:prefix, :number) do
       def self.name
         'Phone'
+      end
+    end
+
+    module Test
+      class Location < Dry::Data::Value
+        attributes(lat: 'float', lng: 'float')
       end
     end
 
@@ -28,11 +35,15 @@ RSpec.describe Dry::Data::Type::Hash do
   describe '#[]' do
     it 'builds hash using provided schema' do
       user_hash = hash[
-        name: :Jane, age: '21', active: true, phone: ['+48', '123-456-789']
+        name: :Jane, age: '21', active: true,
+        phone: ['+48', '123-456-789'],
+        loc: { lat: 1.23, lng: 4.56 }
       ]
 
       expect(user_hash).to eql(
-        name: 'Jane', age: 21, active: true, phone: phone.new('+48', '123-456-789')
+        name: 'Jane', age: 21, active: true,
+        phone: phone.new('+48', '123-456-789'),
+        loc: Test::Location.new(lat: 1.23, lng: 4.56)
       )
     end
 

@@ -49,7 +49,11 @@ module Dry
 
         def schema(type_map, meth = :safe_constructor)
           value_constructors = type_map.each_with_object({}) { |(name, type), result|
-            result[name] = type.is_a?(String) ? Data[type] : type
+            result[name] =
+              case type
+              when String, Class then Data[type]
+              else type
+              end
           }
 
           self.class.new(
