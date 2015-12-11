@@ -1,3 +1,13 @@
+# v0.4.1 2015-12-11
+
+## Added
+
+* `Dry::Data::Struct#to_hash` with `to_h` as alias (solnic)
+* `Dry::Data::Struct#[]` for reading attribute values (solnic)
+* Ability to pass any class to hash schema assuming it has a corresponding type registered (solnic)
+
+[Compare v0.4.0...v0.4.1](https://github.com/dryrb/dry-data/compare/v0.4.0...v0.4.1)
+
 # v0.4.0 2015-12-11
 
 ## Added
