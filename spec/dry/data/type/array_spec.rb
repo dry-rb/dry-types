@@ -18,6 +18,22 @@ RSpec.describe Dry::Data::Type::Array do
 
         include_context 'array with a member type'
       end
+
+      context 'using a constrained type' do
+        subject(:array) do
+          Dry::Data['array'].member(Dry::Data['coercible.int'].constrained(gt: 2))
+        end
+
+        it 'passes values through member type' do
+          expect(array[%w(3 4 5)]).to eql([3, 4, 5])
+        end
+
+        it 'raises when input is not valid' do
+          expect {
+            array[%w(1 2 3)]
+          }.to raise_error(Dry::Data::ConstraintError)
+        end
+      end
     end
 
     context 'struct' do

@@ -10,8 +10,7 @@ module Dry
           member_constructor =
             case type
             when String, Class then Data[type]
-            else
-              type
+            else type
             end
 
           array_constructor = self.class
