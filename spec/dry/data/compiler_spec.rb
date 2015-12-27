@@ -102,4 +102,38 @@ RSpec.describe Dry::Data::Compiler, '#call' do
       age: 20, admin: true
     )
   end
+
+  it 'builds an array' do
+    ast = [
+      :type, [
+        'array', [
+          :type, [
+            'hash', [
+              :symbolized, [
+                [:key, [:email, [:type, 'string']]],
+                [:key, [:age, [:type, 'form.int']]],
+                [:key, [:admin, [:type, 'form.bool']]]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+
+    arr = compiler.(ast)
+
+    expect(arr).to be_instance_of(Dry::Data::Type::Array)
+
+    input = [
+      'foo' => 'bar', 'email' => 'jane@doe.org', 'age' => '20', 'admin' => '1'
+    ]
+
+    expect(arr[input]).to eql([
+      email: 'jane@doe.org', age: 20, admin: true
+    ])
+
+    expect(arr[['foo' => 'bar', 'age' => '20', 'admin' => '1']]).to eql([
+      age: 20, admin: true
+    ])
+  end
 end

@@ -34,6 +34,10 @@ module Dry
         registry['hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
       end
 
+      def visit_array(node)
+        registry['array'].member(call(node))
+      end
+
       def visit_key(node)
         name, types = node
         { name => visit(types) }
