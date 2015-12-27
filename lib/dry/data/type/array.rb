@@ -3,16 +3,15 @@ module Dry
     class Type
       class Array < Type
         def self.constructor(array_constructor, member_constructor, input)
-          array_constructor[input].map(&member_constructor)
+          array_constructor[input].map { |value| member_constructor[value] }
         end
 
         def member(type)
           member_constructor =
             case type
-            when Type then type.constructor
-            when Class then Data[type].constructor
+            when String, Class then Data[type]
             else
-              raise ArgumentError, "+#{type}+ is an unsupported array member"
+              type
             end
 
           array_constructor = self.class
