@@ -139,8 +139,8 @@ maybe_int[123] # Some(123)
 
 maybe_coercible_float = Dry::Data["maybe.coercible.float"]
 
-maybe_int[nil] # None
-maybe_int['12.3'] # Some(12.3)
+maybe_coercible_float[nil] # None
+maybe_coercible_float['12.3'] # Some(12.3)
 ```
 
 You can define your own optional types too:
