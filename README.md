@@ -214,7 +214,7 @@ You can specify sum types using `|` operator, it is an explicit way of defining
 what are the valid types of a value.
 
 In example `dry-data` defines `bool` type which is a sum-type consisting of `true`
-and `false` types which is expressed as `Dry::Data['true'] | Dry::Data['false']`
+and `false` types which is expressed as `Types::True | Types::False`
 (and it has its strict version, too).
 
 Another common case is defining that something can be either `nil` or something else:
