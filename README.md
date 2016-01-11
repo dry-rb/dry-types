@@ -14,7 +14,15 @@
 [![Test Coverage](https://codeclimate.com/github/dryrb/dry-data/badges/coverage.svg)][codeclimate]
 [![Inline docs](http://inch-ci.org/github/dryrb/dry-data.svg?branch=master)][inchpages]
 
-A simple type system for Ruby with support for coercions.
+A simple and extendible type system for Ruby with support for kernel coercions,
+form coercions, sum types, constrained types and default-value types.
+
+Used by:
+
+* [dry-validation](https://github.com/dryrb/dry-validation) for params coercions
+* [rom-repository](https://github.com/rom-rb/rom-repository) for auto-mapped structs
+* [rom](https://github.com/rom-rb/rom)'s adapters for relation schema definitions
+* your project...?
 
 ## Installation
 
@@ -46,84 +54,120 @@ Built-in types are grouped under 5 categories:
 - `form` - non-strict coercion types suitable for form params
 - `maybe` - accepts either a nil or something else
 
+### Configuring Types Module
+
+In `dry-data` a type is an object with a constructor that knows how to handle
+input. On top of that there are high-level types like a sum-type, constrained type,
+optional type or default value type.
+
+To acccess all the built-in type objects you can configure `dry-data` with a
+namespace module:
+
+``` ruby
+module Types
+end
+
+Dry::Data.configure do |config|
+  config.namespace = Types
+end
+
+# after defining your custom types (if you've got any) you can finalize setup
+Dry::Data.finalize
+
+# this defines all types under your namespace, in example:
+Types::Coercible::String
+# => #<Dry::Data::Type:0x007feffb104aa8 @constructor=#<Method: Kernel.String>, @primitive=String>
+```
+
+With types accessible as constants you can easily compose more complex types,
+like sum-types or constrained types, in hash schemas or structs:
+
+``` ruby
+Dry::Data.configure do |config|
+  config.namespace = Types
+end
+
+Dry::Data.finalize
+
+module Types
+  Email = String.constrained(format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
+  Age = Int.constrained(gt: 18)
+end
+
+class User < Dry::Data::Struct
+  attribute :name, Types::String
+  attribute :email, Types::Email
+  attribute :age, Types::Age
+end
+```
+
 ### Built-in Type Categories
+
+Assuming you configured types under `Types` module namespace:
 
 Non-coercible:
 
-- `nil`
-- `symbol`
-- `class`
-- `true`
-- `false`
-- `date`
-- `date_time`
-- `time`
+- `Types::Nil`
+- `Types::Symbol`
+- `Types::Class`
+- `Types::True`
+- `Types::False`
+- `Types::Date`
+- `Types::DateTime`
+- `Types::Time`
 
 Coercible types using kernel coercion methods:
 
-- `coercible.string`
-- `coercible.int`
-- `coercible.float`
-- `coercible.decimal`
-- `coercible.array`
-- `coercible.hash`
+- `Types::Coercible.String`
+- `Types::Coercible.Int`
+- `Types::Coercible.Float`
+- `Types::Coercible.Decimal`
+- `Types::Coercible.Array`
+- `Types::Coercible.Hash`
 
 Optional strict types:
 
-- `maybe.strict.string`
-- `maybe.strict.int`
-- `maybe.strict.float`
-- `maybe.strict.decimal`
-- `maybe.strict.array`
-- `maybe.strict.hash`
+- `Types::Maybe.Strict.String`
+- `Types::Maybe.Strict.Int`
+- `Types::Maybe.Strict.Float`
+- `Types::Maybe.Strict.Decimal`
+- `Types::Maybe.Strict.Array`
+- `Types::Maybe.Strict.Hash`
 
 Optional coercible types:
 
-- `maybe.coercible.string`
-- `maybe.coercible.int`
-- `maybe.coercible.float`
-- `maybe.coercible.decimal`
-- `maybe.coercible.array`
-- `maybe.coercible.hash`
+- `Types::Maybe.Coercible.String`
+- `Types::Maybe.Coercible.Int`
+- `Types::Maybe.Coercible.Float`
+- `Types::Maybe.Coercible.Decimal`
+- `Types::Maybe.Coercible.Array`
+- `Types::Maybe.Coercible.Hash`
 
 Coercible types suitable for form param processing:
 
-- `form.nil`
-- `form.date`
-- `form.date_time`
-- `form.time`
-- `form.true`
-- `form.false`
-- `form.bool`
-- `form.int`
-- `form.float`
-- `form.decimal`
+- `Types::Form.Nil`
+- `Types::Form.Date`
+- `Types::Form.DateTime`
+- `Types::Form.Time`
+- `Types::Form.True`
+- `Types::Form.False`
+- `Types::Form.Bool`
+- `Types::Form.Int`
+- `Types::Form.Float`
+- `Types::Form.Decimal`
 
-### Accessing Built-in Types
+### Strict vs Coercible Types
 
 ``` ruby
-# default passthrough category
-float = Dry::Data["float"]
-
-float[3.2] # => 3.2
-float["3.2"] # "3.2"
-
-# strict type-check category
-int = Dry::Data["strict.int"]
-
-int[1] # => 1
-int['1'] # => raises TypeError
+Types::Strict::Int[1] # => 1
+Types::Strict::Int['1'] # => raises TypeError
 
 # coercible type-check group
-string = Dry::Data["coercible.string"]
-array = Dry::Data["coercible.array"]
-
-string[:foo] # => 'foo'
-array[:foo] # => [:foo]
+Types::Coercible::String[:foo] # => 'foo'
+Types::Coercible::Array[:foo] # => [:foo]
 
 # form group
-date = Dry::Data["form.date"]
-date['2015-11-29'] # => #<Date: 2015-11-29 ((2457356j,0s,0n),+0s,2299161j)>
+Types::Form::Date['2015-11-29'] # => #<Date: 2015-11-29 ((2457356j,0s,0n),+0s,2299161j)>
 ```
 
 ### Optional types
@@ -212,47 +256,6 @@ email["jane@doe.org"]
 
 email["jane"]
 # => Dry::Data::ConstraintError: "fo" violates constraints
-```
-
-### Setting Type Constants
-
-Types can be stored as easily accessible constants in a configured namespace:
-
-``` ruby
-module Types; end
-
-Dry::Data.configure do |config|
-  config.namespace = Types
-end
-
-# after defining your custom types (if you've got any) you can finalize setup
-Dry::Data.finalize
-
-# this defines all types under your namespace
-Types::Coercible::String
-# => #<Dry::Data::Type:0x007feffb104aa8 @constructor=#<Method: Kernel.String>, @primitive=String>
-```
-
-With types accessible as constants you can easily compose more complex types,
-like sum-types or constrained types, in hash schemas or structs:
-
-``` ruby
-Dry::Data.configure do |config|
-  config.namespace = Types
-end
-
-Dry::Data.finalize
-
-module Types
-  Email = String.constrained(format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
-  Age = Int.constrained(gt: 18)
-end
-
-class User < Dry::Data::Struct
-  attribute :name, Types::String
-  attribute :email, Types::Email
-  attribute :age, Types::Age
-end
 ```
 
 ### Defining Enums
