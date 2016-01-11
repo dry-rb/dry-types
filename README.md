@@ -28,6 +28,35 @@ Articles:
 
 * ["Invalid Object Is An Anti-Pattern"](http://solnic.eu/2015/12/28/invalid-object-is-an-anti-pattern.html)
 
+## dry-data vs virtus
+
+[Virtus](https://github.com/solnic/virtus) has been a successful library, unfortunately
+it is "only" a by-product of an ActiveRecord ORM which carries many issues typical
+to ActiveRecord-like features that we all know from Rails, especially when it
+comes to very complicated coercion logic, mixing unrelated concerns, polluting
+application layer with concerns that should be handled at the bounderies etc.
+
+`dry-data` has been created to become a better tool that solves *similar* (but
+not identical!) problems related to type-safety and coercions. It is a superior
+solution because:
+
+* Types are categorized, which is especially important for coercions
+* Types are objects and they are easily reusable
+* Has [structs](#structs) and [values](#values) with *a simple DSL*
+* Has [constrained types](#constrained-types)
+* Has [optional types](#optional-types)
+* Has [sum-types](#sum-types)
+* Has [enums](#enums)
+* Has [hash with type schemas](#hash)
+* Suitable for many use-cases while remaining simple, in example:
+  * Params coercions
+  * Domain "models"
+  * Defining various domain-specific, shared information using enums or values
+  * Annotating objects
+  * and more...
+* There's no const-missing magic and complicated const lookups like in Virtus
+* AND is roughly 10-12x faster than Virtus
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -258,7 +287,7 @@ email["jane"]
 # => Dry::Data::ConstraintError: "fo" violates constraints
 ```
 
-### Defining Enums
+### Enums
 
 In many cases you may want to define an enum. For example in a blog application
 a post may have a finite list of statuses. Apart from accessing the current status
@@ -338,10 +367,10 @@ hash['name' => 'Jane', 'age' => '21']
 # => { :name => "Jane", :age => 21 }
 ```
 
-### Defining a struct
+### Structs
 
-You can define struct objects which will have attribute readers for specified
-attributes using a simple dsl:
+You can define struct objects which will have readers for specified attributes
+using a simple dsl:
 
 ``` ruby
 class User < Dry::Data::Struct
@@ -358,6 +387,24 @@ user = User(name: 'Jane', age: '21')
 
 user.name # => Some("Jane")
 user.age # => 21
+```
+
+### Values
+
+You can define value objects which will behave like structs and have equality
+methods too:
+
+``` ruby
+class Location < Dry::Data::Value
+  attribute :lat, Types::Strict::Float
+  attribute :lat, Types::Strict::Float
+end
+
+loc1 = Location.new(lat: 1.23, lng: 4.56)
+loc2 = Location.new(lat: 1.23, lng: 4.56)
+
+loc1 == loc2
+# true
 ```
 
 ## Status and Roadmap
