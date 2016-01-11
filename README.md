@@ -45,6 +45,7 @@ solution because:
 * Has [structs](#structs) and [values](#values) with *a simple DSL*
 * Has [constrained types](#constrained-types)
 * Has [optional types](#optional-types)
+* Has [defaults](#defaults)
 * Has [sum-types](#sum-types)
 * Has [enums](#enums)
 * Has [hash type with type schemas](#hashes)
@@ -235,6 +236,18 @@ maybe_string['something'].fmap(&:upcase)
 
 maybe_string['something'].fmap(&:upcase).value
 # => "SOMETHING"
+```
+
+### Defaults
+
+A type with a default value will return the configured value when the input is `nil`:
+
+``` ruby
+PostStatus = Types::Strict::String.default('draft')
+
+PostStatus[nil] # "draft"
+PostStatus["published"] # "published"
+PostStatus[true] # raises ConstraintError
 ```
 
 ### Sum-types
