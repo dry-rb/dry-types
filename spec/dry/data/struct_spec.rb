@@ -72,6 +72,14 @@ RSpec.describe Dry::Data::Struct do
 
       expect(user.root).to be(true)
     end
+
+    it 'raises error when type is missing' do
+      expect {
+        class Test::Foo < Dry::Data::Struct
+          attribute :bar
+        end
+      }.to raise_error(ArgumentError)
+    end
   end
 
   describe '#to_h' do

@@ -10,8 +10,8 @@ module Dry
         Data.register_class(klass) unless klass == Value
       end
 
-      def self.attribute(*args)
-        attributes(Hash[[args]])
+      def self.attribute(name, type)
+        attributes(name => type)
       end
 
       def self.attributes(new_schema)
