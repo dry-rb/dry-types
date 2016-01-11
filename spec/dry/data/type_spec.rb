@@ -21,7 +21,7 @@ RSpec.describe Dry::Data::Type do
 
     it 'raises type-error when non-coercible type is used and input does not match' do
       expect { Dry::Data["strict.date"]['nopenopenope'] }
-        .to raise_error(Dry::Data::ConstraintError, /\+nopenopenope\+ violates constraints/)
+        .to raise_error(Dry::Data::ConstraintError, /"nopenopenope" violates constraints/)
     end
   end
 
@@ -37,7 +37,7 @@ RSpec.describe Dry::Data::Type do
     end
 
     it 'raises when input is not true or false' do
-      expect { bool['false'] }.to raise_error(Dry::Data::ConstraintError, /\+false\+ violates constraints/)
+      expect { bool['false'] }.to raise_error(Dry::Data::ConstraintError, /"false" violates constraints/)
     end
   end
 

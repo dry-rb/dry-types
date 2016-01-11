@@ -241,7 +241,7 @@ string['foo']
 # => "foo"
 
 string['fo']
-# => Dry::Data::ConstraintError: +fo+ violates constraints
+# => Dry::Data::ConstraintError: "fo" violates constraints
 
 email = Types::Strict::String.constrained(
   format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i

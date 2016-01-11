@@ -17,13 +17,17 @@ module Dry
           if valid?(result)
             result
           else
-            raise ConstraintError, "+#{input}+ violates constraints"
+            raise ConstraintError, "#{input.inspect} violates constraints"
           end
         end
         alias_method :[], :call
 
         def valid?(input)
           super && rule.(input).success?
+        end
+
+        def constrained(options)
+          Constrained.new(constructor, primitive, rule & Data.Rule(primitive, options))
         end
       end
     end

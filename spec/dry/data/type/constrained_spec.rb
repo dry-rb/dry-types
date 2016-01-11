@@ -27,4 +27,19 @@ RSpec.describe Dry::Data::Type::Constrained do
       expect { type['hel'] }.to raise_error(Dry::Data::ConstraintError, /hel/)
     end
   end
+
+  context 'with another constrained type' do
+    subject(:type) do
+      Dry::Data['strict.string'].constrained(size: 4)
+    end
+
+    it 'passes when constraints are not violated' do
+      expect(type['hell']).to eql('hell')
+    end
+
+    it 'raises when a given constraint is violated' do
+      expect { type[nil] }.to raise_error(Dry::Data::ConstraintError, /nil/)
+      expect { type['hel'] }.to raise_error(Dry::Data::ConstraintError, /hel/)
+    end
+  end
 end
