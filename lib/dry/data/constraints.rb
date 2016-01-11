@@ -1,5 +1,5 @@
-require 'dry/validation/rule_compiler'
-require 'dry/validation/predicates'
+require 'dry/logic/rule_compiler'
+require 'dry/logic/predicates'
 
 module Dry
   module Data
@@ -12,7 +12,7 @@ module Dry
     end
 
     def self.rule_compiler
-      @rule_compiler ||= Validation::RuleCompiler.new(Validation::Predicates)
+      @rule_compiler ||= Logic::RuleCompiler.new(Logic::Predicates)
     end
   end
 end

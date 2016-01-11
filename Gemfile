@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-validation'
+gem 'dry-logic', github: 'dryrb/dry-logic', branch: 'master'
 
 group :tools do
   gem 'byebug', platform: :mri
