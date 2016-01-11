@@ -1,3 +1,12 @@
+# v0.5.1 2016-01-11
+
+## Added
+
+* `Dry::Data::Type#safe` for types which can skip constructor when primitive does
+  not match input's class (solnic)
+
+[Compare v0.5.0...v0.5.1](https://github.com/dryrb/dry-data/compare/v0.5.0...v0.5.1)
+
 # v0.5.0 2016-01-11
 
 ## Added
