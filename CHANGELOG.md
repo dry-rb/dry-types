@@ -4,6 +4,7 @@
 
 * `Dry::Data::Type#safe` for types which can skip constructor when primitive does
   not match input's class (solnic)
+* `form.array` and `form.hash` safe types (solnic)
 
 [Compare v0.5.0...v0.5.1](https://github.com/dryrb/dry-data/compare/v0.5.0...v0.5.1)
 
