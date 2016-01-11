@@ -47,7 +47,7 @@ solution because:
 * Has [optional types](#optional-types)
 * Has [sum-types](#sum-types)
 * Has [enums](#enums)
-* Has [hash with type schemas](#hash)
+* Has [hash type with type schemas](#hashes)
 * Suitable for many use-cases while remaining simple, in example:
   * Params coercions
   * Domain "models"
