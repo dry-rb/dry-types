@@ -10,6 +10,7 @@
 * `dry-logic` is now a dependency for constrained types (solnic)
 * Constrained types are now always available (solnic)
 * `strict.*` category uses constrained types with `:type?` predicate (solnic)
+* `SumType#call` no longer needs to rescue from `TypeError` (solnic)
 
 ## Fixed
 
