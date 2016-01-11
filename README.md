@@ -40,7 +40,7 @@ application layer with concerns that should be handled at the bounderies etc.
 not identical!) problems related to type-safety and coercions. It is a superior
 solution because:
 
-* Types are categorized, which is especially important for coercions
+* Types are [categorized](#built-in-type-categories), which is especially important for coercions
 * Types are objects and they are easily reusable
 * Has [structs](#structs) and [values](#values) with *a simple DSL*
 * Has [constrained types](#constrained-types)
