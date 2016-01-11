@@ -122,49 +122,49 @@ Non-coercible:
 
 Coercible types using kernel coercion methods:
 
-- `Types::Coercible.String`
-- `Types::Coercible.Int`
-- `Types::Coercible.Float`
-- `Types::Coercible.Decimal`
-- `Types::Coercible.Array`
-- `Types::Coercible.Hash`
+- `Types::Coercible::String`
+- `Types::Coercible::Int`
+- `Types::Coercible::Float`
+- `Types::Coercible::Decimal`
+- `Types::Coercible::Array`
+- `Types::Coercible::Hash`
 
 Optional strict types:
 
-- `Types::Maybe.Strict.String`
-- `Types::Maybe.Strict.Int`
-- `Types::Maybe.Strict.Float`
-- `Types::Maybe.Strict.Decimal`
-- `Types::Maybe.Strict.Array`
-- `Types::Maybe.Strict.Hash`
+- `Types::Maybe::Strict::String`
+- `Types::Maybe::Strict::Int`
+- `Types::Maybe::Strict::Float`
+- `Types::Maybe::Strict::Decimal`
+- `Types::Maybe::Strict::Array`
+- `Types::Maybe::Strict::Hash`
 
 Optional coercible types:
 
-- `Types::Maybe.Coercible.String`
-- `Types::Maybe.Coercible.Int`
-- `Types::Maybe.Coercible.Float`
-- `Types::Maybe.Coercible.Decimal`
-- `Types::Maybe.Coercible.Array`
-- `Types::Maybe.Coercible.Hash`
+- `Types::Maybe::Coercible::String`
+- `Types::Maybe::Coercible::Int`
+- `Types::Maybe::Coercible::Float`
+- `Types::Maybe::Coercible::Decimal`
+- `Types::Maybe::Coercible::Array`
+- `Types::Maybe::Coercible::Hash`
 
 Coercible types suitable for form param processing:
 
-- `Types::Form.Nil`
-- `Types::Form.Date`
-- `Types::Form.DateTime`
-- `Types::Form.Time`
-- `Types::Form.True`
-- `Types::Form.False`
-- `Types::Form.Bool`
-- `Types::Form.Int`
-- `Types::Form.Float`
-- `Types::Form.Decimal`
+- `Types::Form::Nil`
+- `Types::Form::Date`
+- `Types::Form::DateTime`
+- `Types::Form::Time`
+- `Types::Form::True`
+- `Types::Form::False`
+- `Types::Form::Bool`
+- `Types::Form::Int`
+- `Types::Form::Float`
+- `Types::Form::Decimal`
 
 ### Strict vs Coercible Types
 
 ``` ruby
 Types::Strict::Int[1] # => 1
-Types::Strict::Int['1'] # => raises TypeError
+Types::Strict::Int['1'] # => raises Dry::Data::ConstraintError
 
 # coercible type-check group
 Types::Coercible::String[:foo] # => 'foo'
