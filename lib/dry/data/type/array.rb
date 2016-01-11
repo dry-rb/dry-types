@@ -16,7 +16,7 @@ module Dry
           array_constructor = self.class
             .method(:constructor).to_proc.curry.(constructor, member_constructor)
 
-          self.class.new(array_constructor, primitive)
+          self.class.new(array_constructor, primitive: primitive, member: member_constructor)
         end
       end
     end

@@ -58,7 +58,7 @@ module Dry
 
           self.class.new(
             self.class.method(meth).to_proc.curry.(constructor, value_constructors),
-            primitive
+            primitive: primitive, schema: value_constructors
           )
         end
       end

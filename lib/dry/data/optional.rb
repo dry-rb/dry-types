@@ -1,15 +1,7 @@
 module Dry
   module Data
     class Optional
-      attr_reader :type
-
-      def initialize(type)
-        @type = type
-      end
-
-      def valid?(input)
-        type.valid?(input)
-      end
+      include Decorator
 
       def call(input)
         Maybe(type[input])

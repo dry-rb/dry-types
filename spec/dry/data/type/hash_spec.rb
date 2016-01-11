@@ -28,7 +28,7 @@ RSpec.describe Dry::Data::Type::Hash do
 
     Dry::Data.register(
       "phone",
-      Dry::Data::Type.new(-> args { phone.new(*args) }, phone)
+      Dry::Data::Type.new(-> args { phone.new(*args) }, primitive: phone)
     )
   end
 

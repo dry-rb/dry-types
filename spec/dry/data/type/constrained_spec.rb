@@ -42,4 +42,20 @@ RSpec.describe Dry::Data::Type::Constrained do
       expect { type['hel'] }.to raise_error(Dry::Data::ConstraintError, /hel/)
     end
   end
+
+  context 'with another complex and constrained type' do
+    subject(:type) do
+      Dry::Data['strict.array']
+        .constrained(size: 3)
+        .member(Dry::Data['coercible.string'])
+    end
+
+    it 'passes when constraints are not violated' do
+      expect(type[[:foo, :bar, :baz]]).to eql(%w(foo bar baz))
+    end
+
+    it 'raises when a given constraint is violated' do
+      expect { type[%w(foo bar)] }.to raise_error(Dry::Data::ConstraintError)
+    end
+  end
 end

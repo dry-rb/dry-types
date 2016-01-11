@@ -1,3 +1,5 @@
+require 'dry/data/decorator'
+
 require 'dry/data/type/hash'
 require 'dry/data/type/array'
 require 'dry/data/type/enum'
@@ -10,7 +12,12 @@ require 'dry/data/optional'
 module Dry
   module Data
     class Type
+      include Dry::Equalizer(:constructor, :options)
+
       attr_reader :constructor
+
+      attr_reader :options
+
       attr_reader :primitive
 
       def self.[](primitive)
@@ -27,13 +34,10 @@ module Dry
         input
       end
 
-      def initialize(constructor, primitive)
+      def initialize(constructor, options = {})
         @constructor = constructor
-        @primitive = primitive
-      end
-
-      def enum(*values)
-        Enum.new(values, constrained(inclusion: values))
+        @options = options
+        @primitive = options.fetch(:primitive)
       end
 
       def optional
@@ -41,11 +45,15 @@ module Dry
       end
 
       def constrained(options)
-        Constrained.new(constructor, primitive, Data.Rule(primitive, options))
+        Constrained.new(self, rule: Data.Rule(primitive, options))
       end
 
       def default(value)
-        Default.new(self, value)
+        Default.new(self, value: value)
+      end
+
+      def enum(*values)
+        Enum.new(constrained(inclusion: values), values: values)
       end
 
       def name

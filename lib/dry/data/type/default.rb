@@ -2,23 +2,17 @@ module Dry
   module Data
     class Type
       class Default < Type
-        attr_reader :type, :value
+        include Decorator
 
-        def initialize(type, value)
-          @type = type
-          @value = value
-        end
+        attr_reader :value
 
-        def constructor
-          type.constructor
-        end
-
-        def primitive
-          type.primitive
+        def initialize(type, options)
+          super
+          @value = options.fetch(:value)
         end
 
         def call(input)
-          input.nil? ? value : super
+          input.nil? ? value : type[input]
         end
         alias_method :[], :call
       end

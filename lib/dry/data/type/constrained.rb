@@ -4,15 +4,17 @@ module Dry
   module Data
     class Type
       class Constrained < Type
+        include Decorator
+
         attr_reader :rule
 
-        def initialize(constructor, primitive, rule)
-          super(constructor, primitive)
-          @rule = rule
+        def initialize(type, options)
+          super
+          @rule = options.fetch(:rule)
         end
 
         def call(input)
-          result = super(input)
+          result = type[input]
 
           if valid?(result)
             result
@@ -27,7 +29,7 @@ module Dry
         end
 
         def constrained(options)
-          Constrained.new(constructor, primitive, rule & Data.Rule(primitive, options))
+          with(rule: rule & Data.Rule(primitive, options))
         end
       end
     end

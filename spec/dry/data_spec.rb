@@ -11,7 +11,7 @@ RSpec.describe Dry::Data do
 
       Dry::Data.register(
         'custom_array',
-        Dry::Data::Type.new(FlatArray.method(:constructor), Array)
+        Dry::Data::Type.new(FlatArray.method(:constructor), primitive: Array)
       )
 
       input = [[1], [2]]

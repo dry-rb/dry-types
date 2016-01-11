@@ -52,7 +52,7 @@ module Dry
     def self.register_class(klass)
       container.register(
         Inflecto.underscore(klass).gsub('/', '.'),
-        Type.new(klass.method(:new), klass)
+        Type.new(klass.method(:new), primitive: klass)
       )
     end
 

@@ -1,18 +1,15 @@
 module Dry
   module Data
     class Type
-      class Enum
+      class Enum < Type
+        include Decorator
+
         attr_reader :values
-        attr_reader :type
 
-        def initialize(values, type)
-          @values = values.freeze
-          @type = type
-          values.each(&:freeze)
-        end
-
-        def primitive
-          type.primitive
+        def initialize(type, options)
+          super
+          @values = options.fetch(:values).freeze
+          @values.each(&:freeze)
         end
 
         def call(input)
