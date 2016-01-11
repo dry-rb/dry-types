@@ -24,6 +24,10 @@ Used by:
 * [rom](https://github.com/rom-rb/rom)'s adapters for relation schema definitions
 * your project...?
 
+Articles:
+
+* ["Invalid Object Is An Anti-Pattern"](http://solnic.eu/2015/12/28/invalid-object-is-an-anti-pattern.html)
+
 ## Installation
 
 Add this line to your application's Gemfile:
