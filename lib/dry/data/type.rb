@@ -1,6 +1,7 @@
 require 'dry/data/type/hash'
 require 'dry/data/type/array'
 require 'dry/data/type/enum'
+require 'dry/data/type/default'
 require 'dry/data/type/constrained'
 
 require 'dry/data/sum_type'
@@ -37,6 +38,10 @@ module Dry
 
       def optional
         Optional.new(Data['nil'] | self)
+      end
+
+      def default(value)
+        Default.new(self, value)
       end
 
       def name
