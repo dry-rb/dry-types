@@ -266,8 +266,6 @@ value it is useful to have all possible values accessible too. Furthermore an
 enum is a `int => value` map, so you can store integers somewhere and have them
 mapped to enum values conveniently.
 
-You can define enums for every type but it probably only makes sense for `string`:
-
 ``` ruby
 # assuming we have types loaded into `Types` namespace
 # we can easily define an enum for our post struct
