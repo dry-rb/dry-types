@@ -1,4 +1,4 @@
-# v0.5.0 to-be-released
+# v0.5.0 2016-01-11
 
 ## Added
 
@@ -7,6 +7,7 @@
 ## Changed
 
 * [BREAKING] `Dry::Data::Type.new` accepts constructor and *options* now (solnic)
+* Renamed `Dry::Data::Type::{Enum,Constrained}` => `Dry::Data::{Enum,Constrained}` (solnic)
 * `dry-logic` is now a dependency for constrained types (solnic)
 * Constrained types are now always available (solnic)
 * `strict.*` category uses constrained types with `:type?` predicate (solnic)
