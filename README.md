@@ -170,27 +170,23 @@ Types::Coercible::Array[:foo] # => [:foo]
 Types::Form::Date['2015-11-29'] # => #<Date: 2015-11-29 ((2457356j,0s,0n),+0s,2299161j)>
 ```
 
-### Optional types
+### Optional Types
 
 All built-in types have their optional versions too, you can access them under
-`"maybe.strict"` and `"maybe.coercible"` categories:
+`"Types::Maybe::Strict"` and `"Maybe::Coercible"` categories:
 
 ``` ruby
-maybe_int = Dry::Data["maybe.strict.int"]
+Types::Maybe::Int[nil] # None
+Types::Maybe::Int[123] # Some(123)
 
-maybe_int[nil] # None
-maybe_int[123] # Some(123)
-
-maybe_coercible_float = Dry::Data["maybe.coercible.float"]
-
-maybe_coercible_float[nil] # None
-maybe_coercible_float['12.3'] # Some(12.3)
+Types::Maybe::Coercible::Float[nil] # None
+Types::Maybe::Coercible::Float['12.3'] # Some(12.3)
 ```
 
 You can define your own optional types too:
 
 ``` ruby
-maybe_string = Dry::Data["string"].optional
+maybe_string = Types::Strict::String.optional
 
 maybe_string[nil]
 # => None
@@ -220,7 +216,7 @@ and `false` types which is expressed as `Dry::Data['true'] | Dry::Data['false']`
 Another common case is defining that something can be either `nil` or something else:
 
 ``` ruby
-nil_or_string = Dry::Data['strict.nil'] | Dry::Data['strict.string']
+nil_or_string = Types::Nil | Types::Strict::String
 
 nil_or_string[nil] # => nil
 nil_or_string["hello"] # => "hello"
@@ -239,15 +235,15 @@ Under the hood it uses [`dry-logic`](https://github.com/dryrb/dry-logic)
 and all of its predicates are supported.
 
 ``` ruby
-string = Dry::Data["strict.string"].constrained(min_size: 3)
+string = Types::Strict::String.constrained(min_size: 3)
 
 string['foo']
 # => "foo"
 
 string['fo']
-# => Dry::Data::ConstraintError: "fo" violates constraints
+# => Dry::Data::ConstraintError: +fo+ violates constraints
 
-email = Dry::Data['strict.string'].constrained(
+email = Types::Strict::String.constrained(
   format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 )
 
@@ -306,13 +302,13 @@ explicit schemas and coercible values using the built-in types.
 
 ``` ruby
 # using simple kernel coercions
-hash = Dry::Data['hash'].schema(name: 'string', age: 'coercible.int')
+hash = Types::Hash.schema(name: Types::String, age: Types::Coercible::Int)
 
 hash[name: 'Jane', age: '21']
 # => { :name => "Jane", :age => 21 }
 
 # using form param coercions
-hash = Dry::Data['hash'].schema(name: 'string', birthdate: 'form.date')
+hash = Types::Hash.schema(name: Types::String, birthdate: Form::Date)
 
 hash[name: 'Jane', birthdate: '1994-11-11']
 # => { :name => "Jane", :birthdate => #<Date: 1994-11-11 ((2449668j,0s,0n),+0s,2299161j)> }
@@ -323,7 +319,7 @@ hash[name: 'Jane', birthdate: '1994-11-11']
 Strict hash will raise errors when keys are missing or value types are incorrect.
 
 ``` ruby
-hash = Dry::Data['hash'].strict(name: 'string', age: 'coercible.int')
+hash = Types::Hash.strict(name: 'string', age: 'coercible.int')
 
 hash[email: 'jane@doe.org', name: 'Jane', age: 21]
 # => Dry::Data::SchemaKeyError: :email is missing in Hash input
@@ -334,7 +330,7 @@ hash[email: 'jane@doe.org', name: 'Jane', age: 21]
 Symbolized hash will turn string key names into symbols
 
 ``` ruby
-hash = Dry::Data['hash'].symbolized(name: 'string', age: 'coercible.int')
+hash = Types::Hash.symbolized(name: Types::String, age: Types::Coercible::Int)
 
 hash['name' => 'Jane', 'age' => '21']
 # => { :name => "Jane", :age => 21 }
@@ -347,19 +343,16 @@ attributes using a simple dsl:
 
 ``` ruby
 class User < Dry::Data::Struct
-  attribute :name, "maybe.coercible.string"
-  attribute :age, "coercible.int"
+  attribute :name, Types::Maybe::Coercible::String
+  attribute :age, Types::Coercible::Int
 end
 
-# becomes available like any other type
-user_type = Dry::Data["user"]
-
-user = user_type[name: nil, age: '21']
+user = User.new(name: nil, age: '21')
 
 user.name # None
 user.age # 21
 
-user = user_type[name: 'Jane', age: '21']
+user = User(name: 'Jane', age: '21')
 
 user.name # => Some("Jane")
 user.age # => 21
