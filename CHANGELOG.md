@@ -6,6 +6,7 @@
 
 ## Changed
 
+* [BREAKING] `Dry::Data::Type.new` accepts constructor and *options* now (solnic)
 * `dry-logic` is now a dependency for constrained types (solnic)
 * Constrained types are now always available (solnic)
 * `strict.*` category uses constrained types with `:type?` predicate (solnic)
