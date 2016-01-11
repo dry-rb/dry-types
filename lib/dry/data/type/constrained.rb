@@ -26,10 +26,6 @@ module Dry
           super && rule.(input).success?
         end
       end
-
-      def constrained(options)
-        Constrained.new(constructor, primitive, Data.Rule(primitive, options))
-      end
     end
   end
 end

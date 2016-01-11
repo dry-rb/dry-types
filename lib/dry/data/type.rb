@@ -40,6 +40,10 @@ module Dry
         Optional.new(Data['nil'] | self)
       end
 
+      def constrained(options)
+        Constrained.new(constructor, primitive, Data.Rule(primitive, options))
+      end
+
       def default(value)
         Default.new(self, value)
       end
