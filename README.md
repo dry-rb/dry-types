@@ -191,17 +191,8 @@ a lower level guarantee that you're not instantiating objects that are broken.
 All types support constraints API, but not all constraints are suitable for a
 particular primitive, it's up to you to set up constraints that make sense.
 
-Under the hood it uses [`dry-validation`](https://github.com/dryrb/dry-validation)
+Under the hood it uses [`dry-logic`](https://github.com/dryrb/dry-logic)
 and all of its predicates are supported.
-
-IMPORTANT: `dry-data` does not have a runtime dependency on `dry-validation` so
-if you want to use contrained types you need to add it to your Gemfile
-
-If you want to use constrained type you need to require it explicitly:
-
-``` ruby
-require "dry/data/type/constrained"
-```
 
 ``` ruby
 string = Dry::Data["strict.string"].constrained(min_size: 3)

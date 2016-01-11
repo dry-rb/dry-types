@@ -1,3 +1,12 @@
+# v0.4.3 to-be-released
+
+## Changed
+
+* `dry-logic` is now a dependency for constrained types (solnic)
+* Constrained types are now always available (solnic)
+
+[Compare v0.4.2...v0.4.3](https://github.com/dryrb/dry-data/compare/v0.4.2...v0.4.3)
+
 # v0.4.2 2015-12-27
 
 ## Added
