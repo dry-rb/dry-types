@@ -324,12 +324,12 @@ Post::Statuses[nil]
 # => Dry::Data::ConstraintError: nil violates constraints
 ```
 
-### Defining a hash with explicit schema
+### Hashes
 
 The built-in hash type has constructors that you can use to define hashes with
 explicit schemas and coercible values using the built-in types.
 
-### Hash Schema
+#### Hash Schema
 
 ``` ruby
 # using simple kernel coercions
@@ -345,7 +345,7 @@ hash[name: 'Jane', birthdate: '1994-11-11']
 # => { :name => "Jane", :birthdate => #<Date: 1994-11-11 ((2449668j,0s,0n),+0s,2299161j)> }
 ```
 
-### Strict Hash
+#### Strict Schema
 
 Strict hash will raise errors when keys are missing or value types are incorrect.
 
@@ -356,7 +356,7 @@ hash[email: 'jane@doe.org', name: 'Jane', age: 21]
 # => Dry::Data::SchemaKeyError: :email is missing in Hash input
 ```
 
-### Symbolized Hash
+#### Symbolized Schema
 
 Symbolized hash will turn string key names into symbols
 
