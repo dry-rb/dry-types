@@ -16,7 +16,7 @@ module Dry
       end
 
       def call(input)
-        value = left[input]
+        value = left.try(input)
 
         if left.valid?(value)
           value

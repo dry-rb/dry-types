@@ -1,3 +1,5 @@
+require 'dry/data/struct'
+
 module Dry
   module Data
     class Value < Struct

@@ -1,4 +1,4 @@
-RSpec.describe Dry::Data::Type::Enum do
+RSpec.describe Dry::Data::Enum do
   subject(:type) { Dry::Data['string'].enum(*values) }
 
   let(:values) { %w(draft published archived) }

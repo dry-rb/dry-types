@@ -2,12 +2,19 @@ require 'dry/data/decorator'
 
 module Dry
   module Data
-    class Optional
+    class Default
       include Decorator
       include TypeBuilder
 
+      attr_reader :value
+
+      def initialize(type, options)
+        super
+        @value = options.fetch(:value)
+      end
+
       def call(input)
-        Maybe(type[input])
+        input.nil? ? value : type[input]
       end
       alias_method :[], :call
     end

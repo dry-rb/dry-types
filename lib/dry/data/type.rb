@@ -1,18 +1,12 @@
-require 'dry/data/decorator'
-
 require 'dry/data/type/hash'
 require 'dry/data/type/array'
-require 'dry/data/type/enum'
-require 'dry/data/type/default'
-require 'dry/data/type/constrained'
-
-require 'dry/data/sum_type'
-require 'dry/data/optional'
+require 'dry/data/type_builder'
 
 module Dry
   module Data
     class Type
       include Dry::Equalizer(:constructor, :options)
+      include TypeBuilder
 
       attr_reader :constructor
 
@@ -40,22 +34,6 @@ module Dry
         @primitive = options.fetch(:primitive)
       end
 
-      def optional
-        Optional.new(Data['nil'] | self)
-      end
-
-      def constrained(options)
-        Constrained.new(self, rule: Data.Rule(primitive, options))
-      end
-
-      def default(value)
-        Default.new(self, value: value)
-      end
-
-      def enum(*values)
-        Enum.new(constrained(inclusion: values), values: values)
-      end
-
       def name
         primitive.name
       end
@@ -65,12 +43,12 @@ module Dry
       end
       alias_method :[], :call
 
-      def valid?(input)
-        input.is_a?(primitive)
+      def try(input)
+        call(input)
       end
 
-      def |(other)
-        SumType.new(self, other)
+      def valid?(input)
+        input.is_a?(primitive)
       end
     end
   end

@@ -1,4 +1,4 @@
-RSpec.describe Dry::Data::Type::Constrained do
+RSpec.describe Dry::Data::Constrained do
   describe '#[]' do
     subject(:type) do
       Dry::Data['strict.string'].constrained(size: 3..12)
