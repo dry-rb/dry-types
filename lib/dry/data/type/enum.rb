@@ -1,7 +1,7 @@
 module Dry
   module Data
     class Type
-      class Enum < Type
+      class Enum
         include Decorator
 
         attr_reader :values

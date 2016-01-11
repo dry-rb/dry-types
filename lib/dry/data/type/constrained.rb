@@ -3,7 +3,7 @@ require 'dry/data/constraints'
 module Dry
   module Data
     class Type
-      class Constrained < Type
+      class Constrained
         include Decorator
 
         attr_reader :rule
@@ -30,6 +30,10 @@ module Dry
 
         def constrained(options)
           with(rule: rule & Data.Rule(primitive, options))
+        end
+
+        def optional
+          Optional.new(Data['nil'] | self)
         end
       end
     end

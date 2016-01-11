@@ -8,16 +8,8 @@ module Dry
         @options = options
       end
 
-      def name
-        type.name
-      end
-
       def constructor
         type.constructor
-      end
-
-      def primitive
-        type.primitive
       end
 
       def valid?(input)
@@ -25,7 +17,7 @@ module Dry
       end
 
       def respond_to_missing?(meth, include_private = false)
-        super || false
+        super || type.respond_to?(meth)
       end
 
       def with(new_options)
