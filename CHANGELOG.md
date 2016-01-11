@@ -1,12 +1,16 @@
 # v0.5.0 to-be-released
 
+## Added
+
+* `Type#default` interface for defining a type with a default value (solnic)
+
 ## Changed
 
 * `dry-logic` is now a dependency for constrained types (solnic)
 * Constrained types are now always available (solnic)
 * `strict.*` category uses constrained types with `:type?` predicate (solnic)
 
-[Compare v0.4.2...v0.4.3](https://github.com/dryrb/dry-data/compare/v0.4.2...v0.4.3)
+[Compare v0.4.2...v0.5.0](https://github.com/dryrb/dry-data/compare/v0.4.2...v0.5.0)
 
 # v0.4.2 2015-12-27
 
