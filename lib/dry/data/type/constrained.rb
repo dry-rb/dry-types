@@ -17,7 +17,7 @@ module Dry
           if valid?(result)
             result
           else
-            raise ConstraintError, "#{input.inspect} violates constraints"
+            raise ConstraintError, "+#{input}+ violates constraints"
           end
         end
         alias_method :[], :call

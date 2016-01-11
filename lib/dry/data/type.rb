@@ -12,26 +12,6 @@ module Dry
       attr_reader :constructor
       attr_reader :primitive
 
-      class Constrained < Type
-        attr_reader :rule
-
-        def initialize(constructor, primitive, rule)
-          super(constructor, primitive)
-          @rule = rule
-        end
-
-        def call(input)
-          result = super(input)
-
-          if rule.(result).success?
-            result
-          else
-            raise ConstraintError, "#{input.inspect} violates constraints"
-          end
-        end
-        alias_method :[], :call
-      end
-
       def self.[](primitive)
         if primitive == ::Array
           Type::Array
@@ -42,15 +22,7 @@ module Dry
         end
       end
 
-      def self.strict_constructor(primitive, input)
-        if input.is_a?(primitive)
-          input
-        else
-          raise TypeError, "#{input.inspect} has invalid type"
-        end
-      end
-
-      def self.passthrough_constructor(input)
+      def self.constructor(input)
         input
       end
 
