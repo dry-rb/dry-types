@@ -16,16 +16,12 @@ module Dry
       end
 
       def call(input)
-        begin
-          value = left[input]
+        value = left[input]
 
-          if left.valid?(value)
-            value
-          else
-            right[value]
-          end
-        rescue TypeError
-          right[input]
+        if left.valid?(value)
+          value
+        else
+          right[value]
         end
       end
       alias_method :[], :call
