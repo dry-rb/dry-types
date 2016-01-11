@@ -13,7 +13,6 @@ require 'dry/data/container'
 require 'dry/data/type'
 require 'dry/data/struct'
 require 'dry/data/value'
-require 'dry/data/dsl'
 
 module Dry
   module Data
@@ -96,11 +95,6 @@ module Dry
 
     def self.identifier(klass)
       Inflecto.underscore(klass).gsub('/', '.')
-    end
-
-    def self.type(*args, &block)
-      dsl = DSL.new(container)
-      block ? yield(dsl) : registry[args.first]
     end
 
     def self.type_map
