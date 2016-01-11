@@ -10,6 +10,10 @@
 * Constrained types are now always available (solnic)
 * `strict.*` category uses constrained types with `:type?` predicate (solnic)
 
+## Fixed
+
+* `attribute` raises proper error when type definition is missing (solnic)
+
 [Compare v0.4.2...v0.5.0](https://github.com/dryrb/dry-data/compare/v0.4.2...v0.5.0)
 
 # v0.4.2 2015-12-27
