@@ -49,6 +49,7 @@ solution because:
 * Has [sum-types](#sum-types)
 * Has [enums](#enums)
 * Has [hash type with type schemas](#hashes)
+* Has [array type with member type](#arrays)
 * Suitable for many use-cases while remaining simple, in example:
   * Params coercions
   * Domain "models"
@@ -378,6 +379,16 @@ hash = Types::Hash.symbolized(name: Types::String, age: Types::Coercible::Int)
 
 hash['name' => 'Jane', 'age' => '21']
 # => { :name => "Jane", :age => 21 }
+```
+
+### Arrays
+
+The built-in array type supports defining member type:
+
+``` ruby
+PostStatuses = Types::Strict::Array.member(Types::Coercible::String)
+
+PostStatuses[[:foo, :bar]] # ["foo", "bar"]
 ```
 
 ### Structs
