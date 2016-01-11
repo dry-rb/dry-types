@@ -41,5 +41,13 @@ module Dry
     register('form.decimal') do
       Type.new(Coercions::Form.method(:to_decimal), primitive: BigDecimal)
     end
+
+    register('form.array') do
+      self['array'].safe
+    end
+
+    register('form.hash') do
+      self['hash'].safe
+    end
   end
 end

@@ -144,4 +144,32 @@ RSpec.describe Dry::Data::Type do
       expect(type['foo']).to eql('foo')
     end
   end
+
+  describe 'form.array' do
+    subject(:type) { Dry::Data['form.array'].member(Dry::Data['form.int']) }
+
+    it 'returns coerced array' do
+      arr = %w(1 2 3)
+      expect(type[arr]).to eql([1, 2, 3])
+    end
+
+    it 'returns original value when it is not an array' do
+      foo = 'foo'
+      expect(type[foo]).to be(foo)
+    end
+  end
+
+  describe 'form.hash' do
+    subject(:type) { Dry::Data['form.hash'].schema(age: Dry::Data['form.int']) }
+
+    it 'returns coerced hash' do
+      hash = { age: '21' }
+      expect(type[hash]).to eql(age: 21)
+    end
+
+    it 'returns original value when it is not an hash' do
+      foo = 'foo'
+      expect(type[foo]).to be(foo)
+    end
+  end
 end

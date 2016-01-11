@@ -136,4 +136,39 @@ RSpec.describe Dry::Data::Compiler, '#call' do
       age: 20, admin: true
     ])
   end
+
+  it 'builds a safe form array' do
+    ast = [:type, ['form.array', [:type, ['coercible.int']]]]
+
+    arr = compiler.(ast)
+
+    expect(arr['oops']).to eql('oops')
+    expect(arr[%w(1 2 3)]).to eql([1, 2, 3])
+  end
+
+  it 'builds a safe form hash' do
+    ast = [
+      :type, [
+        'form.hash', [
+          :symbolized, [
+            [:key, [:email, [:type, 'string']]],
+            [:key, [:age, [:type, 'form.int']]],
+            [:key, [:admin, [:type, 'form.bool']]]
+          ]
+        ]
+      ]
+    ]
+
+    hash = compiler.(ast)
+
+    expect(hash['oops']).to eql('oops')
+
+    expect(hash['foo' => 'bar', 'email' => 'jane@doe.org', 'age' => '20', 'admin' => '1']).to eql(
+      email: 'jane@doe.org', age: 20, admin: true
+    )
+
+    expect(hash['foo' => 'bar', 'age' => '20', 'admin' => '1']).to eql(
+      age: 20, admin: true
+    )
+  end
 end

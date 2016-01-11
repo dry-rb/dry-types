@@ -20,6 +20,10 @@ module Dry
       def enum(*values)
         Enum.new(constrained(inclusion: values), values: values)
       end
+
+      def safe
+        Safe.new(self)
+      end
     end
   end
 end
@@ -28,4 +32,5 @@ require 'dry/data/default'
 require 'dry/data/constrained'
 require 'dry/data/enum'
 require 'dry/data/optional'
+require 'dry/data/safe'
 require 'dry/data/sum_type'

@@ -17,9 +17,10 @@ module Dry
 
       def visit_type(node)
         type, args = node
+        meth = :"visit_#{type.gsub('.', '_')}"
 
-        if respond_to?(:"visit_#{type}")
-          send(:"visit_#{type}", args)
+        if respond_to?(meth)
+          send(meth, args)
         else
           registry[type]
         end
@@ -29,13 +30,22 @@ module Dry
         node.map { |type| visit(type) }.reduce(:|)
       end
 
+      def visit_array(node)
+        registry['array'].member(call(node))
+      end
+
+      def visit_form_array(node)
+        registry['form.array'].member(call(node))
+      end
+
       def visit_hash(node)
         constructor, schema = node
         registry['hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
       end
 
-      def visit_array(node)
-        registry['array'].member(call(node))
+      def visit_form_hash(node)
+        constructor, schema = node
+        registry['form.hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
       end
 
       def visit_key(node)
