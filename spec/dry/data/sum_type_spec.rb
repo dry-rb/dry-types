@@ -1,5 +1,5 @@
 RSpec.describe Dry::Data::SumType do
-  describe '#call' do
+  describe '#[]' do
     it 'works with two pass-through types' do
       type = Dry::Data['int'] | Dry::Data['string']
 
