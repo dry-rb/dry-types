@@ -5,6 +5,10 @@ RSpec.describe Dry::Data::Type, '#default' do
     expect(type[nil]).to eql('foo')
   end
 
+  it 'aliases #[] as #call' do
+    expect(type.call(nil)).to eql('foo')
+  end
+
   it 'returns original value when it is not nil' do
     expect(type['bar']).to eql('bar')
   end

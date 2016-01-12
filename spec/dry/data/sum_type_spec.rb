@@ -24,5 +24,11 @@ RSpec.describe Dry::Data::SumType do
 
       expect { type[{}] }.to raise_error(TypeError)
     end
+
+    it 'is aliased as #call' do
+      type = Dry::Data['int'] | Dry::Data['string']
+      expect(type.call(312)).to be(312)
+      expect(type.call('312')).to eql('312')
+    end
   end
 end

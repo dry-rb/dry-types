@@ -8,4 +8,8 @@ RSpec.describe Dry::Data::Type, '#optional' do
   it 'returns Some when value exists' do
     expect(type['hello'].value).to eql('hello')
   end
+
+  it 'aliases #[] as #call' do
+    expect(type.call('hello').value).to eql('hello')
+  end
 end
