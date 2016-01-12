@@ -11,6 +11,10 @@ RSpec.describe Dry::Data::Constrained do
     it 'raises when a given constraint is violated' do
       expect { type['he'] }.to raise_error(Dry::Data::ConstraintError, /he/)
     end
+
+    it 'is aliased as #call' do
+      expect(type.call('hello')).to eql('hello')
+    end
   end
 
   context 'with a sum type' do

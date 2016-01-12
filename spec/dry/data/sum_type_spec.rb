@@ -1,5 +1,5 @@
 RSpec.describe Dry::Data::SumType do
-  describe '#call' do
+  describe '#[]' do
     it 'works with two pass-through types' do
       type = Dry::Data['int'] | Dry::Data['string']
 
@@ -23,6 +23,12 @@ RSpec.describe Dry::Data::SumType do
       expect(type['312']).to eql('312')
 
       expect { type[{}] }.to raise_error(TypeError)
+    end
+
+    it 'is aliased as #call' do
+      type = Dry::Data['int'] | Dry::Data['string']
+      expect(type.call(312)).to be(312)
+      expect(type.call('312')).to eql('312')
     end
   end
 end

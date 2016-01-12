@@ -9,4 +9,8 @@ RSpec.describe Dry::Data::Type, '#safe' do
   it 'skips constructor when primitive does not match' do
     expect(type[:passing]).to be(:passing)
   end
+
+  it 'aliases #[] as #call' do
+    expect(type.call(:passing)).to be(:passing)
+  end
 end

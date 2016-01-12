@@ -23,6 +23,10 @@ RSpec.describe Dry::Data::Type do
       expect { Dry::Data["strict.date"]['nopenopenope'] }
         .to raise_error(Dry::Data::ConstraintError, /"nopenopenope" violates constraints/)
     end
+
+    it 'is aliased as #call' do
+      expect(string.call('hello')).to eql('hello')
+    end
   end
 
   describe 'with Bool' do

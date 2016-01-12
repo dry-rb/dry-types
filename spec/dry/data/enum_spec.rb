@@ -21,4 +21,9 @@ RSpec.describe Dry::Data::Enum do
 
     expect(type.values).to be_frozen
   end
+
+  it 'aliases #[] as #call' do
+    expect(type.call('draft')).to eql(values[0])
+    expect(type.call(0)).to eql(values[0])
+  end
 end
