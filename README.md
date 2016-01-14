@@ -431,6 +431,10 @@ loc1 == loc2
 # true
 ```
 
+## Rails
+
+If you're using Rails then you want to install [dry-data-rails](https://github.com/jeromegn/dry-data-rails) which makes it work in development mode.
+
 ## Status and Roadmap
 
 This library is in an early stage of development but you are encouraged to try it
