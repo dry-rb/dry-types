@@ -19,18 +19,21 @@ module Dry
         end
 
         def self.to_date(input)
+          return input if input.kind_of?(Date)
           Date.parse(input)
         rescue ArgumentError
           input
         end
 
         def self.to_date_time(input)
+          return input if input.kind_of?(DateTime)
           DateTime.parse(input)
         rescue ArgumentError
           input
         end
 
         def self.to_time(input)
+          return input if input.kind_of?(Time)
           Time.parse(input)
         rescue ArgumentError
           input
