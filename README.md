@@ -95,7 +95,7 @@ In `dry-data` a type is an object with a constructor that knows how to handle
 input. On top of that there are high-level types like a sum-type, constrained type,
 optional type or default value type.
 
-To acccess all the built-in type objects you can configure `dry-data` with a
+To access all the built-in type objects you can configure `dry-data` with a
 namespace module:
 
 ``` ruby
