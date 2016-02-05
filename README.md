@@ -1,18 +1,18 @@
-[gem]: https://rubygems.org/gems/dry-data
-[travis]: https://travis-ci.org/dryrb/dry-data
-[gemnasium]: https://gemnasium.com/dryrb/dry-data
-[codeclimate]: https://codeclimate.com/github/dryrb/dry-data
-[coveralls]: https://coveralls.io/r/dryrb/dry-data
-[inchpages]: http://inch-ci.org/github/dryrb/dry-data
+[gem]: https://rubygems.org/gems/dry-types
+[travis]: https://travis-ci.org/dryrb/dry-types
+[gemnasium]: https://gemnasium.com/dryrb/dry-types
+[codeclimate]: https://codeclimate.com/github/dryrb/dry-types
+[coveralls]: https://coveralls.io/r/dryrb/dry-types
+[inchpages]: http://inch-ci.org/github/dryrb/dry-types
 
-# dry-data [![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dryrb/chat)
+# dry-types [![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dryrb/chat)
 
-[![Gem Version](https://badge.fury.io/rb/dry-data.svg)][gem]
-[![Build Status](https://travis-ci.org/dryrb/dry-data.svg?branch=master)][travis]
-[![Dependency Status](https://gemnasium.com/dryrb/dry-data.svg)][gemnasium]
-[![Code Climate](https://codeclimate.com/github/dryrb/dry-data/badges/gpa.svg)][codeclimate]
-[![Test Coverage](https://codeclimate.com/github/dryrb/dry-data/badges/coverage.svg)][codeclimate]
-[![Inline docs](http://inch-ci.org/github/dryrb/dry-data.svg?branch=master)][inchpages]
+[![Gem Version](https://badge.fury.io/rb/dry-types.svg)][gem]
+[![Build Status](https://travis-ci.org/dryrb/dry-types.svg?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/dryrb/dry-types.svg)][gemnasium]
+[![Code Climate](https://codeclimate.com/github/dryrb/dry-types/badges/gpa.svg)][codeclimate]
+[![Test Coverage](https://codeclimate.com/github/dryrb/dry-types/badges/coverage.svg)][codeclimate]
+[![Inline docs](http://inch-ci.org/github/dryrb/dry-types.svg?branch=master)][inchpages]
 
 A simple and extendible type system for Ruby with support for kernel coercions,
 form coercions, sum types, constrained types and default-value types.
@@ -28,7 +28,7 @@ Articles:
 
 * ["Invalid Object Is An Anti-Pattern"](http://solnic.eu/2015/12/28/invalid-object-is-an-anti-pattern.html)
 
-## dry-data vs virtus
+## dry-types vs virtus
 
 [Virtus](https://github.com/solnic/virtus) has been a successful library, unfortunately
 it is "only" a by-product of an ActiveRecord ORM which carries many issues typical
@@ -36,7 +36,7 @@ to ActiveRecord-like features that we all know from Rails, especially when it
 comes to very complicated coercion logic, mixing unrelated concerns, polluting
 application layer with concerns that should be handled at the bounderies etc.
 
-`dry-data` has been created to become a better tool that solves *similar* (but
+`dry-types` has been created to become a better tool that solves *similar* (but
 not identical!) problems related to type-safety and coercions. It is a superior
 solution because:
 
@@ -64,7 +64,7 @@ solution because:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'dry-data'
+gem 'dry-types'
 ```
 
 And then execute:
@@ -73,11 +73,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install dry-data
+    $ gem install dry-types
 
 ## Usage
 
-You can use `dry-data` for defining various data types in your application, like
+You can use `dry-types` for defining various types types in your application, like
 domain entities and value objects or hashes with coercible values used to handle
 params.
 
@@ -91,45 +91,45 @@ Built-in types are grouped under 5 categories:
 
 ### Configuring Types Module
 
-In `dry-data` a type is an object with a constructor that knows how to handle
+In `dry-types` a type is an object with a constructor that knows how to handle
 input. On top of that there are high-level types like a sum-type, constrained type,
 optional type or default value type.
 
-To access all the built-in type objects you can configure `dry-data` with a
+To access all the built-in type objects you can configure `dry-types` with a
 namespace module:
 
 ``` ruby
 module Types
 end
 
-Dry::Data.configure do |config|
+Dry::Types.configure do |config|
   config.namespace = Types
 end
 
 # after defining your custom types (if you've got any) you can finalize setup
-Dry::Data.finalize
+Dry::Types.finalize
 
 # this defines all types under your namespace, in example:
 Types::Coercible::String
-# => #<Dry::Data::Type:0x007feffb104aa8 @constructor=#<Method: Kernel.String>, @primitive=String>
+# => #<Dry::Types::Type:0x007feffb104aa8 @constructor=#<Method: Kernel.String>, @primitive=String>
 ```
 
 With types accessible as constants you can easily compose more complex types,
 like sum-types or constrained types, in hash schemas or structs:
 
 ``` ruby
-Dry::Data.configure do |config|
+Dry::Types.configure do |config|
   config.namespace = Types
 end
 
-Dry::Data.finalize
+Dry::Types.finalize
 
 module Types
   Email = String.constrained(format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
   Age = Int.constrained(gt: 18)
 end
 
-class User < Dry::Data::Struct
+class User < Dry::Types::Struct
   attribute :name, Types::String
   attribute :email, Types::Email
   attribute :age, Types::Age
@@ -195,7 +195,7 @@ Coercible types suitable for form param processing:
 
 ``` ruby
 Types::Strict::Int[1] # => 1
-Types::Strict::Int['1'] # => raises Dry::Data::ConstraintError
+Types::Strict::Int['1'] # => raises Dry::Types::ConstraintError
 
 # coercible type-check group
 Types::Coercible::String[:foo] # => 'foo'
@@ -256,7 +256,7 @@ PostStatus[true] # raises ConstraintError
 You can specify sum types using `|` operator, it is an explicit way of defining
 what are the valid types of a value.
 
-In example `dry-data` defines `bool` type which is a sum-type consisting of `true`
+In example `dry-types` defines `bool` type which is a sum-type consisting of `true`
 and `false` types which is expressed as `Types::True | Types::False`
 (and it has its strict version, too).
 
@@ -288,7 +288,7 @@ string['foo']
 # => "foo"
 
 string['fo']
-# => Dry::Data::ConstraintError: "fo" violates constraints
+# => Dry::Types::ConstraintError: "fo" violates constraints
 
 email = Types::Strict::String.constrained(
   format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
@@ -298,7 +298,7 @@ email["jane@doe.org"]
 # => "jane@doe.org"
 
 email["jane"]
-# => Dry::Data::ConstraintError: "fo" violates constraints
+# => Dry::Types::ConstraintError: "fo" violates constraints
 ```
 
 ### Enums
@@ -312,7 +312,7 @@ mapped to enum values conveniently.
 ``` ruby
 # assuming we have types loaded into `Types` namespace
 # we can easily define an enum for our post struct
-class Post < Dry::Data::Struct
+class Post < Dry::Types::Struct
   Statuses = Types::Strict::String.enum('draft', 'published', 'archived')
 
   attribute :title, Types::Strict::String
@@ -331,11 +331,11 @@ Post::Statuses['draft'] # => "draft"
 
 # it'll raise if something silly was passed in
 Post::Statuses['something silly']
-# => Dry::Data::ConstraintError: "something silly" violates constraints
+# => Dry::Types::ConstraintError: "something silly" violates constraints
 
 # nil is considered as something silly too
 Post::Statuses[nil]
-# => Dry::Data::ConstraintError: nil violates constraints
+# => Dry::Types::ConstraintError: nil violates constraints
 ```
 
 ### Hashes
@@ -367,7 +367,7 @@ Strict hash will raise errors when keys are missing or value types are incorrect
 hash = Types::Hash.strict(name: 'string', age: 'coercible.int')
 
 hash[email: 'jane@doe.org', name: 'Jane', age: 21]
-# => Dry::Data::SchemaKeyError: :email is missing in Hash input
+# => Dry::Types::SchemaKeyError: :email is missing in Hash input
 ```
 
 #### Symbolized Schema
@@ -397,7 +397,7 @@ You can define struct objects which will have readers for specified attributes
 using a simple dsl:
 
 ``` ruby
-class User < Dry::Data::Struct
+class User < Dry::Types::Struct
   attribute :name, Types::Maybe::Coercible::String
   attribute :age, Types::Coercible::Int
 end
@@ -419,7 +419,7 @@ You can define value objects which will behave like structs and have equality
 methods too:
 
 ``` ruby
-class Location < Dry::Data::Value
+class Location < Dry::Types::Value
   attribute :lat, Types::Strict::Float
   attribute :lat, Types::Strict::Float
 end
@@ -433,14 +433,14 @@ loc1 == loc2
 
 ## Rails
 
-If you're using Rails then you want to install [dry-data-rails](https://github.com/jeromegn/dry-data-rails) which makes it work in development mode.
+If you're using Rails then you want to install [dry-types-rails](https://github.com/jeromegn/dry-types-rails) which makes it work in development mode.
 
 ## Status and Roadmap
 
 This library is in an early stage of development but you are encouraged to try it
 out and provide feedback.
 
-For planned features check out [the issues](https://github.com/dryrb/dry-data/labels/feature).
+For planned features check out [the issues](https://github.com/dryrb/dry-types/labels/feature).
 
 ## Development
 
@@ -450,4 +450,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/dryrb/dry-data.
+Bug reports and pull requests are welcome on GitHub at https://github.com/dryrb/dry-types.
