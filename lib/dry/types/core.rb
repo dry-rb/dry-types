@@ -47,13 +47,13 @@ module Dry
     end
 
     # Register non-coercible maybe types
-    ALL_PRIMITIVES.each do |name, primitive|
+    ALL_PRIMITIVES.each_key do |name|
       next if name == :nil
       register("maybe.strict.#{name}", self["strict.#{name}"].optional)
     end
 
     # Register coercible maybe types
-    COERCIBLE.each do |name, primitive|
+    COERCIBLE.each_key do |name|
       register("maybe.coercible.#{name}", self["coercible.#{name}"].optional)
     end
 
