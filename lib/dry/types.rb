@@ -103,4 +103,4 @@ module Dry
   end
 end
 
-require 'dry/types/types' # load built-in types
+require 'dry/types/core' # load built-in types

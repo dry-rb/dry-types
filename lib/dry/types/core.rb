@@ -63,4 +63,4 @@ module Dry
   end
 end
 
-require 'dry/types/types/form'
+require 'dry/types/form'

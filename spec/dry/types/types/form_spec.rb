@@ -1,5 +1,3 @@
-require 'dry/types/types/form'
-
 RSpec.describe Dry::Types::Type do
   describe 'form.nil' do
     subject(:type) { Dry::Types['form.nil'] }
