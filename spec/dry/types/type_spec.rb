@@ -129,5 +129,19 @@ RSpec.describe Dry::Types::Type do
       expect(value).to be_instance_of(Kleisli::Maybe::Some)
       expect(value.fmap(&:downcase).fmap(&:upcase).value).to eql('SOMETHING')
     end
+
+    it 'accepts None value' do
+      value = maybe_string[Maybe(nil)]
+
+      expect(value).to be_instance_of(Kleisli::Maybe::None)
+      expect(value.fmap(&:downcase).fmap(&:upcase).value).to be(nil)
+    end
+
+    it 'accepts Some value' do
+      value = maybe_string[Maybe('SomeThing')]
+
+      expect(value).to be_instance_of(Kleisli::Maybe::Some)
+      expect(value.fmap(&:downcase).fmap(&:upcase).value).to eql('SOMETHING')
+    end
   end
 end
