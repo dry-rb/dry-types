@@ -1,3 +1,4 @@
+require 'kleisli/maybe'
 require 'dry/types/decorator'
 
 module Dry

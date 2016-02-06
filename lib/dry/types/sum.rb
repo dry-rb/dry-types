@@ -1,5 +1,3 @@
-require 'kleisli'
-
 module Dry
   module Types
     class Sum
