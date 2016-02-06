@@ -31,4 +31,12 @@ RSpec.describe Dry::Types::Sum do
       expect(type.call('312')).to eql('312')
     end
   end
+
+  describe '#default' do
+    it 'returns a default value sum type' do
+      type = (Dry::Types['nil'] | Dry::Types['string']).default('foo')
+
+      expect(type.value).to eql('foo')
+    end
+  end
 end

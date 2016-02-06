@@ -1,6 +1,8 @@
 module Dry
   module Types
     class Sum
+      include Builder
+
       attr_reader :left
 
       attr_reader :right
