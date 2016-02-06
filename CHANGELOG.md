@@ -1,6 +1,6 @@
 # v0.6.0 to-be-released
 
-Renamed from dry-types to dry-types and:
+Renamed from dry-data to dry-types and:
 
 ## Added
 
