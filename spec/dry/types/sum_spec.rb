@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::SumType do
+RSpec.describe Dry::Types::Sum do
   describe '#[]' do
     it 'works with two pass-through types' do
       type = Dry::Types['int'] | Dry::Types['string']

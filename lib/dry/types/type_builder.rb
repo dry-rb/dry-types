@@ -2,7 +2,7 @@ module Dry
   module Types
     module TypeBuilder
       def |(other)
-        SumType.new(self, other)
+        Sum.new(self, other)
       end
 
       def optional
@@ -33,4 +33,4 @@ require 'dry/types/constrained'
 require 'dry/types/enum'
 require 'dry/types/optional'
 require 'dry/types/safe'
-require 'dry/types/sum_type'
+require 'dry/types/sum'

@@ -2,7 +2,7 @@ require 'kleisli'
 
 module Dry
   module Types
-    class SumType
+    class Sum
       attr_reader :left
 
       attr_reader :right
