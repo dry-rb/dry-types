@@ -58,23 +58,19 @@ module Dry
 
     def self.[](name)
       type_map.fetch_or_store(name) do
-        type =
-          case name
-          when String
-            result = name.match(TYPE_SPEC_REGEX)
+        case name
+        when String
+          result = name.match(TYPE_SPEC_REGEX)
 
-            type =
-              if result
-                type_id, member_id = result[1..2]
-                container[type_id].member(self[member_id])
-              else
-                container[name]
-              end
-          when Class
-            self[identifier(name)]
+          if result
+            type_id, member_id = result[1..2]
+            container[type_id].member(self[member_id])
+          else
+            container[name]
           end
-
-        type
+        when Class
+          self[identifier(name)]
+        end
       end
     end
 
