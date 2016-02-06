@@ -17,7 +17,7 @@ module Dry
 
       def visit_type(node)
         type, args = node
-        meth = :"visit_#{type.gsub('.', '_')}"
+        meth = :"visit_#{type.tr('.', '_')}"
 
         if respond_to?(meth)
           send(meth, args)
