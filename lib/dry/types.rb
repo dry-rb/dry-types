@@ -51,7 +51,7 @@ module Dry
 
     def self.register_class(klass)
       container.register(
-        Inflecto.underscore(klass).gsub('/', '.'),
+        Inflecto.underscore(klass).tr('/', '.'),
         Type.new(klass.method(:new), primitive: klass)
       )
     end
@@ -94,7 +94,7 @@ module Dry
     end
 
     def self.identifier(klass)
-      Inflecto.underscore(klass).gsub('/', '.')
+      Inflecto.underscore(klass).tr('/', '.')
     end
 
     def self.type_map
