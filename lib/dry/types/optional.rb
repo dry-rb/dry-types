@@ -8,7 +8,11 @@ module Dry
       include Builder
 
       def call(input)
-        Maybe(type[input])
+        if input.is_a? Kleisli::Maybe
+          Maybe(type[input.value])
+        else
+          Maybe(type[input])
+        end
       end
       alias_method :[], :call
     end
