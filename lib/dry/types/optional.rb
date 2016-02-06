@@ -4,7 +4,7 @@ module Dry
   module Types
     class Optional
       include Decorator
-      include TypeBuilder
+      include Builder
 
       def call(input)
         Maybe(type[input])

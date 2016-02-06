@@ -4,7 +4,7 @@ module Dry
   module Types
     class Safe
       include Decorator
-      include TypeBuilder
+      include Builder
 
       def call(input)
         if input.is_a?(primitive)

@@ -5,7 +5,7 @@ module Dry
   module Types
     class Constrained
       include Decorator
-      include TypeBuilder
+      include Builder
 
       attr_reader :rule
 

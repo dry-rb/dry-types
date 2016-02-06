@@ -1,12 +1,12 @@
 require 'dry/types/type/hash'
 require 'dry/types/type/array'
-require 'dry/types/type_builder'
+require 'dry/types/builder'
 
 module Dry
   module Types
     class Type
       include Dry::Equalizer(:constructor, :options)
-      include TypeBuilder
+      include Builder
 
       attr_reader :constructor
 

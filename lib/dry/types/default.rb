@@ -4,7 +4,7 @@ module Dry
   module Types
     class Default
       include Decorator
-      include TypeBuilder
+      include Builder
 
       attr_reader :value
 

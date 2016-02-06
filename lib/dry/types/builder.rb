@@ -1,6 +1,6 @@
 module Dry
   module Types
-    module TypeBuilder
+    module Builder
       def |(other)
         Sum.new(self, other)
       end
