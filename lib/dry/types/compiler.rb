@@ -40,17 +40,23 @@ module Dry
 
       def visit_hash(node)
         constructor, schema = node
-        registry['hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
+        merge_with('hash', constructor, schema)
       end
 
       def visit_form_hash(node)
         constructor, schema = node
-        registry['form.hash'].public_send(constructor, schema.map { |key| visit(key) }.reduce(:merge))
+        merge_with('form.hash', constructor, schema)
       end
 
       def visit_key(node)
         name, types = node
         { name => visit(types) }
+      end
+
+      def merge_with(hash_id, constructor, schema)
+        registry[hash_id].__send__(
+          constructor, schema.map { |key| visit(key) }.reduce(:merge)
+        )
       end
     end
   end
