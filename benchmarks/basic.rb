@@ -1,4 +1,4 @@
-require 'dry/data'
+require 'dry/types'
 require 'virtus'
 require 'fast_attributes'
 require 'attrio'
@@ -41,17 +41,17 @@ class AttrioUser
   end
 end
 
-class DryDataUser < Dry::Data::Struct
+class DryTypesUser < Dry::Types::Struct
   attributes(name: 'string', age: 'form.int')
 end
 
-puts DryDataUser.new(name: 'Jane', age: '21').inspect
+puts DryTypesUser.new(name: 'Jane', age: '21').inspect
 
 Benchmark.ips do |x|
   x.report('virtus') { VirtusUser.new(name: 'Jane', age: '21') }
   x.report('fast_attributes') { FastUser.new(name: 'Jane', age: '21') }
   x.report('attrio') { AttrioUser.new(name: 'Jane', age: '21') }
-  x.report('dry-data') { DryDataUser.new(name: 'Jane', age: '21') }
+  x.report('dry-types') { DryTypesUser.new(name: 'Jane', age: '21') }
 
   x.compare!
 end
