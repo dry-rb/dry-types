@@ -34,7 +34,7 @@ module Dry
     ALL_PRIMITIVES.each do |name, primitive|
       register(
         "strict.#{name}",
-        Type[primitive].new(Type.method(:constructor), primitive: primitive).constrained(type: primitive)
+        Type[primitive].new(Type.method(:trivial_constructor), primitive: primitive).constrained(type: primitive)
       )
     end
 
@@ -42,7 +42,7 @@ module Dry
     ALL_PRIMITIVES.each do |name, primitive|
       register(
         name.to_s,
-        Type[primitive].new(Type.method(:constructor), primitive: primitive)
+        Type[primitive].new(Type.method(:trivial_constructor), primitive: primitive)
       )
     end
 

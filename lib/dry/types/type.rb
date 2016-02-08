@@ -24,7 +24,7 @@ module Dry
         end
       end
 
-      def self.constructor(input)
+      def self.trivial_constructor(input)
         input
       end
 
