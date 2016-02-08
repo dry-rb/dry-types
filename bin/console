@@ -3,6 +3,15 @@
 require "bundler/setup"
 require "dry/types"
 
+module Types
+end
+
+Dry::Types.configure do |config|
+  config.namespace = Types
+end
+
+Dry::Types.finalize
+
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
 
