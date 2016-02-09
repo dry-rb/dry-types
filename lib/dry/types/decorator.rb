@@ -12,6 +12,10 @@ module Dry
         type.constructor
       end
 
+      def primitive
+        type.primitive
+      end
+
       def valid?(input)
         type.valid?(input)
       end

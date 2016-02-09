@@ -4,7 +4,7 @@ RSpec.describe Dry::Types::Enum do
   let(:values) { %w(draft published archived) }
   let(:string) { Dry::Types['strict.string'] }
 
-  it_behaves_like Dry::Types::Type
+  it_behaves_like Dry::Types::Definition
 
   it 'allows defining an enum from a specific type' do
     expect(type['draft']).to eql(values[0])

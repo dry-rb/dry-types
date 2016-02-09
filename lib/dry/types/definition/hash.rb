@@ -1,35 +1,29 @@
 module Dry
   module Types
-    class Type
-      class Hash < Type
-        def self.safe_constructor(hash_constructor, value_constructors, input)
-          attributes = hash_constructor[input]
-
+    class Definition
+      class Hash < Definition
+        def self.safe_constructor(value_constructors, hash)
           value_constructors.each_with_object({}) do |(key, value_constructor), result|
-            if attributes.key?(key)
-              result[key] = value_constructor[attributes[key]]
+            if hash.key?(key)
+              result[key] = value_constructor[hash[key]]
             end
           end
         end
 
-        def self.symbolized_constructor(hash_constructor, value_constructors, input)
-          attributes = hash_constructor[input]
-
+        def self.symbolized_constructor(value_constructors, hash)
           value_constructors.each_with_object({}) do |(key, value_constructor), result|
             key_name = key.to_s
 
-            if attributes.key?(key_name)
-              result[key.to_sym] = value_constructor[attributes[key_name]]
+            if hash.key?(key_name)
+              result[key.to_sym] = value_constructor[hash[key_name]]
             end
           end
         end
 
-        def self.strict_constructor(hash_constructor, value_constructors, input)
-          attributes = hash_constructor[input]
-
+        def self.strict_constructor(value_constructors, hash)
           value_constructors.each_with_object({}) do |(key, value_constructor), result|
             begin
-              value = attributes.fetch(key)
+              value = hash.fetch(key)
               result[key] = value_constructor[value]
             rescue TypeError
               raise SchemaError.new(key, value)
@@ -56,9 +50,9 @@ module Dry
               end
           }
 
-          self.class.new(
-            self.class.method(meth).to_proc.curry.(constructor, value_constructors),
-            primitive: primitive, schema: value_constructors
+          constructor(
+            self.class.method(meth).to_proc.curry.(value_constructors),
+            schema: value_constructors
           )
         end
       end

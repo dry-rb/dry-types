@@ -3,27 +3,27 @@ require 'dry/types/coercions/form'
 module Dry
   module Types
     register('form.nil') do
-      Type.new(Coercions::Form.method(:to_nil), primitive: NilClass)
+      self['nil'].constructor(Coercions::Form.method(:to_nil))
     end
 
     register('form.date') do
-      Type.new(Coercions::Form.method(:to_date), primitive: Date)
+      self['date'].constructor(Coercions::Form.method(:to_date))
     end
 
     register('form.date_time') do
-      Type.new(Coercions::Form.method(:to_date_time), primitive: DateTime)
+      self['date_time'].constructor(Coercions::Form.method(:to_date_time))
     end
 
     register('form.time') do
-      Type.new(Coercions::Form.method(:to_time), primitive: Time)
+      self['time'].constructor(Coercions::Form.method(:to_time))
     end
 
     register('form.true') do
-      Type.new(Coercions::Form.method(:to_true), primitive: TrueClass)
+      self['true'].constructor(Coercions::Form.method(:to_true))
     end
 
     register('form.false') do
-      Type.new(Coercions::Form.method(:to_false), primitive: FalseClass)
+      self['false'].constructor(Coercions::Form.method(:to_false))
     end
 
     register('form.bool') do
@@ -31,15 +31,15 @@ module Dry
     end
 
     register('form.int') do
-      Type.new(Coercions::Form.method(:to_int), primitive: Fixnum)
+      self['int'].constructor(Coercions::Form.method(:to_int))
     end
 
     register('form.float') do
-      Type.new(Coercions::Form.method(:to_float), primitive: Float)
+      self['float'].constructor(Coercions::Form.method(:to_float))
     end
 
     register('form.decimal') do
-      Type.new(Coercions::Form.method(:to_decimal), primitive: BigDecimal)
+      self['decimal'].constructor(Coercions::Form.method(:to_decimal))
     end
 
     register('form.array') do

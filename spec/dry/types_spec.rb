@@ -11,7 +11,7 @@ RSpec.describe Dry::Types do
 
       Dry::Types.register(
         'custom_array',
-        Dry::Types::Type.new(FlatArray.method(:constructor), primitive: Array)
+        Dry::Types::Definition.new(Array).constructor(FlatArray.method(:constructor))
       )
 
       input = [[1], [2]]
@@ -34,7 +34,7 @@ RSpec.describe Dry::Types do
 
   describe '.[]' do
     it 'returns registered type for "string"' do
-      expect(Dry::Types['string']).to be_a(Dry::Types::Type)
+      expect(Dry::Types['string']).to be_a(Dry::Types::Definition)
       expect(Dry::Types['string'].name).to eql('String')
     end
 

@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Type, '#optional' do
+RSpec.describe Dry::Types::Definition, '#optional' do
   subject(:type) { Dry::Types['string'].optional }
 
   it 'returns None when value is nil' do

@@ -24,6 +24,10 @@ module Dry
       def safe
         Safe.new(self)
       end
+
+      def constructor(constructor, options = {})
+        Constructor.new(with(options), constructor)
+      end
     end
   end
 end
