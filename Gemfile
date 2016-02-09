@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'dry-logic', github: 'dryrb/dry-logic', branch: 'refactor'
+
 group :test do
   gem "codeclimate-test-reporter", platform: :rbx, require: false
 end
