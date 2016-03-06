@@ -30,11 +30,15 @@ module Dry
 
       private
 
+      def decorate?(response)
+        response.kind_of?(type.class)
+      end
+
       def method_missing(meth, *args, &block)
         if type.respond_to?(meth)
           response = type.__send__(meth, *args, &block)
 
-          if response.kind_of?(type.class)
+          if decorate?(response)
             self.class.new(response, options)
           else
             response
