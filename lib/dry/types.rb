@@ -38,8 +38,18 @@ module Dry
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
+    def self.module
+      namespace = Module.new
+      define_constants(namespace, type_keys)
+      namespace
+    end
+
     def self.finalize
-      define_constants(config.namespace, container._container.keys)
+      warn 'Dry::Types.finalize and configuring namespace is deprecated. Just'\
+       ' do `include Dry::Types.module` in places where you want to have access'\
+       ' to built-in types'
+
+      define_constants(config.namespace, type_keys)
     end
 
     def self.container
@@ -96,6 +106,10 @@ module Dry
 
     def self.type_map
       @type_map ||= ThreadSafe::Cache.new
+    end
+
+    def self.type_keys
+      container._container.keys
     end
   end
 end

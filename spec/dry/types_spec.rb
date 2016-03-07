@@ -43,23 +43,20 @@ RSpec.describe Dry::Types do
     end
   end
 
+  describe '.module' do
+    it 'returns a module with built-in types' do
+      mod = Dry::Types.module
+
+      expect(mod::Coercible::String).to be_instance_of(Dry::Types::Constructor)
+    end
+  end
+
   describe '.define_constants' do
     it 'defines types under constants in the provided namespace' do
       constants = Dry::Types.define_constants(Test, ['coercible.string'])
 
       expect(constants).to eql([Dry::Types['coercible.string']])
       expect(Test::Coercible::String).to be(Dry::Types['coercible.string'])
-    end
-  end
-
-  describe '.finalize' do
-    it 'defines all registered types under configured namespace' do
-      Dry::Types.configure { |config| config.namespace = Test }
-      Dry::Types.finalize
-
-      expect(Test::Strict::String).to be(Dry::Types['strict.string'])
-      expect(Test::Coercible::String).to be(Dry::Types['coercible.string'])
-      expect(Test::Maybe::Coercible::Int).to be(Dry::Types['maybe.coercible.int'])
     end
   end
 end
