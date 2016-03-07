@@ -37,6 +37,13 @@ RSpec.describe Dry::Types::Struct do
         "[Test::User.new] nil (NilClass) has invalid type for :address"
       )
     end
+
+    it 'passes through values when they are structs already' do
+      address = Test::Address.new(city: 'NYC', zipcode: '312')
+      user = user_type[name: 'Jane', age: 21, address: address]
+
+      expect(user.address).to be(address)
+    end
   end
 
   describe '.attribute' do

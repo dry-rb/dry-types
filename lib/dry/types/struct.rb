@@ -31,7 +31,11 @@ module Dry
       end
 
       def self.new(attributes)
-        super(constructor[attributes])
+        if attributes.is_a?(self)
+          attributes
+        else
+          super(constructor[attributes])
+        end
       rescue SchemaError, SchemaKeyError => e
         raise StructError, "[#{self}.new] #{e.message}"
       end
