@@ -10,7 +10,7 @@ module Dry
       end
 
       def constrained(options)
-        Constrained.new(self, rule: Types.Rule(primitive, options))
+        Constrained.new(self, rule: Types.Rule(options))
       end
 
       def default(value)

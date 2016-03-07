@@ -34,7 +34,7 @@ module Dry
       end
 
       def constrained(options)
-        with(rule: rule & Types.Rule(primitive, options))
+        with(rule: rule & Types.Rule(options))
       end
 
       private

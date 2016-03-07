@@ -11,7 +11,7 @@ module Dry
       end
     end
 
-    def self.Rule(primitive, options)
+    def self.Rule(options)
       rule_compiler.(
         options.map { |key, val| [:val, [:predicate, [:"#{key}?", [val]]]] }
       ).reduce(:and)
