@@ -95,36 +95,26 @@ In `dry-types` a type is an object with a constructor that knows how to handle
 input. On top of that there are high-level types like a sum-type, constrained type,
 optional type or default value type.
 
-To access all the built-in type objects you can configure `dry-types` with a
-namespace module:
+To access all the built-in type objects you can include `dry-types` module inside
+your own namespace:
 
 ``` ruby
 module Types
+  include Dry::Types.module
 end
-
-Dry::Types.configure do |config|
-  config.namespace = Types
-end
-
-# after defining your custom types (if you've got any) you can finalize setup
-Dry::Types.finalize
 
 # this defines all types under your namespace, in example:
 Types::Coercible::String
-# => #<Dry::Types::Type:0x007feffb104aa8 @constructor=#<Method: Kernel.String>, @primitive=String>
+# => #<Dry::Types::Constructor type=#<Dry::Types::Definition primitive=String options={}>>
 ```
 
 With types accessible as constants you can easily compose more complex types,
 like sum-types or constrained types, in hash schemas or structs:
 
 ``` ruby
-Dry::Types.configure do |config|
-  config.namespace = Types
-end
-
-Dry::Types.finalize
-
 module Types
+  include Dry::Types.module
+
   Email = String.constrained(format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
   Age = Int.constrained(gt: 18)
 end
