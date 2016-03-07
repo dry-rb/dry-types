@@ -1,10 +1,20 @@
 # v0.6.0 to-be-released
 
-Renamed from dry-data to dry-types and:
+Renamed from `dry-data` to `dry-types` and:
 
 ## Added
 
+* `Dry::Types.module` which returns a namespace for inclusion which has all
+  built-in types defined as constants (solnic)
+
+## Fixed
+
+* `Struct` will simply pass-through the input if it is already a struct (solnic)
+
 ## Changed
+
+* `Dry::Types::Definition` is now the base type definition object (solnic)
+* `Dry::Types::Constructor` is now a type definition with a constructor function (solnic)
 
 [Compare v0.5.1...v0.6.0](https://github.com/dryrb/dry-types/compare/v0.5.1...v0.6.0)
 
