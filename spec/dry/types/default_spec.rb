@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Type, '#default' do
+RSpec.describe Dry::Types::Definition, '#default' do
   subject(:type) { Dry::Types['string'].default('foo') }
 
   it 'returns default value when nil is passed' do

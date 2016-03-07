@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Type do
+RSpec.describe Dry::Types::Definition do
   let(:string) { Dry::Types["coercible.string"] }
   let(:hash) { Dry::Types["coercible.hash"] }
 

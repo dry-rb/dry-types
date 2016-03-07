@@ -28,7 +28,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Type::Hash)
+    expect(hash).to be_instance_of(Dry::Types::Constructor)
 
     result = hash[
       email: 'jane@doe.org',
@@ -62,7 +62,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Type::Hash)
+    expect(hash).to be_instance_of(Dry::Types::Constructor)
 
     result = hash[foo: 'bar', email: 'jane@doe.org', age: '20', admin: '1']
 
@@ -92,7 +92,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Type::Hash)
+    expect(hash).to be_instance_of(Dry::Types::Constructor)
 
     expect(hash['foo' => 'bar', 'email' => 'jane@doe.org', 'age' => '20', 'admin' => '1']).to eql(
       email: 'jane@doe.org', age: 20, admin: true
@@ -122,7 +122,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     arr = compiler.(ast)
 
-    expect(arr).to be_instance_of(Dry::Types::Type::Array)
+    expect(arr).to be_instance_of(Dry::Types::Constructor)
 
     input = [
       'foo' => 'bar', 'email' => 'jane@doe.org', 'age' => '20', 'admin' => '1'

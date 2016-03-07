@@ -10,7 +10,8 @@ require 'dry-equalizer'
 
 require 'dry/types/version'
 require 'dry/types/container'
-require 'dry/types/type'
+require 'dry/types/definition'
+require 'dry/types/constructor'
 require 'dry/types/struct'
 require 'dry/types/value'
 
@@ -52,7 +53,7 @@ module Dry
     def self.register_class(klass)
       container.register(
         Inflecto.underscore(klass).tr('/', '.'),
-        Type.new(klass.method(:new), primitive: klass)
+        Constructor.new(Definition.new(klass), fn: klass.method(:new))
       )
     end
 

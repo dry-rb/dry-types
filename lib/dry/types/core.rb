@@ -22,28 +22,19 @@ module Dry
 
     ALL_PRIMITIVES = COERCIBLE.merge(NON_COERCIBLE).freeze
 
+    # Register built-in types that are non-coercible through kernel methods
+    ALL_PRIMITIVES.each do |name, primitive|
+      register(name.to_s, Definition[primitive].new(primitive))
+    end
+
+    # Register strict built-in types that are non-coercible through kernel methods
+    ALL_PRIMITIVES.each do |name, primitive|
+      register("strict.#{name}", self[name.to_s].constrained(type: primitive))
+    end
+
     # Register built-in primitive types with kernel coercion methods
     COERCIBLE.each do |name, primitive|
-      register(
-        "coercible.#{name}",
-        Type[primitive].new(Kernel.method(primitive.name), primitive: primitive)
-      )
-    end
-
-    # Register built-in types that are non-coercible through kernel methods
-    ALL_PRIMITIVES.each do |name, primitive|
-      register(
-        "strict.#{name}",
-        Type[primitive].new(Type.method(:constructor), primitive: primitive).constrained(type: primitive)
-      )
-    end
-
-    # Register built-in types that are non-coercible through kernel methods
-    ALL_PRIMITIVES.each do |name, primitive|
-      register(
-        name.to_s,
-        Type[primitive].new(Type.method(:constructor), primitive: primitive)
-      )
+      register("coercible.#{name}", self[name.to_s].constructor(Kernel.method(primitive.name)))
     end
 
     # Register non-coercible maybe types

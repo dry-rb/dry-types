@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Type::Hash do
+RSpec.describe Dry::Types::Definition::Hash do
   subject(:hash) do
     Dry::Types['coercible.hash'].strict(
       name: "coercible.string",
@@ -28,7 +28,7 @@ RSpec.describe Dry::Types::Type::Hash do
 
     Dry::Types.register(
       "phone",
-      Dry::Types::Type.new(-> args { phone.new(*args) }, primitive: phone)
+      Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
     )
   end
 

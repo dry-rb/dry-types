@@ -36,6 +36,12 @@ module Dry
       def constrained(options)
         with(rule: rule & Types.Rule(primitive, options))
       end
+
+      private
+
+      def decorate?(response)
+        super || response.kind_of?(Constructor)
+      end
     end
   end
 end

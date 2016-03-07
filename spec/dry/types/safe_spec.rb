@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Type, '#safe' do
+RSpec.describe Dry::Types::Definition, '#safe' do
   subject(:type) { Dry::Types['string'].constrained(min_size: 5).safe }
 
   it 'uses constructor when primitive matches' do

@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Type do
+RSpec.describe Dry::Types::Definition do
   describe 'form.nil' do
     subject(:type) { Dry::Types['form.nil'] }
 

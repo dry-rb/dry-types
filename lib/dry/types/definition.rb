@@ -1,14 +1,10 @@
-require 'dry/types/type/hash'
-require 'dry/types/type/array'
 require 'dry/types/builder'
 
 module Dry
   module Types
-    class Type
-      include Dry::Equalizer(:constructor, :options)
+    class Definition
+      include Dry::Equalizer(:primitive, :options)
       include Builder
-
-      attr_reader :constructor
 
       attr_reader :options
 
@@ -16,22 +12,21 @@ module Dry
 
       def self.[](primitive)
         if primitive == ::Array
-          Type::Array
+          Definition::Array
         elsif primitive == ::Hash
-          Type::Hash
+          Definition::Hash
         else
-          Type
+          self
         end
       end
 
-      def self.constructor(input)
-        input
+      def initialize(primitive, options = {})
+        @primitive = primitive
+        @options = options
       end
 
-      def initialize(constructor, options = {})
-        @constructor = constructor
-        @options = options
-        @primitive = options.fetch(:primitive)
+      def with(new_options)
+        self.class.new(primitive, options.merge(new_options))
       end
 
       def name
@@ -39,7 +34,7 @@ module Dry
       end
 
       def call(input)
-        constructor[input]
+        input
       end
       alias_method :[], :call
 
@@ -53,3 +48,6 @@ module Dry
     end
   end
 end
+
+require 'dry/types/definition/array'
+require 'dry/types/definition/hash'

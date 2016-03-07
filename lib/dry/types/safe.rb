@@ -14,6 +14,12 @@ module Dry
         end
       end
       alias_method :[], :call
+
+      private
+
+      def decorate?(response)
+        super || response.kind_of?(Constructor)
+      end
     end
   end
 end
