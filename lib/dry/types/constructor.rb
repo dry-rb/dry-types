@@ -11,6 +11,11 @@ module Dry
 
       attr_reader :type
 
+      def self.new(input, options = {})
+        type = input.is_a?(Definition) ? input : Definition.new(input)
+        super(type, options)
+      end
+
       def initialize(type, options = {})
         super
         @type = type

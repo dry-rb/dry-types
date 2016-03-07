@@ -3,6 +3,14 @@ RSpec.describe Dry::Types::Constructor do
     Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
   end
 
+  describe '.new' do
+    it 'wraps primitive in a definition' do
+      type = Dry::Types::Constructor.new(String, fn: Kernel.method(:String))
+
+      expect(type.primitive).to be(String)
+    end
+  end
+
   describe '#call' do
     it 'uses constructor function to process input' do
       expect(type[:foo]).to eql('foo')
