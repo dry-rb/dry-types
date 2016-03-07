@@ -15,7 +15,7 @@ module Dry
       end
 
       def self.attributes(new_schema)
-        prev_schema = schema || {}
+        prev_schema = schema
 
         @schema = prev_schema.merge(new_schema)
         @constructor = Types['coercible.hash'].strict(schema)
