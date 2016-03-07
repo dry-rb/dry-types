@@ -26,7 +26,7 @@ module Dry
       end
 
       def constructor(constructor, options = {})
-        Constructor.new(with(options), constructor)
+        Constructor.new(with(options), fn: constructor)
       end
     end
   end

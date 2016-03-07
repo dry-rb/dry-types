@@ -53,7 +53,7 @@ module Dry
     def self.register_class(klass)
       container.register(
         Inflecto.underscore(klass).tr('/', '.'),
-        Constructor.new(Definition.new(klass), klass.method(:new))
+        Constructor.new(Definition.new(klass), fn: klass.method(:new))
       )
     end
 
