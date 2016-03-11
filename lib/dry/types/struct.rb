@@ -34,7 +34,7 @@ module Dry
         super_schema.merge(@schema || {})
       end
 
-      def self.new(attributes)
+      def self.new(attributes = {})
         if attributes.is_a?(self)
           attributes
         else

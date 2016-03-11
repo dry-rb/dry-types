@@ -94,11 +94,12 @@ RSpec.describe Dry::Types::Struct do
       struct = Class.new(Dry::Types::Struct) do
         constructor_type(:schema)
 
-        attribute :name, Dry::Types['strict.string']
+        attribute :name, Dry::Types['strict.string'].default('Jane')
         attribute :admin, Dry::Types['strict.bool'].default(true)
       end
 
       expect(struct.new(name: 'Jane').to_h).to eql(name: 'Jane', admin: true)
+      expect(struct.new.to_h).to eql(name: 'Jane', admin: true)
     end
   end
 
