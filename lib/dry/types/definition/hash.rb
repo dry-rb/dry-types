@@ -2,29 +2,31 @@ module Dry
   module Types
     class Definition
       class Hash < Definition
-        def self.safe_constructor(value_constructors, hash)
-          value_constructors.each_with_object({}) do |(key, value_constructor), result|
+        def self.safe_constructor(types, hash)
+          types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)
-              result[key] = value_constructor[hash[key]]
+              result[key] = type[hash[key]]
+            elsif type.is_a?(Default)
+              result[key] = type.value
             end
           end
         end
 
-        def self.symbolized_constructor(value_constructors, hash)
-          value_constructors.each_with_object({}) do |(key, value_constructor), result|
+        def self.symbolized_constructor(types, hash)
+          types.each_with_object({}) do |(key, type), result|
             key_name = key.to_s
 
             if hash.key?(key_name)
-              result[key.to_sym] = value_constructor[hash[key_name]]
+              result[key.to_sym] = type[hash[key_name]]
             end
           end
         end
 
-        def self.strict_constructor(value_constructors, hash)
-          value_constructors.each_with_object({}) do |(key, value_constructor), result|
+        def self.strict_constructor(types, hash)
+          types.each_with_object({}) do |(key, type), result|
             begin
               value = hash.fetch(key)
-              result[key] = value_constructor[value]
+              result[key] = type[value]
             rescue TypeError
               raise SchemaError.new(key, value)
             rescue KeyError
@@ -42,7 +44,7 @@ module Dry
         end
 
         def schema(type_map, meth = :safe_constructor)
-          value_constructors = type_map.each_with_object({}) { |(name, type), result|
+          types = type_map.each_with_object({}) { |(name, type), result|
             result[name] =
               case type
               when String, Class then Types[type]
@@ -50,10 +52,9 @@ module Dry
               end
           }
 
-          constructor(
-            self.class.method(meth).to_proc.curry.(value_constructors),
-            schema: value_constructors
-          )
+          fn = self.class.method(meth).to_proc.curry.(types)
+
+          constructor(fn, schema: types)
         end
       end
     end
