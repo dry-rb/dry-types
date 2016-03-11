@@ -5,18 +5,24 @@ module Dry
     class Enum
       include Decorator
 
-      attr_reader :values
+      attr_reader :values, :mapping
 
       def initialize(type, options)
         super
         @values = options.fetch(:values).freeze
         @values.each(&:freeze)
+        @mapping = values.each_with_object({}) { |v, h| h[values.index(v)] = v }.freeze
       end
 
       def call(input)
-        case input
-        when Fixnum then type[values[input]]
-        else type[input] end
+        value =
+          if values.include?(input)
+            input
+          elsif mapping.key?(input)
+            mapping[input]
+          end
+
+        type[value || input]
       end
       alias_method :[], :call
     end
