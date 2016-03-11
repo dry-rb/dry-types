@@ -89,6 +89,19 @@ RSpec.describe Dry::Types::Struct do
     end
   end
 
+  describe 'with a safe schema' do
+    it 'uses :safe constructor when constructor_type is overridden' do
+      struct = Class.new(Dry::Types::Struct) do
+        constructor_type(:schema)
+
+        attribute :name, Dry::Types['strict.string']
+        attribute :admin, Dry::Types['strict.bool'].default(true)
+      end
+
+      expect(struct.new(name: 'Jane').to_h).to eql(name: 'Jane', admin: true)
+    end
+  end
+
   describe '#to_h' do
     it 'returns hash with attributes' do
       attributes = {

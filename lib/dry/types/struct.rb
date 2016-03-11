@@ -18,11 +18,15 @@ module Dry
         prev_schema = schema
 
         @schema = prev_schema.merge(new_schema)
-        @constructor = Types['coercible.hash'].strict(schema)
+        @constructor = Types['coercible.hash'].public_send(constructor_type, schema)
 
         attr_reader(*(new_schema.keys - prev_schema.keys))
 
         self
+      end
+
+      def self.constructor_type(type = :strict)
+        @constructor_type ||= type
       end
 
       def self.schema
