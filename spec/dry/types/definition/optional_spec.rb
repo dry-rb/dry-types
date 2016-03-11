@@ -10,6 +10,10 @@ RSpec.describe Dry::Types::Definition, '#optional' do
       expect(type['hello'].value).to eql('hello')
     end
 
+    it 'returns original if input is already a maybe' do
+      expect(type[Some('hello')].value).to eql('hello')
+    end
+
     it 'aliases #[] as #call' do
       expect(type.call('hello').value).to eql('hello')
     end
