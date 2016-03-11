@@ -30,7 +30,7 @@ module Dry
       end
 
       def valid?(input)
-        super && rule.(input).success?
+        rule.(input).success?
       end
 
       def constrained(options)
