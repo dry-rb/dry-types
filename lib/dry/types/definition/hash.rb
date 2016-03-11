@@ -14,10 +14,16 @@ module Dry
 
         def self.symbolized_constructor(types, hash)
           types.each_with_object({}) do |(key, type), result|
-            key_name = key.to_s
+            if hash.key?(key)
+              result[key] = type[hash[key]]
+            else
+              key_name = key.to_s
 
-            if hash.key?(key_name)
-              result[key.to_sym] = type[hash[key_name]]
+              if hash.key?(key_name)
+                result[key] = type[hash[key_name]]
+              elsif type.is_a?(Default)
+                result[key] = type.value
+              end
             end
           end
         end
