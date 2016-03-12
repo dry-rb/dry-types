@@ -14,7 +14,12 @@ module Dry
       end
 
       def call(input)
-        input.nil? ? value : type[input]
+        if input.nil?
+          value
+        else
+          output = type[input]
+          output.nil? ? value : output
+        end
       end
       alias_method :[], :call
     end

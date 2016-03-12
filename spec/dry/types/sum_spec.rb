@@ -36,7 +36,21 @@ RSpec.describe Dry::Types::Sum do
     it 'returns a default value sum type' do
       type = (Dry::Types['nil'] | Dry::Types['string']).default('foo')
 
-      expect(type.value).to eql('foo')
+      expect(type[nil]).to eql('foo')
+    end
+
+    it 'supports a sum type which includes a constructor type' do
+      type = (Dry::Types['form.nil'] | Dry::Types['form.int']).default(3)
+
+      expect(type['']).to be(3)
+    end
+
+    it 'supports a sum type which includes a constrained constructor type' do
+      type = (Dry::Types['strict.nil'] | Dry::Types['coercible.int']).default(3)
+
+      expect(type[nil]).to be(3)
+      expect(type['3']).to be(3)
+      expect(type['7']).to be(7)
     end
   end
 end

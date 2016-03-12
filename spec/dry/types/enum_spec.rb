@@ -23,6 +23,12 @@ RSpec.describe Dry::Types::Enum do
       expect(type.values).to be_frozen
     end
 
+    it 'allows setting a default value' do
+      with_default = type.default('draft')
+
+      expect(with_default[nil]).to eql('draft')
+    end
+
     it 'aliases #[] as #call' do
       expect(type.call('draft')).to eql(values[0])
       expect(type.call(0)).to eql(values[0])
