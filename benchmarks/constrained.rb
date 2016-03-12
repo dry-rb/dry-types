@@ -17,13 +17,8 @@ class ARUser < ActiveRecord::Base
 end
 
 module Types
+  include Dry::Types.module
 end
-
-Dry::Types.configure do |config|
-  config.namespace = Types
-end
-
-Dry::Types.finalize
 
 class DryTypesUser < Dry::Types::Struct
   attribute :id, Types::Form::Int
