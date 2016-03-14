@@ -1,18 +1,18 @@
 [gem]: https://rubygems.org/gems/dry-types
-[travis]: https://travis-ci.org/dryrb/dry-types
-[gemnasium]: https://gemnasium.com/dryrb/dry-types
-[codeclimate]: https://codeclimate.com/github/dryrb/dry-types
-[coveralls]: https://coveralls.io/r/dryrb/dry-types
-[inchpages]: http://inch-ci.org/github/dryrb/dry-types
+[travis]: https://travis-ci.org/dry-rb/dry-types
+[gemnasium]: https://gemnasium.com/dry-rb/dry-types
+[codeclimate]: https://codeclimate.com/github/dry-rb/dry-types
+[coveralls]: https://coveralls.io/r/dry-rb/dry-types
+[inchpages]: http://inch-ci.org/github/dry-rb/dry-types
 
-# dry-types [![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dryrb/chat)
+# dry-types [![Join the chat at https://gitter.im/dry-rb/chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dry-rb/chat)
 
 [![Gem Version](https://badge.fury.io/rb/dry-types.svg)][gem]
-[![Build Status](https://travis-ci.org/dryrb/dry-types.svg?branch=master)][travis]
-[![Dependency Status](https://gemnasium.com/dryrb/dry-types.svg)][gemnasium]
-[![Code Climate](https://codeclimate.com/github/dryrb/dry-types/badges/gpa.svg)][codeclimate]
-[![Test Coverage](https://codeclimate.com/github/dryrb/dry-types/badges/coverage.svg)][codeclimate]
-[![Inline docs](http://inch-ci.org/github/dryrb/dry-types.svg?branch=master)][inchpages]
+[![Build Status](https://travis-ci.org/dry-rb/dry-types.svg?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/dry-rb/dry-types.svg)][gemnasium]
+[![Code Climate](https://codeclimate.com/github/dry-rb/dry-types/badges/gpa.svg)][codeclimate]
+[![Test Coverage](https://codeclimate.com/github/dry-rb/dry-types/badges/coverage.svg)][codeclimate]
+[![Inline docs](http://inch-ci.org/github/dry-rb/dry-types.svg?branch=master)][inchpages]
 
 ## Links
 
@@ -26,4 +26,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/dryrb/dry-types.
+Bug reports and pull requests are welcome on GitHub at https://github.com/dry-rb/dry-types.
