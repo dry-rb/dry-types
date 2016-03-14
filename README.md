@@ -411,7 +411,7 @@ methods too:
 ``` ruby
 class Location < Dry::Types::Value
   attribute :lat, Types::Strict::Float
-  attribute :lat, Types::Strict::Float
+  attribute :lng, Types::Strict::Float
 end
 
 loc1 = Location.new(lat: 1.23, lng: 4.56)
