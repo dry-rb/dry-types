@@ -1,4 +1,4 @@
-# v0.6.0 to-be-released
+# v0.6.0 2016-03-16
 
 Renamed from `dry-data` to `dry-types` and:
 
@@ -6,10 +6,25 @@ Renamed from `dry-data` to `dry-types` and:
 
 * `Dry::Types.module` which returns a namespace for inclusion which has all
   built-in types defined as constants (solnic)
+* `Hash#schema` supports default values now (solnic)
+* `Hash#symbolized` passes through keys that are already symbols (solnic)
+* `Struct.new` uses an empty hash by default as input (solnic)
+* `Struct.constructor_type` macro can be used to change attributes constructor (solnic)
+* `default` accepts a block now for dynamic values (solnic)
+* `Types.register_class` accepts a second arg which is the name of the class'
+  constructor method, defaults to `:new` (solnic)
 
 ## Fixed
 
 * `Struct` will simply pass-through the input if it is already a struct (solnic)
+* `default` will raise if a value violates constraints (solnic)
+* Evaluating a default value tries to use type's constructor which makes it work
+  with types that may coerce an input into nil (solnic)
+* `enum` works just fine with integer-values (solnic)
+* `enum` + `default` works just fine (solnic)
+* `Optional` no longer responds to `primitive` as it makes no sense since there's
+  no single primitive for an optional value (solnic)
+* `Optional` passes-through a value which is already a maybe (solnic)
 
 ## Changed
 
