@@ -61,10 +61,8 @@ module Dry
     end
 
     def self.register_class(klass)
-      container.register(
-        Inflecto.underscore(klass).tr('/', '.'),
-        Constructor.new(Definition.new(klass), fn: klass.method(:new))
-      )
+      type = Definition.new(klass).constructor(klass.method(:new))
+      container.register(identifier(klass), type)
     end
 
     def self.[](name)
