@@ -60,8 +60,8 @@ module Dry
       container.register(name, type || block.call)
     end
 
-    def self.register_class(klass)
-      type = Definition.new(klass).constructor(klass.method(:new))
+    def self.register_class(klass, meth = :new)
+      type = Definition.new(klass).constructor(klass.method(meth))
       container.register(identifier(klass), type)
     end
 
