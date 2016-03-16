@@ -14,7 +14,11 @@ module Dry
       end
 
       def default(value)
-        Default.new(self, value: value)
+        if valid?(value)
+          Default.new(self, value: value)
+        else
+          raise ConstraintError, "default value #{value.inspect} violates constraints"
+        end
       end
 
       def enum(*values)
