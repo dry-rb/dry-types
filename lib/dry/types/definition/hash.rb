@@ -7,7 +7,7 @@ module Dry
             if hash.key?(key)
               result[key] = type[hash[key]]
             elsif type.is_a?(Default)
-              result[key] = type.value
+              result[key] = type.evaluate
             end
           end
         end
@@ -22,7 +22,7 @@ module Dry
               if hash.key?(key_name)
                 result[key] = type[hash[key_name]]
               elsif type.is_a?(Default)
-                result[key] = type.value
+                result[key] = type.evaluate
               end
             end
           end
