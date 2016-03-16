@@ -13,9 +13,11 @@ module Dry
         Constrained.new(self, rule: Types.Rule(options))
       end
 
-      def default(value)
-        if valid?(value)
-          Default.new(self, value: value)
+      def default(input = nil, &block)
+        value = input ? input : block
+
+        if value.is_a?(Proc) || valid?(value)
+          Default[value].new(self, value: value)
         else
           raise ConstraintError, "default value #{value.inspect} violates constraints"
         end

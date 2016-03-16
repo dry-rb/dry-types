@@ -6,7 +6,23 @@ module Dry
       include Decorator
       include Builder
 
+      class Callable < Default
+        def evaluate
+          value.call
+        end
+      end
+
       attr_reader :value
+
+      alias_method :evaluate, :value
+
+      def self.[](value)
+        if value.respond_to?(:call)
+          Callable
+        else
+          self
+        end
+      end
 
       def initialize(type, options)
         super
@@ -15,10 +31,10 @@ module Dry
 
       def call(input)
         if input.nil?
-          value
+          evaluate
         else
           output = type[input]
-          output.nil? ? value : output
+          output.nil? ? evaluate : output
         end
       end
       alias_method :[], :call

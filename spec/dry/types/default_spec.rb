@@ -24,4 +24,12 @@ RSpec.describe Dry::Types::Definition, '#default' do
       )
     end
   end
+
+  context 'with a callable value' do
+    subject(:type) { Dry::Types['time'].default { Time.now } }
+
+    it 'calls the value' do
+      expect(type[nil]).to be_instance_of(Time)
+    end
+  end
 end
