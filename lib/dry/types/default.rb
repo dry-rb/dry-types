@@ -29,6 +29,10 @@ module Dry
         @value = options.fetch(:value)
       end
 
+      def constrained(*args)
+        type.constrained(*args).default(value)
+      end
+
       def call(input)
         if input.nil?
           evaluate
