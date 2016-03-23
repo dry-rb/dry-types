@@ -8,7 +8,7 @@ module Dry
       module Form
         TRUE_VALUES = %w[1 on  t true  y yes].freeze
         FALSE_VALUES = %w[0 off f false n no].freeze
-        BOOLEAN_MAP = Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
+        BOOLEAN_MAP = ::Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
 
         def self.to_nil(input)
           if input.is_a?(String) && input == ''

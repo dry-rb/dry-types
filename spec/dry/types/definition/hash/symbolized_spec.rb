@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition::Hash, ':symbolized constructor' do
+RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
   subject(:hash) do
     Dry::Types['hash'].symbolized(name: 'string', age: 'int', password: password)
   end

@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition::Array do
+RSpec.describe Dry::Types::Array do
   describe '#member' do
     context 'primitive' do
       shared_context 'array with a member type' do

@@ -28,7 +28,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Definition::Hash::Strict)
+    expect(hash).to be_instance_of(Dry::Types::Hash::Strict)
 
     result = hash[
       email: 'jane@doe.org',
@@ -62,7 +62,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Definition::Hash::Safe)
+    expect(hash).to be_instance_of(Dry::Types::Hash::Safe)
 
     result = hash[foo: 'bar', email: 'jane@doe.org', age: '20', admin: '1']
 
@@ -92,7 +92,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Definition::Hash::Symbolized)
+    expect(hash).to be_instance_of(Dry::Types::Hash::Symbolized)
 
     expect(hash['foo' => 'bar', 'email' => 'jane@doe.org', 'age' => '20', 'admin' => '1']).to eql(
       email: 'jane@doe.org', age: 20, admin: true
@@ -122,7 +122,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     arr = compiler.(ast)
 
-    expect(arr).to be_instance_of(Dry::Types::Definition::Array)
+    expect(arr).to be_instance_of(Dry::Types::Array)
 
     input = [
       'foo' => 'bar', 'email' => 'jane@doe.org', 'age' => '20', 'admin' => '1'

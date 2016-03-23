@@ -13,9 +13,9 @@ module Dry
 
       def self.[](primitive)
         if primitive == ::Array
-          Definition::Array
+          Types::Array
         elsif primitive == ::Hash
-          Definition::Hash
+          Types::Hash
         else
           self
         end
@@ -70,5 +70,5 @@ module Dry
   end
 end
 
-require 'dry/types/definition/array'
-require 'dry/types/definition/hash'
+require 'dry/types/array'
+require 'dry/types/hash'

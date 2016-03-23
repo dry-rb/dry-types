@@ -5,8 +5,8 @@ module Dry
       int: Integer,
       float: Float,
       decimal: BigDecimal,
-      array: Array,
-      hash: Hash
+      array: ::Array,
+      hash: ::Hash
     }.freeze
 
     NON_COERCIBLE = {
@@ -34,7 +34,11 @@ module Dry
 
     # Register built-in primitive types with kernel coercion methods
     COERCIBLE.each do |name, primitive|
-      register("coercible.#{name}", self[name.to_s].constructor(Kernel.method(primitive.name)))
+      begin
+        register("coercible.#{name}", self[name.to_s].constructor(Kernel.method(primitive.name)))
+      rescue => e
+        byebug
+      end
     end
 
     # Register non-coercible maybe types

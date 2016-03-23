@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition::Hash do
+RSpec.describe Dry::Types::Hash do
   subject(:hash) do
     Dry::Types['coercible.hash'].strict(
       name: "coercible.string",
