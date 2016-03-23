@@ -5,8 +5,6 @@ module Dry
     class Constructor < Definition
       include Dry::Equalizer(:type)
 
-      undef_method :primitive
-
       attr_reader :fn
 
       attr_reader :type
