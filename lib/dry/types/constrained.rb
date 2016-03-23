@@ -15,22 +15,40 @@ module Dry
       end
 
       def call(input)
-        result = try(input)
-
-        if valid?(result)
-          result
-        else
-          raise ConstraintError, "#{input.inspect} violates constraints"
-        end
+        try(input) do |result|
+          raise ConstraintError, result
+        end.input
       end
       alias_method :[], :call
 
-      def try(input)
-        type[input]
+      def try(input, &block)
+        if type.is_a?(Constructor)
+          result = type.try(input)
+
+          if result.success?
+            validation = rule.(result.input)
+
+            if validation.success?
+              result
+            else
+              block ? yield(validation) : validation
+            end
+          else
+            block ? yield(result) : result
+          end
+        else
+          validation = rule.(input)
+
+          if validation.success?
+            type.try(input, &block)
+          else
+            block ? yield(validation) : validation
+          end
+        end
       end
 
-      def valid?(input)
-        rule.(input).success?
+      def valid?(value)
+        rule.(value).success?
       end
 
       def constrained(options)

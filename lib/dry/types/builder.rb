@@ -6,7 +6,7 @@ module Dry
       end
 
       def optional
-        Optional.new(Types['nil'] | self)
+        Optional.new(Types['strict.nil'] | self)
       end
 
       def constrained(options)

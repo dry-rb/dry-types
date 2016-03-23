@@ -34,7 +34,23 @@ module Dry
     end
 
     StructError = Class.new(TypeError)
-    ConstraintError = Class.new(TypeError)
+
+    ConstraintError = Class.new(TypeError) do
+      attr_reader :result
+
+      def initialize(result)
+        if result.is_a?(String)
+          super
+        else
+          super("#{result.input.inspect} violates constraints (#{result.inspect})")
+        end
+        @result = result
+      end
+
+      def input
+        result.input
+      end
+    end
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 

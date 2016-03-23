@@ -16,18 +16,32 @@ module Dry
       end
 
       def call(input)
-        value = left.try(input)
-
-        if left.valid?(value)
-          value
-        else
-          right[value]
-        end
+        try(input) do |result|
+          raise ConstraintError, result
+        end.input
       end
       alias_method :[], :call
 
-      def valid?(input)
-        left.valid?(input) || right.valid?(input)
+      def try(input, &block)
+        result = left.try(input) do
+          right.try(input)
+        end
+
+        return result if result.success?
+
+        if block
+          yield(result)
+        else
+          result
+        end
+      end
+
+      def primitive?(value)
+        left.primitive?(value) || right.primitive?(value)
+      end
+
+      def valid?(value)
+        left.valid?(value) || right.valid?(value)
       end
     end
   end
