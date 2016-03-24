@@ -1,5 +1,5 @@
 require 'dry/types/decorator'
-require 'dry/types/rule'
+require 'dry/types/constraints'
 require 'dry/types/constrained/coercible'
 
 module Dry
