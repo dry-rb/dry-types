@@ -17,7 +17,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'works with nil and strict types' do
-      type = Dry::Types['nil'] | Dry::Types['strict.string']
+      type = Dry::Types['strict.nil'] | Dry::Types['strict.string']
 
       expect(type[nil]).to be(nil)
       expect(type['312']).to eql('312')
@@ -29,6 +29,49 @@ RSpec.describe Dry::Types::Sum do
       type = Dry::Types['int'] | Dry::Types['string']
       expect(type.call(312)).to be(312)
       expect(type.call('312')).to eql('312')
+    end
+
+    it 'works with two constructor & constrained types' do
+      left = Dry::Types['strict.array<strict.string>']
+      right = Dry::Types['strict.array<strict.hash>']
+
+      type = left | right
+
+      expect(type[%w(foo bar)]).to eql(%w(foo bar))
+
+      expect(type[[{ name: 'foo' }, { name: 'bar' }]]).to eql([
+        { name: 'foo' }, { name: 'bar' }
+      ])
+    end
+
+    it 'works with two complex types with constraints' do
+      pair = Dry::Types['strict.array']
+        .member(Dry::Types['coercible.string'])
+        .constrained(size: 2)
+
+      string_list = Dry::Types['strict.array']
+        .member(Dry::Types['strict.string'])
+        .constrained(min_size: 1)
+
+      string_pairs = Dry::Types['strict.array']
+        .member(pair)
+        .constrained(min_size: 1)
+
+      type = string_list | string_pairs
+
+      expect(type.(%w(foo))).to eql(%w(foo))
+      expect(type.(%w(foo bar))).to eql(%w(foo bar))
+
+      expect(type.([[1, 'foo'], [2, 'bar']])).to eql([['1', 'foo'], ['2', 'bar']])
+
+      expect { type[:oops] }.to raise_error(Dry::Types::ConstraintError, /:oops/)
+
+      expect { type[[]] }.to raise_error(Dry::Types::ConstraintError, /\[\]/)
+
+      expect { type.([%i[foo]]) }.to raise_error(Dry::Types::ConstraintError, /\[:foo\]/)
+
+      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, %r[[1]])
+      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, %r[[2]])
     end
   end
 

@@ -11,6 +11,18 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
+  describe 'form.nil | form.int' do
+    subject(:type) { Dry::Types['form.nil'] | Dry::Types['form.int'] }
+
+    it 'coerces empty string to nil' do
+      expect(type['']).to be(nil)
+    end
+
+    it 'coerces string to an integer' do
+      expect(type['23']).to be(23)
+    end
+  end
+
   describe 'form.date' do
     subject(:type) { Dry::Types['form.date'] }
 

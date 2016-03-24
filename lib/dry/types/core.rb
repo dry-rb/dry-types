@@ -5,8 +5,8 @@ module Dry
       int: Integer,
       float: Float,
       decimal: BigDecimal,
-      array: Array,
-      hash: Hash
+      array: ::Array,
+      hash: ::Hash
     }.freeze
 
     NON_COERCIBLE = {

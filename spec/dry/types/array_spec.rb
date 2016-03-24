@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition::Array do
+RSpec.describe Dry::Types::Array do
   describe '#member' do
     context 'primitive' do
       shared_context 'array with a member type' do
@@ -29,9 +29,10 @@ RSpec.describe Dry::Types::Definition::Array do
         end
 
         it 'raises when input is not valid' do
-          expect {
-            array[%w(1 2 3)]
-          }.to raise_error(Dry::Types::ConstraintError)
+          expect { array[%w(1 2 3)] }.to raise_error(
+            Dry::Types::ConstraintError,
+            '1 violates constraints (gt?(2) failed)'
+          )
         end
       end
     end

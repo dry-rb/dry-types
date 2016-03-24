@@ -12,16 +12,16 @@ module Dry
         type.constructor
       end
 
-      def valid?(input)
-        type.valid?(input)
+      def with(new_options)
+        self.class.new(type, options.merge(new_options))
+      end
+
+      def valid?(value)
+        type.valid?(value)
       end
 
       def respond_to_missing?(meth, include_private = false)
         super || type.respond_to?(meth)
-      end
-
-      def with(new_options)
-        self.class.new(type, options.merge(new_options))
       end
 
       private

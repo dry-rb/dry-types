@@ -1,16 +1,20 @@
 module Dry
   module Types
     module Builder
+      def constrained_type
+        Constrained
+      end
+
       def |(other)
         Sum.new(self, other)
       end
 
       def optional
-        Optional.new(Types['nil'] | self)
+        Optional.new(Types['strict.nil'] | self)
       end
 
       def constrained(options)
-        Constrained.new(self, rule: Types.Rule(options))
+        constrained_type.new(self, rule: Types.Rule(options))
       end
 
       def default(input = nil, &block)

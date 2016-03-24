@@ -1,9 +1,8 @@
 RSpec.describe Dry::Types::Definition, '#safe' do
-  subject(:type) { Dry::Types['string'].constrained(min_size: 5).safe }
+  subject(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).safe }
 
-  it 'uses constructor when primitive matches' do
-    expect(type['passing']).to eql('passing')
-    expect { type['pass'] }.to raise_error(Dry::Types::ConstraintError, /pass/)
+  it 'rescues from type-errors and returns input' do
+    expect(type['pass']).to eql('pass')
   end
 
   it 'skips constructor when primitive does not match' do

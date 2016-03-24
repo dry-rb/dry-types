@@ -1,4 +1,5 @@
 require 'dry/types/builder'
+require 'dry/types/result'
 
 module Dry
   module Types
@@ -12,9 +13,9 @@ module Dry
 
       def self.[](primitive)
         if primitive == ::Array
-          Definition::Array
+          Types::Array
         elsif primitive == ::Hash
-          Definition::Hash
+          Types::Hash
         else
           self
         end
@@ -38,16 +39,36 @@ module Dry
       end
       alias_method :[], :call
 
-      def try(input)
-        call(input)
+      def try(input, &block)
+        output = call(input)
+
+        if valid?(output)
+          success(output)
+        else
+          failure = failure(output, "#{output.inspect} must be an instance of #{primitive}")
+          block ? yield(failure) : failure
+        end
       end
 
-      def valid?(input)
-        input.is_a?(primitive)
+      def success(*args)
+        result(Result::Success, *args)
       end
+
+      def failure(*args)
+        result(Result::Failure, *args)
+      end
+
+      def result(klass, *args)
+        klass.new(*args)
+      end
+
+      def primitive?(value)
+        value.is_a?(primitive)
+      end
+      alias_method :valid?, :primitive?
     end
   end
 end
 
-require 'dry/types/definition/array'
-require 'dry/types/definition/hash'
+require 'dry/types/array'
+require 'dry/types/hash'

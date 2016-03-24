@@ -1,5 +1,6 @@
 require 'dry/types/decorator'
 require 'dry/types/constraints'
+require 'dry/types/constrained/coercible'
 
 module Dry
   module Types
@@ -15,22 +16,24 @@ module Dry
       end
 
       def call(input)
-        result = try(input)
-
-        if valid?(result)
-          result
-        else
-          raise ConstraintError, "#{input.inspect} violates constraints"
-        end
+        try(input) do |result|
+          raise ConstraintError, result
+        end.input
       end
       alias_method :[], :call
 
-      def try(input)
-        type[input]
+      def try(input, &block)
+        validation = rule.(input)
+
+        if validation.success?
+          type.try(input, &block)
+        else
+          block ? yield(validation) : validation
+        end
       end
 
-      def valid?(input)
-        rule.(input).success?
+      def valid?(value)
+        rule.(value).success?
       end
 
       def constrained(options)

@@ -15,26 +15,13 @@ require 'dry/types/constructor'
 require 'dry/types/struct'
 require 'dry/types/value'
 
+require 'dry/types/errors'
+
 module Dry
   module Types
     extend Dry::Configurable
 
     setting :namespace, self
-
-    class SchemaError < TypeError
-      def initialize(key, value)
-        super("#{value.inspect} (#{value.class}) has invalid type for :#{key}")
-      end
-    end
-
-    class SchemaKeyError < KeyError
-      def initialize(key)
-        super(":#{key} is missing in Hash input")
-      end
-    end
-
-    StructError = Class.new(TypeError)
-    ConstraintError = Class.new(TypeError)
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 

@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Enum do
   context 'with string type' do
-    subject(:type) { Dry::Types['string'].enum(*values) }
+    subject(:type) { string.enum(*values) }
 
     let(:values) { %w(draft published archived) }
     let(:string) { Dry::Types['strict.string'] }
@@ -23,10 +23,16 @@ RSpec.describe Dry::Types::Enum do
       expect(type.values).to be_frozen
     end
 
-    it 'allows setting a default value' do
-      with_default = type.default('draft')
+    it 'allows defining an enum from a default-value type' do
+      with_default = string.default('draft').enum(*values)
 
       expect(with_default[nil]).to eql('draft')
+    end
+
+    it 'allows defining a default value for an enum' do
+      with_default = type.default('published')
+
+      expect(with_default[nil]).to eql('published')
     end
 
     it 'aliases #[] as #call' do

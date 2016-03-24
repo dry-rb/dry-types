@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition::Hash, 'with default values' do
+RSpec.describe Dry::Types::Hash, 'with default values' do
   subject(:hash) do
     Dry::Types['hash'].schema(
       name: 'string', password: password, created_at: created_at

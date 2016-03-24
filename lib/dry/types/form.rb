@@ -27,7 +27,7 @@ module Dry
     end
 
     register('form.bool') do
-      self['form.true'] | self['form.false']
+      (self['form.true'] | self['form.false']).safe
     end
 
     register('form.int') do
