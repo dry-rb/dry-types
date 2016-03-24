@@ -11,6 +11,14 @@ module Dry
         input.is_a?(Kleisli::Maybe) ? input : Maybe(type[input])
       end
       alias_method :[], :call
+
+      def default(value)
+        if value.nil?
+          raise ArgumentError, "nil cannot be used as a default of an optional type"
+        else
+          super
+        end
+      end
     end
   end
 end

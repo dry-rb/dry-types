@@ -25,6 +25,14 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
   end
 
+  context 'with an optional' do
+    subject(:type) { Dry::Types['strict.int'].optional }
+
+    it 'does not allow nil' do
+      expect { type.default(nil) }.to raise_error(ArgumentError, /nil/)
+    end
+  end
+
   context 'with a callable value' do
     subject(:type) { Dry::Types['time'].default { Time.now } }
 

@@ -23,6 +23,22 @@ RSpec.describe Dry::Types::Definition, '#optional' do
     end
   end
 
+  context 'with a strict type' do
+    subject(:type) { Dry::Types['strict.int'].optional }
+
+    it 'returns None when value is nil' do
+      expect(type[nil].value).to be(nil)
+    end
+
+    it 'returns Some when value exists' do
+      expect(type[231].value).to be(231)
+    end
+
+    it 'returns original if input is already a maybe' do
+      expect(type[Maybe(231)].value).to be(231)
+    end
+  end
+
   context 'with a sum' do
     subject(:type) { Dry::Types['bool'].optional }
 
