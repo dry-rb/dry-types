@@ -45,6 +45,10 @@ module Dry
         super && type.valid?(value)
       end
 
+      def constrained_type
+        Constrained::Coercible
+      end
+
       private
 
       def method_missing(meth, *args, &block)

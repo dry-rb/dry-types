@@ -1,5 +1,6 @@
 require 'dry/types/decorator'
-require 'dry/types/constraints'
+require 'dry/types/rule'
+require 'dry/types/constrained/coercible'
 
 module Dry
   module Types
@@ -22,28 +23,12 @@ module Dry
       alias_method :[], :call
 
       def try(input, &block)
-        if type.is_a?(Constructor)
-          result = type.try(input)
+        validation = rule.(input)
 
-          if result.success?
-            validation = rule.(result.input)
-
-            if validation.success?
-              result
-            else
-              block ? yield(validation) : validation
-            end
-          else
-            block ? yield(result) : result
-          end
+        if validation.success?
+          type.try(input, &block)
         else
-          validation = rule.(input)
-
-          if validation.success?
-            type.try(input, &block)
-          else
-            block ? yield(validation) : validation
-          end
+          block ? yield(validation) : validation
         end
       end
 
