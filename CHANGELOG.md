@@ -5,7 +5,7 @@ Major focus of this release is to make complex type composition possible.
 ## Added
 
 - `Type#try` interface that tries to process the input and return a result object which can be either a success or failure (solnic)
-- `ConstraintError` has a message which includes information about the predicate which failed ie `nil violates constraints (type?(String) failed) (solnic)
+- `ConstraintError` has a message which includes information about the predicate which failed ie `nil violates constraints (type?(String) failed)` (solnic)
 
 ## Fixed
 
