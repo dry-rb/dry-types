@@ -1,3 +1,26 @@
+# v0.7.0 to-be-released
+
+Major focus of this release is to make complex type composition possible.
+
+## Added
+
+- `Type#try` interface that tries to process the input and return a result object which can be either a success or failure (solnic)
+- `ConstraintError` has a message which includes information about the predicate which failed ie `nil violates constraints (type?(String) failed) (solnic)
+
+## Fixed
+
+- `Sum` now supports complex types like `Array` or `Hash` with member types and/or constraints (solnic)
+- `Default#constrained` will properly wrap a new constrained type (solnic)
+
+## Changed
+
+- `Array` is no longer a constructor and has a `Array::Member` subclass (solnic)
+- `Hash` is no longer a constructor and is split into `Hash::Safe`, `Hash::Strict` and `Hash::Symbolized` (solnic)
+- `Constrained` has now a `Constrained::Coercible` subclass which will try to apply its type prior applying its rule (solnic)
+- `#optional` uses `Strict::Nil` now (solnic)
+
+[Compare v0.6.0...v0.7.0](https://github.com/dryrb/dry-types/compare/v0.6.0...v0.7.0)
+
 # v0.6.0 2016-03-16
 
 Renamed from `dry-data` to `dry-types` and:
