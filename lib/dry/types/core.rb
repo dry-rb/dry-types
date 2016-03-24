@@ -34,11 +34,7 @@ module Dry
 
     # Register built-in primitive types with kernel coercion methods
     COERCIBLE.each do |name, primitive|
-      begin
-        register("coercible.#{name}", self[name.to_s].constructor(Kernel.method(primitive.name)))
-      rescue => e
-        byebug
-      end
+      register("coercible.#{name}", self[name.to_s].constructor(Kernel.method(primitive.name)))
     end
 
     # Register non-coercible maybe types
