@@ -122,7 +122,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     arr = compiler.(ast)
 
-    expect(arr).to be_instance_of(Dry::Types::Array)
+    expect(arr).to be_instance_of(Dry::Types::Array::Member)
 
     input = [
       'foo' => 'bar', 'email' => 'jane@doe.org', 'age' => '20', 'admin' => '1'
