@@ -9,7 +9,10 @@ RSpec.describe Dry::Types::Constrained do
     end
 
     it 'raises when a given constraint is violated' do
-      expect { type['he'] }.to raise_error(Dry::Types::ConstraintError, /he/)
+      expect { type['he'] }.to raise_error(
+        Dry::Types::ConstraintError,
+        '"he" violates constraints (size?(3..12) failed)'
+      )
     end
 
     it 'is aliased as #call' do

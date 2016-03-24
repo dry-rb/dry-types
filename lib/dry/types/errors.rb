@@ -22,16 +22,25 @@ module Dry
       attr_reader :result
 
       def initialize(result)
+        @result = result
         if result.is_a?(String)
           super
         else
-          super("#{result.input.inspect} violates constraints (#{result.inspect})")
+          super("#{result.input.inspect} violates constraints (#{failure_message})")
         end
-        @result = result
       end
 
       def input
         result.input
+      end
+
+      def failure_message
+        if result.respond_to?(:rule)
+          rule = result.rule
+          "#{rule.predicate.id}(#{rule.predicate.args.map(&:inspect).join(', ')}) failed"
+        else
+          result.inspect
+        end
       end
     end
   end
