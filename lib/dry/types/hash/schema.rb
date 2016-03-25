@@ -2,6 +2,13 @@ module Dry
   module Types
     class Hash < Definition
       class Schema < Hash
+        attr_reader :member_types
+
+        def initialize(primitive, options = {})
+          super
+          @member_types = options.fetch(:member_types)
+        end
+
         def try(hash, &block)
           result = call(hash, :try)
 
@@ -11,10 +18,6 @@ module Dry
             failure = failure(hash, result)
             block ? yield(failure) : failure
           end
-        end
-
-        def member_types
-          options[:member_types]
         end
       end
 
