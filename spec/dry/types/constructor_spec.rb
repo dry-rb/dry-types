@@ -38,5 +38,9 @@ RSpec.describe Dry::Types::Constructor do
     it 'responds to type methods' do
       expect(type).to respond_to(:schema)
     end
+
+    it 'raises no-method error when it does not respond to a method' do
+      expect { type.oh_noez }.to raise_error(NoMethodError)
+    end
   end
 end
