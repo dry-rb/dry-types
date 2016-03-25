@@ -3,7 +3,7 @@ require 'dry/types/decorator'
 
 module Dry
   module Types
-    class Optional
+    class Maybe
       include Decorator
       include Builder
 

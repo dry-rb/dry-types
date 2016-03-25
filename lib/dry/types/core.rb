@@ -40,12 +40,12 @@ module Dry
     # Register non-coercible maybe types
     ALL_PRIMITIVES.each_key do |name|
       next if name == :nil
-      register("maybe.strict.#{name}", self["strict.#{name}"].optional)
+      register("maybe.strict.#{name}", self["strict.#{name}"].maybe)
     end
 
     # Register coercible maybe types
     COERCIBLE.each_key do |name|
-      register("maybe.coercible.#{name}", self["coercible.#{name}"].optional)
+      register("maybe.coercible.#{name}", self["coercible.#{name}"].maybe)
     end
 
     # Register :bool since it's common and not a built-in Ruby type :(

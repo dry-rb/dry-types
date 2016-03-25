@@ -73,7 +73,7 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'with built-in optional types' do
+  describe 'with built-in maybe types' do
     context 'with strict string' do
       let(:string) { Dry::Types["maybe.strict.string"] }
 
@@ -99,8 +99,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'defining coercible Optional String' do
-    let(:maybe_string) { Dry::Types["coercible.string"].optional }
+  describe 'defining coercible Maybe String' do
+    let(:maybe_string) { Dry::Types["coercible.string"].maybe }
 
     it 'accepts nil' do
       expect(maybe_string[nil].value).to be(nil)
@@ -111,8 +111,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'defining Optional String' do
-    let(:maybe_string) { Dry::Types["strict.string"].optional }
+  describe 'defining Maybe String' do
+    let(:maybe_string) { Dry::Types["strict.string"].maybe }
 
     it 'accepts nil and returns None instance' do
       value = maybe_string[nil]
