@@ -19,6 +19,16 @@ module Dry
             block ? yield(failure) : failure
           end
         end
+
+        private
+
+        def resolve_missing_value(result, key, type)
+          if type.is_a?(Default)
+            result[key] = type.evaluate
+          elsif type.is_a?(Maybe)
+            result[key] = type[nil]
+          end
+        end
       end
 
       class Safe < Schema
@@ -26,10 +36,8 @@ module Dry
           member_types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)
               result[key] = type.__send__(meth, hash[key])
-            elsif type.is_a?(Default)
-              result[key] = type.evaluate
-            elsif type.is_a?(Maybe)
-              result[key] = type[nil]
+            else
+              resolve_missing_value(result, key, type)
             end
           end
         end
@@ -46,10 +54,8 @@ module Dry
 
               if hash.key?(key_name)
                 result[key] = type.__send__(meth, hash[key_name])
-              elsif type.is_a?(Default)
-                result[key] = type.evaluate
-              elsif type.is_a?(Maybe)
-                result[key] = type[nil]
+              else
+                resolve_missing_value(result, key, type)
               end
             end
           end
