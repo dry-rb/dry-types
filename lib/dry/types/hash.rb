@@ -8,7 +8,7 @@ module Dry
               result[key] = type.__send__(meth, hash[key])
             elsif type.is_a?(Default)
               result[key] = type.evaluate
-            elsif type.is_a?(Optional)
+            elsif type.is_a?(Maybe)
               result[key] = type[nil]
             end
           end
@@ -28,7 +28,7 @@ module Dry
                 result[key] = type.__send__(meth, hash[key_name])
               elsif type.is_a?(Default)
                 result[key] = type.evaluate
-              elsif type.is_a?(Optional)
+              elsif type.is_a?(Maybe)
                 result[key] = type[nil]
               end
             end
