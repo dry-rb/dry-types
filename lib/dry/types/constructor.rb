@@ -31,6 +31,8 @@ module Dry
 
       def try(input, &block)
         type.try(fn[input], &block)
+      rescue TypeError => e
+        failure(input, e.message)
       end
 
       def constructor(new_fn, options = {})

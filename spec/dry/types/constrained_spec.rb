@@ -20,6 +20,27 @@ RSpec.describe Dry::Types::Constrained do
     end
   end
 
+  context 'with a constructor type' do
+    subject(:type) do
+      Dry::Types['coercible.hash'].constrained(size: 1)
+    end
+
+    it 'passes when constraints are not violated by the coerced value' do
+      expect(type[a: 1]).to eql(a: 1)
+    end
+
+    it 'fails when constraints are violated by coerced value' do
+      expect { type[{}] }.to raise_error(
+        Dry::Types::ConstraintError,
+        '{} violates constraints (size?(1) failed)'
+      )
+    end
+
+    it 'fails when coercion fails' do
+      expect { type['foo'] }.to raise_error(Dry::Types::ConstraintError, /foo/)
+    end
+  end
+
   context 'with a sum type' do
     subject(:type) do
       Dry::Types['string'].constrained(size: 4).maybe
