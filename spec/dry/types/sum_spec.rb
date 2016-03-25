@@ -75,6 +75,18 @@ RSpec.describe Dry::Types::Sum do
     end
   end
 
+  describe '#try' do
+    subject(:type) { Dry::Types['strict.bool'] }
+
+    it 'returns success when value passed' do
+      expect(type.try(true)).to be_success
+    end
+
+    it 'returns failure when value did not pass' do
+      expect(type.try('true')).to be_failure
+    end
+  end
+
   describe '#default' do
     it 'returns a default value sum type' do
       type = (Dry::Types['nil'] | Dry::Types['string']).default('foo')
