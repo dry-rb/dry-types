@@ -1,6 +1,6 @@
 # v0.7.0 to-be-released
 
-Major focus of this release is to make complex type composition possible.
+Major focus of this release is to make complex type composition possible and improving constraint errors to be more meaningful.
 
 ## Added
 
@@ -14,10 +14,14 @@ Major focus of this release is to make complex type composition possible.
 
 ## Changed
 
+- [BREAKING] Renamed `Type#{optional=>maybe}` (AMHOL)
+- [BREAKING] `Type#optional(other)` builds a sum: `Strict::Nil | other` (AMHOL)
 - `Array` is no longer a constructor and has a `Array::Member` subclass (solnic)
 - `Hash` is no longer a constructor and is split into `Hash::Safe`, `Hash::Strict` and `Hash::Symbolized` (solnic)
 - `Constrained` has now a `Constrained::Coercible` subclass which will try to apply its type prior applying its rule (solnic)
 - `#optional` uses `Strict::Nil` now (solnic)
+- `Type#default` will raise if `nil` was passed for `Maybe` type (solnic)
+- `Hash` with a schema will set maybe values for missing keys or nils (flash-gordon)
 
 [Compare v0.6.0...v0.7.0](https://github.com/dryrb/dry-types/compare/v0.6.0...v0.7.0)
 
