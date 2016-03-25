@@ -1,18 +1,28 @@
 RSpec.describe Dry::Types::Value do
   before do
     module Test
-      class Location < Dry::Types::Value
-        attribute :lat, "strict.float"
-        attribute :lng, "strict.float"
+      class Address < Dry::Types::Value
+        attribute :city, "strict.string"
+        attribute :zipcode, "coercible.string"
+      end
+
+      class User < Dry::Types::Value
+        attribute :name, "coercible.string"
+        attribute :age, "coercible.int"
+        attribute :address, "test.address"
+      end
+
+      class SuperUser < User
+        attributes(root: 'strict.bool')
       end
     end
   end
 
-  describe '.new' do
-    let(:loc) { Test::Location.new(lat: 1.234, lng: 5.678) }
+  it_behaves_like Dry::Types::Struct do
+    subject(:type) { Dry::Types['test.super_user'] }
+  end
 
-    it 'returns a frozen instance' do
-      expect(loc).to be_frozen
-    end
+  it 'is frozen' do
+    expect(Test::Address.new(city: 'NYC', zipcode: 123)).to be_frozen
   end
 end
