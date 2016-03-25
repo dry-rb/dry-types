@@ -52,4 +52,12 @@ RSpec.describe Dry::Types::Definition, '#default' do
       expect(type[nil]).to be_instance_of(Time)
     end
   end
+
+  describe 'decorator' do
+    subject(:type) { Dry::Types['strict.string'].default('foo') }
+
+    it 'raises no-method error when type does not respond to a method' do
+      expect { type.oh_noez }.to raise_error(NoMethodError, /oh_noez/)
+    end
+  end
 end
