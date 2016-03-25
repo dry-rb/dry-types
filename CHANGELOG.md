@@ -7,6 +7,7 @@ Major focus of this release is to make complex type composition possible and imp
 - `Type#try` interface that tries to process the input and return a result object which can be either a success or failure (solnic)
 - `#meta` interface for setting arbitrary meta data on types (solnic)
 - `ConstraintError` has a message which includes information about the predicate which failed ie `nil violates constraints (type?(String) failed)` (solnic)
+- `Struct` uses `Dry::Equalizer` too, just like `Value` (AMHOL)
 
 ## Fixed
 
@@ -18,6 +19,7 @@ Major focus of this release is to make complex type composition possible and imp
 - [BREAKING] Renamed `Type#{optional=>maybe}` (AMHOL)
 - [BREAKING] `Type#optional(other)` builds a sum: `Strict::Nil | other` (AMHOL)
 - [BREAKING] Type objects are now frozen (solnic)
+- [BREAKING] `Value` instances are frozen (AMHOL)
 - `Array` is no longer a constructor and has a `Array::Member` subclass (solnic)
 - `Hash` is no longer a constructor and is split into `Hash::Safe`, `Hash::Strict` and `Hash::Symbolized` (solnic)
 - `Constrained` has now a `Constrained::Coercible` subclass which will try to apply its type prior applying its rule (solnic)
