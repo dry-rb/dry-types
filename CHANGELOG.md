@@ -19,7 +19,7 @@ Major focus of this release is to make complex type composition possible and imp
 - `Array` is no longer a constructor and has a `Array::Member` subclass (solnic)
 - `Hash` is no longer a constructor and is split into `Hash::Safe`, `Hash::Strict` and `Hash::Symbolized` (solnic)
 - `Constrained` has now a `Constrained::Coercible` subclass which will try to apply its type prior applying its rule (solnic)
-- `#optional` uses `Strict::Nil` now (solnic)
+- `#maybe` uses `Strict::Nil` now (solnic)
 - `Type#default` will raise if `nil` was passed for `Maybe` type (solnic)
 - `Hash` with a schema will set maybe values for missing keys or nils (flash-gordon)
 
