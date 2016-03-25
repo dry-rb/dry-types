@@ -1,10 +1,12 @@
 require 'dry/types/builder'
 require 'dry/types/result'
+require 'dry/types/options'
 
 module Dry
   module Types
     class Definition
       include Dry::Equalizer(:primitive, :options)
+      include Options
       include Builder
 
       attr_reader :options
@@ -22,17 +24,8 @@ module Dry
       end
 
       def initialize(primitive, options = {})
+        super
         @primitive = primitive
-        @options = options
-        @meta = options.fetch(:meta, {})
-      end
-
-      def with(new_options)
-        self.class.new(primitive, options.merge(new_options))
-      end
-
-      def meta(data = nil)
-        data ? with(meta: data) : @meta
       end
 
       def name

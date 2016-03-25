@@ -1,4 +1,10 @@
 RSpec.describe Dry::Types::Sum do
+  describe 'common definition behavior' do
+    subject(:type) { Dry::Types['bool'] }
+
+    it_behaves_like 'Dry::Types::Definition#meta'
+  end
+
   describe '#[]' do
     it 'works with two pass-through types' do
       type = Dry::Types['int'] | Dry::Types['string']

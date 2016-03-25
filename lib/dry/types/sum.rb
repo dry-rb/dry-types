@@ -1,13 +1,17 @@
+require 'dry/types/options'
+
 module Dry
   module Types
     class Sum
       include Builder
+      include Options
 
       attr_reader :left
 
       attr_reader :right
 
-      def initialize(left, right)
+      def initialize(left, right, options = {})
+        super
         @left, @right = left, right
       end
 
