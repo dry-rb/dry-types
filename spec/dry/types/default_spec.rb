@@ -39,6 +39,10 @@ RSpec.describe Dry::Types::Definition, '#default' do
     it 'does not allow nil' do
       expect { type.default(nil) }.to raise_error(ArgumentError, /nil/)
     end
+
+    it 'accepts a non-nil value' do
+      expect(type.default(0)[0].value).to be(0)
+    end
   end
 
   context 'with a callable value' do
