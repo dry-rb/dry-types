@@ -1,6 +1,6 @@
-RSpec.describe Dry::Types::Definition, '#optional' do
+RSpec.describe Dry::Types::Definition, '#maybe' do
   context 'with a definition' do
-    subject(:type) { Dry::Types['string'].optional }
+    subject(:type) { Dry::Types['string'].maybe }
 
     it 'returns None when value is nil' do
       expect(type[nil].value).to be(nil)
@@ -24,7 +24,7 @@ RSpec.describe Dry::Types::Definition, '#optional' do
   end
 
   context 'with a strict type' do
-    subject(:type) { Dry::Types['strict.int'].optional }
+    subject(:type) { Dry::Types['strict.int'].maybe }
 
     it 'returns None when value is nil' do
       expect(type[nil].value).to be(nil)
@@ -40,7 +40,7 @@ RSpec.describe Dry::Types::Definition, '#optional' do
   end
 
   context 'with a sum' do
-    subject(:type) { Dry::Types['bool'].optional }
+    subject(:type) { Dry::Types['bool'].maybe }
 
     it 'returns None when value is nil' do
       expect(type[nil].value).to be(nil)

@@ -22,7 +22,7 @@ RSpec.describe Dry::Types::Constrained do
 
   context 'with a sum type' do
     subject(:type) do
-      Dry::Types['string'].constrained(size: 4).optional
+      Dry::Types['string'].constrained(size: 4).maybe
     end
 
     it 'passes when constraints are not violated' do

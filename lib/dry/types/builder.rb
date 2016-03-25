@@ -9,8 +9,8 @@ module Dry
         Sum.new(self, other)
       end
 
-      def optional
-        Optional.new(Types['strict.nil'] | self)
+      def maybe
+        Maybe.new(Types['strict.nil'] | self)
       end
 
       def constrained(options)
@@ -45,6 +45,6 @@ end
 require 'dry/types/default'
 require 'dry/types/constrained'
 require 'dry/types/enum'
-require 'dry/types/optional'
+require 'dry/types/maybe'
 require 'dry/types/safe'
 require 'dry/types/sum'
