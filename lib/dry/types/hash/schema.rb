@@ -5,8 +5,8 @@ module Dry
         attr_reader :member_types
 
         def initialize(primitive, options = {})
-          super
           @member_types = options.fetch(:member_types)
+          super
         end
 
         def try(hash, &block)

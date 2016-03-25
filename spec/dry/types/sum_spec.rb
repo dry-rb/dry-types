@@ -3,6 +3,10 @@ RSpec.describe Dry::Types::Sum do
     subject(:type) { Dry::Types['bool'] }
 
     it_behaves_like 'Dry::Types::Definition#meta'
+
+    it 'is frozen' do
+      expect(type).to be_frozen
+    end
   end
 
   describe '#[]' do

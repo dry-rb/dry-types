@@ -5,8 +5,8 @@ module Dry
         attr_reader :member
 
         def initialize(primitive, options = {})
-          super
           @member = options.fetch(:member)
+          super
         end
 
         def call(input, meth = :call)

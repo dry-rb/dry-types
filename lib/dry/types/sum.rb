@@ -13,6 +13,7 @@ module Dry
       def initialize(left, right, options = {})
         super
         @left, @right = left, right
+        freeze
       end
 
       def name

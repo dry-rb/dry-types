@@ -15,9 +15,9 @@ module Dry
       end
 
       def initialize(type, options = {})
-        super
         @type = type
         @fn = options.fetch(:fn)
+        super
       end
 
       def primitive

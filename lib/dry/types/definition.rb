@@ -26,6 +26,7 @@ module Dry
       def initialize(primitive, options = {})
         super
         @primitive = primitive
+        freeze
       end
 
       def name
