@@ -39,10 +39,6 @@ module Dry
         with(options.merge(fn: -> input { new_fn[fn[input]] }))
       end
 
-      def respond_to_missing?(meth, include_private = false)
-        super || type.respond_to?(meth)
-      end
-
       def valid?(value)
         super && type.valid?(value)
       end
@@ -53,15 +49,14 @@ module Dry
 
       private
 
+      def respond_to_missing?(meth, include_private = false)
+        super || type.respond_to?(meth)
+      end
+
       def method_missing(meth, *args, &block)
         if type.respond_to?(meth)
           response = type.__send__(meth, *args, &block)
-
-          if response.is_a?(Constructor)
-            constructor(response.fn, options.merge(response.options))
-          else
-            self.class.new(response, options)
-          end
+          self.class.new(response, options)
         else
           super
         end

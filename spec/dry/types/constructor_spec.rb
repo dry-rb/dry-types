@@ -31,4 +31,12 @@ RSpec.describe Dry::Types::Constructor do
       expect(upcaser.options[:id]).to be(:upcaser)
     end
   end
+
+  context 'decoration' do
+    subject(:type) { Dry::Types['coercible.hash'] }
+
+    it 'responds to type methods' do
+      expect(type).to respond_to(:schema)
+    end
+  end
 end
