@@ -7,7 +7,13 @@ module Dry
 
       def self.inherited(klass)
         super
+        klass.instance_variable_set('@equalizer', Equalizer.new)
+        klass.send(:include, klass.equalizer)
         Types.register_class(klass) unless klass == Value
+      end
+
+      def self.equalizer
+        @equalizer
       end
 
       def self.attribute(name, type)
@@ -21,6 +27,7 @@ module Dry
         @constructor = Types['coercible.hash'].public_send(constructor_type, schema)
 
         attr_reader(*(new_schema.keys - prev_schema.keys))
+        equalizer.instance_variable_get('@keys').concat(schema.keys).uniq!
 
         self
       end
