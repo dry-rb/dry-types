@@ -48,6 +48,17 @@ module Dry
       register("maybe.coercible.#{name}", self["coercible.#{name}"].maybe)
     end
 
+    # Register non-coercible optional types
+    ALL_PRIMITIVES.each_key do |name|
+      next if name == :nil
+      register("optional.strict.#{name}", self["strict.#{name}"].optional)
+    end
+
+    # Register coercible optional types
+    COERCIBLE.each_key do |name|
+      register("optional.coercible.#{name}", self["coercible.#{name}"].optional)
+    end
+
     # Register :bool since it's common and not a built-in Ruby type :(
     register("bool", self["true"] | self["false"])
     register("strict.bool", self["strict.true"] | self["strict.false"])
