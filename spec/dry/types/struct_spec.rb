@@ -21,6 +21,10 @@ RSpec.describe Dry::Types::Struct do
     end
   end
 
+  it_behaves_like Dry::Types::Struct do
+    subject(:type) { root_type }
+  end
+
   describe '.new' do
     it 'raises StructError when attribute constructor failed' do
       expect {
