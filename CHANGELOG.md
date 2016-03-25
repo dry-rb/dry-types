@@ -17,6 +17,7 @@ Major focus of this release is to make complex type composition possible and imp
 
 - [BREAKING] Renamed `Type#{optional=>maybe}` (AMHOL)
 - [BREAKING] `Type#optional(other)` builds a sum: `Strict::Nil | other` (AMHOL)
+- [BREAKING] Type objects are now frozen (solnic)
 - `Array` is no longer a constructor and has a `Array::Member` subclass (solnic)
 - `Hash` is no longer a constructor and is split into `Hash::Safe`, `Hash::Strict` and `Hash::Symbolized` (solnic)
 - `Constrained` has now a `Constrained::Coercible` subclass which will try to apply its type prior applying its rule (solnic)
