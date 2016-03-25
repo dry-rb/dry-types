@@ -24,10 +24,15 @@ module Dry
       def initialize(primitive, options = {})
         @primitive = primitive
         @options = options
+        @meta = options.fetch(:meta, {})
       end
 
       def with(new_options)
         self.class.new(primitive, options.merge(new_options))
+      end
+
+      def meta(data = nil)
+        data ? with(meta: data) : @meta
       end
 
       def name
