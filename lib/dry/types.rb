@@ -3,7 +3,7 @@ require 'date'
 require 'set'
 
 require 'inflecto'
-require 'thread_safe'
+require 'concurrent'
 
 require 'dry-container'
 require 'dry-equalizer'
@@ -90,7 +90,7 @@ module Dry
     end
 
     def self.type_map
-      @type_map ||= ThreadSafe::Cache.new
+      @type_map ||= Concurrent::Map.new
     end
 
     def self.type_keys
