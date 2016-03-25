@@ -128,4 +128,58 @@ RSpec.describe Dry::Types::Definition do
       expect(value.fmap(&:downcase).fmap(&:upcase).value).to eql('SOMETHING')
     end
   end
+
+  describe 'with built-in optional types' do
+    context 'with strict string' do
+      let(:string) { Dry::Types["optional.strict.string"] }
+
+      it 'accepts nil' do
+        expect(string[nil]).to be(nil)
+      end
+
+      it 'accepts a string' do
+        expect(string['something']).to eql('something')
+      end
+    end
+
+    context 'with coercible string' do
+      let(:string) { Dry::Types["optional.coercible.string"] }
+
+      it 'accepts nil' do
+        expect(string[nil]).to be(nil)
+      end
+
+      it 'accepts a string' do
+        expect(string[:something]).to eql('something')
+      end
+    end
+  end
+
+  describe 'defining coercible Optional String' do
+    let(:optional_string) { Dry::Types["coercible.string"].optional }
+
+    it 'accepts nil' do
+      expect(optional_string[nil]).to be(nil)
+    end
+
+    it 'accepts an object coercible to a string' do
+      expect(optional_string[123]).to eql('123')
+    end
+  end
+
+  describe 'defining Optional String' do
+    let(:optional_string) { Dry::Types["strict.string"].optional }
+
+    it 'accepts nil and returns a nil' do
+      value = optional_string[nil]
+
+      expect(value).to be(nil)
+    end
+
+    it 'accepts a string and returns the string' do
+      value = optional_string['SomeThing']
+
+      expect(value).to eql('SomeThing')
+    end
+  end
 end

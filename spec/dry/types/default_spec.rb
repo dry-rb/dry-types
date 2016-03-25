@@ -25,6 +25,14 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
   end
 
+  context 'with an optional type' do
+    subject(:type) { Dry::Types['strict.int'].optional.default(nil) }
+
+    it 'allows nil' do
+      expect(type[nil]).to be(nil)
+    end
+  end
+
   context 'with a maybe' do
     subject(:type) { Dry::Types['strict.int'].maybe }
 

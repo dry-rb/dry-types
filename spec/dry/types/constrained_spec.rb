@@ -35,6 +35,21 @@ RSpec.describe Dry::Types::Constrained do
     end
   end
 
+  context 'with an optional sum type' do
+    subject(:type) do
+      Dry::Types['string'].constrained(size: 4).optional
+    end
+
+    it 'passes when constraints are not violated' do
+      expect(type[nil]).to be(nil)
+      expect(type['hell']).to eql('hell')
+    end
+
+    it 'raises when a given constraint is violated' do
+      expect { type['hel'] }.to raise_error(Dry::Types::ConstraintError, /hel/)
+    end
+  end
+
   context 'with another constrained type' do
     subject(:type) do
       Dry::Types['strict.string'].constrained(size: 4)
