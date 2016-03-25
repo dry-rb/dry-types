@@ -6,20 +6,20 @@ end
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'dry-types'
-require 'mutant'
-
-module Mutant
-  class Selector
-    class Expression < self
-      def call(_subject)
-        integration.all_tests
-      end
-    end # Expression
-  end # Selector
-end # Mutant
 
 begin
   require 'byebug'
+  require 'mutant'
+
+  module Mutant
+    class Selector
+      class Expression < self
+        def call(_subject)
+          integration.all_tests
+        end
+      end # Expression
+    end # Selector
+  end # Mutant
 rescue LoadError; end
 
 Dir[Pathname(__dir__).join('shared/*.rb')].each(&method(:require))
