@@ -8,6 +8,8 @@ end
 
 group :tools do
   gem 'byebug', platform: :mri
+  gem 'mutant'
+  gem 'mutant-rspec'
 end
 
 group :benchmarks do
