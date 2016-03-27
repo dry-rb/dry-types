@@ -91,6 +91,11 @@ RSpec.describe Dry::Types::Struct do
         end
       }.to raise_error(ArgumentError)
     end
+
+    it 'works on blank structs' do
+      class Test::Foo < Dry::Types::Struct; end
+      expect(Test::Foo.new).to be_kind_of(Test::Foo)
+    end
   end
 
   describe 'with a safe schema' do
