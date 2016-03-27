@@ -45,6 +45,9 @@ module Dry
         if attributes.is_a?(self)
           attributes
         else
+          if !constructor
+            fail ArgumentError, "#{name} must have defined attributes"
+          end
           super(constructor[attributes])
         end
       rescue SchemaError, SchemaKeyError => e
