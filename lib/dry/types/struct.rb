@@ -7,9 +7,14 @@ module Dry
 
       def self.inherited(klass)
         super
+
         klass.instance_variable_set('@equalizer', Equalizer.new)
         klass.send(:include, klass.equalizer)
-        Types.register_class(klass) unless klass == Value
+
+        unless klass == Value
+          klass.instance_variable_set('@constructor', Types['coercible.hash'])
+          Types.register_class(klass)
+        end
       end
 
       def self.equalizer

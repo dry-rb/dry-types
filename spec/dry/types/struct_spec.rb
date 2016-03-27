@@ -93,6 +93,13 @@ RSpec.describe Dry::Types::Struct do
     end
   end
 
+  describe 'with a blank schema' do
+    it 'works for blank structs' do
+      class Test::Foo < Dry::Types::Struct; end
+      expect(Test::Foo.new.to_h).to eql({})
+    end
+  end
+
   describe 'with a safe schema' do
     it 'uses :safe constructor when constructor_type is overridden' do
       struct = Class.new(Dry::Types::Struct) do
