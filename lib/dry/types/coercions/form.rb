@@ -1,6 +1,7 @@
 require 'date'
 require 'bigdecimal'
 require 'bigdecimal/util'
+require 'time'
 
 module Dry
   module Types
