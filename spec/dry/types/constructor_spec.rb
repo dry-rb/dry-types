@@ -39,6 +39,10 @@ RSpec.describe Dry::Types::Constructor do
       expect(type).to respond_to(:schema)
     end
 
+    it 'returns response when it is not a type definition' do
+      expect(type.constrained(type: Hash).rule).to be_kind_of(Dry::Logic::Rule)
+    end
+
     it 'raises no-method error when it does not respond to a method' do
       expect { type.oh_noez }.to raise_error(NoMethodError)
     end

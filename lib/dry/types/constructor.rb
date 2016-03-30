@@ -56,7 +56,12 @@ module Dry
       def method_missing(meth, *args, &block)
         if type.respond_to?(meth)
           response = type.__send__(meth, *args, &block)
-          self.class.new(response, options)
+
+          if response.kind_of?(Builder)
+            self.class.new(response, options)
+          else
+            response
+          end
         else
           super
         end
