@@ -10,6 +10,12 @@ module Dry
 
       attr_reader :right
 
+      class Constrained < Sum
+        def rule
+          left.rule | right.rule
+        end
+      end
+
       def initialize(left, right, options = {})
         super
         @left, @right = left, right

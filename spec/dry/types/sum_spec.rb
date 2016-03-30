@@ -118,4 +118,16 @@ RSpec.describe Dry::Types::Sum do
       expect(type['7']).to be(7)
     end
   end
+
+  describe '#rule' do
+    subject(:type) { Dry::Types['strict.nil'] | Dry::Types['strict.string'] }
+
+    it 'returns a disjunction from its constrained types' do
+      rule = type.rule
+
+      expect(rule.(nil)).to be_success
+      expect(rule.('1')).to be_success
+      expect(rule.(1)).to be_failure
+    end
+  end
 end
