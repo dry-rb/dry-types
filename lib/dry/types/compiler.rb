@@ -15,6 +15,11 @@ module Dry
         send(:"visit_#{node[0]}", node[1], *args)
       end
 
+      def visit_constructor(node)
+        primitive, fn = node
+        Types::Constructor.new(primitive, &fn)
+      end
+
       def visit_type(node)
         type, args = node
         meth = :"visit_#{type.tr('.', '_')}"

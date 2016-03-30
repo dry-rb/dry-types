@@ -171,4 +171,17 @@ RSpec.describe Dry::Types::Compiler, '#call' do
       age: 20, admin: true
     )
   end
+
+  it 'builds a constructor' do
+    fn = -> v { v.to_s }
+
+    ast = [:constructor, [String, fn]]
+
+    type = compiler.(ast)
+
+    expect(type[:foo]).to eql('foo')
+
+    expect(type.fn).to be(fn)
+    expect(type.primitive).to be(String)
+  end
 end
