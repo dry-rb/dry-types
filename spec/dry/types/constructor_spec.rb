@@ -9,6 +9,12 @@ RSpec.describe Dry::Types::Constructor do
 
       expect(type.primitive).to be(String)
     end
+
+    it 'passes builder types as its type' do
+      type = Dry::Types::Constructor.new(Dry::Types['strict.string'], fn: -> v { v.strip })
+
+      expect(type.type).to be(Dry::Types['strict.string'])
+    end
   end
 
   describe '#call' do
