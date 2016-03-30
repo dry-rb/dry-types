@@ -35,8 +35,11 @@ module Dry
         failure(input, e.message)
       end
 
-      def constructor(new_fn, options = {})
-        with(options.merge(fn: -> input { new_fn[fn[input]] }))
+      def constructor(new_fn = nil, **options, &block)
+        left = new_fn || block
+        right = fn
+
+        with(options.merge(fn: -> input { left[right[input]] }))
       end
 
       def valid?(value)

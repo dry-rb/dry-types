@@ -39,8 +39,8 @@ module Dry
         Safe.new(self)
       end
 
-      def constructor(constructor, options = {})
-        Constructor.new(with(options), fn: constructor)
+      def constructor(constructor = nil, **options, &block)
+        Constructor.new(with(options), fn: constructor || block)
       end
     end
   end

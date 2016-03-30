@@ -42,6 +42,13 @@ RSpec.describe Dry::Types::Constructor do
       expect(upcaser[:foo]).to eql('FOO')
       expect(upcaser.options[:id]).to be(:upcaser)
     end
+
+    it 'accepts a block' do
+      upcaser = type.constructor(id: :upcaser, &:upcase)
+
+      expect(upcaser[:foo]).to eql('FOO')
+      expect(upcaser.options[:id]).to be(:upcaser)
+    end
   end
 
   context 'decoration' do
