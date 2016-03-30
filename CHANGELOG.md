@@ -1,4 +1,4 @@
-# v0.7.0 to-be-released
+# v0.7.0 2016-03-30
 
 Major focus of this release is to make complex type composition possible and improving constraint errors to be more meaningful.
 
@@ -8,6 +8,8 @@ Major focus of this release is to make complex type composition possible and imp
 - `#meta` interface for setting arbitrary meta data on types (solnic)
 - `ConstraintError` has a message which includes information about the predicate which failed ie `nil violates constraints (type?(String) failed)` (solnic)
 - `Struct` uses `Dry::Equalizer` too, just like `Value` (AMHOL)
+- Compiler supports `[:constructor, [primitive, fn_proc]]` nodes (solnic)
+- Compiler supports building schema-less `form.hash` types (solnic)
 
 ## Fixed
 
