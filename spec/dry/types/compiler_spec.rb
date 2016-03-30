@@ -172,6 +172,15 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     )
   end
 
+  it 'builds an schema-less form.hash' do
+    ast = [:type, ['form.hash']]
+
+    type = compiler.(ast)
+
+    expect(type[nil]).to be(nil)
+    expect(type[{}]).to eql({})
+  end
+
   it 'builds a constructor' do
     fn = -> v { v.to_s }
 

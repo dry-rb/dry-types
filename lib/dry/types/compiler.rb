@@ -49,8 +49,12 @@ module Dry
       end
 
       def visit_form_hash(node)
-        constructor, schema = node
-        merge_with('form.hash', constructor, schema)
+        if node
+          constructor, schema = node
+          merge_with('form.hash', constructor, schema)
+        else
+          registry['form.hash']
+        end
       end
 
       def visit_key(node)
