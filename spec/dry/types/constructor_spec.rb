@@ -15,6 +15,12 @@ RSpec.describe Dry::Types::Constructor do
 
       expect(type.type).to be(Dry::Types['strict.string'])
     end
+
+    it 'allows block as the fn' do
+      type = Dry::Types::Constructor.new(String, &:strip)
+
+      expect(type[' foo ']).to eql('foo')
+    end
   end
 
   describe '#call' do

@@ -9,14 +9,14 @@ module Dry
 
       attr_reader :type
 
-      def self.new(input, options = {})
+      def self.new(input, options = {}, &block)
         type = input.is_a?(Builder) ? input : Definition.new(input)
-        super(type, options)
+        super(type, options, &block)
       end
 
-      def initialize(type, options = {})
+      def initialize(type, options = {}, &block)
         @type = type
-        @fn = options.fetch(:fn)
+        @fn = options.fetch(:fn, block)
         super
       end
 
