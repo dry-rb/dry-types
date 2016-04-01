@@ -34,7 +34,11 @@ module Dry
         end
 
         def self.to_decimal(input)
-          input.to_d
+          if input.is_a?(String) && input == ''
+            nil
+          else
+            input.to_d
+          end
         end
       end
     end

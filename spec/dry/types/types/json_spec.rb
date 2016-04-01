@@ -50,6 +50,10 @@ RSpec.describe Dry::Types::Definition do
   describe 'json.decimal' do
     subject(:type) { Dry::Types['json.decimal'] }
 
+    it 'coerces empty string to nil' do
+      expect(type['']).to eql(nil)
+    end
+
     it 'coerces strings to a decimal' do
       expect(type['3.12']).to eql(BigDecimal('3.12'))
     end
