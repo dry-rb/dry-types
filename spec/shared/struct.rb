@@ -74,4 +74,18 @@ RSpec.shared_examples_for Dry::Types::Struct do
       end
     end
   end
+
+  describe '#inspect' do
+    let(:user_1) do
+      type[
+        name: :Jane, age: '21', root: true, address: { city: 'NYC', zipcode: 123 }
+      ]
+    end
+
+    it 'lists attributes' do
+      expect(user_1.inspect).to eql(
+        %Q(#<#{type.primitive} name="Jane" age=21 address=#<Test::Address city="NYC" zipcode="123"> root=true>)
+      )
+    end
+  end
 end
