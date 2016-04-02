@@ -15,6 +15,8 @@ module Dry
           klass.instance_variable_set('@constructor', Types['coercible.hash'])
           Types.register_class(klass)
         end
+
+        klass.attributes({}) unless equal?(Struct)
       end
 
       def self.equalizer

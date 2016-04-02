@@ -9,10 +9,14 @@ RSpec.describe Dry::Types::Struct do
         attribute :zipcode, "coercible.string"
       end
 
-      class User < Dry::Types::Struct
+      # This abstract user guarantees User preserves schema definition
+      class AbstractUser < Dry::Types::Struct
         attribute :name, "coercible.string"
         attribute :age, "coercible.int"
         attribute :address, "test.address"
+      end
+
+      class User < AbstractUser
       end
 
       class SuperUser < User
