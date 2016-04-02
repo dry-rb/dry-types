@@ -95,6 +95,18 @@ RSpec.describe Dry::Types::Struct do
         end
       }.to raise_error(ArgumentError)
     end
+
+    it 'raises error when attribute is defined twice' do
+      expect {
+        class Test::Foo < Dry::Types::Struct
+          attribute :bar, 'strict.string'
+          attribute :bar, 'strict.string'
+        end
+      }.to raise_error(
+        Dry::Types::RepeatedAttributeError,
+        'Attribute :bar has already been defined'
+      )
+    end
   end
 
   describe 'with a blank schema' do

@@ -28,6 +28,8 @@ module Dry
       end
 
       def self.attributes(new_schema)
+        check_schema_duplication(new_schema)
+
         prev_schema = schema
 
         @schema = prev_schema.merge(new_schema)
@@ -38,6 +40,13 @@ module Dry
 
         self
       end
+
+      def self.check_schema_duplication(new_schema)
+        shared_keys = new_schema.keys & schema.keys
+
+        fail RepeatedAttributeError, shared_keys.first if shared_keys.any?
+      end
+      private_class_method :check_schema_duplication
 
       def self.constructor_type(type = :strict)
         @constructor_type ||= type
