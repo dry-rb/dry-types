@@ -33,7 +33,7 @@ module Dry
         @schema = prev_schema.merge(new_schema)
         @constructor = Types['coercible.hash'].public_send(constructor_type, schema)
 
-        attr_reader(*(new_schema.keys - prev_schema.keys))
+        attr_reader(*new_schema.keys)
         equalizer.instance_variable_get('@keys').concat(schema.keys).uniq!
 
         self
