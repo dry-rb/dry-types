@@ -131,6 +131,13 @@ RSpec.describe Dry::Types::Struct do
     end
   end
 
+  describe '.inherited' do
+    it 'does not register Value' do
+      expect { Dry::Types::Struct.inherited(Dry::Types::Value) }
+        .to_not change(Dry::Types, :type_keys)
+    end
+  end
+
   describe 'with a blank schema' do
     it 'works for blank structs' do
       class Test::Foo < Dry::Types::Struct; end
