@@ -63,8 +63,8 @@ module Dry
         else
           super(constructor[attributes])
         end
-      rescue SchemaError, SchemaKeyError => e
-        raise StructError, "[#{self}.new] #{e.message}"
+      rescue SchemaError, SchemaKeyError => error
+        raise StructError, "[#{self}.new] #{error}"
       end
 
       def initialize(attributes)
