@@ -51,7 +51,7 @@ module Dry
 
           result = input.to_f
 
-          if result == 0.0 && (input != '0' || input != '0.0')
+          if result.eql?(0.0) && (!input.eql?('0') && !input.eql?('0.0'))
             input
           else
             result

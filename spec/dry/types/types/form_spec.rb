@@ -131,6 +131,11 @@ RSpec.describe Dry::Types::Definition do
       expect(type['3.12']).to eql(3.12)
     end
 
+    it 'coerces zero values' do
+      expect(type['0.0']).to eql(0.0)
+      expect(type['0']).to eql(0.0)
+    end
+
     it 'coerces empty string to nil' do
       expect(type['']).to be(nil)
     end
