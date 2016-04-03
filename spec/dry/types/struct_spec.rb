@@ -52,6 +52,14 @@ RSpec.describe Dry::Types::Struct do
 
       expect(user.address).to be(address)
     end
+
+    it 'creates an empty struct when called without arguments' do
+      class Test::Empty < Dry::Types::Struct
+        @constructor = Dry::Types['strict.hash'].strict(schema)
+      end
+
+      expect { Test::Empty.new }.to_not raise_error
+    end
   end
 
   describe '.attribute' do
