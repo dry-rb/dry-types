@@ -61,7 +61,7 @@ module Dry
         def self.to_decimal(input)
           result = to_float(input)
 
-          if result.is_a?(Float)
+          if result.instance_of?(Float)
             result.to_d
           else
             result
