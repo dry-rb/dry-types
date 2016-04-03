@@ -34,44 +34,38 @@ module Dry
         end
 
         def self.to_int(input)
-          if input == ''
-            nil
-          else
-            result = input.to_i
+          return if input == ''
 
-            if result === 0 && input != '0'
-              input
-            else
-              result
-            end
+          result = input.to_i
+
+          if result === 0 && input != '0'
+            input
+          else
+            result
           end
         end
 
         def self.to_float(input)
-          if input == ''
-            nil
-          else
-            result = input.to_f
+          return if input == ''
 
-            if result == 0.0 && (input != '0' || input != '0.0')
-              input
-            else
-              result
-            end
+          result = input.to_f
+
+          if result == 0.0 && (input != '0' || input != '0.0')
+            input
+          else
+            result
           end
         end
 
         def self.to_decimal(input)
-          if input == ''
-            nil
-          else
-            result = to_float(input)
+          return if input == ''
 
-            if result.is_a?(Float)
-              result.to_d
-            else
-              result
-            end
+          result = to_float(input)
+
+          if result.is_a?(Float)
+            result.to_d
+          else
+            result
           end
         end
       end

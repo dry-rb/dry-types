@@ -8,11 +8,7 @@ module Dry
     module Coercions
       module JSON
         def self.to_nil(input)
-          if input.is_a?(String) && input == ''
-            nil
-          else
-            input
-          end
+          input unless input.is_a?(String) && input == ''
         end
 
         def self.to_date(input)
