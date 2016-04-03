@@ -8,7 +8,7 @@ module Dry
       def self.inherited(klass)
         super
 
-        klass.instance_variable_set('@equalizer', Equalizer.new)
+        klass.instance_variable_set('@equalizer', Equalizer.new(*schema.keys))
         klass.send(:include, klass.equalizer)
 
         unless klass == Value
@@ -28,16 +28,25 @@ module Dry
       end
 
       def self.attributes(new_schema)
+        check_schema_duplication(new_schema)
+
         prev_schema = schema
 
         @schema = prev_schema.merge(new_schema)
         @constructor = Types['coercible.hash'].public_send(constructor_type, schema)
 
-        attr_reader(*(new_schema.keys - prev_schema.keys))
-        equalizer.instance_variable_get('@keys').concat(schema.keys).uniq!
+        attr_reader(*new_schema.keys)
+        equalizer.instance_variable_get('@keys').concat(new_schema.keys)
 
         self
       end
+
+      def self.check_schema_duplication(new_schema)
+        shared_keys = new_schema.keys & schema.keys
+
+        fail RepeatedAttributeError, shared_keys.first if shared_keys.any?
+      end
+      private_class_method :check_schema_duplication
 
       def self.constructor_type(type = :strict)
         @constructor_type ||= type
@@ -49,13 +58,13 @@ module Dry
       end
 
       def self.new(attributes = {})
-        if attributes.is_a?(self)
+        if attributes.instance_of?(self)
           attributes
         else
           super(constructor[attributes])
         end
-      rescue SchemaError, SchemaKeyError => e
-        raise StructError, "[#{self}.new] #{e.message}"
+      rescue SchemaError, SchemaKeyError => error
+        raise StructError, "[#{self}.new] #{error}"
       end
 
       def initialize(attributes)

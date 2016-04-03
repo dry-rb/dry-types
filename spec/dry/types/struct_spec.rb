@@ -52,6 +52,14 @@ RSpec.describe Dry::Types::Struct do
 
       expect(user.address).to be(address)
     end
+
+    it 'creates an empty struct when called without arguments' do
+      class Test::Empty < Dry::Types::Struct
+        @constructor = Dry::Types['strict.hash'].strict(schema)
+      end
+
+      expect { Test::Empty.new }.to_not raise_error
+    end
   end
 
   describe '.attribute' do
@@ -95,6 +103,39 @@ RSpec.describe Dry::Types::Struct do
         end
       }.to raise_error(ArgumentError)
     end
+
+    it 'raises error when attribute is defined twice' do
+      expect {
+        class Test::Foo < Dry::Types::Struct
+          attribute :bar, 'strict.string'
+          attribute :bar, 'strict.string'
+        end
+      }.to raise_error(
+        Dry::Types::RepeatedAttributeError,
+        'Attribute :bar has already been defined'
+      )
+    end
+
+    it 'can be chained' do
+      class Test::Foo < Dry::Types::Struct
+      end
+
+      Test::Foo
+        .attribute(:foo, 'strict.string')
+        .attribute(:bar, 'strict.int')
+
+      foo = Test::Foo.new(foo: 'foo', bar: 123)
+
+      expect(foo.foo).to eql('foo')
+      expect(foo.bar).to eql(123)
+    end
+  end
+
+  describe '.inherited' do
+    it 'does not register Value' do
+      expect { Dry::Types::Struct.inherited(Dry::Types::Value) }
+        .to_not change(Dry::Types, :type_keys)
+    end
   end
 
   describe 'with a blank schema' do
@@ -118,13 +159,13 @@ RSpec.describe Dry::Types::Struct do
     end
   end
 
-  describe '#to_h' do
+  describe '#to_hash' do
     it 'returns hash with attributes' do
       attributes = {
         name: 'Jane', age: 21, address: { city: 'NYC', zipcode: '123' }
       }
 
-      expect(user_type[attributes].to_h).to eql(attributes)
+      expect(user_type[attributes].to_hash).to eql(attributes)
     end
   end
 end

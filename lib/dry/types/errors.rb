@@ -18,6 +18,12 @@ module Dry
 
     StructError = Class.new(TypeError)
 
+    class RepeatedAttributeError < ArgumentError
+      def initialize(key)
+        super("Attribute :#{key} has already been defined")
+      end
+    end
+
     ConstraintError = Class.new(TypeError) do
       attr_reader :result
 

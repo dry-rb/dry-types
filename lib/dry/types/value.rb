@@ -3,7 +3,7 @@ require 'dry/types/struct'
 module Dry
   module Types
     class Value < Struct
-      def self.new(*, &_block)
+      def self.new(*)
         super.freeze
       end
     end
