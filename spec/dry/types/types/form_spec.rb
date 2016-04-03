@@ -27,7 +27,11 @@ RSpec.describe Dry::Types::Definition do
     subject(:type) { Dry::Types['form.date'] }
 
     it 'coerces to a date' do
-      expect(type['2015-11-26']).to eql(Date.new(2015, 11, 26))
+      expect([
+        type['2015-11-26'],
+        type['H27.11.26'],
+        type['Thu, 26 Nov 2015 00:00:00 GMT']
+      ]).to all(eql(Date.new(2015, 11, 26)))
     end
 
     it 'returns original value when it was unparsable' do
