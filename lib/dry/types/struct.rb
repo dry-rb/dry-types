@@ -58,7 +58,7 @@ module Dry
       end
 
       def self.new(attributes = {})
-        if attributes.is_a?(self)
+        if attributes.instance_of?(self)
           attributes
         else
           super(constructor[attributes])
