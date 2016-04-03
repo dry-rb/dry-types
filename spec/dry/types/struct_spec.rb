@@ -107,6 +107,20 @@ RSpec.describe Dry::Types::Struct do
         'Attribute :bar has already been defined'
       )
     end
+
+    it 'can be chained' do
+      class Test::Foo < Dry::Types::Struct
+      end
+
+      Test::Foo
+        .attribute(:foo, 'strict.string')
+        .attribute(:bar, 'strict.int')
+
+      foo = Test::Foo.new(foo: 'foo', bar: 123)
+
+      expect(foo.foo).to eql('foo')
+      expect(foo.bar).to eql(123)
+    end
   end
 
   describe 'with a blank schema' do
