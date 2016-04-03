@@ -19,6 +19,18 @@ RSpec.describe Dry::Types, '.[]' do
     end
   end
 
+  context 'with "coercible.symbol"' do
+    let(:type) { Dry::Types['coercible.symbol'] }
+
+    it 'passes through a symbol' do
+      expect(type[:hello]).to be(:hello)
+    end
+
+    it 'coerces a string' do
+      expect(type['hello']).to be(:hello)
+    end
+  end
+
   context 'with "class"' do
     let(:type) { Dry::Types['class'] }
 

@@ -65,4 +65,5 @@ module Dry
   end
 end
 
+require 'dry/types/symbol'
 require 'dry/types/form'
