@@ -8,6 +8,7 @@ module Dry
         TRUE_VALUES = %w[1 on  t true  y yes].freeze
         FALSE_VALUES = %w[0 off f false n no].freeze
         BOOLEAN_MAP = ::Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
+        EMPTY_STRING = ''.freeze
 
         def self.to_nil(input)
           JSON.to_nil(input)
@@ -34,7 +35,7 @@ module Dry
         end
 
         def self.to_int(input)
-          return if input == ''
+          return if empty_str?(input)
 
           result = input.to_i
 
@@ -46,7 +47,7 @@ module Dry
         end
 
         def self.to_float(input)
-          return if input == ''
+          return if empty_str?(input)
 
           result = input.to_f
 
@@ -58,7 +59,7 @@ module Dry
         end
 
         def self.to_decimal(input)
-          return if input == ''
+          return if empty_str?(input)
 
           result = to_float(input)
 
@@ -68,6 +69,11 @@ module Dry
             result
           end
         end
+
+        def self.empty_str?(value)
+          EMPTY_STRING.eql?(value)
+        end
+        private_class_method :empty_str?
       end
     end
   end
