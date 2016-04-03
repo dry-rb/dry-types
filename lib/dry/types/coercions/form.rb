@@ -9,21 +9,7 @@ module Dry
         FALSE_VALUES = %w[0 off f false n no].freeze
         BOOLEAN_MAP = ::Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
 
-        def self.to_nil(input)
-          JSON.to_nil(input)
-        end
-
-        def self.to_date(input)
-          JSON.to_date(input)
-        end
-
-        def self.to_date_time(input)
-          JSON.to_date_time(input)
-        end
-
-        def self.to_time(input)
-          JSON.to_time(input)
-        end
+        extend Coercions
 
         def self.to_true(input)
           BOOLEAN_MAP.fetch(input, input)
@@ -34,44 +20,36 @@ module Dry
         end
 
         def self.to_int(input)
-          if input == ''
-            nil
-          else
-            result = input.to_i
+          return if empty_str?(input)
 
-            if result === 0 && input != '0'
-              input
-            else
-              result
-            end
+          result = input.to_i
+
+          if result === 0 && !input.eql?('0')
+            input
+          else
+            result
           end
         end
 
         def self.to_float(input)
-          if input == ''
-            nil
-          else
-            result = input.to_f
+          return if empty_str?(input)
 
-            if result == 0.0 && (input != '0' || input != '0.0')
-              input
-            else
-              result
-            end
+          result = input.to_f
+
+          if result.eql?(0.0) && (!input.eql?('0') && !input.eql?('0.0'))
+            input
+          else
+            result
           end
         end
 
         def self.to_decimal(input)
-          if input == ''
-            nil
-          else
-            result = to_float(input)
+          result = to_float(input)
 
-            if result.is_a?(Float)
-              result.to_d
-            else
-              result
-            end
+          if result.instance_of?(Float)
+            result.to_d
+          else
+            result
           end
         end
       end

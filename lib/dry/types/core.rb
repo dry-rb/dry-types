@@ -65,5 +65,6 @@ module Dry
   end
 end
 
+require 'dry/types/coercions'
 require 'dry/types/form'
 require 'dry/types/json'

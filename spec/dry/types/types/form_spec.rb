@@ -27,7 +27,11 @@ RSpec.describe Dry::Types::Definition do
     subject(:type) { Dry::Types['form.date'] }
 
     it 'coerces to a date' do
-      expect(type['2015-11-26']).to eql(Date.new(2015, 11, 26))
+      expect([
+        type['2015-11-26'],
+        type['H27.11.26'],
+        type['Thu, 26 Nov 2015 00:00:00 GMT']
+      ]).to all(eql(Date.new(2015, 11, 26)))
     end
 
     it 'returns original value when it was unparsable' do
@@ -112,6 +116,7 @@ RSpec.describe Dry::Types::Definition do
 
     it 'coerces to a integer' do
       expect(type['312']).to be(312)
+      expect(type['0']).to eql(0)
     end
 
     it 'coerces empty string to nil' do
@@ -128,6 +133,11 @@ RSpec.describe Dry::Types::Definition do
 
     it 'coerces to a float' do
       expect(type['3.12']).to eql(3.12)
+    end
+
+    it 'coerces zero values' do
+      expect(type['0.0']).to eql(0.0)
+      expect(type['0']).to eql(0.0)
     end
 
     it 'coerces empty string to nil' do
