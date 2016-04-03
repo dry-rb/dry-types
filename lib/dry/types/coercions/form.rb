@@ -59,8 +59,6 @@ module Dry
         end
 
         def self.to_decimal(input)
-          return if empty_str?(input)
-
           result = to_float(input)
 
           if result.is_a?(Float)
