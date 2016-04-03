@@ -38,7 +38,7 @@ module Dry
 
           result = input.to_i
 
-          if result === 0 && input != '0'
+          if result === 0 && !input.eql?('0')
             input
           else
             result

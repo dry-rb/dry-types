@@ -112,6 +112,7 @@ RSpec.describe Dry::Types::Definition do
 
     it 'coerces to a integer' do
       expect(type['312']).to be(312)
+      expect(type['0']).to eql(0)
     end
 
     it 'coerces empty string to nil' do
