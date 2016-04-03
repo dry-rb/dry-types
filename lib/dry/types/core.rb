@@ -66,3 +66,4 @@ module Dry
 end
 
 require 'dry/types/form'
+require 'dry/types/json'

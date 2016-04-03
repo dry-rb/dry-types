@@ -1,7 +1,5 @@
-require 'date'
 require 'bigdecimal'
 require 'bigdecimal/util'
-require 'time'
 
 module Dry
   module Types
@@ -12,29 +10,19 @@ module Dry
         BOOLEAN_MAP = ::Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
 
         def self.to_nil(input)
-          if input.is_a?(String) && input == ''
-            nil
-          else
-            input
-          end
+          JSON.to_nil(input)
         end
 
         def self.to_date(input)
-          Date.parse(input)
-        rescue ArgumentError
-          input
+          JSON.to_date(input)
         end
 
         def self.to_date_time(input)
-          DateTime.parse(input)
-        rescue ArgumentError
-          input
+          JSON.to_date_time(input)
         end
 
         def self.to_time(input)
-          Time.parse(input)
-        rescue ArgumentError
-          input
+          JSON.to_time(input)
         end
 
         def self.to_true(input)

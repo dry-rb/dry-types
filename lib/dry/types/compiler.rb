@@ -43,6 +43,10 @@ module Dry
         registry['form.array'].member(call(node))
       end
 
+      def visit_json_array(node)
+        registry['json.array'].member(call(node))
+      end
+
       def visit_hash(node)
         constructor, schema = node
         merge_with('hash', constructor, schema)
@@ -54,6 +58,15 @@ module Dry
           merge_with('form.hash', constructor, schema)
         else
           registry['form.hash']
+        end
+      end
+
+      def visit_json_hash(node)
+        if node
+          constructor, schema = node
+          merge_with('json.hash', constructor, schema)
+        else
+          registry['json.hash']
         end
       end
 
