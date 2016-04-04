@@ -16,33 +16,37 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe '#try' do
-    subject(:try) { type.try(value) }
-
-    let(:success) { try.success?    }
-    let(:failure) { try.failure?    }
-    let(:input)   { try.input       }
+    let(:result) { type.try(value) }
 
     context 'when given valid input' do
       let(:value) { 'foo' }
 
-      specify { expect(success).to be(true)  }
-      specify { expect(failure).to be(false) }
-      specify { expect(input).to be(value)   }
+      it 'returns a success' do
+        expect(result).to be_success
+      end
+
+      it 'provides the original input' do
+        expect(result.input).to be(value)
+      end
     end
 
     context 'when given invalid input' do
       let(:value) { :foo }
 
-      specify { expect(success).to be(false) }
-      specify { expect(failure).to be(true)  }
-      specify { expect(input).to be(value)   }
+      it 'returns a failure' do
+        expect(result).to be_failure
+      end
+
+      it 'provides the original input' do
+        expect(result.input).to be(value)
+      end
 
       it "provides an error message" do
-        expect(try.error).to eql(':foo must be an instance of String')
+        expect(result.error).to eql(':foo must be an instance of String')
       end
 
       it "yields failure when given a block" do
-        expect { |probe| type.try(value, &probe) }.to yield_with_args(try)
+        expect { |probe| type.try(value, &probe) }.to yield_with_args(result)
       end
     end
   end
