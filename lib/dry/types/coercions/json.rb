@@ -10,11 +10,7 @@ module Dry
         extend Coercions
 
         def self.to_decimal(input)
-          if input.is_a?(String) && input == ''
-            nil
-          else
-            input.to_d
-          end
+          input.to_d unless empty_str?(input)
         end
       end
     end

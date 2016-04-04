@@ -39,12 +39,10 @@ module Dry
       alias_method :[], :call
 
       def try(input, &block)
-        output = call(input)
-
-        if valid?(output)
-          success(output)
+        if valid?(input)
+          success(input)
         else
-          failure = failure(output, "#{output.inspect} must be an instance of #{primitive}")
+          failure = failure(input, "#{input.inspect} must be an instance of #{primitive}")
           block ? yield(failure) : failure
         end
       end
