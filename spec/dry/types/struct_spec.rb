@@ -138,6 +138,14 @@ RSpec.describe Dry::Types::Struct do
     end
   end
 
+  describe 'when inheriting a struct from another struct' do
+    it 'also inherits the constructor_type' do
+      class Test::Parent < Dry::Types::Struct; constructor_type(:schema); end
+      class Test::Child < Test::Parent; end
+      expect(Test::Child.constructor_type).to eql(:schema)
+    end
+  end
+
   describe 'with a blank schema' do
     it 'works for blank structs' do
       class Test::Foo < Dry::Types::Struct; end
