@@ -25,7 +25,7 @@ module Dry
         def resolve_missing_value(result, key, type)
           if type.is_a?(Default)
             result[key] = type.evaluate
-          elsif type.is_a?(Maybe)
+          else
             result[key] = type[nil]
           end
         end
