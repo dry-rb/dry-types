@@ -96,6 +96,25 @@ module Dry
         end
         alias_method :[], :call
       end
+
+      class StrictWithDefaults < Schema
+        def call(hash, meth = :call)
+          member_types.each_with_object({}) do |(key, type), result|
+            begin
+              value = hash.fetch(key) do
+                resolve_missing_value(result, key, type) or raise SchemaKeyError.new(key)
+              end
+
+              result[key] = type.__send__(meth, value)
+            rescue TypeError
+              raise SchemaError.new(key, value)
+            rescue KeyError
+              raise SchemaKeyError.new(key)
+            end
+          end
+        end
+        alias_method :[], :call
+      end
     end
   end
 end
