@@ -9,6 +9,7 @@ module Dry
         super
 
         klass.instance_variable_set('@equalizer', Equalizer.new(*schema.keys))
+        klass.instance_variable_set('@constructor_type', constructor_type)
         klass.send(:include, klass.equalizer)
 
         unless klass == Value
@@ -48,8 +49,12 @@ module Dry
       end
       private_class_method :check_schema_duplication
 
-      def self.constructor_type(type = :strict)
-        @constructor_type ||= type
+      def self.constructor_type(type = nil)
+        if type
+          @constructor_type = type
+        else
+          @constructor_type || :strict
+        end
       end
 
       def self.schema
