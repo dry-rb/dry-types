@@ -1,3 +1,16 @@
+# v0.7.1 2016-04-06
+
+## Added
+
+- `JSON::*` types with JSON-specific coercions (coop)
+
+## Fixed
+
+- Schema is properly inherited in Struct (backus)
+- `constructor_type` is properly inherited in Struct (fbernier)
+
+[Compare v0.7.0...v0.7.1](https://github.com/dryrb/dry-types/compare/v0.7.0...v0.7.1)
+
 # v0.7.0 2016-03-30
 
 Major focus of this release is to make complex type composition possible and improving constraint errors to be more meaningful.
