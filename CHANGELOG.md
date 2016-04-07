@@ -1,3 +1,11 @@
+# v0.7.2 to-be-released
+
+## Fixed
+
+- `Bool#default` gladly accepts `false` as its value (solnic)
+
+[Compare v0.7.0...v0.7.1](https://github.com/dryrb/dry-types/compare/v0.7.0...v0.7.1)
+
 # v0.7.1 2016-04-06
 
 ## Added
