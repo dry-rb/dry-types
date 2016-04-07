@@ -21,6 +21,8 @@ module Dry
   module Types
     extend Dry::Configurable
 
+    Undefined = Object.new.freeze
+
     setting :namespace, self
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze

@@ -45,6 +45,18 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
   end
 
+  context 'with a strict bool' do
+    subject(:type) { Dry::Types['strict.bool'] }
+
+    it 'allows setting false' do
+      expect(type.default(false)[nil]).to be(false)
+    end
+
+    it 'allows setting true' do
+      expect(type.default(true)[nil]).to be(true)
+    end
+  end
+
   context 'with a callable value' do
     subject(:type) { Dry::Types['time'].default { Time.now } }
 

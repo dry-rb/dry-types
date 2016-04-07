@@ -22,8 +22,8 @@ module Dry
         constrained_type.new(self, rule: Types.Rule(options))
       end
 
-      def default(input = nil, &block)
-        value = input ? input : block
+      def default(input = Undefined, &block)
+        value = input == Undefined ? block : input
 
         if value.is_a?(Proc) || valid?(value)
           Default[value].new(self, value: value)
