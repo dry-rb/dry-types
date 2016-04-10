@@ -77,7 +77,7 @@ module Dry
 
       def merge_with(hash_id, constructor, schema)
         registry[hash_id].__send__(
-          constructor, schema.map { |key| visit(key) }.reduce(:merge)
+          constructor, schema.map { |key| visit(key) }.reduce({}, :merge)
         )
       end
     end

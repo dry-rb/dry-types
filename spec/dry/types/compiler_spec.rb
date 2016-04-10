@@ -103,6 +103,18 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     )
   end
 
+  it 'builds a hash with empty schema' do
+    ast = [
+      :type, [
+        'hash', [:schema, []]
+      ]
+    ]
+
+    hash = compiler.(ast)
+
+    expect(hash['foo' => 'bar']).to eql({})
+  end
+
   it 'builds an array' do
     ast = [
       :type, [
