@@ -16,7 +16,7 @@ module Dry
       end
 
       def meta(data = nil)
-        data ? with(meta: data) : @meta
+        data ? with(meta: @meta.merge(data)) : @meta
       end
     end
   end
