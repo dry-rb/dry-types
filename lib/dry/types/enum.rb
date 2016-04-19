@@ -2,7 +2,7 @@ require 'dry/types/decorator'
 
 module Dry
   module Types
-    class Enum
+    class Enum < BasicObject
       include Decorator
 
       attr_reader :values, :mapping

@@ -56,5 +56,24 @@ RSpec.describe Dry::Types::Array do
         expect(john.name).to eql('John')
       end
     end
+
+    context 'enum' do
+      it 'uses enum type for member values' do
+        enum = Dry::Types['strict.string'].enum(*%w(draft published archived))
+        array = Dry::Types['array'].member(enum)
+
+        expect{ array[['draft', 'published']] }.to_not raise_error
+        expect{ array[['trash', 'published']] }.to raise_error(Dry::Types::ConstraintError)
+      end
+      it 'uses enum type for member values if Object was monkeypatched' do
+        Object.send(:define_method, :try){|*| nil}
+
+        enum = Dry::Types['strict.string'].enum(*%w(draft published archived))
+        array = Dry::Types['strict.array'].member(enum)
+
+        expect{ array[['draft', 'published']] }.to_not raise_error
+        Object.send(:remove_method, :try)
+      end
+    end
   end
 end
