@@ -20,3 +20,5 @@ group :benchmarks do
   gem 'fast_attributes'
   gem 'attrio'
 end
+
+gem "dry-logic", path: "../dry-logic"
