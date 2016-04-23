@@ -21,4 +21,4 @@ group :benchmarks do
   gem 'attrio'
 end
 
-gem "dry-logic", path: "../dry-logic"
+gem "dry-logic", git: 'https://github.com/dry-rb/dry-logic.git', branch: "master"
