@@ -37,6 +37,10 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it was unparsable' do
       expect(type['not-a-date']).to eql('not-a-date')
     end
+
+    it 'returns nil when given nil' do
+      expect(type[nil]).to eql(nil)
+    end
   end
 
   describe 'form.date_time' do

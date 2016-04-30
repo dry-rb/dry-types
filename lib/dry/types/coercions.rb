@@ -8,6 +8,8 @@ module Dry
       end
 
       def to_date(input)
+        return nil if input.nil?
+
         Date.parse(input)
       rescue ArgumentError
         input
