@@ -117,14 +117,14 @@ RSpec.describe Dry::Types::Definition do
     it 'accepts nil and returns None instance' do
       value = maybe_string[nil]
 
-      expect(value).to be_instance_of(Kleisli::Maybe::None)
+      expect(value).to be_instance_of(Dry::Monads::Maybe::None)
       expect(value.fmap(&:downcase).fmap(&:upcase).value).to be(nil)
     end
 
     it 'accepts a string and returns Some instance' do
       value = maybe_string['SomeThing']
 
-      expect(value).to be_instance_of(Kleisli::Maybe::Some)
+      expect(value).to be_instance_of(Dry::Monads::Maybe::Some)
       expect(value.fmap(&:downcase).fmap(&:upcase).value).to eql('SOMETHING')
     end
   end
