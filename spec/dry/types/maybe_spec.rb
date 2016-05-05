@@ -11,7 +11,7 @@ RSpec.describe Dry::Types::Definition, '#maybe' do
     end
 
     it 'returns original if input is already a maybe' do
-      expect(type[Some('hello')].value).to eql('hello')
+      expect(type[Dry::Monads::Maybe::Some.new('hello')].value).to eql('hello')
     end
 
     it 'aliases #[] as #call' do
@@ -35,7 +35,7 @@ RSpec.describe Dry::Types::Definition, '#maybe' do
     end
 
     it 'returns original if input is already a maybe' do
-      expect(type[Maybe(231)].value).to be(231)
+      expect(type[Dry::Monads::Maybe.lift(231)].value).to be(231)
     end
   end
 

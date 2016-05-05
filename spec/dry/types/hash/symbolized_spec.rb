@@ -26,7 +26,7 @@ RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
     it 'sets None as a default value for optional' do
       result = hash['name' => 'Jane', 'age' => 1]
 
-      expect(result[:middle_name]).to be_instance_of(Kleisli::Maybe::None)
+      expect(result[:middle_name]).to be_instance_of(Dry::Monads::Maybe::None)
     end
 
     it 'passes through already symbolized hash' do

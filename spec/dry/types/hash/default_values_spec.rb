@@ -25,7 +25,7 @@ RSpec.describe Dry::Types::Hash, 'with default values' do
     it 'sets None as a default value for optional types' do
       result = hash[name: 'Jane']
 
-      expect(result[:middle_name]).to be_instance_of(Kleisli::Maybe::None)
+      expect(result[:middle_name]).to be_instance_of(Dry::Monads::Maybe::None)
     end
   end
 end
