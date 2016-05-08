@@ -173,6 +173,11 @@ RSpec.describe Dry::Types::Definition do
       expect(type[arr]).to eql([1, 2, 3])
     end
 
+    it 'coerces an empty string into an empty array' do
+      input = ''
+      expect(type[input]).to eql([])
+    end
+
     it 'returns original value when it is not an array' do
       foo = 'foo'
       expect(type[foo]).to be(foo)
@@ -185,6 +190,11 @@ RSpec.describe Dry::Types::Definition do
     it 'returns coerced hash' do
       hash = { age: '21' }
       expect(type[hash]).to eql(age: 21)
+    end
+
+    it 'coerces an empty string into an empty hash' do
+      input = ''
+      expect(type[input]).to eql({})
     end
 
     it 'returns original value when it is not an hash' do
