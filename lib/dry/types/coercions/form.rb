@@ -20,34 +20,30 @@ module Dry
         end
 
         def self.to_int(input)
-          return if empty_str?(input)
-
-          result = input.to_i
-
-          if result === 0 && !input.eql?('0')
-            input
+          if empty_str?(input)
+            nil
           else
-            result
+            Integer(input)
           end
+        rescue ArgumentError
+          input
         end
 
         def self.to_float(input)
-          return if empty_str?(input)
-
-          result = input.to_f
-
-          if result.eql?(0.0) && (!input.eql?('0') && !input.eql?('0.0'))
-            input
+          if empty_str?(input)
+            nil
           else
-            result
+            Float(input)
           end
+        rescue ArgumentError
+          input
         end
 
         def self.to_decimal(input)
           result = to_float(input)
 
           if result.instance_of?(Float)
-            result.to_d
+            BigDecimal(input)
           else
             result
           end
