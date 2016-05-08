@@ -25,7 +25,7 @@ module Dry
           else
             Integer(input)
           end
-        rescue ArgumentError
+        rescue ArgumentError, TypeError
           input
         end
 
@@ -35,7 +35,7 @@ module Dry
           else
             Float(input)
           end
-        rescue ArgumentError
+        rescue ArgumentError, TypeError
           input
         end
 

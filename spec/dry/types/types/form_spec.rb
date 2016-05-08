@@ -126,6 +126,7 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it cannot be coerced' do
       expect(type['foo']).to eql('foo')
       expect(type['23asd']).to eql('23asd')
+      expect(type[{}]).to eql({})
     end
   end
 
@@ -148,6 +149,7 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it cannot be coerced' do
       expect(type['foo']).to eql('foo')
       expect(type['23asd']).to eql('23asd')
+      expect(type[{}]).to eql({})
     end
   end
 
@@ -165,6 +167,7 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it cannot be coerced' do
       expect(type['foo']).to eql('foo')
       expect(type['23asd']).to eql('23asd')
+      expect(type[{}]).to eql({})
     end
 
     it 'does not lose precision of the original value' do
