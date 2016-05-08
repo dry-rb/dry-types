@@ -43,7 +43,7 @@ module Dry
           result = to_float(input)
 
           if result.instance_of?(Float)
-            BigDecimal(input)
+            input.to_d
           else
             result
           end

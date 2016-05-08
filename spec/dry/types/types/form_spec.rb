@@ -173,6 +173,10 @@ RSpec.describe Dry::Types::Definition do
     it 'does not lose precision of the original value' do
       expect(type['0.66666666666666666667']).to eql(BigDecimal('0.66666666666666666667'))
     end
+
+    it 'coerces Float to BigDecimal without complaining about precision' do
+      expect(type[3.12]).to eql(BigDecimal('3.12'))
+    end
   end
 
   describe 'form.array' do
