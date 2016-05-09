@@ -1,4 +1,4 @@
-require 'kleisli/maybe'
+require 'dry/monads/maybe'
 require 'dry/types/decorator'
 
 module Dry
@@ -6,9 +6,10 @@ module Dry
     class Maybe
       include Decorator
       include Builder
+      include Dry::Monads::Maybe::Mixin
 
       def call(input)
-        input.is_a?(Kleisli::Maybe) ? input : Maybe(type[input])
+        input.is_a?(Dry::Monads::Maybe) ? input : Maybe(type[input])
       end
       alias_method :[], :call
 

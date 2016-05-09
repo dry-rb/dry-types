@@ -5,8 +5,8 @@ module Dry
   module Types
     module Coercions
       module Form
-        TRUE_VALUES = %w[1 on  t true  y yes].freeze
-        FALSE_VALUES = %w[0 off f false n no].freeze
+        TRUE_VALUES = %w[1 on On ON t true True TRUE  y yes Yes YES].freeze
+        FALSE_VALUES = %w[0 off Off OFF f false False FALSE n no No NO].freeze
         BOOLEAN_MAP = ::Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
 
         extend Coercions
@@ -20,34 +20,30 @@ module Dry
         end
 
         def self.to_int(input)
-          return if empty_str?(input)
-
-          result = input.to_i
-
-          if result === 0 && !input.eql?('0')
-            input
+          if empty_str?(input)
+            nil
           else
-            result
+            Integer(input)
           end
+        rescue ArgumentError, TypeError
+          input
         end
 
         def self.to_float(input)
-          return if empty_str?(input)
-
-          result = input.to_f
-
-          if result.eql?(0.0) && (!input.eql?('0') && !input.eql?('0.0'))
-            input
+          if empty_str?(input)
+            nil
           else
-            result
+            Float(input)
           end
+        rescue ArgumentError, TypeError
+          input
         end
 
         def self.to_decimal(input)
           result = to_float(input)
 
           if result.instance_of?(Float)
-            result.to_d
+            input.to_d
           else
             result
           end
