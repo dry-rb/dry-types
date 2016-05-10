@@ -33,7 +33,7 @@ module Dry
       end
 
       def enum(*values)
-        Enum.new(constrained(inclusion: values), values: values)
+        Enum.new(constrained(included_in: values), values: values)
       end
 
       def safe
