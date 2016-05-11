@@ -1,10 +1,20 @@
-# v0.7.2 to-be-released
+# v0.7.2 2016-05-11
 
 ## Fixed
 
 - `Bool#default` gladly accepts `false` as its value (solnic)
+- Creating an empty schema with input processor no longer fails (lasseebert)
 
-[Compare v0.7.0...v0.7.1](https://github.com/dryrb/dry-types/compare/v0.7.0...v0.7.1)
+## Changes
+- Allow multiple calls to meta (solnic)
+- Allow capitalised versions of true and false values for boolean coercions (nil0bject)
+- Replace kleisli with dry-monads (flash-gordon)
+- Use coercions from Kernel (flash-gordon)
+- Decimal coercions now work with Float (flash-gordon)
+- Coerce empty strings in form posts to blank arrays and hashes (timriley)
+- update to use dry-logic v0.2.3 (fran-worley)
+
+[Compare v0.7.0...v0.7.1](https://github.com/dryrb/dry-types/compare/v0.7.1...v0.7.2)
 
 # v0.7.1 2016-04-06
 
