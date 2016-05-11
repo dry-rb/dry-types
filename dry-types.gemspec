@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dry-container', '~> 0.3'
   spec.add_runtime_dependency 'dry-equalizer', '~> 0.2'
   spec.add_runtime_dependency 'dry-configurable', '~> 0.1'
-  spec.add_runtime_dependency 'dry-logic', '~> 0.2', '>= 0.2.0'
+  spec.add_runtime_dependency 'dry-logic', '~> 0.2', '>= 0.2.3'
   spec.add_runtime_dependency 'inflecto', '~> 0.0.0', '>= 0.0.2'
   spec.add_runtime_dependency 'dry-monads', '>= 0.0.1'
 
