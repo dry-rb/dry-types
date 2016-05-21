@@ -66,4 +66,12 @@ RSpec.describe Dry::Types::Constructor do
       expect { type.oh_noez }.to raise_error(NoMethodError)
     end
   end
+
+  describe 'equality' do
+    def type
+      Dry::Types::Constructor.new(String, &:strip)
+    end
+
+    it_behaves_like 'a type with equality defined'
+  end
 end

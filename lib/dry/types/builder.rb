@@ -26,7 +26,7 @@ module Dry
         value = input == Undefined ? block : input
 
         if value.is_a?(Proc) || valid?(value)
-          Default[value].new(self, value: value)
+          Default[value].new(self, value)
         else
           raise ConstraintError, "default value #{value.inspect} violates constraints"
         end

@@ -4,6 +4,7 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Maybe
+      include Dry::Equalizer(:type, :options)
       include Decorator
       include Builder
       include Dry::Monads::Maybe::Mixin

@@ -12,4 +12,12 @@ RSpec.describe Dry::Types::Definition, '#safe' do
   it 'aliases #[] as #call' do
     expect(type.call(:passing)).to be(:passing)
   end
+
+  describe 'equality' do
+    def type
+      Dry::Types['coercible.string'].constrained(min_size: 5).safe
+    end
+
+    it_behaves_like 'a type with equality defined'
+  end
 end
