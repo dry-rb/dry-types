@@ -60,4 +60,12 @@ RSpec.describe Dry::Types::Enum do
       expect(type.values).to eql(values)
     end
   end
+
+  describe 'equality' do
+    def type
+      Dry::Types['strict.string'].enum('foo', 'bar', 'baz')
+    end
+
+    it_behaves_like 'a type with equality defined'
+  end
 end

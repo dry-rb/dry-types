@@ -3,10 +3,13 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Default
+      include Dry::Equalizer(:type, :options, :value)
       include Decorator
       include Builder
 
       class Callable < Default
+        include Dry::Equalizer(:type, :options)
+
         def evaluate
           value.call
         end
@@ -24,9 +27,9 @@ module Dry
         end
       end
 
-      def initialize(type, options)
-        super
-        @value = options.fetch(:value)
+      def initialize(type, value, options = {})
+        super(type, options)
+        @value = value
       end
 
       def constrained(*args)

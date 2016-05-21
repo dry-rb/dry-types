@@ -130,4 +130,12 @@ RSpec.describe Dry::Types::Sum do
       expect(rule.(1)).to be_failure
     end
   end
+
+  describe 'equality' do
+    def type
+      Dry::Types['int'] | Dry::Types['string']
+    end
+
+    it_behaves_like 'a type with equality defined'
+  end
 end

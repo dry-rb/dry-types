@@ -72,4 +72,22 @@ RSpec.describe Dry::Types::Definition, '#default' do
       expect { type.oh_noez }.to raise_error(NoMethodError, /oh_noez/)
     end
   end
+
+  describe 'equality' do
+    context 'with a static value' do
+      def type
+        Dry::Types['strict.string'].default('foo')
+      end
+
+      it_behaves_like 'a type with equality defined'
+    end
+
+    context 'with a callable value' do
+      def type
+        Dry::Types['strict.string'].default { 'foo' }
+      end
+
+      it_behaves_like 'a type with equality defined'
+    end
+  end
 end
