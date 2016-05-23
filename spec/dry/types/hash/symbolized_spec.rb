@@ -1,9 +1,9 @@
 RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
   subject(:hash) do
     Dry::Types['hash'].symbolized(
-      name: 'string',
+      name: 'strict.string',
       middle_name: 'maybe.strict.string',
-      age: 'int',
+      age: Dry::Types['strict.int'].optional,
       password: password
     )
   end
@@ -23,7 +23,7 @@ RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
       )
     end
 
-    it 'sets None as a default value for optional' do
+    it 'sets None as a default value for maybe' do
       result = hash['name' => 'Jane', 'age' => 1]
 
       expect(result[:middle_name]).to be_instance_of(Dry::Monads::Maybe::None)
@@ -34,6 +34,19 @@ RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
 
       expect(result).to include(name: 'Jane', age: 1, password: 'changeme')
       expect(result[:middle_name].value).to eql('Alice')
+    end
+
+    it 'raises an error on attempt to omit key associated with a strict type' do
+      expect { hash[middle_name: 'Alice'] }.to raise_error(
+        Dry::Types::ConstraintError,
+        'nil violates constraints (type?(String) failed)'
+      )
+    end
+
+    it 'sets nil as a default value for optional' do
+      result = hash['name' => 'Jane']
+
+      expect(result[:age]).to be_nil
     end
   end
 end

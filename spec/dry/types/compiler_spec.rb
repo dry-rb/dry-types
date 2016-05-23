@@ -74,7 +74,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     result = hash[foo: 'bar', email: 'jane@doe.org', admin: '1']
 
-    expect(result).to eql(email: 'jane@doe.org', admin: true)
+    expect(result).to eql(email: 'jane@doe.org', admin: true, age: nil)
   end
 
   it 'builds a coercible hash with symbolized keys' do
@@ -99,7 +99,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     )
 
     expect(hash['foo' => 'bar', 'age' => '20', 'admin' => '1']).to eql(
-      age: 20, admin: true
+      age: 20, admin: true, email: nil
     )
   end
 
@@ -145,7 +145,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ])
 
     expect(arr[['foo' => 'bar', 'age' => '20', 'admin' => '1']]).to eql([
-      age: 20, admin: true
+      age: 20, admin: true, email: nil
     ])
   end
 
@@ -180,7 +180,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     )
 
     expect(hash['foo' => 'bar', 'age' => '20', 'admin' => '1']).to eql(
-      age: 20, admin: true
+      age: 20, admin: true, email: nil
     )
   end
 
