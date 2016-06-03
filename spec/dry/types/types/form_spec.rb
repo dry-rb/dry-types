@@ -192,6 +192,11 @@ RSpec.describe Dry::Types::Definition do
       expect(type[input]).to eql([])
     end
 
+    it 'coerces nil into an empty array' do
+      input = nil
+      expect(type[input]).to eql([])
+    end
+
     it 'returns original value when it is not an array' do
       foo = 'foo'
       expect(type[foo]).to be(foo)
@@ -208,6 +213,11 @@ RSpec.describe Dry::Types::Definition do
 
     it 'coerces an empty string into an empty hash' do
       input = ''
+      expect(type[input]).to eql({})
+    end
+
+    it 'coerces nil into an empty hash' do
+      input = nil
       expect(type[input]).to eql({})
     end
 

@@ -50,11 +50,11 @@ module Dry
         end
 
         def self.to_ary(input)
-          empty_str?(input) ? [] : input
+          empty?(input) ? [] : input
         end
 
         def self.to_hash(input)
-          empty_str?(input) ? {} : input
+          empty?(input) ? {} : input
         end
       end
     end

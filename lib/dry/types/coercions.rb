@@ -30,6 +30,10 @@ module Dry
       def empty_str?(value)
         EMPTY_STRING.eql?(value)
       end
+
+      def empty?(value)
+        value.nil? || empty_str?(value)
+      end
     end
   end
 end
