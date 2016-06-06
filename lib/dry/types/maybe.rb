@@ -14,6 +14,14 @@ module Dry
       end
       alias_method :[], :call
 
+      def try(input)
+        Result::Success.new(Maybe(type[input]))
+      end
+
+      def maybe?
+        true
+      end
+
       def default(value)
         if value.nil?
           raise ArgumentError, "nil cannot be used as a default of a maybe type"

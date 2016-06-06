@@ -11,11 +11,12 @@ module Dry
 
         def try(hash, &block)
           result = call(hash, :try)
+          output = result.each_with_object({}) { |(key, res), h| h[key] = res.input }
 
           if result.values.all?(&:success?)
-            success(result.each_with_object({}) { |(key, res), h| h[key] = res.input })
+            success(output)
           else
-            failure = failure(hash, result)
+            failure = failure(output, result)
             block ? yield(failure) : failure
           end
         end
@@ -23,15 +24,32 @@ module Dry
         private
 
         def resolve_missing_value(result, key, type)
-          if type.is_a?(Default)
+          if type.default?
             result[key] = type.evaluate
-          elsif type.is_a?(Maybe)
+          elsif type.maybe?
             result[key] = type[nil]
           end
         end
       end
 
       class Safe < Schema
+        def self.new(primitive, options = {})
+          member_types = options.
+            fetch(:member_types, {}).
+            each_with_object({}) { |(k, t), res| res[k] = t.safe }
+
+          super(primitive, options.merge(member_types: member_types))
+        end
+
+        def try(hash, &block)
+          if hash.is_a?(::Hash)
+            super
+          else
+            result = failure(hash, "#{hash} must be a hash")
+            block ? yield(result) : result
+          end
+        end
+
         def call(hash, meth = :call)
           member_types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)
@@ -44,7 +62,7 @@ module Dry
         alias_method :[], :call
       end
 
-      class Symbolized < Schema
+      class Symbolized < Safe
         def call(hash, meth = :call)
           member_types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)

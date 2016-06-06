@@ -27,6 +27,14 @@ module Dry
         [left, right].map(&:name).join(' | ')
       end
 
+      def default?
+        false
+      end
+
+      def maybe?
+        false
+      end
+
       def call(input)
         try(input) do |result|
           raise ConstraintError, result

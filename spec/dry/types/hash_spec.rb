@@ -1,38 +1,60 @@
 RSpec.describe Dry::Types::Hash do
   subject(:hash) do
-    Dry::Types['coercible.hash'].strict(
-      name: "coercible.string",
-      age: "coercible.int",
-      active: "strict.bool",
-      phone: Dry::Types['phone'],
-      loc: Test::Location
-    )
+    Dry::Types['hash'].schema(date: 'form.date', bool: 'form.bool')
   end
 
-  let(:phone) do
-    Dry::Types['phone'].primitive
-  end
+  describe '#try' do
+    it 'applies member types' do
+      input = { date: '2011-10-09', bool: '1' }
+      result = hash.try(input)
 
-  before do
-    phone = Struct.new(:prefix, :number) do
-      def self.name
-        'Phone'
-      end
+      expect(result).to be_success
+      expect(result.input).to eql(date: Date.new(2011, 10, 9), bool: true)
     end
 
-    module Test
-      class Location < Dry::Types::Value
-        attributes(lat: 'float', lng: 'float')
-      end
-    end
+    it 'keeps original values when applying a member type fails' do
+      input = { date: 'not-a-date', bool: '0' }
+      result = hash.try(input)
 
-    Dry::Types.register(
-      "phone",
-      Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
-    )
+      expect(result).to be_failure
+      expect(result.input).to eql(date: 'not-a-date', bool: false)
+    end
   end
 
   describe '#[]' do
+    subject(:hash) do
+      Dry::Types['coercible.hash'].strict(
+        name: "coercible.string",
+        age: "coercible.int",
+        active: "strict.bool",
+        phone: Dry::Types['phone'],
+        loc: Test::Location
+      )
+    end
+
+    let(:phone) do
+      Dry::Types['phone'].primitive
+    end
+
+    before do
+      phone = Struct.new(:prefix, :number) do
+        def self.name
+          'Phone'
+        end
+      end
+
+      module Test
+        class Location < Dry::Types::Value
+          attributes(lat: 'float', lng: 'float')
+        end
+      end
+
+      Dry::Types.register(
+        "phone",
+        Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
+      )
+    end
+
     it 'builds hash using provided schema' do
       user_hash = hash[
         name: :Jane, age: '21', active: true,

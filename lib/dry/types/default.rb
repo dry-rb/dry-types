@@ -36,6 +36,14 @@ module Dry
         type.constrained(*args).default(value)
       end
 
+      def default?
+        true
+      end
+
+      def try(input)
+        success(call(input))
+      end
+
       def call(input)
         if input.nil?
           evaluate

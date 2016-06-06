@@ -33,6 +33,14 @@ module Dry
         primitive.name
       end
 
+      def default?
+        false
+      end
+
+      def maybe?
+        false
+      end
+
       def call(input)
         input
       end

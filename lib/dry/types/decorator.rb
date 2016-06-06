@@ -20,6 +20,14 @@ module Dry
         type.valid?(value)
       end
 
+      def default?
+        type.default?
+      end
+
+      def maybe?
+        type.maybe?
+      end
+
       def respond_to_missing?(meth, include_private = false)
         super || type.respond_to?(meth)
       end

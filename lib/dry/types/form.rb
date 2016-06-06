@@ -43,11 +43,11 @@ module Dry
     end
 
     register('form.array') do
-      self['array'].safe.constructor(Coercions::Form.method(:to_ary))
+      self['array'].constructor(Coercions::Form.method(:to_ary)).safe
     end
 
     register('form.hash') do
-      self['hash'].safe.constructor(Coercions::Form.method(:to_hash))
+      self['hash'].constructor(Coercions::Form.method(:to_hash)).safe
     end
   end
 end
