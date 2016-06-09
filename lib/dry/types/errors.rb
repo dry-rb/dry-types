@@ -43,7 +43,8 @@ module Dry
       def failure_message
         if result.respond_to?(:rule)
           rule = result.rule
-          "#{rule.predicate.id}(#{rule.predicate.args.map(&:inspect).join(', ')}) failed"
+          args = rule.predicate.args - [rule.predicate.args.last]
+          "#{rule.predicate.id}(#{args.map(&:inspect).join(', ')}) failed"
         else
           result.inspect
         end

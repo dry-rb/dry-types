@@ -13,7 +13,7 @@ module Dry
 
     def self.Rule(options)
       rule_compiler.(
-        options.map { |key, val| [:val, [:predicate, [:"#{key}?", [val]]]] }
+        options.map { |key, val| [:val, Predicates[:"#{key}?"].curry(val).to_ast] }
       ).reduce(:and)
     end
 
