@@ -12,6 +12,10 @@ module Dry
         type.constructor
       end
 
+      def try(input, &block)
+        type.try(input, &block)
+      end
+
       def with(new_options)
         self.class.new(type, options.merge(new_options))
       end

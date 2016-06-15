@@ -68,4 +68,20 @@ RSpec.describe Dry::Types::Enum do
 
     it_behaves_like 'a type with equality defined'
   end
+
+  describe '#try' do
+    subject(:enum) { Dry::Types['int'].enum(4, 5, 6) }
+
+    it 'returns a success result for valid input' do
+      expect(enum.try(5)).to be_success
+    end
+
+    it 'returns a failure result for invalid input' do
+      expect(enum.try(2)).to be_failure
+    end
+
+    it 'accepts a block for the fallback mechanism' do
+      expect(enum.try(2) { 5 }).to be(5)
+    end
+  end
 end
