@@ -199,7 +199,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'form.hash' do
-    subject(:type) { Dry::Types['form.hash'].schema(age: Dry::Types['form.int']) }
+    subject(:type) { Dry::Types['form.hash'].weak(age: Dry::Types['form.int']) }
 
     it 'returns coerced hash' do
       hash = { age: '21' }

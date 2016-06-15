@@ -3,7 +3,7 @@ require 'dry/types/hash/schema'
 module Dry
   module Types
     class Hash < Definition
-      def schema(type_map, klass = Safe)
+      def schema(type_map, klass = Schema)
         member_types = type_map.each_with_object({}) { |(name, type), result|
           result[name] =
             case type
@@ -13,6 +13,10 @@ module Dry
         }
 
         klass.new(primitive, options.merge(member_types: member_types))
+      end
+
+      def weak(type_map)
+        schema(type_map, Weak)
       end
 
       def strict(type_map)

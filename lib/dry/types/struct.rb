@@ -62,7 +62,7 @@ module Dry
         super_schema.merge(@schema || {})
       end
 
-      def self.new(attributes = {})
+      def self.new(attributes = default_attributes)
         if attributes.instance_of?(self)
           attributes
         else
@@ -70,6 +70,12 @@ module Dry
         end
       rescue SchemaError, SchemaKeyError => error
         raise StructError, "[#{self}.new] #{error}"
+      end
+
+      def self.default_attributes
+        schema.each_with_object({}) { |(name, type), result|
+          result[name] = type.default? ? type.evaluate : type[nil]
+        }
       end
 
       def initialize(attributes)

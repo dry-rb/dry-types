@@ -9,6 +9,17 @@ module Dry
           super
         end
 
+        def call(hash, meth = :call)
+          member_types.each_with_object({}) do |(key, type), result|
+            if hash.key?(key)
+              result[key] = type.__send__(meth, hash[key])
+            else
+              resolve_missing_value(result, key, type)
+            end
+          end
+        end
+        alias_method :[], :call
+
         def try(hash, &block)
           result = call(hash, :try)
           output = result.each_with_object({}) { |(key, res), h| h[key] = res.input }
@@ -32,7 +43,23 @@ module Dry
         end
       end
 
-      class Safe < Schema
+      class Strict < Schema
+        def call(hash, meth = :call)
+          member_types.each_with_object({}) do |(key, type), result|
+            begin
+              value = hash.fetch(key)
+              result[key] = type.__send__(meth, value)
+            rescue TypeError
+              raise SchemaError.new(key, value)
+            rescue KeyError
+              raise SchemaKeyError.new(key)
+            end
+          end
+        end
+        alias_method :[], :call
+      end
+
+      class Weak < Schema
         def self.new(primitive, options = {})
           member_types = options.
             fetch(:member_types, {}).
@@ -49,20 +76,9 @@ module Dry
             block ? yield(result) : result
           end
         end
-
-        def call(hash, meth = :call)
-          member_types.each_with_object({}) do |(key, type), result|
-            if hash.key?(key)
-              result[key] = type.__send__(meth, hash[key])
-            else
-              resolve_missing_value(result, key, type)
-            end
-          end
-        end
-        alias_method :[], :call
       end
 
-      class Symbolized < Safe
+      class Symbolized < Weak
         def call(hash, meth = :call)
           member_types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)
@@ -75,22 +91,6 @@ module Dry
               else
                 resolve_missing_value(result, key, type)
               end
-            end
-          end
-        end
-        alias_method :[], :call
-      end
-
-      class Strict < Schema
-        def call(hash, meth = :call)
-          member_types.each_with_object({}) do |(key, type), result|
-            begin
-              value = hash.fetch(key)
-              result[key] = type.__send__(meth, value)
-            rescue TypeError
-              raise SchemaError.new(key, value)
-            rescue KeyError
-              raise SchemaKeyError.new(key)
             end
           end
         end

@@ -153,17 +153,32 @@ RSpec.describe Dry::Types::Struct do
     end
   end
 
-  describe 'with a safe schema' do
-    it 'uses :safe constructor when constructor_type is overridden' do
-      struct = Class.new(Dry::Types::Struct) do
+  describe 'with a non-strict schema' do
+    subject(:struct) do
+      Class.new(Dry::Types::Struct) do
         constructor_type(:schema)
 
         attribute :name, Dry::Types['strict.string'].default('Jane')
+        attribute :age, Dry::Types['strict.int']
         attribute :admin, Dry::Types['strict.bool'].default(true)
       end
+    end
 
-      expect(struct.new(name: 'Jane').to_h).to eql(name: 'Jane', admin: true)
-      expect(struct.new.to_h).to eql(name: 'Jane', admin: true)
+    it 'sets missing values using default-value types' do
+      attrs = { name: 'Jane', age: 21, admin: true }
+
+      expect(struct.new(name: 'Jane', age: 21).to_h).to eql(attrs)
+      expect(struct.new(age: 21).to_h).to eql(attrs)
+    end
+
+    it 'raises error when values have incorrect types' do
+      expect { struct.new(name: 'Jane', age: 21, admin: 'true') }.to raise_error(
+        Dry::Types::ConstraintError, /"true" violates constraints/
+      )
+
+      expect { struct.new }.to raise_error(
+        Dry::Types::ConstraintError, /nil violates constraints/
+      )
     end
   end
 

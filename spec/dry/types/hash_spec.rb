@@ -3,6 +3,14 @@ RSpec.describe Dry::Types::Hash do
     Dry::Types['hash'].schema(date: 'form.date', bool: 'form.bool')
   end
 
+  describe '#weak' do
+    it 'returns a weakly-typed hash' do
+      hash = Dry::Types['hash'].weak(date: 'form.date')
+
+      expect(hash[date: 'oops']).to eql(date: 'oops')
+    end
+  end
+
   describe '#try' do
     it 'applies member types' do
       input = { date: '2011-10-09', bool: '1' }

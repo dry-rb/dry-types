@@ -51,7 +51,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = [
       :type, [
         'hash', [
-          :schema, [
+          :weak, [
             [:key, [:email, [:type, 'string']]],
             [:key, [:age, [:sum, [[:type, 'form.nil'], [:type, 'form.int']]]]],
             [:key, [:admin, [:type, 'form.bool']]]
@@ -62,7 +62,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Hash::Safe)
+    expect(hash).to be_instance_of(Dry::Types::Hash::Weak)
 
     result = hash[foo: 'bar', email: 'jane@doe.org', age: '20', admin: '1']
 
