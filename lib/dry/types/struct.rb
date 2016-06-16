@@ -1,3 +1,5 @@
+require_relative 'hashify'
+
 module Dry
   module Types
     class Struct
@@ -87,10 +89,9 @@ module Dry
       end
 
       def to_hash
-        self.class.schema.keys.each_with_object({}) { |key, result|
-          value = self[key]
-          result[key] = value.respond_to?(:to_hash) ? value.to_hash : value
-        }
+        self.class.schema.keys.each_with_object({}) do |key, result|
+          result[key] = Hashify[self[key]]
+        end
       end
       alias_method :to_h, :to_hash
     end
