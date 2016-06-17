@@ -1,20 +1,12 @@
 # Converts value to hash recursively
-class Hashify
+module Hashify
   def self.[](value)
-    new(value).call
-  end
-
-  def initialize(value)
-    @value = value
-  end
-
-  def call
-    if @value.respond_to?(:to_hash)
-      @value.to_hash
-    elsif @value.respond_to?(:map)
-      @value.map { |item| self.class[item] }
+    if value.respond_to?(:to_hash)
+      value.to_hash
+    elsif value.respond_to?(:map)
+      value.map { |item| self[item] }
     else
-      @value
+      value
     end
   end
 end
