@@ -22,7 +22,37 @@ RSpec.describe Dry::Types::Value do
     subject(:type) { Dry::Types['test.super_user'] }
   end
 
-  it 'is frozen' do
-    expect(Test::Address.new(city: 'NYC', zipcode: 123)).to be_frozen
+  it 'is deeply frozen' do
+    address = Test::Address.new(city: 'NYC', zipcode: 123)
+    expect(address).to be_frozen
+    expect(address.city).to be_frozen
+  end
+
+  context 'when deep freezing' do
+    before do
+      module Test
+        class Name
+          def initialize(full)
+            @full = full
+          end
+
+          attr_reader :full
+        end
+
+        Dry::Types.register_class(Name)
+
+        class Person < Dry::Types::Value
+          attribute :name, Name
+        end
+      end
+    end
+
+    it 'deep freezes plain member objects' do
+      person = Test::Person.new(name: Test::Name.new('John Doe'))
+
+      expect(person).to be_frozen
+      expect(person.name).to be_frozen
+      expect(person.name.full).to be_frozen
+    end
   end
 end
