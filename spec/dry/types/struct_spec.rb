@@ -183,12 +183,27 @@ RSpec.describe Dry::Types::Struct do
   end
 
   describe '#to_hash' do
+    let(:parent_type) { Dry::Types["test.parent"] }
+
+    before do
+      module Test
+        class Parent < User
+          attribute :children, Dry::Types["coercible.array"].member("test.user")
+        end
+      end
+    end
+
     it 'returns hash with attributes' do
-      attributes = {
-        name: 'Jane', age: 21, address: { city: 'NYC', zipcode: '123' }
+      attributes  = {
+        name: 'Jane',
+        age:  29,
+        address: { city: 'NYC', zipcode: '123' },
+        children: [
+          { name: 'Joe', age: 3, address: { city: 'NYC', zipcode: '123' } }
+        ]
       }
 
-      expect(user_type[attributes].to_hash).to eql(attributes)
+      expect(parent_type[attributes].to_hash).to eql(attributes)
     end
   end
 end
