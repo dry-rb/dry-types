@@ -55,7 +55,7 @@ RSpec.shared_examples_for Dry::Types::Struct do
 
   context 'class interface' do
     describe '.|' do
-      let(:sum_type) { type_or_nil = type | Dry::Types['strict.nil'] }
+      let(:sum_type) { type | Dry::Types['strict.nil'] }
 
       it 'returns Sum type' do
         expect(sum_type).to be_instance_of(Dry::Types::Sum)
