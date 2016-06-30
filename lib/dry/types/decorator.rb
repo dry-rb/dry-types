@@ -1,11 +1,15 @@
+require 'dry/types/options'
+
 module Dry
   module Types
     module Decorator
-      attr_reader :type, :options
+      include Options
 
-      def initialize(type, options = {})
+      attr_reader :type
+
+      def initialize(type, *)
+        super
         @type = type
-        @options = options
       end
 
       def constructor
@@ -14,10 +18,6 @@ module Dry
 
       def try(input, &block)
         type.try(input, &block)
-      end
-
-      def with(new_options)
-        self.class.new(type, options.merge(new_options))
       end
 
       def valid?(value)

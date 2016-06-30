@@ -27,8 +27,8 @@ module Dry
         end
       end
 
-      def initialize(type, value, options = {})
-        super(type, options)
+      def initialize(type, value, *)
+        super
         @value = value
       end
 

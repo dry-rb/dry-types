@@ -5,7 +5,7 @@ module Dry
 
       attr_reader :meta
 
-      def initialize(*args, **options )
+      def initialize(*args, **options)
         @__args__ = args
         @options = options
         @meta = options.fetch(:meta, {})
