@@ -84,4 +84,12 @@ RSpec.describe Dry::Types::Enum do
       expect(enum.try(2) { 5 }).to be(5)
     end
   end
+
+  describe '#with' do
+    subject(:enum_with_meta) { Dry::Types['int'].enum(4, 5, 6).with(meta: { foo: :bar }) }
+
+    it 'preserves metadata' do
+      expect(enum_with_meta.meta).to eql(foo: :bar)
+    end
+  end
 end

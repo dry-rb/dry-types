@@ -90,4 +90,17 @@ RSpec.describe Dry::Types::Definition, '#default' do
       it_behaves_like 'a type with equality defined'
     end
   end
+
+  describe'#with' do
+    subject(:type) { Dry::Types['time'].default { Time.now }.with(meta: { foo: :bar }) }
+
+    it 'creates a new type with provided options' do
+      expect(type.options).to eql(meta: { foo: :bar })
+      expect(type.meta).to eql(foo: :bar)
+    end
+
+    it 'calls the value' do
+      expect(type[nil]).to be_instance_of(Time)
+    end
+  end
 end
