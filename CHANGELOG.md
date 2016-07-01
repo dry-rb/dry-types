@@ -1,3 +1,23 @@
+# v0.8.0 2016-07-01
+
+## Added
+
+* `Struct` now implements `Type` interface so ie `SomeStruct | String` works now (flash-gordon)
+* `:weak` Hash constructor which can partially coerce a hash even when it includes invalid values (solnic)
+* Types include `Dry::Equalizer` now (flash-gordon)
+
+## Fixed
+
+* `Struct#to_hash` descends into arrays too (nepalez)
+* `Default#with` works now (flash-gordon)
+
+## Changed
+
+* `:symbolized` hash schema is now based on `:weak` schema (solnic)
+* `Struct::Value` instances are now **deeply frozen** via ice_nine (backus)
+
+[Compare v0.7.2...v0.8.0](https://github.com/dryrb/dry-types/compare/v0.7.2...v0.8.0)
+
 # v0.7.2 2016-05-11
 
 ## Fixed
@@ -6,6 +26,7 @@
 - Creating an empty schema with input processor no longer fails (lasseebert)
 
 ## Changes
+
 - Allow multiple calls to meta (solnic)
 - Allow capitalised versions of true and false values for boolean coercions (nil0bject)
 - Replace kleisli with dry-monads (flash-gordon)
@@ -14,7 +35,7 @@
 - Coerce empty strings in form posts to blank arrays and hashes (timriley)
 - update to use dry-logic v0.2.3 (fran-worley)
 
-[Compare v0.7.0...v0.7.1](https://github.com/dryrb/dry-types/compare/v0.7.1...v0.7.2)
+[Compare v0.7.1...v0.7.2](https://github.com/dryrb/dry-types/compare/v0.7.1...v0.7.2)
 
 # v0.7.1 2016-04-06
 
