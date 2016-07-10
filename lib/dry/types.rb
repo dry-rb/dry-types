@@ -12,8 +12,6 @@ require 'dry/types/version'
 require 'dry/types/container'
 require 'dry/types/definition'
 require 'dry/types/constructor'
-require 'dry/types/struct'
-require 'dry/types/value'
 
 require 'dry/types/errors'
 
