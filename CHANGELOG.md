@@ -1,3 +1,12 @@
+# v0.8.1 2016-07-13
+
+## Fixed
+
+* Compiler no longer chokes on type nodes without args (solnic)
+* Removed `bin/console` from gem package (solnic)
+
+[Compare v0.8.0...v0.8.1](https://github.com/dryrb/dry-types/compare/v0.8.0...v0.8.1)
+
 # v0.8.0 2016-07-01
 
 ## Added
