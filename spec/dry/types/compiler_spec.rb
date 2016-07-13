@@ -150,6 +150,16 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe form array' do
+    ast = [:type, ['form.array']]
+
+    arr = compiler.(ast)
+
+    expect(arr['oops']).to eql('oops')
+    expect(arr['']).to eql([])
+    expect(arr[%w(a b c)]).to eql(%w(a b c))
+  end
+
+  it 'builds a safe form array with member' do
     ast = [:type, ['form.array', [:type, ['coercible.int']]]]
 
     arr = compiler.(ast)

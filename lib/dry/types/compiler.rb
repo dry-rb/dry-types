@@ -24,7 +24,7 @@ module Dry
         type, args = node
         meth = :"visit_#{type.tr('.', '_')}"
 
-        if respond_to?(meth)
+        if respond_to?(meth) && args
           send(meth, args)
         else
           registry[type]
