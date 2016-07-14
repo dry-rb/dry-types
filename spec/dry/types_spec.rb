@@ -29,6 +29,9 @@ RSpec.describe Dry::Types do
       Dry::Types.register_class(Test::User)
 
       expect(Dry::Types['test.user'].primitive).to be(Test::User)
+
+      user = Dry::Types['test.user']['jane']
+      expect(user.name).to eql('jane')
     end
 
     it 'registers a class and uses a custom constructor method' do
