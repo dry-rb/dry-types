@@ -38,7 +38,7 @@ RSpec.describe Dry::Types do
       module Test
         User = Struct.new(:name) do
           def self.build(name)
-            new(name.to_s)
+            new(name.upcase)
           end
         end
       end
@@ -47,8 +47,8 @@ RSpec.describe Dry::Types do
 
       expect(Dry::Types['test.user'].primitive).to be(Test::User)
 
-      user = Dry::Types['test.user'][:jane]
-      expect(user.name).to eql('jane')
+      user = Dry::Types['test.user']['jane']
+      expect(user.name).to eql('JANE')
     end
   end
 
