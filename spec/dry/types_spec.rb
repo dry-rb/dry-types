@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Dry::Types do
   describe '.register' do
     it 'registers a new type constructor' do
-      class FlatArray
+      module FlatArray
         def self.constructor(input)
           input.flatten
         end
