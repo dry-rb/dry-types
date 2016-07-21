@@ -1,7 +1,7 @@
 module Dry
   module Types
     module Result
-      class Success < Struct.new(:input)
+      class Success < ::Struct.new(:input)
         def success?
           true
         end
@@ -11,7 +11,7 @@ module Dry
         end
       end
 
-      class Failure < Struct.new(:input, :error)
+      class Failure < ::Struct.new(:input, :error)
         def success?
           false
         end

@@ -36,25 +36,5 @@ RSpec.describe Dry::Types::Array do
         end
       end
     end
-
-    context 'struct' do
-      it 'uses struct constructor for member values' do
-        module Test
-          class User < Dry::Types::Struct
-            attribute :name, 'string'
-          end
-        end
-
-        array = Dry::Types['array'].member(Test::User)
-
-        jane, john = array[[{ name: 'Jane' }, { name: 'John' }]]
-
-        expect(jane).to be_instance_of(Test::User)
-        expect(john).to be_instance_of(Test::User)
-
-        expect(jane.name).to eql('Jane')
-        expect(john.name).to eql('John')
-      end
-    end
   end
 end
