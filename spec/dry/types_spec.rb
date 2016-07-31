@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Dry::Types do
   describe '.register' do
     it 'registers a new type constructor' do
-      class FlatArray
+      module FlatArray
         def self.constructor(input)
           input.flatten
         end
@@ -21,31 +21,32 @@ RSpec.describe Dry::Types do
   end
 
   describe '.register_class' do
-    it 'registers a class and uses `.new` method as default constructor' do
-      module Test
-        User = Struct.new(:name)
-      end
-
-      Dry::Types.register_class(Test::User)
-
-      expect(Dry::Types['test.user'].primitive).to be(Test::User)
-    end
-
-    it 'registers a class and uses a custom constructor method' do
+    before do
       module Test
         User = Struct.new(:name) do
           def self.build(name)
-            new(name.to_s)
+            new(name.upcase)
           end
         end
       end
+    end
 
+    it 'registers a class and uses `.new` method as default constructor' do
+      Dry::Types.register_class(Test::User)
+
+      expect(Dry::Types['test.user'].primitive).to be(Test::User)
+
+      user = Dry::Types['test.user']['jane']
+      expect(user.name).to eql('jane')
+    end
+
+    it 'registers a class and uses a custom constructor method' do
       Dry::Types.register_class(Test::User, :build)
 
       expect(Dry::Types['test.user'].primitive).to be(Test::User)
 
-      user = Dry::Types['test.user'][:jane]
-      expect(user.name).to eql('jane')
+      user = Dry::Types['test.user']['jane']
+      expect(user.name).to eql('JANE')
     end
   end
 
