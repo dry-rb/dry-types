@@ -67,13 +67,13 @@ RSpec.describe Dry::Types::Definition do
     subject(:type) { Dry::Types['form.bool'] }
 
     it 'coerces to true' do
-      %w[1 on  t true  y yes].each do |value|
+      %w[1 on T t true  y yes] + [1].each do |value|
         expect(type[value]).to be(true)
       end
     end
 
     it 'coerces to false' do
-      %w[0 off f false n no].each do |value|
+      %w[0 off F f false n no] + [0].each do |value|
         expect(type[value]).to be(false)
       end
     end
