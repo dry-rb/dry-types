@@ -12,11 +12,11 @@ module Dry
         extend Coercions
 
         def self.to_true(input)
-          BOOLEAN_MAP.fetch(input, input)
+          BOOLEAN_MAP.fetch(input.to_s, input)
         end
 
         def self.to_false(input)
-          BOOLEAN_MAP.fetch(input, input)
+          BOOLEAN_MAP.fetch(input.to_s, input)
         end
 
         def self.to_int(input)
