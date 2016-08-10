@@ -69,6 +69,18 @@ RSpec.describe Dry::Types::Enum do
     it_behaves_like 'a type with equality defined'
   end
 
+  describe 'inclusion' do
+    subject(:enum) { Dry::Types['int'].enum(4, 5, 6) }
+
+    it 'returns true for input that is included in the values' do
+      expect(enum.include?(5)).to be true
+    end
+
+    it 'returns false for input that is not included in the values' do
+      expect(enum.include?(7)).to be false
+    end
+  end
+
   describe '#try' do
     subject(:enum) { Dry::Types['int'].enum(4, 5, 6) }
 
