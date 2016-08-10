@@ -46,6 +46,8 @@ module Dry
               '.default(value).enum(*values) instead'
       end
 
+      alias_method :include?, :valid?
+
       # @api public
       #
       # @see Definition#to_ast
