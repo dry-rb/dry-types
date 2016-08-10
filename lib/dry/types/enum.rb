@@ -17,7 +17,7 @@ module Dry
 
       def call(input)
         value =
-          if values.include?(input)
+          if include?(input)
             input
           elsif mapping.key?(input)
             mapping[input]
@@ -26,6 +26,10 @@ module Dry
         type[value || input]
       end
       alias_method :[], :call
+
+      def include?(input)
+        values.include?(input)
+      end
     end
   end
 end
