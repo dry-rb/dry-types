@@ -22,6 +22,8 @@ module Dry
 
     ALL_PRIMITIVES = COERCIBLE.merge(NON_COERCIBLE).freeze
 
+    NON_NIL = ALL_PRIMITIVES.reject { |name, _| name == :nil}.freeze
+
     # Register built-in types that are non-coercible through kernel methods
     ALL_PRIMITIVES.each do |name, primitive|
       register(name.to_s, Definition[primitive].new(primitive))
@@ -38,8 +40,7 @@ module Dry
     end
 
     # Register non-coercible maybe types
-    ALL_PRIMITIVES.each_key do |name|
-      next if name == :nil
+    NON_NIL.each_key do |name|
       register("maybe.strict.#{name}", self["strict.#{name}"].maybe)
     end
 
@@ -49,8 +50,7 @@ module Dry
     end
 
     # Register non-coercible optional types
-    ALL_PRIMITIVES.each_key do |name|
-      next if name == :nil
+    NON_NIL.each_key do |name|
       register("optional.strict.#{name}", self["strict.#{name}"].optional)
     end
 
