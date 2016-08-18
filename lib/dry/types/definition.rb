@@ -41,6 +41,10 @@ module Dry
         false
       end
 
+      def constrained?
+        false
+      end
+
       def call(input)
         input
       end

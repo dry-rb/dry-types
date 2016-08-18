@@ -6,7 +6,7 @@ module Dry
       end
 
       def |(other)
-        klass = is_a?(Constrained) && other.is_a?(Constrained) ? Sum::Constrained : Sum
+        klass = constrained? && other.constrained? ? Sum::Constrained : Sum
         klass.new(self, other)
       end
 
