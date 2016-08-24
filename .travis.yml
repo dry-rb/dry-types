@@ -5,10 +5,9 @@ bundler_args: --without benchmarks tools
 script:
   - bundle exec rake spec
 rvm:
-  - 2.0
-  - 2.1
-  - 2.2
-  - 2.3.0
+  - 2.1.10
+  - 2.2.5
+  - 2.3.1
   - rbx-2
   - jruby-9000
   - ruby-head
