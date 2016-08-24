@@ -12,12 +12,14 @@ require 'dry/types/version'
 require 'dry/types/container'
 require 'dry/types/definition'
 require 'dry/types/constructor'
+require 'dry/types/cache'
 
 require 'dry/types/errors'
 
 module Dry
   module Types
     extend Dry::Configurable
+    extend Cache
 
     Undefined = Object.new.freeze
 
@@ -53,7 +55,7 @@ module Dry
     end
 
     def self.[](name)
-      type_map.fetch_or_store(name) do
+      cache.fetch_or_store(name) do
         case name
         when String
           result = name.match(TYPE_SPEC_REGEX)
@@ -87,10 +89,6 @@ module Dry
 
     def self.identifier(klass)
       Inflecto.underscore(klass).tr('/', '.')
-    end
-
-    def self.type_map
-      @type_map ||= Concurrent::Map.new
     end
 
     def self.type_keys
