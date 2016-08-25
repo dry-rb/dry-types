@@ -2,6 +2,8 @@
 
 * `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
 
+[Compare v0.8.1...HEAD](https://github.com/dryrb/dry-types/compare/v0.8.1...HEAD)
+
 # v0.8.1 2016-07-13
 
 ## Fixed
