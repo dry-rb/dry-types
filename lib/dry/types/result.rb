@@ -1,7 +1,17 @@
+require 'dry/equalizer'
+
 module Dry
   module Types
-    module Result
-      class Success < ::Struct.new(:input)
+    class Result
+      include Dry::Equalizer(:input)
+
+      attr_reader :input
+
+      def initialize(input)
+        @input = input
+      end
+
+      class Success < Result
         def success?
           true
         end
@@ -11,7 +21,16 @@ module Dry
         end
       end
 
-      class Failure < ::Struct.new(:input, :error)
+      class Failure < Result
+        include Dry::Equalizer(:input, :error)
+
+        attr_reader :error
+
+        def initialize(input, error)
+          super(input)
+          @error = error
+        end
+
         def success?
           false
         end
