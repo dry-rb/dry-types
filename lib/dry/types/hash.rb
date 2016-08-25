@@ -23,6 +23,10 @@ module Dry
         schema(type_map, Strict)
       end
 
+      def strict_with_defaults(type_map)
+        schema(type_map, StrictWithDefaults)
+      end
+
       def symbolized(type_map)
         schema(type_map, Symbolized)
       end
