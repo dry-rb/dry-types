@@ -120,14 +120,42 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#rule' do
-    subject(:type) { Dry::Types['strict.nil'] | Dry::Types['strict.string'] }
+    let(:two_addends) { Dry::Types['strict.nil'] | Dry::Types['strict.string'] }
 
-    it 'returns a disjunction from its constrained types' do
-      rule = type.rule
+    shared_examples_for 'a disjunction of constraints' do
+      it 'returns a rule' do
+        rule = type.rule
 
-      expect(rule.(nil)).to be_success
-      expect(rule.('1')).to be_success
-      expect(rule.(1)).to be_failure
+        expect(rule.(nil)).to be_success
+        expect(rule.('1')).to be_success
+        expect(rule.(1)).to be_failure
+      end
+    end
+
+    it_behaves_like 'a disjunction of constraints' do
+      subject(:type) { two_addends }
+    end
+
+    it_behaves_like 'a disjunction of constraints' do
+      subject(:type) { Dry::Types['strict.true'] | two_addends  }
+
+      it 'accepts true' do
+        rule = type.rule
+
+        expect(rule.(true)).to be_success
+        expect(rule.(false)).to be_failure
+      end
+    end
+
+    it_behaves_like 'a disjunction of constraints' do
+      subject(:type) { two_addends | Dry::Types['strict.true'] }
+
+      it 'accepts true' do
+        rule = type.rule
+
+        expect(rule.(true)).to be_success
+        expect(rule.(false)).to be_failure
+      end
     end
   end
 

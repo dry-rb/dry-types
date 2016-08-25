@@ -32,6 +32,10 @@ module Dry
         type.maybe?
       end
 
+      def constrained?
+        type.constrained?
+      end
+
       def respond_to_missing?(meth, include_private = false)
         super || type.respond_to?(meth)
       end

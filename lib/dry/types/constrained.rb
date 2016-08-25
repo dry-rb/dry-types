@@ -41,6 +41,10 @@ module Dry
         with(rule: rule & Types.Rule(options))
       end
 
+      def constrained?
+        true
+      end
+
       private
 
       def decorate?(response)

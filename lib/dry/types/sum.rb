@@ -15,6 +15,10 @@ module Dry
         def rule
           left.rule | right.rule
         end
+
+        def constrained?
+          true
+        end
       end
 
       def initialize(left, right, options = {})
@@ -32,6 +36,10 @@ module Dry
       end
 
       def maybe?
+        false
+      end
+
+      def constrained?
         false
       end
 
