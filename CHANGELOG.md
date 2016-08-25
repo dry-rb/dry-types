@@ -1,5 +1,16 @@
 # v0.9.0 to-be-released
 
+## Added
+
+* `Type#constrained?` method (flash-gordon)
+
+## Fixed
+
+* Summing two constrained types works correctly (flash-gordon)
+
+## Changed
+
+* `Types::Form::Bool` supports upcased true/false values (kirs)
 * `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
 
 [Compare v0.8.1...HEAD](https://github.com/dryrb/dry-types/compare/v0.8.1...HEAD)
