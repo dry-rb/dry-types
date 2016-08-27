@@ -7,14 +7,14 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = [
       :type, [
         'hash', [
-          :strict, [
+          :permissive, [
             [:key, [:email, [:type, 'string']]],
             [:key, [:age, [:type, 'form.int']]],
             [:key, [:admin, [:type, 'form.bool']]],
             [:key, [:address, [
               :type, [
                 'hash', [
-                  :strict, [
+                  :permissive, [
                     [:key, [:city, [:type, 'string']]],
                     [:key, [:street, [:type, 'string']]]
                   ]
@@ -28,7 +28,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     hash = compiler.(ast)
 
-    expect(hash).to be_instance_of(Dry::Types::Hash::Strict)
+    expect(hash).to be_instance_of(Dry::Types::Hash::Permissive)
 
     result = hash[
       email: 'jane@doe.org',

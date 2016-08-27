@@ -43,7 +43,7 @@ module Dry
         end
       end
 
-      class Strict < Schema
+      class Permissive < Schema
         def call(hash, meth = :call)
           member_types.each_with_object({}) do |(key, type), result|
             begin

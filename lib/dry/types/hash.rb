@@ -19,8 +19,8 @@ module Dry
         schema(type_map, Weak)
       end
 
-      def strict(type_map)
-        schema(type_map, Strict)
+      def permissive(type_map)
+        schema(type_map, Permissive)
       end
 
       def symbolized(type_map)
