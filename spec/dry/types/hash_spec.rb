@@ -47,6 +47,22 @@ RSpec.describe Dry::Types::Hash do
         phone: phone.new('+48', '123-456-789')
       )
     end
+
+    it 'applies member types' do
+      input = { name: :John, age: 21, active: 'true', phone: %w[1 234] }
+      result = hash.try(input)
+
+      expect(result).to be_success
+      expect(result.input).to eql(name: 'John', age: 21, active: true, phone: phone.new('1', '234'))
+    end
+
+    it 'keeps original values when applying a member type fails' do
+      input = { age: 'twenty one', active: '0', name: 'John', phone: %w[1 234] }
+      result = hash.try(input)
+
+      expect(result).to be_failure
+      expect(result.input).to eql(age: 'twenty one', active: false, name: 'John', phone: phone.new('1', '234'))
+    end
   end
 
   shared_examples 'strict schema behavior for missing keys' do
@@ -123,23 +139,5 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'strict schema behavior for missing keys'
     include_examples 'strict typing behavior'
-  end
-
-  describe '#try' do
-    it 'applies member types' do
-      input = { name: :John, age: 21, active: 'true', phone: %w[1 234] }
-      result = hash.try(input)
-
-      expect(result).to be_success
-      expect(result.input).to eql(name: 'John', age: 21, active: true, phone: phone.new('1', '234'))
-    end
-
-    it 'keeps original values when applying a member type fails' do
-      input = { age: 'twenty one', active: '0', name: 'John', phone: %w[1 234] }
-      result = hash.try(input)
-
-      expect(result).to be_failure
-      expect(result.input).to eql(age: 'twenty one', active: false, name: 'John', phone: phone.new('1', '234'))
-    end
   end
 end
