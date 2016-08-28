@@ -49,34 +49,55 @@ RSpec.describe Dry::Types::Hash do
     end
   end
 
+  shared_examples 'strict schema behavior for missing keys' do
+    it 'raises MissingKeyError if input is missing a key' do
+      expect {
+        hash[name: :Jane, active: true, phone: ['+48', '123-456-789']]
+      }.to raise_error(
+        Dry::Types::MissingKeyError, /:age is missing in Hash input/
+      )
+    end
+  end
+
+  shared_examples 'weak schema behavior for missing keys' do
+    it 'allows omitting keys' do
+      expect(hash[{}]).to eql({})
+    end
+  end
+
   describe '#schema' do
     let(:hash) { Dry::Types['hash'].schema(hash_schema) }
 
     include_examples 'hash schema behavior'
+    include_examples 'weak schema behavior for missing keys'
   end
 
   describe '#weak' do
     let(:hash) { Dry::Types['hash'].weak(hash_schema) }
 
     include_examples 'hash schema behavior'
+    include_examples 'weak schema behavior for missing keys'
   end
 
   describe '#symbolized' do
     let(:hash) { Dry::Types['hash'].symbolized(hash_schema) }
 
     include_examples 'hash schema behavior'
+    include_examples 'weak schema behavior for missing keys'
   end
 
   describe '#permissive' do
     let(:hash) { Dry::Types['hash'].permissive(hash_schema) }
 
     include_examples 'hash schema behavior'
+    include_examples 'strict schema behavior for missing keys'
   end
 
   describe '#strict' do
     let(:hash) { Dry::Types['hash'].strict(hash_schema) }
 
     include_examples 'hash schema behavior'
+    include_examples 'strict schema behavior for missing keys'
   end
 
   describe '#weak' do
@@ -84,16 +105,6 @@ RSpec.describe Dry::Types::Hash do
 
     it 'returns a weakly-typed hash' do
       expect(hash[age: 'oops']).to eql(age: 'oops')
-    end
-  end
-
-  describe '#permissive' do
-    let(:hash) { Dry::Types['hash'].permissive(hash_schema) }
-
-    it 'fails if key omitted' do
-      expect { hash.call({}) }
-        .to raise_error(Dry::Types::MissingKeyError)
-        .with_message(/:name is missing/)
     end
   end
 
@@ -125,14 +136,6 @@ RSpec.describe Dry::Types::Hash do
         hash[name: 'Jane', age: '21', active: true, phone: nil]
       }.to raise_error(
         Dry::Types::SchemaError, '"21" (String) has invalid type for :age'
-      )
-    end
-
-    it 'raises MissingKeyError if input is missing a key' do
-      expect {
-        hash[name: :Jane, active: true, phone: ['+48', '123-456-789']]
-      }.to raise_error(
-        Dry::Types::MissingKeyError, /:age is missing in Hash input/
       )
     end
   end
