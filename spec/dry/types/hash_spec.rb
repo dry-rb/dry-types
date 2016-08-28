@@ -19,6 +19,16 @@ RSpec.describe Dry::Types::Hash do
     end
   end
 
+  describe '#permissive' do
+    let(:permissive) { Dry::Types['hash'].permissive(date: 'form.date') }
+
+    it 'fails if key omitted' do
+      expect { permissive.call({}) }
+        .to raise_error(Dry::Types::MissingKeyError)
+        .with_message(/:date is missing/)
+    end
+  end
+
   describe '#try' do
     it 'applies member types' do
       input = { date: '2011-10-09', bool: '1' }
