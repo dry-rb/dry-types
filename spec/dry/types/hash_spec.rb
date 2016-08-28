@@ -27,16 +27,60 @@ RSpec.describe Dry::Types::Hash do
     )
   end
 
-  it_behaves_like Dry::Types::Definition do
-    let(:type) { hash }
+  shared_examples 'hash schema behavior' do
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { hash }
+    end
+
+    it_behaves_like 'Dry::Types::Definition#meta' do
+      let(:type) { hash }
+    end
+
+    it 'builds hash using provided schema' do
+      user_hash = hash[
+        name: :Jane, age: 21, active: true,
+        phone: ['+48', '123-456-789']
+      ]
+
+      expect(user_hash).to eql(
+        name: 'Jane', age: 21, active: true,
+        phone: phone.new('+48', '123-456-789')
+      )
+    end
+  end
+
+  describe '#schema' do
+    let(:hash) { Dry::Types['hash'].schema(hash_schema) }
+
+    include_examples 'hash schema behavior'
   end
 
   describe '#weak' do
     let(:hash) { Dry::Types['hash'].weak(hash_schema) }
 
-    it_behaves_like Dry::Types::Definition do
-      let(:type) { hash }
-    end
+    include_examples 'hash schema behavior'
+  end
+
+  describe '#symbolized' do
+    let(:hash) { Dry::Types['hash'].symbolized(hash_schema) }
+
+    include_examples 'hash schema behavior'
+  end
+
+  describe '#permissive' do
+    let(:hash) { Dry::Types['hash'].permissive(hash_schema) }
+
+    include_examples 'hash schema behavior'
+  end
+
+  describe '#strict' do
+    let(:hash) { Dry::Types['hash'].strict(hash_schema) }
+
+    include_examples 'hash schema behavior'
+  end
+
+  describe '#weak' do
+    let(:hash) { Dry::Types['hash'].weak(hash_schema) }
 
     it 'returns a weakly-typed hash' do
       expect(hash[age: 'oops']).to eql(age: 'oops')
@@ -74,18 +118,6 @@ RSpec.describe Dry::Types::Hash do
   describe '#[]' do
     subject(:hash) do
       Dry::Types['hash'].permissive(hash_schema)
-    end
-
-    it 'builds hash using provided schema' do
-      user_hash = hash[
-        name: :Jane, age: 21, active: true,
-        phone: ['+48', '123-456-789']
-      ]
-
-      expect(user_hash).to eql(
-        name: 'Jane', age: 21, active: true,
-        phone: phone.new('+48', '123-456-789')
-      )
     end
 
     it 'raises SchemaError if constructing one of the values raised an error' do
