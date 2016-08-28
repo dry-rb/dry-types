@@ -47,6 +47,28 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     )
   end
 
+  it 'builds a strict hash' do
+    ast = [
+      :type, [
+        'hash', [
+          :strict, [
+            [:key, [:email, [:type, 'string']]],
+          ]
+        ]
+      ]
+    ]
+
+    hash = compiler.(ast)
+
+    expect(hash).to be_instance_of(Dry::Types::Hash::Strict)
+
+    params = { email: 'jane@doe.org', unexpected1: 'wow', unexpected2: 'wow' }
+    expect { hash[params] }
+      .to raise_error(Dry::Types::UnknownKeysError, /unexpected1, :unexpected2/)
+
+    expect(hash[email: 'jane@doe.org']).to eql(email: 'jane@doe.org')
+  end
+
   it 'builds a coercible hash' do
     ast = [
       :type, [

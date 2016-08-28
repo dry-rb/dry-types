@@ -23,6 +23,10 @@ module Dry
         schema(type_map, Permissive)
       end
 
+      def strict(type_map)
+        schema(type_map, Strict)
+      end
+
       def symbolized(type_map)
         schema(type_map, Symbolized)
       end
