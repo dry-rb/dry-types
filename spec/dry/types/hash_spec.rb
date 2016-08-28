@@ -8,22 +8,22 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#weak' do
-    let(:weak) { Dry::Types['hash'].weak(date: 'form.date') }
+    let(:hash) { Dry::Types['hash'].weak(date: 'form.date') }
 
     it_behaves_like Dry::Types::Definition do
-      let(:type) { weak }
+      let(:type) { hash }
     end
 
     it 'returns a weakly-typed hash' do
-      expect(weak[date: 'oops']).to eql(date: 'oops')
+      expect(hash[date: 'oops']).to eql(date: 'oops')
     end
   end
 
   describe '#permissive' do
-    let(:permissive) { Dry::Types['hash'].permissive(date: 'form.date') }
+    let(:hash) { Dry::Types['hash'].permissive(date: 'form.date') }
 
     it 'fails if key omitted' do
-      expect { permissive.call({}) }
+      expect { hash.call({}) }
         .to raise_error(Dry::Types::MissingKeyError)
         .with_message(/:date is missing/)
     end
