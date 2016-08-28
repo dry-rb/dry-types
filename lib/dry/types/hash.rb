@@ -12,7 +12,7 @@ module Dry
             end
         }
 
-        klass.new(primitive, options.merge(member_types: member_types))
+        klass.new(primitive, member_types: member_types)
       end
 
       def weak(type_map)
