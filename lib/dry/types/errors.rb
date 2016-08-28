@@ -10,7 +10,10 @@ module Dry
       end
     end
 
-    class SchemaKeyError < KeyError
+    SchemaKeyError = Class.new(KeyError)
+    private_constant(:SchemaKeyError)
+
+    class MissingKeyError < SchemaKeyError
       def initialize(key)
         super(":#{key} is missing in Hash input")
       end

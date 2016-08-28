@@ -43,7 +43,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     )
 
     expect { hash[foo: 'jane@doe.org', age: '20', admin: '1'] }.to raise_error(
-      Dry::Types::SchemaKeyError, /email/
+      Dry::Types::MissingKeyError, /email/
     )
   end
 

@@ -52,7 +52,7 @@ module Dry
             rescue TypeError
               raise SchemaError.new(key, value)
             rescue KeyError
-              raise SchemaKeyError.new(key)
+              raise MissingKeyError.new(key)
             end
           end
         end
