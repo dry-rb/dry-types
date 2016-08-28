@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Hash do
   subject(:hash) do
-    Dry::Types['hash'].schema(date: 'form.date', bool: 'form.bool')
+    Dry::Types['coercible.hash'].schema(date: 'form.date', bool: 'form.bool')
   end
 
   it_behaves_like Dry::Types::Definition do
@@ -8,7 +8,7 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#weak' do
-    let(:hash) { Dry::Types['hash'].weak(date: 'form.date') }
+    let(:hash) { Dry::Types['coercible.hash'].weak(date: 'form.date', bool: 'form.bool') }
 
     it_behaves_like Dry::Types::Definition do
       let(:type) { hash }
@@ -20,7 +20,7 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#permissive' do
-    let(:hash) { Dry::Types['hash'].permissive(date: 'form.date') }
+    let(:hash) { Dry::Types['coercible.hash'].permissive(date: 'form.date', bool: 'form.bool') }
 
     it 'fails if key omitted' do
       expect { hash.call({}) }
