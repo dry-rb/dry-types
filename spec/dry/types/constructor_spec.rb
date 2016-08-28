@@ -68,10 +68,8 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe 'equality' do
-    def type
-      Dry::Types::Constructor.new(String, &:strip)
+    it_behaves_like 'a type with equality defined' do
+      let(:type) { Dry::Types::Constructor.new(String, &:strip) }
     end
-
-    it_behaves_like 'a type with equality defined'
   end
 end

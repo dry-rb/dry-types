@@ -120,19 +120,15 @@ RSpec.describe Dry::Types::Constrained do
 
   describe 'equality' do
     context 'with a constructor type' do
-      def type
-        Dry::Types['coercible.hash'].constrained(size: 1)
+      it_behaves_like 'a type with equality defined' do
+        let(:type) { Dry::Types['coercible.hash'].constrained(size: 1) }
       end
-
-      it_behaves_like 'a type with equality defined'
     end
 
     context 'with a sum type' do
-      def type
-        Dry::Types['string'].constrained(size: 4).maybe
+      it_behaves_like 'a type with equality defined' do
+        let(:type) { Dry::Types['string'].constrained(size: 4).maybe }
       end
-
-      it_behaves_like 'a type with equality defined'
     end
   end
 end

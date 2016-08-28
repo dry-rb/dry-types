@@ -17,11 +17,9 @@ RSpec.describe Dry::Types::Definition, '#safe' do
     end
 
     describe 'equality' do
-      def type
-        Dry::Types['coercible.string'].constrained(min_size: 5).safe
+      it_behaves_like 'a type with equality defined' do
+        let(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).safe }
       end
-
-      it_behaves_like 'a type with equality defined'
     end
   end
 
