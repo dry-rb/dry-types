@@ -19,6 +19,12 @@ module Dry
       end
     end
 
+    class UnknownKeysError < SchemaKeyError
+      def initialize(*keys)
+        super("unexpected keys #{keys.inspect} in Hash input")
+      end
+    end
+
     ConstraintError = Class.new(TypeError) do
       attr_reader :result
 
