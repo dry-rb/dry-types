@@ -1,6 +1,30 @@
 RSpec.describe Dry::Types::Hash do
   subject(:hash) do
-    Dry::Types['coercible.hash'].schema(date: 'form.date', bool: 'form.bool')
+    Dry::Types['hash'].schema(hash_schema)
+  end
+
+  let(:hash_schema) do
+    {
+      name: "coercible.string",
+      age: "strict.int",
+      active: "form.bool",
+      phone: Dry::Types['phone']
+    }
+  end
+
+  let(:phone) { Dry::Types['phone'].primitive }
+
+  before do
+    phone = Struct.new(:prefix, :number) do
+      def self.name
+        'Phone'
+      end
+    end
+
+    Dry::Types.register(
+      "phone",
+      Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
+    )
   end
 
   it_behaves_like Dry::Types::Definition do
@@ -8,75 +32,53 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#weak' do
-    let(:hash) { Dry::Types['coercible.hash'].weak(date: 'form.date', bool: 'form.bool') }
+    let(:hash) { Dry::Types['hash'].weak(hash_schema) }
 
     it_behaves_like Dry::Types::Definition do
       let(:type) { hash }
     end
 
     it 'returns a weakly-typed hash' do
-      expect(hash[date: 'oops']).to eql(date: 'oops')
+      expect(hash[age: 'oops']).to eql(age: 'oops')
     end
   end
 
   describe '#permissive' do
-    let(:hash) { Dry::Types['coercible.hash'].permissive(date: 'form.date', bool: 'form.bool') }
+    let(:hash) { Dry::Types['hash'].permissive(hash_schema) }
 
     it 'fails if key omitted' do
       expect { hash.call({}) }
         .to raise_error(Dry::Types::MissingKeyError)
-        .with_message(/:date is missing/)
+        .with_message(/:name is missing/)
     end
   end
 
   describe '#try' do
     it 'applies member types' do
-      input = { date: '2011-10-09', bool: '1' }
+      input = { name: :John, age: 21, active: 'true', phone: %w[1 234] }
       result = hash.try(input)
 
       expect(result).to be_success
-      expect(result.input).to eql(date: Date.new(2011, 10, 9), bool: true)
+      expect(result.input).to eql(name: 'John', age: 21, active: true, phone: phone.new('1', '234'))
     end
 
     it 'keeps original values when applying a member type fails' do
-      input = { date: 'not-a-date', bool: '0' }
+      input = { age: 'twenty one', active: '0', name: 'John', phone: %w[1 234] }
       result = hash.try(input)
 
       expect(result).to be_failure
-      expect(result.input).to eql(date: 'not-a-date', bool: false)
+      expect(result.input).to eql(age: 'twenty one', active: false, name: 'John', phone: phone.new('1', '234'))
     end
   end
 
   describe '#[]' do
     subject(:hash) do
-      Dry::Types['coercible.hash'].permissive(
-        name: "coercible.string",
-        age: "coercible.int",
-        active: "strict.bool",
-        phone: Dry::Types['phone']
-      )
-    end
-
-    let(:phone) do
-      Dry::Types['phone'].primitive
-    end
-
-    before do
-      phone = Struct.new(:prefix, :number) do
-        def self.name
-          'Phone'
-        end
-      end
-
-      Dry::Types.register(
-        "phone",
-        Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
-      )
+      Dry::Types['hash'].permissive(hash_schema)
     end
 
     it 'builds hash using provided schema' do
       user_hash = hash[
-        name: :Jane, age: '21', active: true,
+        name: :Jane, age: 21, active: true,
         phone: ['+48', '123-456-789']
       ]
 
@@ -88,9 +90,9 @@ RSpec.describe Dry::Types::Hash do
 
     it 'raises SchemaError if constructing one of the values raised an error' do
       expect {
-        hash[name: 'Jane', age: 21, active: 'true', phone: nil]
+        hash[name: 'Jane', age: '21', active: true, phone: nil]
       }.to raise_error(
-        Dry::Types::SchemaError, '"true" (String) has invalid type for :active'
+        Dry::Types::SchemaError, '"21" (String) has invalid type for :age'
       )
     end
 
