@@ -65,11 +65,32 @@ RSpec.describe Dry::Types::Hash do
     end
   end
 
+  shared_examples 'weak typing behavior' do
+    it 'preserves successful coercions and ignores failed coercions' do
+      expect(hash[name: :Jane, age: 'oops', active: true, phone: []])
+        .to eql(name: 'Jane', age: 'oops', active: true, phone: phone.new)
+    end
+  end
+
+  shared_examples 'strict typing behavior' do
+    it 'fails if any coercions are unsuccessful' do
+      expect { hash[name: :Jane, age: 'oops', active: true, phone: []] }
+        .to raise_error(Dry::Types::SchemaError, '"oops" (String) has invalid type for :age')
+    end
+  end
+
   describe '#schema' do
     let(:hash) { Dry::Types['hash'].schema(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
+
+    # This is essentially the same test as "strict typing behavior" but
+    # the error is different for some reason
+    it 'fails if any coercions are unsuccessful' do
+      expect { hash[name: :Jane, age: 'oops', active: true, phone: []] }
+        .to raise_error(Dry::Types::ConstraintError, /"oops" violates constraints/)
+    end
   end
 
   describe '#weak' do
@@ -77,6 +98,7 @@ RSpec.describe Dry::Types::Hash do
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
+    include_examples 'weak typing behavior'
   end
 
   describe '#symbolized' do
@@ -84,6 +106,7 @@ RSpec.describe Dry::Types::Hash do
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
+    include_examples 'weak typing behavior'
   end
 
   describe '#permissive' do
@@ -91,6 +114,7 @@ RSpec.describe Dry::Types::Hash do
 
     include_examples 'hash schema behavior'
     include_examples 'strict schema behavior for missing keys'
+    include_examples 'strict typing behavior'
   end
 
   describe '#strict' do
@@ -98,14 +122,7 @@ RSpec.describe Dry::Types::Hash do
 
     include_examples 'hash schema behavior'
     include_examples 'strict schema behavior for missing keys'
-  end
-
-  describe '#weak' do
-    let(:hash) { Dry::Types['hash'].weak(hash_schema) }
-
-    it 'returns a weakly-typed hash' do
-      expect(hash[age: 'oops']).to eql(age: 'oops')
-    end
+    include_examples 'strict typing behavior'
   end
 
   describe '#try' do
@@ -123,20 +140,6 @@ RSpec.describe Dry::Types::Hash do
 
       expect(result).to be_failure
       expect(result.input).to eql(age: 'twenty one', active: false, name: 'John', phone: phone.new('1', '234'))
-    end
-  end
-
-  describe '#[]' do
-    subject(:hash) do
-      Dry::Types['hash'].permissive(hash_schema)
-    end
-
-    it 'raises SchemaError if constructing one of the values raised an error' do
-      expect {
-        hash[name: 'Jane', age: '21', active: true, phone: nil]
-      }.to raise_error(
-        Dry::Types::SchemaError, '"21" (String) has invalid type for :age'
-      )
     end
   end
 end
