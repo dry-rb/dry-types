@@ -5,6 +5,10 @@ RSpec.describe Dry::Types::Array do
         it 'returns an array with correct member values' do
           expect(array[Set[1, 2, 3]]).to eql(%w(1 2 3))
         end
+
+        it_behaves_like Dry::Types::Definition do
+          subject(:type) { array }
+        end
       end
 
       context 'using string identifiers' do
@@ -33,6 +37,10 @@ RSpec.describe Dry::Types::Array do
             Dry::Types::ConstraintError,
             '1 violates constraints (gt?(2) failed)'
           )
+        end
+
+        it_behaves_like Dry::Types::Definition do
+          subject(:type) { array }
         end
       end
     end

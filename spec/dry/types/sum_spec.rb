@@ -4,6 +4,8 @@ RSpec.describe Dry::Types::Sum do
 
     it_behaves_like 'Dry::Types::Definition#meta'
 
+    it_behaves_like 'Dry::Types::Definition without primitive'
+
     it 'is frozen' do
       expect(type).to be_frozen
     end
@@ -160,10 +162,8 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe 'equality' do
-    def type
-      Dry::Types['int'] | Dry::Types['string']
+    it_behaves_like 'a type with equality defined' do
+      let(:type) { Dry::Types['int'] | Dry::Types['string'] }
     end
-
-    it_behaves_like 'a type with equality defined'
   end
 end
