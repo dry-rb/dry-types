@@ -63,6 +63,19 @@ RSpec.describe Dry::Types::Hash do
       expect(result).to be_failure
       expect(result.input).to eql(age: 'twenty one', active: false, name: 'John', phone: phone.new('1', '234'))
     end
+
+    it 'yields failure on #try when applying a member type fails' do
+      input = { age: 'twenty one', active: '0', name: 'John', phone: %w[1 234] }
+
+      # assert that a failed #try yields a failure result
+      expect { |rspec_probe| hash.try(input, &rspec_probe) }
+        .to yield_with_args(instance_of(Dry::Types::Result::Failure))
+
+      # assert that the failure result provides context for the failing input
+      hash.try(input) do |failure|
+        expect(failure.error[:age].success?).to be(false)
+      end
+    end
   end
 
   shared_examples 'strict schema behavior for missing keys' do
