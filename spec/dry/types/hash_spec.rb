@@ -28,12 +28,17 @@ RSpec.describe Dry::Types::Hash do
   end
 
   shared_examples 'hash schema behavior' do
-    it_behaves_like Dry::Types::Definition do
-      let(:type) { hash }
+    let(:type) { Dry::Types['hash'] }
+
+    let(:primitive) do
+      type.meta(my: :metadata)
     end
 
-    it_behaves_like 'Dry::Types::Definition#meta' do
-      let(:type) { hash }
+    it_behaves_like Dry::Types::Definition
+    it_behaves_like 'Dry::Types::Definition#meta'
+
+    it 'preserves metadata' do
+      expect(hash.meta).to eql(my: :metadata)
     end
 
     it 'has a Hash primitive' do
@@ -152,7 +157,7 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#schema' do
-    let(:hash) { Dry::Types['hash'].schema(hash_schema) }
+    let(:hash) { primitive.schema(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
@@ -167,7 +172,7 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#weak' do
-    let(:hash) { Dry::Types['hash'].weak(hash_schema) }
+    let(:hash) { primitive.weak(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
@@ -187,7 +192,7 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#symbolized' do
-    let(:hash) { Dry::Types['hash'].symbolized(hash_schema) }
+    let(:hash) { primitive.symbolized(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
@@ -196,7 +201,7 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#permissive' do
-    let(:hash) { Dry::Types['hash'].permissive(hash_schema) }
+    let(:hash) { primitive.permissive(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'strict schema behavior for missing keys'
@@ -204,7 +209,7 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#strict' do
-    let(:hash) { Dry::Types['hash'].strict(hash_schema) }
+    let(:hash) { primitive.strict(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'strict schema behavior for missing keys'
