@@ -4,7 +4,7 @@ module Dry
       class Schema < Hash
         attr_reader :member_types
 
-        def initialize(primitive, options = {})
+        def initialize(primitive, options)
           @member_types = options.fetch(:member_types)
           super
         end
@@ -79,7 +79,7 @@ module Dry
       end
 
       class Weak < Schema
-        def self.new(primitive, options = {})
+        def self.new(primitive, options)
           member_types = options.
             fetch(:member_types, {}).
             each_with_object({}) { |(k, t), res| res[k] = t.safe }
