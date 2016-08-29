@@ -61,12 +61,6 @@ RSpec.describe Dry::Types::Enum do
     end
   end
 
-  describe 'equality' do
-    it_behaves_like 'a type with equality defined' do
-      let(:type) { Dry::Types['strict.string'].enum('foo', 'bar', 'baz') }
-    end
-  end
-
   describe '#try' do
     subject(:enum) { Dry::Types['int'].enum(4, 5, 6) }
 

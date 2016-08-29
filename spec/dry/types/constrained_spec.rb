@@ -117,18 +117,4 @@ RSpec.describe Dry::Types::Constrained do
       expect { type[%w(foo bar)] }.to raise_error(Dry::Types::ConstraintError)
     end
   end
-
-  describe 'equality' do
-    context 'with a constructor type' do
-      it_behaves_like 'a type with equality defined' do
-        let(:type) { Dry::Types['coercible.hash'].constrained(size: 1) }
-      end
-    end
-
-    context 'with a sum type' do
-      it_behaves_like 'a type with equality defined' do
-        let(:type) { Dry::Types['string'].constrained(size: 4).maybe }
-      end
-    end
-  end
 end

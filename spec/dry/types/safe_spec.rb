@@ -15,12 +15,6 @@ RSpec.describe Dry::Types::Definition, '#safe' do
     it 'aliases #[] as #call' do
       expect(type.call(:passing)).to eql('passing')
     end
-
-    describe 'equality' do
-      it_behaves_like 'a type with equality defined' do
-        let(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).safe }
-      end
-    end
   end
 
   context 'with a form hash' do

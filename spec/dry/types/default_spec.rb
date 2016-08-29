@@ -87,20 +87,6 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
   end
 
-  describe 'equality' do
-    context 'with a static value' do
-      it_behaves_like 'a type with equality defined' do
-        let(:type) { Dry::Types['strict.string'].default('foo') }
-      end
-    end
-
-    context 'with a callable value' do
-      it_behaves_like 'a type with equality defined' do
-        let(:type) { Dry::Types['strict.string'].default { 'foo' } }
-      end
-    end
-  end
-
   describe'#with' do
     subject(:type) { Dry::Types['time'].default { Time.now }.with(meta: { foo: :bar }) }
 

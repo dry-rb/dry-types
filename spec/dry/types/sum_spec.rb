@@ -160,10 +160,4 @@ RSpec.describe Dry::Types::Sum do
       end
     end
   end
-
-  describe 'equality' do
-    it_behaves_like 'a type with equality defined' do
-      let(:type) { Dry::Types['int'] | Dry::Types['string'] }
-    end
-  end
 end

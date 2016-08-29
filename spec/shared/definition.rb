@@ -26,6 +26,18 @@ RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
       expect(type.valid?(1)).to be_boolean
     end
   end
+
+  describe '#eql?' do
+    it 'has #eql? defined' do
+      expect(type).to eql(type)
+    end
+  end
+
+  describe '#==' do
+    it 'has #== defined' do
+      expect(type).to eq(type)
+    end
+  end
 end
 
 RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
