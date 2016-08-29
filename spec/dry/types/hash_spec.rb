@@ -81,6 +81,22 @@ RSpec.describe Dry::Types::Hash do
         expect(failure.error[:age].success?).to be(false)
       end
     end
+
+    context 'when schema specifies a default value' do
+      let(:hash_schema) do
+        {
+          name: "coercible.string",
+          age: Dry::Types["strict.int"].default(21),
+          active: "form.bool",
+          phone: Dry::Types['phone']
+        }
+      end
+
+      it 'fills in default value when input value is nil' do
+        user = hash.call(name: :John, age: nil, active: '1', phone: [])
+        expect(user[:age]).to be(21)
+      end
+    end
   end
 
   shared_examples 'strict schema behavior for missing keys' do
@@ -113,11 +129,30 @@ RSpec.describe Dry::Types::Hash do
     end
   end
 
+  shared_examples 'sets default value behavior when keys are omitted' do
+    context 'when default value for :age is 21' do
+      let(:hash_schema) do
+        {
+          name: "coercible.string",
+          age: Dry::Types["strict.int"].default(21),
+          active: "form.bool",
+          phone: Dry::Types['phone']
+        }
+      end
+
+      it 'fills in default value when key is omitted' do
+        user = hash.call(name: :John, active: '1', phone: [])
+        expect(user[:age]).to be(21)
+      end
+    end
+  end
+
   describe '#schema' do
     let(:hash) { Dry::Types['hash'].schema(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
+    include_examples 'sets default value behavior when keys are omitted'
 
     # This is essentially the same test as "strict typing behavior" but
     # the error is different for some reason
@@ -133,6 +168,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
     include_examples 'weak typing behavior'
+    include_examples 'sets default value behavior when keys are omitted'
   end
 
   describe '#symbolized' do
@@ -141,6 +177,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
     include_examples 'weak typing behavior'
+    include_examples 'sets default value behavior when keys are omitted'
   end
 
   describe '#permissive' do
