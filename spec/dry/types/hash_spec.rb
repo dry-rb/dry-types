@@ -36,11 +36,16 @@ RSpec.describe Dry::Types::Hash do
       let(:type) { hash }
     end
 
+    it 'is callable via #[]' do
+      params = { name: :Jane, age: 21, active: true, phone: [] }
+      expect(hash[params]).to eql(hash.call(params))
+    end
+
     it 'builds hash using provided schema' do
-      user_hash = hash[
+      user_hash = hash.call(
         name: :Jane, age: 21, active: true,
         phone: ['+48', '123-456-789']
-      ]
+      )
 
       expect(user_hash).to eql(
         name: 'Jane', age: 21, active: true,
@@ -81,7 +86,7 @@ RSpec.describe Dry::Types::Hash do
   shared_examples 'strict schema behavior for missing keys' do
     it 'raises MissingKeyError if input is missing a key' do
       expect {
-        hash[name: :Jane, active: true, phone: ['+48', '123-456-789']]
+        hash.call(name: :Jane, active: true, phone: ['+48', '123-456-789'])
       }.to raise_error(
         Dry::Types::MissingKeyError, /:age is missing in Hash input/
       )
@@ -96,14 +101,14 @@ RSpec.describe Dry::Types::Hash do
 
   shared_examples 'weak typing behavior' do
     it 'preserves successful coercions and ignores failed coercions' do
-      expect(hash[name: :Jane, age: 'oops', active: true, phone: []])
+      expect(hash.call(name: :Jane, age: 'oops', active: true, phone: []))
         .to eql(name: 'Jane', age: 'oops', active: true, phone: phone.new)
     end
   end
 
   shared_examples 'strict typing behavior' do
     it 'fails if any coercions are unsuccessful' do
-      expect { hash[name: :Jane, age: 'oops', active: true, phone: []] }
+      expect { hash.call(name: :Jane, age: 'oops', active: true, phone: []) }
         .to raise_error(Dry::Types::SchemaError, '"oops" (String) has invalid type for :age')
     end
   end
@@ -117,7 +122,7 @@ RSpec.describe Dry::Types::Hash do
     # This is essentially the same test as "strict typing behavior" but
     # the error is different for some reason
     it 'fails if any coercions are unsuccessful' do
-      expect { hash[name: :Jane, age: 'oops', active: true, phone: []] }
+      expect { hash.call(name: :Jane, age: 'oops', active: true, phone: []) }
         .to raise_error(Dry::Types::ConstraintError, /"oops" violates constraints/)
     end
   end
