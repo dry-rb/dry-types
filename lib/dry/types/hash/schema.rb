@@ -88,7 +88,7 @@ module Dry
         end
 
         def try(hash, &block)
-          if hash.is_a?(::Hash)
+          if hash.instance_of?(::Hash)
             super
           else
             result = failure(hash, "#{hash} must be a hash")
