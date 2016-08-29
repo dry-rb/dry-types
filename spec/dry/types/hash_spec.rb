@@ -36,6 +36,10 @@ RSpec.describe Dry::Types::Hash do
       let(:type) { hash }
     end
 
+    it 'has a Hash primitive' do
+      expect(hash.primitive).to be(::Hash)
+    end
+
     it 'is callable via #[]' do
       params = { name: :Jane, age: 21, active: true, phone: [] }
       expect(hash[params]).to eql(hash.call(params))
