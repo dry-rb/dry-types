@@ -115,6 +115,8 @@ module Dry
         end
         alias_method :[], :call
       end
+
+      private_constant(*constants(false))
     end
   end
 end
