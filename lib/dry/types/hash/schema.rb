@@ -4,7 +4,7 @@ module Dry
       class Schema < Hash
         attr_reader :member_types
 
-        def initialize(primitive, options)
+        def initialize(_primitive, options)
           @member_types = options.fetch(:member_types)
           super
         end
