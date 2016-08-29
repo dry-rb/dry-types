@@ -81,7 +81,7 @@ module Dry
       class Weak < Schema
         def self.new(primitive, options)
           member_types = options.
-            fetch(:member_types, {}).
+            fetch(:member_types).
             each_with_object({}) { |(k, t), res| res[k] = t.safe }
 
           super(primitive, options.merge(member_types: member_types))
