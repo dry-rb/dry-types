@@ -169,6 +169,17 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'weak schema behavior for missing keys'
     include_examples 'weak typing behavior'
     include_examples 'sets default value behavior when keys are omitted'
+
+    it 'yields a special failure if #try is given a non-hash' do
+      invalid_input = double(:not_a_hash)
+
+      expect { |rspec_probe| hash.try(invalid_input, &rspec_probe) }
+        .to yield_with_args(instance_of(Dry::Types::Result::Failure))
+
+      hash.try(invalid_input) do |failure|
+        expect(failure.error).to eql('#[Double :not_a_hash] must be a hash')
+      end
+    end
   end
 
   describe '#symbolized' do
