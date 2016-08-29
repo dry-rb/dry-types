@@ -12,7 +12,7 @@ module Dry
         def call(hash, meth = :call)
           member_types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)
-              result[key] = type.__send__(meth, hash.fetch(key))
+              result[key] = type.public_send(meth, hash.fetch(key))
             else
               resolve_missing_value(result, key, type)
             end
@@ -48,7 +48,7 @@ module Dry
           member_types.each_with_object({}) do |(key, type), result|
             begin
               value = hash.fetch(key)
-              result[key] = type.__send__(meth, value)
+              result[key] = type.public_send(meth, value)
             rescue TypeError
               raise SchemaError.new(key, value)
             rescue KeyError
@@ -67,7 +67,7 @@ module Dry
           member_types.each_with_object({}) do |(key, type), result|
             begin
               value = hash.fetch(key)
-              result[key] = type.__send__(meth, value)
+              result[key] = type.public_send(meth, value)
             rescue TypeError
               raise SchemaError.new(key, value)
             rescue KeyError
@@ -101,12 +101,12 @@ module Dry
         def call(hash, meth = :call)
           member_types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)
-              result[key] = type.__send__(meth, hash.fetch(key))
+              result[key] = type.public_send(meth, hash.fetch(key))
             else
               key_name = key.to_s
 
               if hash.key?(key_name)
-                result[key] = type.__send__(meth, hash.fetch(key_name))
+                result[key] = type.public_send(meth, hash.fetch(key_name))
               else
                 resolve_missing_value(result, key, type)
               end
