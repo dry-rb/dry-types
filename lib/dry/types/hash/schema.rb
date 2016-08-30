@@ -52,7 +52,26 @@ module Dry
             rescue TypeError
               raise SchemaError.new(key, value)
             rescue KeyError
-              raise SchemaKeyError.new(key)
+              raise MissingKeyError.new(key)
+            end
+          end
+        end
+        alias_method :[], :call
+      end
+
+      class Strict < Schema
+        def call(hash, meth = :call)
+          unexpected = hash.keys - member_types.keys
+          raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
+
+          member_types.each_with_object({}) do |(key, type), result|
+            begin
+              value = hash.fetch(key)
+              result[key] = type.__send__(meth, value)
+            rescue TypeError
+              raise SchemaError.new(key, value)
+            rescue KeyError
+              raise MissingKeyError.new(key)
             end
           end
         end

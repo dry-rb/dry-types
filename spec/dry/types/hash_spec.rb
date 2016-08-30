@@ -76,11 +76,11 @@ RSpec.describe Dry::Types::Hash do
       )
     end
 
-    it 'raises SchemaKeyError if input is missing a key' do
+    it 'raises MissingKeyError if input is missing a key' do
       expect {
         hash[name: :Jane, active: true, phone: ['+48', '123-456-789']]
       }.to raise_error(
-        Dry::Types::SchemaKeyError, /:age is missing in Hash input/
+        Dry::Types::MissingKeyError, /:age is missing in Hash input/
       )
     end
   end
