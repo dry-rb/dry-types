@@ -9,6 +9,11 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it is not an empty string' do
       expect(type[['foo']]).to eql(['foo'])
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.nil | form.int' do
@@ -96,6 +101,11 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it is not supported' do
       expect(type['huh?']).to eql('huh?')
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.true' do
@@ -110,6 +120,11 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it is not supported' do
       expect(type['huh?']).to eql('huh?')
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.false' do
@@ -123,6 +138,11 @@ RSpec.describe Dry::Types::Definition do
 
     it 'returns original value when it is not supported' do
       expect(type['huh?']).to eql('huh?')
+    end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
     end
   end
 
@@ -142,6 +162,11 @@ RSpec.describe Dry::Types::Definition do
       expect(type['foo']).to eql('foo')
       expect(type['23asd']).to eql('23asd')
       expect(type[{}]).to eql({})
+    end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
     end
   end
 
@@ -165,6 +190,11 @@ RSpec.describe Dry::Types::Definition do
       expect(type['foo']).to eql('foo')
       expect(type['23asd']).to eql('23asd')
       expect(type[{}]).to eql({})
+    end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
     end
   end
 
@@ -192,6 +222,11 @@ RSpec.describe Dry::Types::Definition do
     it 'coerces Float to BigDecimal without complaining about precision' do
       expect(type[3.12]).to eql(BigDecimal('3.12'))
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.array' do
@@ -211,6 +246,11 @@ RSpec.describe Dry::Types::Definition do
       foo = 'foo'
       expect(type[foo]).to be(foo)
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.hash' do
@@ -229,6 +269,11 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it is not an hash' do
       foo = 'foo'
       expect(type[foo]).to be(foo)
+    end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
     end
   end
 end
