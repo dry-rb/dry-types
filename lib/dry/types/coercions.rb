@@ -9,19 +9,19 @@ module Dry
 
       def to_date(input)
         Date.parse(input)
-      rescue ArgumentError
+      rescue ArgumentError, TypeError
         input
       end
 
       def to_date_time(input)
         DateTime.parse(input)
-      rescue ArgumentError
+      rescue ArgumentError, TypeError
         input
       end
 
       def to_time(input)
         Time.parse(input)
-      rescue ArgumentError
+      rescue ArgumentError, TypeError
         input
       end
 

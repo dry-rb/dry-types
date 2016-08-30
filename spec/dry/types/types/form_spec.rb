@@ -37,6 +37,11 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it was unparsable' do
       expect(type['not-a-date']).to eql('not-a-date')
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.date_time' do
@@ -49,6 +54,11 @@ RSpec.describe Dry::Types::Definition do
     it 'returns original value when it was unparsable' do
       expect(type['not-a-date-time']).to eql('not-a-date-time')
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.time' do
@@ -60,6 +70,11 @@ RSpec.describe Dry::Types::Definition do
 
     it 'returns original value when it was unparsable' do
       expect(type['not-a-time']).to eql('not-a-time')
+    end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
     end
   end
 
