@@ -31,7 +31,7 @@ RSpec.describe Dry::Types::Hash do
 
   describe '#[]' do
     subject(:hash) do
-      Dry::Types['coercible.hash'].strict(
+      Dry::Types['coercible.hash'].permissive(
         name: "coercible.string",
         age: "coercible.int",
         active: "strict.bool",
