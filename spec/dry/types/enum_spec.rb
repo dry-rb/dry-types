@@ -61,14 +61,6 @@ RSpec.describe Dry::Types::Enum do
     end
   end
 
-  describe 'equality' do
-    def type
-      Dry::Types['strict.string'].enum('foo', 'bar', 'baz')
-    end
-
-    it_behaves_like 'a type with equality defined'
-  end
-
   describe '#try' do
     subject(:enum) { Dry::Types['int'].enum(4, 5, 6) }
 
@@ -87,6 +79,10 @@ RSpec.describe Dry::Types::Enum do
 
   describe '#with' do
     subject(:enum_with_meta) { Dry::Types['int'].enum(4, 5, 6).with(meta: { foo: :bar }) }
+
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { enum_with_meta }
+    end
 
     it 'preserves metadata' do
       expect(enum_with_meta.meta).to eql(foo: :bar)

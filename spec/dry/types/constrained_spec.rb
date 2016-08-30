@@ -1,4 +1,10 @@
 RSpec.describe Dry::Types::Constrained do
+  describe 'common definition behavior' do
+    subject(:type) { Dry::Types['strict.string'].constrained(size: 3..12) }
+
+    it_behaves_like Dry::Types::Definition
+  end
+
   describe '#[]' do
     subject(:type) do
       Dry::Types['strict.string'].constrained(size: 3..12)
@@ -25,6 +31,8 @@ RSpec.describe Dry::Types::Constrained do
       Dry::Types['coercible.hash'].constrained(size: 1)
     end
 
+    it_behaves_like Dry::Types::Definition
+
     it 'passes when constraints are not violated by the coerced value' do
       expect(type[a: 1]).to eql(a: 1)
     end
@@ -46,6 +54,8 @@ RSpec.describe Dry::Types::Constrained do
       Dry::Types['string'].constrained(size: 4).maybe
     end
 
+    it_behaves_like 'Dry::Types::Definition without primitive'
+
     it 'passes when constraints are not violated' do
       expect(type[nil].value).to be(nil)
       expect(type['hell'].value).to eql('hell')
@@ -61,6 +71,8 @@ RSpec.describe Dry::Types::Constrained do
       Dry::Types['string'].constrained(size: 4).optional
     end
 
+    it_behaves_like 'Dry::Types::Definition without primitive'
+
     it 'passes when constraints are not violated' do
       expect(type[nil]).to be(nil)
       expect(type['hell']).to eql('hell')
@@ -75,6 +87,8 @@ RSpec.describe Dry::Types::Constrained do
     subject(:type) do
       Dry::Types['strict.string'].constrained(size: 4)
     end
+
+    it_behaves_like Dry::Types::Definition
 
     it 'passes when constraints are not violated' do
       expect(type['hell']).to eql('hell')
@@ -93,30 +107,14 @@ RSpec.describe Dry::Types::Constrained do
         .member(Dry::Types['coercible.string'])
     end
 
+    it_behaves_like Dry::Types::Definition
+
     it 'passes when constraints are not violated' do
       expect(type[[:foo, :bar, :baz]]).to eql(%w(foo bar baz))
     end
 
     it 'raises when a given constraint is violated' do
       expect { type[%w(foo bar)] }.to raise_error(Dry::Types::ConstraintError)
-    end
-  end
-
-  describe 'equality' do
-    context 'with a constructor type' do
-      def type
-        Dry::Types['coercible.hash'].constrained(size: 1)
-      end
-
-      it_behaves_like 'a type with equality defined'
-    end
-
-    context 'with a sum type' do
-      def type
-        Dry::Types['string'].constrained(size: 4).maybe
-      end
-
-      it_behaves_like 'a type with equality defined'
     end
   end
 end

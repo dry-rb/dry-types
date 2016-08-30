@@ -2,6 +2,8 @@ RSpec.describe Dry::Types::Definition, '#default' do
   context 'with a definition' do
     subject(:type) { Dry::Types['string'].default('foo') }
 
+    it_behaves_like Dry::Types::Definition
+
     it 'returns default value when nil is passed' do
       expect(type[nil]).to eql('foo')
     end
@@ -28,6 +30,8 @@ RSpec.describe Dry::Types::Definition, '#default' do
   context 'with an optional type' do
     subject(:type) { Dry::Types['strict.int'].optional.default(nil) }
 
+    it_behaves_like 'Dry::Types::Definition without primitive'
+
     it 'allows nil' do
       expect(type[nil]).to be(nil)
     end
@@ -35,6 +39,10 @@ RSpec.describe Dry::Types::Definition, '#default' do
 
   context 'with a maybe' do
     subject(:type) { Dry::Types['strict.int'].maybe }
+
+    it_behaves_like 'Dry::Types::Definition without primitive' do
+      let(:type) { Dry::Types['strict.int'].maybe.default(0) }
+    end
 
     it 'does not allow nil' do
       expect { type.default(nil) }.to raise_error(ArgumentError, /nil/)
@@ -48,6 +56,10 @@ RSpec.describe Dry::Types::Definition, '#default' do
   context 'with a strict bool' do
     subject(:type) { Dry::Types['strict.bool'] }
 
+    it_behaves_like 'Dry::Types::Definition without primitive' do
+      let(:type) { Dry::Types['strict.bool'].default(false) }
+    end
+
     it 'allows setting false' do
       expect(type.default(false)[nil]).to be(false)
     end
@@ -59,6 +71,8 @@ RSpec.describe Dry::Types::Definition, '#default' do
 
   context 'with a callable value' do
     subject(:type) { Dry::Types['time'].default { Time.now } }
+
+    it_behaves_like Dry::Types::Definition
 
     it 'calls the value' do
       expect(type[nil]).to be_instance_of(Time)
@@ -73,26 +87,10 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
   end
 
-  describe 'equality' do
-    context 'with a static value' do
-      def type
-        Dry::Types['strict.string'].default('foo')
-      end
-
-      it_behaves_like 'a type with equality defined'
-    end
-
-    context 'with a callable value' do
-      def type
-        Dry::Types['strict.string'].default { 'foo' }
-      end
-
-      it_behaves_like 'a type with equality defined'
-    end
-  end
-
   describe'#with' do
     subject(:type) { Dry::Types['time'].default { Time.now }.with(meta: { foo: :bar }) }
+
+    it_behaves_like Dry::Types::Definition
 
     it 'creates a new type with provided options' do
       expect(type.options).to eql(meta: { foo: :bar })

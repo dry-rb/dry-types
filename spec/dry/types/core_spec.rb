@@ -30,6 +30,10 @@ RSpec.describe Dry::Types::Definition do
   describe 'with Bool' do
     let(:bool) { Dry::Types["strict.bool"] }
 
+    it_behaves_like 'Dry::Types::Definition without primitive' do
+      let(:type) { bool }
+    end
+
     it 'accepts true object' do
       expect(bool[true]).to be(true)
     end
@@ -46,6 +50,10 @@ RSpec.describe Dry::Types::Definition do
   describe 'with Date' do
     let(:date) { Dry::Types["strict.date"] }
 
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { date }
+    end
+
     it 'accepts a date object' do
       input = Date.new
 
@@ -56,6 +64,10 @@ RSpec.describe Dry::Types::Definition do
   describe 'with DateTime' do
     let(:datetime) { Dry::Types["strict.date_time"] }
 
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { datetime }
+    end
+
     it 'accepts a date-time object' do
       input = DateTime.new
 
@@ -65,6 +77,10 @@ RSpec.describe Dry::Types::Definition do
 
   describe 'with Time' do
     let(:time) { Dry::Types["strict.time"] }
+
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { time }
+    end
 
     it 'accepts a time object' do
       input = Time.new
@@ -77,6 +93,10 @@ RSpec.describe Dry::Types::Definition do
     context 'with strict string' do
       let(:string) { Dry::Types["maybe.strict.string"] }
 
+      it_behaves_like 'Dry::Types::Definition without primitive' do
+        let(:type) { string }
+      end
+
       it 'accepts nil' do
         expect(string[nil].value).to be(nil)
       end
@@ -88,6 +108,10 @@ RSpec.describe Dry::Types::Definition do
 
     context 'with coercible string' do
       let(:string) { Dry::Types["maybe.coercible.string"] }
+
+      it_behaves_like 'Dry::Types::Definition without primitive' do
+        let(:type) { string }
+      end
 
       it 'accepts nil' do
         expect(string[nil].value).to be(nil)
@@ -102,6 +126,10 @@ RSpec.describe Dry::Types::Definition do
   describe 'defining coercible Maybe String' do
     let(:maybe_string) { Dry::Types["coercible.string"].maybe }
 
+    it_behaves_like 'Dry::Types::Definition without primitive' do
+      let(:type) { maybe_string }
+    end
+
     it 'accepts nil' do
       expect(maybe_string[nil].value).to be(nil)
     end
@@ -113,6 +141,10 @@ RSpec.describe Dry::Types::Definition do
 
   describe 'defining Maybe String' do
     let(:maybe_string) { Dry::Types["strict.string"].maybe }
+
+    it_behaves_like 'Dry::Types::Definition without primitive' do
+      let(:type) { maybe_string }
+    end
 
     it 'accepts nil and returns None instance' do
       value = maybe_string[nil]
@@ -133,6 +165,10 @@ RSpec.describe Dry::Types::Definition do
     context 'with strict string' do
       let(:string) { Dry::Types["optional.strict.string"] }
 
+      it_behaves_like 'Dry::Types::Definition without primitive' do
+        let(:type) { string }
+      end
+
       it 'accepts nil' do
         expect(string[nil]).to be(nil)
       end
@@ -144,6 +180,10 @@ RSpec.describe Dry::Types::Definition do
 
     context 'with coercible string' do
       let(:string) { Dry::Types["optional.coercible.string"] }
+
+      it_behaves_like 'Dry::Types::Definition without primitive' do
+        let(:type) { string }
+      end
 
       it 'accepts nil' do
         expect(string[nil]).to be(nil)
@@ -158,6 +198,10 @@ RSpec.describe Dry::Types::Definition do
   describe 'defining coercible Optional String' do
     let(:optional_string) { Dry::Types["coercible.string"].optional }
 
+    it_behaves_like 'Dry::Types::Definition without primitive' do
+      let(:type) { optional_string }
+    end
+
     it 'accepts nil' do
       expect(optional_string[nil]).to be(nil)
     end
@@ -169,6 +213,10 @@ RSpec.describe Dry::Types::Definition do
 
   describe 'defining Optional String' do
     let(:optional_string) { Dry::Types["strict.string"].optional }
+
+    it_behaves_like 'Dry::Types::Definition without primitive' do
+      let(:type) { optional_string }
+    end
 
     it 'accepts nil and returns a nil' do
       value = optional_string[nil]

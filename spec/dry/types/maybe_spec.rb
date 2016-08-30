@@ -2,6 +2,8 @@ RSpec.describe Dry::Types::Definition, '#maybe' do
   context 'with a definition' do
     subject(:type) { Dry::Types['string'].maybe }
 
+    it_behaves_like 'Dry::Types::Definition without primitive'
+
     it 'returns None when value is nil' do
       expect(type[nil].value).to be(nil)
     end
@@ -26,6 +28,8 @@ RSpec.describe Dry::Types::Definition, '#maybe' do
   context 'with a strict type' do
     subject(:type) { Dry::Types['strict.int'].maybe }
 
+    it_behaves_like 'Dry::Types::Definition without primitive'
+
     it 'returns None when value is nil' do
       expect(type[nil].value).to be(nil)
     end
@@ -41,6 +45,8 @@ RSpec.describe Dry::Types::Definition, '#maybe' do
 
   context 'with a sum' do
     subject(:type) { Dry::Types['bool'].maybe }
+
+    it_behaves_like 'Dry::Types::Definition without primitive'
 
     it 'returns None when value is nil' do
       expect(type[nil].value).to be(nil)

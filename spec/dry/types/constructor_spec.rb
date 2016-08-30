@@ -3,6 +3,8 @@ RSpec.describe Dry::Types::Constructor do
     Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
   end
 
+  it_behaves_like Dry::Types::Definition
+
   describe '.new' do
     it 'wraps primitive in a definition' do
       type = Dry::Types::Constructor.new(String, fn: Kernel.method(:String))
@@ -65,13 +67,5 @@ RSpec.describe Dry::Types::Constructor do
     it 'raises no-method error when it does not respond to a method' do
       expect { type.oh_noez }.to raise_error(NoMethodError)
     end
-  end
-
-  describe 'equality' do
-    def type
-      Dry::Types::Constructor.new(String, &:strip)
-    end
-
-    it_behaves_like 'a type with equality defined'
   end
 end

@@ -2,6 +2,8 @@ RSpec.describe Dry::Types::Definition, '#safe' do
   context 'with a coercible string' do
     subject(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).safe }
 
+    it_behaves_like Dry::Types::Definition
+
     it 'rescues from type-errors and returns input' do
       expect(type['pass']).to eql('pass')
     end
@@ -13,20 +15,14 @@ RSpec.describe Dry::Types::Definition, '#safe' do
     it 'aliases #[] as #call' do
       expect(type.call(:passing)).to eql('passing')
     end
-
-    describe 'equality' do
-      def type
-        Dry::Types['coercible.string'].constrained(min_size: 5).safe
-      end
-
-      it_behaves_like 'a type with equality defined'
-    end
   end
 
   context 'with a form hash' do
     subject(:type) do
       Dry::Types['form.hash'].weak(age: 'coercible.int', active: 'form.bool')
     end
+
+    it_behaves_like Dry::Types::Definition
 
     it 'applies its types' do
       expect(type[age: '23', active: 'f']).to eql(age: 23, active: false)
