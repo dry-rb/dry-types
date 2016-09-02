@@ -31,6 +31,10 @@ module Dry
           @error = error
         end
 
+        def to_s
+          error.to_s
+        end
+
         def success?
           false
         end

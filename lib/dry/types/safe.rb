@@ -8,7 +8,13 @@ module Dry
       include Builder
 
       def call(input)
-        try(input).input
+        result = try(input)
+
+        if result.respond_to?(:input)
+          result.input
+        else
+          input
+        end
       end
       alias_method :[], :call
 

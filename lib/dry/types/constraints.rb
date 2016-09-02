@@ -1,11 +1,12 @@
 require 'dry/logic/rule_compiler'
 require 'dry/logic/predicates'
+require 'dry/logic/rule/predicate'
 
 module Dry
   module Types
     def self.Rule(options)
       rule_compiler.(
-        options.map { |key, val| [:val, Logic::Predicates[:"#{key}?"].curry(val).to_ast] }
+        options.map { |key, val| Logic::Rule::Predicate.new(Logic::Predicates[:"#{key}?"]).curry(val).to_ast }
       ).reduce(:and)
     end
 

@@ -45,7 +45,7 @@ module Dry
 
       def call(input)
         try(input) do |result|
-          raise ConstraintError, result
+          raise ConstraintError.new(result, input)
         end.input
       end
       alias_method :[], :call

@@ -26,29 +26,21 @@ module Dry
     end
 
     ConstraintError = Class.new(TypeError) do
-      attr_reader :result
+      attr_reader :result, :input
 
-      def initialize(result)
+      def initialize(result, input)
         @result = result
+        @input = input
+
         if result.is_a?(String)
-          super
+          super(result)
         else
-          super("#{result.input.inspect} violates constraints (#{failure_message})")
+          super(to_s)
         end
       end
 
-      def input
-        result.input
-      end
-
-      def failure_message
-        if result.respond_to?(:rule)
-          rule = result.rule
-          args = rule.predicate.args - [rule.predicate.args.last]
-          "#{rule.predicate.id}(#{args.map(&:inspect).join(', ')}) failed"
-        else
-          result.inspect
-        end
+      def to_s
+        "#{input.inspect} violates constraints (#{result} failed)"
       end
     end
   end

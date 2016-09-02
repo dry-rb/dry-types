@@ -35,7 +35,7 @@ RSpec.describe Dry::Types::Array do
         it 'raises when input is not valid' do
           expect { array[%w(1 2 3)] }.to raise_error(
             Dry::Types::ConstraintError,
-            '1 violates constraints (gt?(2) failed)'
+            '"1" violates constraints (gt?(2, 1) failed)'
           )
         end
 

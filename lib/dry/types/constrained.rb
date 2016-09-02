@@ -18,18 +18,19 @@ module Dry
 
       def call(input)
         try(input) do |result|
-          raise ConstraintError, result
+          raise ConstraintError.new(result, input)
         end.input
       end
       alias_method :[], :call
 
       def try(input, &block)
-        validation = rule.(input)
+        result = rule.(input)
 
-        if validation.success?
+        if result.success?
           type.try(input, &block)
         else
-          block ? yield(validation) : validation
+          failure = failure(input, result)
+          block ? yield(failure) : failure
         end
       end
 

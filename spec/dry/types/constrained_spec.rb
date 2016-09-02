@@ -17,7 +17,7 @@ RSpec.describe Dry::Types::Constrained do
     it 'raises when a given constraint is violated' do
       expect { type['he'] }.to raise_error(
         Dry::Types::ConstraintError,
-        '"he" violates constraints (size?(3..12) failed)'
+        '"he" violates constraints (size?(3..12, "he") failed)'
       )
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Dry::Types::Constrained do
     it 'fails when constraints are violated by coerced value' do
       expect { type[{}] }.to raise_error(
         Dry::Types::ConstraintError,
-        '{} violates constraints (size?(1) failed)'
+        '{} violates constraints (size?(1, {}) failed)'
       )
     end
 
