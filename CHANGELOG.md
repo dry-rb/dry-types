@@ -12,6 +12,7 @@
 
 * `Types::Form::Bool` supports upcased true/false values (kirs)
 * `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
+* ice_nine dependency has been dropped as it was required by Struct only (flash-gordon)
 
 [Compare v0.8.1...HEAD](https://github.com/dryrb/dry-types/compare/v0.8.1...HEAD)
 
@@ -51,7 +52,7 @@
 - `Bool#default` gladly accepts `false` as its value (solnic)
 - Creating an empty schema with input processor no longer fails (lasseebert)
 
-## Changes
+## Changed
 
 - Allow multiple calls to meta (solnic)
 - Allow capitalised versions of true and false values for boolean coercions (nil0bject)
