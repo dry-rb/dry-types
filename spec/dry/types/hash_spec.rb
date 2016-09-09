@@ -173,13 +173,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
     include_examples 'sets default value behavior when keys are omitted'
-
-    # This is essentially the same test as "strict typing behavior" but
-    # the error is different for some reason
-    it 'fails if any coercions are unsuccessful' do
-      expect { hash.call(name: :Jane, age: 'oops', active: true, phone: []) }
-        .to raise_error(Dry::Types::ConstraintError, /"oops" violates constraints/)
-    end
+    include_examples 'strict typing behavior'
   end
 
   describe '#weak' do
