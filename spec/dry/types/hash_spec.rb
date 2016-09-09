@@ -156,6 +156,17 @@ RSpec.describe Dry::Types::Hash do
     end
   end
 
+  shared_examples 'strict schema behavior for unexpected keys' do
+    it 'rejects unexpected keys' do
+      expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
+      unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
+
+      expect { hash.call(expected_input.merge(unexpected_input)) }
+        .to raise_error(Dry::Types::UnknownKeysError)
+        .with_message('unexpected keys [:gender, :email] in Hash input')
+    end
+  end
+
   describe '#schema' do
     let(:hash) { primitive.schema(hash_schema) }
 
@@ -214,14 +225,8 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'strict schema behavior for missing keys'
     include_examples 'strict typing behavior'
+    include_examples 'strict schema behavior for unexpected keys'
+  end
 
-    it 'rejects unexpected keys' do
-      expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
-      unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
-
-      expect { hash.call(expected_input.merge(unexpected_input)) }
-        .to raise_error(Dry::Types::UnknownKeysError)
-        .with_message('unexpected keys [:gender, :email] in Hash input')
-    end
   end
 end
