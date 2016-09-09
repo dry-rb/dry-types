@@ -78,6 +78,29 @@ module Dry
         alias_method :[], :call
       end
 
+      class StrictWithDefaults < Schema
+        def call(hash, meth = :call)
+          unexpected = hash.keys - member_types.keys
+          raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
+
+          member_types.each_with_object({}) do |(key, type), result|
+            begin
+              value = hash.fetch(key)
+              result[key] = type.public_send(meth, value)
+            rescue TypeError
+              raise SchemaError.new(key, value)
+            rescue KeyError
+              if type.default?
+                result[key] = type.value
+              else
+                raise MissingKeyError.new(key)
+              end
+            end
+          end
+        end
+        alias_method :[], :call
+      end
+
       class Weak < Schema
         def self.new(primitive, options)
           member_types = options.

@@ -228,5 +228,13 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'strict schema behavior for unexpected keys'
   end
 
+  describe '#strict_with_defaults' do
+    let(:hash) { primitive.strict_with_defaults(hash_schema) }
+
+    include_examples 'hash schema behavior'
+    include_examples 'strict schema behavior for missing keys'
+    include_examples 'strict typing behavior'
+    include_examples 'strict schema behavior for unexpected keys'
+    include_examples 'sets default value behavior when keys are omitted'
   end
 end
