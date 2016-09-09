@@ -12,7 +12,12 @@ module Dry
         def call(hash, meth = :call)
           member_types.each_with_object({}) do |(key, type), result|
             if hash.key?(key)
-              result[key] = type.public_send(meth, hash.fetch(key))
+              begin
+                value = hash.fetch(key)
+                result[key] = type.public_send(meth, value)
+              rescue ConstraintError
+                raise SchemaError.new(key, value)
+              end
             else
               resolve_missing_value(result, key, type)
             end
