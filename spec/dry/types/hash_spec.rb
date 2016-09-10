@@ -90,22 +90,6 @@ RSpec.describe Dry::Types::Hash do
         expect(failure.error[:age].success?).to be(false)
       end
     end
-
-    context 'when schema specifies a default value' do
-      let(:hash_schema) do
-        {
-          name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
-          active: "form.bool",
-          phone: Dry::Types['phone']
-        }
-      end
-
-      it 'fills in default value when input value is nil' do
-        user = hash.call(name: :John, age: nil, active: '1', phone: [])
-        expect(user[:age]).to be(21)
-      end
-    end
   end
 
   shared_examples 'strict schema behavior for missing keys' do
@@ -167,12 +151,49 @@ RSpec.describe Dry::Types::Hash do
     end
   end
 
+  shared_examples 'permissive schema behavior for nil values on fields with defaults' do
+    context 'when default value for :age is 21' do
+      let(:hash_schema) do
+        {
+          name: "coercible.string",
+          age: Dry::Types["strict.int"].default(21),
+          active: "form.bool",
+          phone: Dry::Types['phone']
+        }
+      end
+
+      it 'fills in default value when value is nil' do
+        user = hash.call(name: :John, active: '1', age: nil, phone: [])
+        expect(user[:age]).to be(21)
+      end
+    end
+  end
+
+  shared_examples 'strict schema behavior for nil values on fields with defaults' do
+    context 'when default value for :age is 21' do
+      let(:hash_schema) do
+        {
+          name: "coercible.string",
+          age: Dry::Types["strict.int"].default(21),
+          active: "form.bool",
+          phone: Dry::Types['phone']
+        }
+      end
+
+      it 'fills in default value when value is nil' do
+        expect { hash.call(name: :John, active: '1', age: nil, phone: []) }
+          .to raise_error(Dry::Types::SchemaError, 'nil (NilClass) has invalid type for :age')
+      end
+    end
+  end
+
   describe '#schema' do
     let(:hash) { primitive.schema(hash_schema) }
 
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
     include_examples 'sets default value behavior when keys are omitted'
+    include_examples 'permissive schema behavior for nil values on fields with defaults'
     include_examples 'strict typing behavior'
   end
 
@@ -182,6 +203,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
     include_examples 'weak typing behavior'
+    include_examples 'permissive schema behavior for nil values on fields with defaults'
     include_examples 'sets default value behavior when keys are omitted'
 
     it 'yields a special failure if #try is given a non-hash' do
@@ -202,6 +224,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'weak schema behavior for missing keys'
     include_examples 'weak typing behavior'
+    include_examples 'permissive schema behavior for nil values on fields with defaults'
     include_examples 'sets default value behavior when keys are omitted'
   end
 
@@ -211,6 +234,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'hash schema behavior'
     include_examples 'strict schema behavior for missing keys'
     include_examples 'strict typing behavior'
+    include_examples 'permissive schema behavior for nil values on fields with defaults'
   end
 
   describe '#strict' do
@@ -220,6 +244,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'strict schema behavior for missing keys'
     include_examples 'strict typing behavior'
     include_examples 'strict schema behavior for unexpected keys'
+    include_examples 'strict schema behavior for nil values on fields with defaults'
   end
 
   describe '#strict_with_defaults' do
@@ -230,5 +255,6 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'strict typing behavior'
     include_examples 'strict schema behavior for unexpected keys'
     include_examples 'sets default value behavior when keys are omitted'
+    include_examples 'strict schema behavior for nil values on fields with defaults'
   end
 end
