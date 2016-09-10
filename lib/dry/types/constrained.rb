@@ -35,7 +35,7 @@ module Dry
       end
 
       def valid?(value)
-        rule.(value).success?
+        rule.(value).success? && type.valid?(value)
       end
 
       def constrained(options)

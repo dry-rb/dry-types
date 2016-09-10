@@ -45,4 +45,20 @@ RSpec.describe Dry::Types::Array do
       end
     end
   end
+
+  describe '#valid?' do
+    subject(:array) { Dry::Types['strict.array'].member(Dry::Types['strict.string']) }
+
+    it 'detects invalid input of the completely wrong type' do
+      expect(array.valid?(5)).to be(false)
+    end
+
+    it 'detects invalid input of the wrong member type' do
+      expect(array.valid?([5])).to be(false)
+    end
+
+    it 'recognizes valid input' do
+      expect(array.valid?(['five'])).to be(true)
+    end
+  end
 end

@@ -14,6 +14,10 @@ module Dry
         end
         alias_method :[], :call
 
+        def valid?(type)
+          super && type.all? { |el| member.valid?(el) }
+        end
+
         def try(input, &block)
           if input.is_a?(::Array)
             result = call(input, :try)
