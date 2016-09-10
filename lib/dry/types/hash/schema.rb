@@ -86,7 +86,11 @@ module Dry
           unexpected = hash.keys - member_types.keys
           raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
 
-          super
+          super do |member_type, key, value|
+            type = member_type.default? ? member_type.type : member_type
+
+            yield(type, key, value)
+          end
         end
       end
 
