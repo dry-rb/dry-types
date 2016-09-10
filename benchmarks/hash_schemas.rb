@@ -46,4 +46,6 @@ Benchmark.ips do |x|
       schema.try(SchemaBench::INPUT)
     end
   end
+
+  x.compare!
 end
