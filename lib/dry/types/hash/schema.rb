@@ -9,27 +9,24 @@ module Dry
           super
         end
 
-        def call(hash, meth = :call)
-          member_types.each_with_object({}) do |(key, type), result|
-            if hash.key?(key)
-              begin
-                value = hash.fetch(key)
-                result[key] = type.public_send(meth, value)
-              rescue ConstraintError
-                raise SchemaError.new(key, value)
-              end
-            else
-              resolve_missing_value(result, key, type)
-            end
-          end
+        def call(hash)
+          coerce(hash)
         end
         alias_method :[], :call
 
         def try(hash, &block)
-          result = call(hash, :try)
-          output = result.each_with_object({}) { |(key, res), h| h[key] = res.input }
+          success = true
+          output  = {}
 
-          if result.values.all?(&:success?)
+          result =
+            try_coerce(hash) do |key, member_result|
+              success &&= member_result.success?
+              output[key] = member_result.input
+
+              member_result
+            end
+
+          if success
             success(output)
           else
             failure = failure(output, result)
@@ -38,6 +35,32 @@ module Dry
         end
 
         private
+
+        def try_coerce(hash)
+          resolve(hash) do |type, key, value|
+            yield(key, type.try(value))
+          end
+        end
+
+        def coerce(hash)
+          resolve(hash) do |type, key, value|
+            begin
+              type.call(value)
+            rescue ConstraintError
+              raise SchemaError.new(key, value)
+            end
+          end
+        end
+
+        def resolve(hash)
+          member_types.each_with_object({}) do |(key, type), result|
+            if hash.key?(key)
+              result[key] = yield(type, key, hash[key])
+            else
+              resolve_missing_value(result, key, type)
+            end
+          end
+        end
 
         def resolve_missing_value(result, key, type)
           if type.default?
@@ -49,61 +72,34 @@ module Dry
       end
 
       class Permissive < Schema
-        def call(hash, meth = :call)
-          member_types.each_with_object({}) do |(key, type), result|
-            begin
-              value = hash.fetch(key)
-              result[key] = type.public_send(meth, value)
-            rescue TypeError
-              raise SchemaError.new(key, value)
-            rescue KeyError
-              raise MissingKeyError.new(key)
-            end
-          end
+        private
+
+        def resolve_missing_value(_, key, _)
+          raise MissingKeyError, key
         end
-        alias_method :[], :call
       end
 
-      class Strict < Schema
-        def call(hash, meth = :call)
+      class Strict < Permissive
+        private
+
+        def resolve(hash)
           unexpected = hash.keys - member_types.keys
           raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
 
-          member_types.each_with_object({}) do |(key, type), result|
-            begin
-              value = hash.fetch(key)
-              result[key] = type.public_send(meth, value)
-            rescue TypeError
-              raise SchemaError.new(key, value)
-            rescue KeyError
-              raise MissingKeyError.new(key)
-            end
-          end
+          super
         end
-        alias_method :[], :call
       end
 
-      class StrictWithDefaults < Schema
-        def call(hash, meth = :call)
-          unexpected = hash.keys - member_types.keys
-          raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
+      class StrictWithDefaults < Strict
+        private
 
-          member_types.each_with_object({}) do |(key, type), result|
-            begin
-              value = hash.fetch(key)
-              result[key] = type.public_send(meth, value)
-            rescue TypeError
-              raise SchemaError.new(key, value)
-            rescue KeyError
-              if type.default?
-                result[key] = type.value
-              else
-                raise MissingKeyError.new(key)
-              end
-            end
+        def resolve_missing_value(result, key, type)
+          if type.default?
+            result[key] = type.value
+          else
+            super
           end
         end
-        alias_method :[], :call
       end
 
       class Weak < Schema
@@ -126,22 +122,24 @@ module Dry
       end
 
       class Symbolized < Weak
-        def call(hash, meth = :call)
-          member_types.each_with_object({}) do |(key, type), result|
-            if hash.key?(key)
-              result[key] = type.public_send(meth, hash.fetch(key))
-            else
-              key_name = key.to_s
+        private
 
-              if hash.key?(key_name)
-                result[key] = type.public_send(meth, hash.fetch(key_name))
-              else
-                resolve_missing_value(result, key, type)
+        def resolve(hash)
+          member_types.each_with_object({}) do |(key, type), result|
+            keyname =
+              if hash.key?(key)
+                key
+              elsif hash.key?(string_key = key.to_s)
+                string_key
               end
+
+            if keyname
+              result[key] = yield(type, key, hash[keyname])
+            else
+              resolve_missing_value(result, key, type)
             end
           end
         end
-        alias_method :[], :call
       end
 
       private_constant(*constants(false))
