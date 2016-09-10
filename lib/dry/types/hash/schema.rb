@@ -18,13 +18,17 @@ module Dry
           success = true
           output  = {}
 
-          result =
-            try_coerce(hash) do |key, member_result|
+          begin
+            result = try_coerce(hash) do |key, member_result|
               success &&= member_result.success?
               output[key] = member_result.input
 
               member_result
             end
+          rescue ConstraintError, UnknownKeysError, SchemaError => e
+            success = false
+            result = e
+          end
 
           if success
             success(output)

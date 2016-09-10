@@ -245,6 +245,25 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'strict typing behavior'
     include_examples 'strict schema behavior for unexpected keys'
     include_examples 'strict schema behavior for nil values on fields with defaults'
+
+    context 'with a sum' do
+      let(:hash) { h1 | h2 }
+
+      let(:h1) { primitive.strict(name: Dry::Types['strict.string']) }
+      let(:h2) { primitive.strict(age: Dry::Types['strict.int']) }
+
+      it 'returns input when it is valid for the left side' do
+        expect(hash[name: 'Jane']).to eql(name: 'Jane')
+      end
+
+      it 'returns input when it is valid for the right side' do
+        expect(hash[age: 21]).to eql(age: 21)
+      end
+
+      it 'raises error when it is invalid for both sides' do
+        expect { hash[oops: 'boom!'] }.to raise_error(Dry::Types::ConstraintError, /oops/)
+      end
+    end
   end
 
   describe '#strict_with_defaults' do
