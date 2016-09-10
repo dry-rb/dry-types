@@ -3,8 +3,6 @@ module Dry
     module Options
       attr_reader :options
 
-      attr_reader :meta
-
       def initialize(*args, **options)
         @__args__ = args
         @options = options
