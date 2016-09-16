@@ -149,8 +149,6 @@ module Dry
           end
         end
       end
-
-      private_constant(*constants(false))
     end
   end
 end
