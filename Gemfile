@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'dry-logic', github: 'dry-rb/dry-logic', branch: 'master'
+gem 'dry-core', github: 'dry-rb/dry-core', branch: 'master'
 
 group :test do
   gem "codeclimate-test-reporter", platform: :rbx, require: false

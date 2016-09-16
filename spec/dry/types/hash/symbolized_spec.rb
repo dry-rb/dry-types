@@ -1,4 +1,8 @@
 RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
+  before(:all) do
+    Dry::Types.load_extensions(:maybe)
+  end
+
   subject(:hash) do
     Dry::Types['hash'].symbolized(
       name: 'string',

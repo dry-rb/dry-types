@@ -34,6 +34,12 @@ module Dry
       def symbolized(type_map)
         schema(type_map, Symbolized)
       end
+
+      private
+
+      def resolve_missing_value(_result, _key, _type)
+        # noop
+      end
     end
   end
 end

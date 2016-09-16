@@ -37,10 +37,6 @@ module Dry
         false
       end
 
-      def maybe?
-        false
-      end
-
       def constrained?
         false
       end

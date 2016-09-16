@@ -1,4 +1,8 @@
 RSpec.describe Dry::Types::Hash, 'with default values' do
+  before(:all) do
+    Dry::Types.load_extensions(:maybe)
+  end
+
   subject(:hash) do
     Dry::Types['hash'].schema(
       name: 'string',

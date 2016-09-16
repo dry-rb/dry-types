@@ -1,4 +1,8 @@
 RSpec.describe Dry::Types::Constrained do
+  before(:all) do
+    Dry::Types.load_extensions(:maybe)
+  end
+
   describe 'common definition behavior' do
     subject(:type) { Dry::Types['strict.string'].constrained(size: 3..12) }
 

@@ -1,4 +1,8 @@
 RSpec.describe Dry::Types::Definition do
+  before(:all) do
+    Dry::Types.load_extensions(:maybe)
+  end
+
   let(:string) { Dry::Types["coercible.string"] }
   let(:hash) { Dry::Types["coercible.hash"] }
 
@@ -89,7 +93,7 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'with built-in maybe types' do
+  describe 'with opt-in maybe types' do
     context 'with strict string' do
       let(:string) { Dry::Types["maybe.strict.string"] }
 
