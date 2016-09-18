@@ -1,43 +1,39 @@
 RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
-  before(:all) do
-    Dry::Types.load_extensions(:maybe)
-  end
-
   subject(:hash) do
     Dry::Types['hash'].symbolized(
       name: 'string',
-      middle_name: 'maybe.strict.string',
+      email: email,
       age: 'int',
       password: password
     )
   end
 
+  let(:email) { Dry::Types['optional.strict.string'] }
   let(:password) { Dry::Types['strict.string'].default('changeme') }
 
   describe '#[]' do
     it 'changes string keys to symbols' do
-      expect(hash['name' => 'Jane', 'age' => 1]).to include(
-        name: 'Jane', age: 1, password: 'changeme'
+      expect(hash['name' => 'Jane', 'email' => 'foo@bar.com', 'age' => 1]).to eql(
+        name: 'Jane', email: 'foo@bar.com', age: 1, password: 'changeme'
       )
     end
 
     it 'sets default when value is nil' do
-      expect(hash['name' => 'Jane', 'age' => 1, 'password' => nil]).to include(
-        name: 'Jane', age: 1, password: 'changeme'
+      expect(hash['name' => 'Jane', 'email' => 'foo@bar.com', 'age' => 1, 'password' => nil]).to eql(
+        name: 'Jane', email: 'foo@bar.com', age: 1, password: 'changeme'
       )
     end
 
-    it 'sets None as a default value for optional' do
+    it 'sets nil as a default value for optional' do
       result = hash['name' => 'Jane', 'age' => 1]
 
-      expect(result[:middle_name]).to be_instance_of(Dry::Monads::Maybe::None)
+      expect(result[:email]).to be_nil
     end
 
     it 'passes through already symbolized hash' do
-      result = hash[name: 'Jane', age: 1, middle_name: 'Alice']
+      result = hash[name: 'Jane', age: 1]
 
-      expect(result).to include(name: 'Jane', age: 1, password: 'changeme')
-      expect(result[:middle_name].value).to eql('Alice')
+      expect(result).to eql(name: 'Jane', age: 1, password: 'changeme')
     end
   end
 end
