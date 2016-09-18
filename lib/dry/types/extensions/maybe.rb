@@ -38,19 +38,17 @@ module Dry
     end
 
     class Hash
-      class Schema
-        module MaybeTypes
-          def resolve_missing_value(result, key, type)
-            if type.respond_to?(:maybe?) && type.maybe?
-              result[key] = type[nil]
-            else
-              super
-            end
+      module MaybeTypes
+        def resolve_missing_value(result, key, type)
+          if type.respond_to?(:maybe?) && type.maybe?
+            result[key] = type[nil]
+          else
+            super
           end
         end
-
-        include MaybeTypes
       end
+
+      Schema.include MaybeTypes
     end
 
     # Register non-coercible maybe types
