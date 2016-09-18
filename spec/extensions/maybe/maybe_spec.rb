@@ -1,8 +1,4 @@
 RSpec.describe Dry::Types::Definition, '#maybe' do
-  before(:all) do
-    Dry::Types.load_extensions(:maybe)
-  end
-
   context 'with a definition' do
     subject(:type) { Dry::Types['string'].maybe }
 

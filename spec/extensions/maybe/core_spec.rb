@@ -1,8 +1,4 @@
 RSpec.describe Dry::Types::Definition do
-  before(:all) do
-    Dry::Types.load_extensions(:maybe)
-  end
-
   describe 'with opt-in maybe types' do
     context 'with strict string' do
       let(:string) { Dry::Types["maybe.strict.string"] }

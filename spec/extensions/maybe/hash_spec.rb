@@ -1,8 +1,4 @@
 RSpec.describe Dry::Types::Hash do
-  before(:all) do
-    Dry::Types.load_extensions(:maybe)
-  end
-
   let(:email) { Dry::Types['maybe.strict.string'] }
 
   context 'Symbolized constructor' do

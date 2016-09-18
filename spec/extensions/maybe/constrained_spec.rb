@@ -1,8 +1,4 @@
-RSpec.describe Dry::Types::Constrained do
-  before(:all) do
-    Dry::Types.load_extensions(:maybe)
-  end
-
+RSpec.describe Dry::Types::Constrained, 'maybe' do
   context 'with a maybe type' do
     subject(:type) do
       Dry::Types['string'].constrained(size: 4).maybe

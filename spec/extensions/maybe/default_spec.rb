@@ -1,8 +1,4 @@
 RSpec.describe Dry::Types::Definition, '#default' do
-  before(:all) do
-    Dry::Types.load_extensions(:maybe)
-  end
-
   context 'with a maybe' do
     subject(:type) { Dry::Types['strict.int'].maybe }
 
