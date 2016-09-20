@@ -69,8 +69,8 @@ module Dry
         def resolve_missing_value(result, key, type)
           if type.default?
             result[key] = type.evaluate
-          elsif type.maybe?
-            result[key] = type[nil]
+          else
+            super
           end
         end
       end

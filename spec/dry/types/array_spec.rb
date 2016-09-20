@@ -1,3 +1,5 @@
+require 'spec/dry/types'
+
 RSpec.describe Dry::Types::Array do
   describe '#member' do
     context 'primitive' do

@@ -28,10 +28,6 @@ module Dry
         type.default?
       end
 
-      def maybe?
-        type.maybe?
-      end
-
       def constrained?
         type.constrained?
       end

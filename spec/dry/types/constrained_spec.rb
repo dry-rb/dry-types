@@ -49,23 +49,6 @@ RSpec.describe Dry::Types::Constrained do
     end
   end
 
-  context 'with a sum type' do
-    subject(:type) do
-      Dry::Types['string'].constrained(size: 4).maybe
-    end
-
-    it_behaves_like 'Dry::Types::Definition without primitive'
-
-    it 'passes when constraints are not violated' do
-      expect(type[nil].value).to be(nil)
-      expect(type['hell'].value).to eql('hell')
-    end
-
-    it 'raises when a given constraint is violated' do
-      expect { type['hel'] }.to raise_error(Dry::Types::ConstraintError, /hel/)
-    end
-  end
-
   context 'with an optional sum type' do
     subject(:type) do
       Dry::Types['string'].constrained(size: 4).optional

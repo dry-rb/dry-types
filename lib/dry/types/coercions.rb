@@ -1,7 +1,9 @@
+require 'dry/core/constants'
+
 module Dry
   module Types
     module Coercions
-      EMPTY_STRING = ''.freeze
+      include Dry::Core::Constants
 
       def to_nil(input)
         input unless empty_str?(input)

@@ -7,6 +7,7 @@ require 'concurrent'
 
 require 'dry-container'
 require 'dry-equalizer'
+require 'dry/core/extensions'
 
 require 'dry/types/version'
 require 'dry/types/container'
@@ -18,8 +19,7 @@ require 'dry/types/errors'
 module Dry
   module Types
     extend Dry::Configurable
-
-    Undefined = Object.new.freeze
+    extend Dry::Core::Extensions
 
     setting :namespace, self
 
@@ -100,3 +100,4 @@ module Dry
 end
 
 require 'dry/types/core' # load built-in types
+require 'dry/types/extensions'

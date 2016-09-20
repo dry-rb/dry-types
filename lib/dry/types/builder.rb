@@ -1,6 +1,10 @@
+require 'dry/core/constants'
+
 module Dry
   module Types
     module Builder
+      include Dry::Core::Constants
+
       def constrained_type
         Constrained
       end
@@ -12,10 +16,6 @@ module Dry
 
       def optional
         Types['strict.nil'] | self
-      end
-
-      def maybe
-        Maybe.new(Types['strict.nil'] | self)
       end
 
       def constrained(options)
@@ -50,6 +50,5 @@ end
 require 'dry/types/default'
 require 'dry/types/constrained'
 require 'dry/types/enum'
-require 'dry/types/maybe'
 require 'dry/types/safe'
 require 'dry/types/sum'

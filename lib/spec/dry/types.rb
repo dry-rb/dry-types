@@ -9,12 +9,6 @@ RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
     end
   end
 
-  describe '#maybe?' do
-    it 'returns a boolean value' do
-      expect(type.maybe?).to be_boolean
-    end
-  end
-
   describe '#default?' do
     it 'returns a boolean value' do
       expect(type.default?).to be_boolean
