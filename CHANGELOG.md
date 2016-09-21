@@ -13,6 +13,7 @@
 * `Types::Form::Bool` supports upcased true/false values (kirs)
 * `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
 * ice_nine dependency has been dropped as it was required by Struct only (flash-gordon)
+* `dry-monads` dependency was made optional, Maybe types are available after `Dry::Types.load_extension(:maybe)` (flash-gordon)
 
 [Compare v0.8.1...HEAD](https://github.com/dryrb/dry-types/compare/v0.8.1...HEAD)
 
