@@ -65,7 +65,13 @@ module Dry
             container[name]
           end
         when Class
-          self[identifier(name)]
+          type_name = identifier(name)
+
+          if container.key?(type_name)
+            self[type_name]
+          else
+            name
+          end
         end
       end
     end

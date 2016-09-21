@@ -51,6 +51,18 @@ RSpec.describe Dry::Types do
   end
 
   describe '.[]' do
+    before do
+      module Test
+        class Foo < Dry::Types::Definition
+          def self.[](value)
+            value
+          end
+        end
+      end
+    end
+
+    let(:unregistered_type) { Test::Foo }
+
     it 'returns registered type for "string"' do
       expect(Dry::Types['string']).to be_a(Dry::Types::Definition)
       expect(Dry::Types['string'].name).to eql('String')
@@ -58,6 +70,10 @@ RSpec.describe Dry::Types do
 
     it 'caches dynamically built types' do
       expect(Dry::Types['array<string>']).to be(Dry::Types['array<string>'])
+    end
+
+    it 'returns unregistered types back' do
+      expect(Dry::Types[unregistered_type]).to be(unregistered_type)
     end
   end
 
