@@ -1,21 +1,26 @@
-# v0.9.0 to-be-released
+# v0.9.0 2016-09-21
 
 ## Added
 
+* `Hash#strict_with_defaults` which validates presence of all required keys and respects default types for missing *values* (backus)
 * `Type#constrained?` method (flash-gordon)
 
 ## Fixed
 
 * Summing two constrained types works correctly (flash-gordon)
+* `Types::Array::Member#valid?` in cases where member type is a constraint (solnic)
+* `Hash::Schema#try` handles exceptions properly and returns a failure object (solnic)
 
 ## Changed
 
+* [BREAKING] Renamed `Hash##{schema=>permissive}` (backus)
+* [BREAKING] `dry-monads` dependency was made optional, Maybe types are available after `Dry::Types.load_extension(:maybe)` (flash-gordon)
+* [BREAKING] `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
 * `Types::Form::Bool` supports upcased true/false values (kirs)
-* `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
+* `Types::Form::{Date,DateTime,Time}` fail gracefully for invalid input (padde)
 * ice_nine dependency has been dropped as it was required by Struct only (flash-gordon)
-* `dry-monads` dependency was made optional, Maybe types are available after `Dry::Types.load_extension(:maybe)` (flash-gordon)
 
-[Compare v0.8.1...HEAD](https://github.com/dryrb/dry-types/compare/v0.8.1...HEAD)
+[Compare v0.8.1...v0.9.0](https://github.com/dryrb/dry-types/compare/v0.8.1...v0.9.0)
 
 # v0.8.1 2016-07-13
 
