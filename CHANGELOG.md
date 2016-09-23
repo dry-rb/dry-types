@@ -14,7 +14,7 @@
 ## Changed
 
 * [BREAKING] Renamed `Hash##{schema=>permissive}` (backus)
-* [BREAKING] `dry-monads` dependency was made optional, Maybe types are available after `Dry::Types.load_extension(:maybe)` (flash-gordon)
+* [BREAKING] `dry-monads` dependency was made optional, Maybe types are available after `Dry::Types.load_extensions(:maybe)` (flash-gordon)
 * [BREAKING] `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
 * `Types::Form::Bool` supports upcased true/false values (kirs)
 * `Types::Form::{Date,DateTime,Time}` fail gracefully for invalid input (padde)
