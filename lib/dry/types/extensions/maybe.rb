@@ -48,6 +48,7 @@ module Dry
         end
       end
 
+      StrictWithDefaults.include MaybeTypes
       Schema.include MaybeTypes
     end
 
