@@ -47,6 +47,10 @@ RSpec.configure do |config|
   end
 
   config.order = 'random'
+
+  config.before(:example, :maybe) do
+    Dry::Types.load_extensions(:maybe)
+  end
 end
 
 srand RSpec.configuration.seed

@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition, '#maybe' do
+RSpec.describe Dry::Types::Definition, '#maybe', :maybe do
   context 'with a definition' do
     subject(:type) { Dry::Types['string'].maybe }
 

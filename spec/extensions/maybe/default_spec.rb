@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition, '#default' do
+RSpec.describe Dry::Types::Definition, '#default', :maybe do
   context 'with a maybe' do
     subject(:type) { Dry::Types['strict.int'].maybe }
 
