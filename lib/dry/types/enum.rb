@@ -3,24 +3,24 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Enum
-      include Dry::Equalizer(:type, :options, :values)
+      include Dry::Equalizer(:type, :options, :mapping)
       include Decorator
 
       attr_reader :values, :mapping
 
       def initialize(type, options)
         super
-        @values = options.fetch(:values).freeze
+        @mapping = options.fetch(:mapping).freeze
+        @values = @mapping.keys.freeze
         @values.each(&:freeze)
-        @mapping = values.each_with_object({}) { |v, h| h[values.index(v)] = v }.freeze
       end
 
       def call(input)
         value =
-          if values.include?(input)
+          if mapping.key?(input)
             input
-          elsif mapping.key?(input)
-            mapping[input]
+          elsif mapping.values.include?(input)
+            mapping.index(input)
           end
 
         type[value || input]

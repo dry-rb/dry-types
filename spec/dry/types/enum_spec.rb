@@ -1,4 +1,30 @@
 RSpec.describe Dry::Types::Enum do
+  context 'with mapping' do
+    subject(:type) { string.enum(mapping) }
+
+    let(:mapping) { {'draft' => 0, 'published' => 10, 'archived' => 20} }
+    let(:values) { mapping.keys }
+    let(:string) { Dry::Types['strict.string'] }
+
+    it_behaves_like Dry::Types::Definition
+
+    it 'allows defining an enum from a specific type' do
+      expect(type['draft']).to eql(mapping.index(0))
+      expect(type['published']).to eql(mapping.index(10))
+      expect(type['archived']).to eql(mapping.index(20))
+
+      expect(type[0]).to be(mapping.index(0))
+      expect(type[10]).to be(mapping.index(10))
+      expect(type[20]).to eql(mapping.index(20))
+
+      expect(type.mapping).to eql(mapping)
+
+      expect { type['oops'] }.to raise_error(Dry::Types::ConstraintError, /oops/)
+
+      expect(type.mapping).to be_frozen
+    end
+  end
+
   context 'with string type' do
     subject(:type) { string.enum(*values) }
 
@@ -12,8 +38,8 @@ RSpec.describe Dry::Types::Enum do
       expect(type['published']).to eql(values[1])
       expect(type['archived']).to eql(values[2])
 
-      expect(type[0]).to be(values[0])
-      expect(type[1]).to be(values[1])
+      expect(type[0]).to eql(values[0])
+      expect(type[1]).to eql(values[1])
       expect(type[2]).to eql(values[2])
 
       expect(type.values).to eql(values)
