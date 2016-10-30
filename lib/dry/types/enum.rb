@@ -4,7 +4,7 @@ module Dry
   module Types
     class Enum
       include Type
-      include Dry::Equalizer(:type, :options, :values)
+      include Dry::Equalizer(:type, :options, :mapping)
       include Decorator
 
       # @return [Array]
@@ -18,9 +18,8 @@ module Dry
       # @option options [Array] :values
       def initialize(type, options)
         super
-        @values = options.fetch(:values).freeze
-        @values.each(&:freeze)
-        @mapping = values.each_with_object({}) { |v, h| h[values.index(v)] = v }.freeze
+        @mapping = options.fetch(:mapping).freeze
+        @values = @mapping.keys.freeze.each(&:freeze)
       end
 
       # @param [Object] input
@@ -33,6 +32,8 @@ module Dry
             input
           elsif mapping.key?(input)
             mapping[input]
+          elsif mapping.values.include?(input)
+            mapping.key(input)
           else
             input
           end
@@ -56,7 +57,7 @@ module Dry
       # @see Definition#to_ast
       def to_ast(meta: true)
         [:enum, [type.to_ast(meta: meta),
-                 values,
+                 mapping,
                  meta ? self.meta : EMPTY_HASH]]
       end
     end
