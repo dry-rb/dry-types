@@ -1,3 +1,11 @@
+# v0.9.1 to-be-released
+
+## Fixed
+
+* `Hash#strict_with_defaults` properly evaluates callable defaults (bolshakov)
+
+[Compare v0.9.0...HEAD](https://github.com/dryrb/dry-types/compare/v0.9.0...HEAD)
+
 # v0.9.0 2016-09-21
 
 ## Added
