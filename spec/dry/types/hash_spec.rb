@@ -249,8 +249,8 @@ RSpec.describe Dry::Types::Hash do
     context 'with a sum' do
       let(:hash) { h1 | h2 }
 
-      let(:h1) { primitive.strict(name: Dry::Types['strict.string']) }
-      let(:h2) { primitive.strict(age: Dry::Types['strict.int']) }
+      let(:h1) { Dry::Types['strict.hash'].strict(name: Dry::Types['strict.string']) }
+      let(:h2) { Dry::Types['strict.hash'].strict(age: Dry::Types['strict.int']) }
 
       it 'returns input when it is valid for the left side' do
         expect(hash[name: 'Jane']).to eql(name: 'Jane')
