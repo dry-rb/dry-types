@@ -13,8 +13,6 @@ group :tools do
 end
 
 group :benchmarks do
-  gem 'sqlite3'
-  gem 'activerecord', platform: %i(jruby mri)
   gem 'benchmark-ips'
   gem 'virtus'
   gem 'fast_attributes'
