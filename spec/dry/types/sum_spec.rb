@@ -17,6 +17,7 @@ RSpec.describe Dry::Types::Sum do
 
       expect(type[312]).to be(312)
       expect(type['312']).to eql('312')
+      expect(type[nil]).to be(nil)
     end
 
     it 'works with two strict types' do

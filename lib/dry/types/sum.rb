@@ -19,6 +19,13 @@ module Dry
         def constrained?
           true
         end
+
+        def call(input)
+          try(input) do |result|
+            raise ConstraintError.new(result, input)
+          end.input
+        end
+        alias_method :[], :call
       end
 
       def initialize(left, right, options = {})
@@ -44,9 +51,7 @@ module Dry
       end
 
       def call(input)
-        try(input) do |result|
-          raise ConstraintError.new(result, input)
-        end.input
+        try(input).input
       end
       alias_method :[], :call
 
