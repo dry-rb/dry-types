@@ -4,6 +4,10 @@
 
 * `Hash#strict_with_defaults` properly evaluates callable defaults (bolshakov)
 
+## Changed
+
+* `Hash#weak` accepts Hash-descendants again (solnic)
+
 [Compare v0.9.0...HEAD](https://github.com/dryrb/dry-types/compare/v0.9.0...HEAD)
 
 # v0.9.0 2016-09-21
