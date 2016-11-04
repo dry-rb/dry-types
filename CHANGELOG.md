@@ -1,4 +1,4 @@
-# v0.9.1 to-be-released
+# v0.9.1 2016-11-04
 
 ## Fixed
 
