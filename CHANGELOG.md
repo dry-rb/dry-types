@@ -8,7 +8,7 @@
 
 * `Hash#weak` accepts Hash-descendants again (solnic)
 
-[Compare v0.9.0...HEAD](https://github.com/dryrb/dry-types/compare/v0.9.0...HEAD)
+[Compare v0.9.0...v0.9.1](https://github.com/dryrb/dry-types/compare/v0.9.0...v0.9.1)
 
 # v0.9.0 2016-09-21
 
