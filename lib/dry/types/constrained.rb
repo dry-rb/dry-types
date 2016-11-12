@@ -9,13 +9,19 @@ module Dry
       include Decorator
       include Builder
 
+      # @return [Dry::Logic::Rule]
       attr_reader :rule
 
+      # @param [Definition] type
+      # @param [Hash] options
       def initialize(type, options)
         super
         @rule = options.fetch(:rule)
       end
 
+      # @param [Object] input
+      # @return [Object]
+      # @raise [ConstraintError]
       def call(input)
         try(input) do |result|
           raise ConstraintError.new(result, input)
@@ -23,6 +29,11 @@ module Dry
       end
       alias_method :[], :call
 
+      # @param [Object] input
+      # @param [#call] block
+      # @yieldparam [Failure] failure
+      # @yieldreturn [Result]
+      # @return [Result]
       def try(input, &block)
         result = rule.(input)
 
@@ -34,20 +45,30 @@ module Dry
         end
       end
 
+      # @param [Object] value
+      # @return [Boolean]
       def valid?(value)
         rule.(value).success? && type.valid?(value)
       end
 
+      # @param [Hash] options
+      #   The options hash provided to {Types.Rule} and combined
+      #   using {&} with previous {#rule}
+      # @return [Constrained]
+      # @see Dry::Logic::Operators#and
       def constrained(options)
         with(rule: rule & Types.Rule(options))
       end
 
+      # @return [true]
       def constrained?
         true
       end
 
       private
 
+      # @param [Object] response
+      # @return [Boolean]
       def decorate?(response)
         super || response.kind_of?(Constructor)
       end
