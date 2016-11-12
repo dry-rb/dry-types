@@ -5,43 +5,62 @@ module Dry
     module Decorator
       include Options
 
+      # @return [Definition]
       attr_reader :type
 
+      # @param [Definition] type
       def initialize(type, *)
         super
         @type = type
       end
 
+      # @return [Constructor]
       def constructor
         type.constructor
       end
 
+      # @param [Object] input
+      # @param [#call] block
+      # @return [Result]
       def try(input, &block)
         type.try(input, &block)
       end
 
+      # @param [Object] value
+      # @return [Boolean]
       def valid?(value)
         type.valid?(value)
       end
 
+      # @return [Boolean]
       def default?
         type.default?
       end
 
+      # @return [Boolean]
       def constrained?
         type.constrained?
       end
 
+      # @param [Symbol] meth
+      # @param [Boolean] include_private
+      # @return [Boolean]
       def respond_to_missing?(meth, include_private = false)
         super || type.respond_to?(meth)
       end
 
       private
 
+      # @param [Object] response
+      # @return [Boolean]
       def decorate?(response)
         response.kind_of?(type.class)
       end
 
+      # Delegates missing methods to {#type}
+      # @param [Symbol] meth
+      # @param [Array] args
+      # @param [#call] block
       def method_missing(meth, *args, &block)
         if type.respond_to?(meth)
           response = type.__send__(meth, *args, &block)
