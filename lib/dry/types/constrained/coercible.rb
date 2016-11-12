@@ -2,6 +2,11 @@ module Dry
   module Types
     class Constrained
       class Coercible < Constrained
+        # @param [Object] input
+        # @param [#call] block
+        # @yieldparam [Failure] failure
+        # @yieldreturn [Result]
+        # @return [Result]
         def try(input, &block)
           result = type.try(input)
 
