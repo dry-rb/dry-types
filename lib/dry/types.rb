@@ -29,12 +29,14 @@ module Dry
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
+    # @return [Module]
     def self.module
       namespace = Module.new
       define_constants(namespace, type_keys)
       namespace
     end
 
+    # @deprecated Include {Dry::Types.module} instead
     def self.finalize
       warn 'Dry::Types.finalize and configuring namespace is deprecated. Just'\
        ' do `include Dry::Types.module` in places where you want to have access'\
@@ -109,14 +111,19 @@ module Dry
       end
     end
 
+    # @param [#to_s] klass
+    # @return [String]
     def self.identifier(klass)
       Inflecto.underscore(klass).tr('/', '.')
     end
 
+    # @return [Concurrent::Map]
     def self.type_map
       @type_map ||= Concurrent::Map.new
     end
 
+    # List of type keys defined in {Dry::Types.container}
+    # @return [<String>]
     def self.type_keys
       container._container.keys
     end
