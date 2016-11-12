@@ -7,6 +7,8 @@ module Dry
       include Decorator
       include Builder
 
+      # @param [Object] input
+      # @return [Object]
       def call(input)
         result = try(input)
 
@@ -18,6 +20,11 @@ module Dry
       end
       alias_method :[], :call
 
+      # @param [Object] input
+      # @param [#call] block
+      # @yieldparam [Failure] failure
+      # @yieldreturn [Result]
+      # @return [Result]
       def try(input, &block)
         type.try(input, &block)
       rescue TypeError, ArgumentError => e
@@ -27,6 +34,8 @@ module Dry
 
       private
 
+      # @param [Object, Dry::Types::Constructor] response
+      # @return [Boolean]
       def decorate?(response)
         super || response.kind_of?(Constructor)
       end
