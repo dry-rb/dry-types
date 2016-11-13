@@ -1,3 +1,11 @@
+# v0.9.2 to-be-released
+
+## Changed
+
+* Optimized object allocation in hash schemas, resulting in up to 25% speed boost (davydovanton)
+
+[Compare v0.9.1...v0.9.2](https://github.com/dryrb/dry-types/compare/v0.9.1...v0.9.2)
+
 # v0.9.1 2016-11-04
 
 ## Fixed
