@@ -57,13 +57,15 @@ module Dry
         end
 
         def resolve(hash)
-          member_types.each_with_object({}) do |(key, type), result|
+          result = {}
+          member_types.each do |key, type|
             if hash.key?(key)
               result[key] = yield(type, key, hash[key])
             else
               resolve_missing_value(result, key, type)
             end
           end
+          result
         end
 
         def resolve_missing_value(result, key, type)
@@ -133,7 +135,8 @@ module Dry
         private
 
         def resolve(hash)
-          member_types.each_with_object({}) do |(key, type), result|
+          result = {}
+          member_types.each do |key, type|
             keyname =
               if hash.key?(key)
                 key
@@ -147,6 +150,7 @@ module Dry
               resolve_missing_value(result, key, type)
             end
           end
+          result
         end
       end
 
