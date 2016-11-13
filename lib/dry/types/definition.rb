@@ -56,11 +56,11 @@ module Dry
       end
 
       def success(*args)
-        result(Result::Success, *args)
+        Result::Success.new(*args)
       end
 
       def failure(*args)
-        result(Result::Failure, *args)
+        Result::Failure.new(*args)
       end
 
       def result(klass, *args)
