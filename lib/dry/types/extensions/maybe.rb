@@ -60,8 +60,13 @@ module Dry
         end
       end
 
-      StrictWithDefaults.include MaybeTypes
-      Schema.include MaybeTypes
+      class StrictWithDefaults < Strict
+        include MaybeTypes
+      end
+
+      class Schema < Hash
+        include MaybeTypes
+      end
     end
 
     # Register non-coercible maybe types
