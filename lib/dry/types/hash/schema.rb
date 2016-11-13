@@ -1,19 +1,38 @@
 module Dry
   module Types
     class Hash < Definition
+      # The built-in Hash type has constructors that you can use to define
+      # hashes with explicit schemas and coercible values using the built-in types.
+      #
+      # Basic {Schema} evaluates default values for keys missing in input hash
+      # (see {Schema#resolve_missing_value})
+      #
+      # @see Dry::Types::Default#evaluate
+      # @see Dry::Types::Default::Callable#evaluate
       class Schema < Hash
+        # @return [Hash{Symbol => Definition}]
         attr_reader :member_types
 
+        # @param [Class] _primitive
+        # @param [Hash] options
+        # @option options [Hash{Symbol => Definition}] :member_types
         def initialize(_primitive, options)
           @member_types = options.fetch(:member_types)
           super
         end
 
+        # @param [Hash] hash
+        # @return [Hash{Symbol => Object}]
         def call(hash)
           coerce(hash)
         end
         alias_method :[], :call
 
+        # @param [Hash] hash
+        # @param [#call] block
+        # @yieldparam [Failure] failure
+        # @yieldreturn [Result]
+        # @return [Result]
         def try(hash, &block)
           success = true
           output  = {}
@@ -40,12 +59,16 @@ module Dry
 
         private
 
+        # @param [Hash] hash
+        # @return [Hash{Symbol => Object}]
         def try_coerce(hash)
           resolve(hash) do |type, key, value|
             yield(key, type.try(value))
           end
         end
 
+        # @param [Hash] hash
+        # @return [Hash{Symbol => Object}]
         def coerce(hash)
           resolve(hash) do |type, key, value|
             begin
@@ -56,6 +79,8 @@ module Dry
           end
         end
 
+        # @param [Hash] hash
+        # @return [Hash{Symbol => Object}]
         def resolve(hash)
           result = {}
           member_types.each do |key, type|
@@ -68,6 +93,12 @@ module Dry
           result
         end
 
+        # @param [Hash] result
+        # @param [Symbol] key
+        # @param [Definition] type
+        # @return [Object]
+        # @see Dry::Types::Default#evaluate
+        # @see Dry::Types::Default::Callable#evaluate
         def resolve_missing_value(result, key, type)
           if type.default?
             result[key] = type.evaluate
@@ -77,17 +108,33 @@ module Dry
         end
       end
 
+      # Permissive schema raises a {MissingKeyError} if the given key is missing
+      # in provided hash.
       class Permissive < Schema
         private
 
+        # @param [Symbol] key
+        # @raise [MissingKeyError] when key is missing in given input
         def resolve_missing_value(_, key, _)
           raise MissingKeyError, key
         end
       end
 
+      # Strict hash will raise errors when keys are missing or value types are incorrect.
+      # Strict schema raises a {UnknownKeysError} if there are any unexpected
+      # keys in given hash, and raises a {MissingKeyError} if any key is missing
+      # in it.
+      # @example
+      #   hash = Types::Hash.strict(name: Types::String, age: Types::Coercible::Int)
+      #   hash[email: 'jane@doe.org', name: 'Jane', age: 21]
+      #     # => Dry::Types::SchemaKeyError: :email is missing in Hash input
       class Strict < Permissive
         private
 
+        # @param [Hash] hash
+        # @return [Hash{Symbol => Object}]
+        # @raise [UnknownKeysError]
+        #   if there any unexpected key in given hash
         def resolve(hash)
           unexpected = hash.keys - member_types.keys
           raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
@@ -100,9 +147,20 @@ module Dry
         end
       end
 
+      # {StrictWithDefaults} checks that there are no extra keys
+      # (raises {UnknownKeysError} otherwise) and there a no missing keys
+      # without default values given (raises {MissingKeyError} otherwise).
+      # @see Default#evaluate
+      # @see Default::Callable#evaluate
       class StrictWithDefaults < Strict
         private
 
+        # @param [Hash] result
+        # @param [Symbol] key
+        # @param [Definition] type
+        # @return [Object]
+        # @see Dry::Types::Default#evaluate
+        # @see Dry::Types::Default::Callable#evaluate
         def resolve_missing_value(result, key, type)
           if type.default?
             result[key] = type.evaluate
@@ -112,7 +170,12 @@ module Dry
         end
       end
 
+      # Weak schema provides safe types for every type given in schema hash
+      # @see Safe
       class Weak < Schema
+        # @param [Class] primitive
+        # @param [Hash] options
+        # @see #initialize
         def self.new(primitive, options)
           member_types = options.
             fetch(:member_types).
@@ -121,6 +184,11 @@ module Dry
           super(primitive, options.merge(member_types: member_types))
         end
 
+        # @param [Hash] hash
+        # @param [#call] block
+        # @yieldparam [Failure] failure
+        # @yieldreturn [Result]
+        # @return [Result]
         def try(hash, &block)
           if hash.is_a?(::Hash)
             super
@@ -131,6 +199,7 @@ module Dry
         end
       end
 
+      # {Symbolized} hash will turn string key names into symbols.
       class Symbolized < Weak
         private
 
