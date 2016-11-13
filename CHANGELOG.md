@@ -1,5 +1,9 @@
 # v0.9.2 to-be-released
 
+## Added
+
+* Support for `"Y"` and `"N"` as `true` and `false` values, respectively (scare21410)
+
 ## Changed
 
 * Optimized object allocation in hash schemas, resulting in up to 25% speed boost (davydovanton)
