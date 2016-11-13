@@ -11,14 +11,24 @@ module Dry
 
         extend Coercions
 
+        # @param [String, Object] input
+        # @return [Boolean?]
+        # @see TRUE_VALUES
+        # @see FALSE_VALUES
         def self.to_true(input)
           BOOLEAN_MAP.fetch(input.to_s, input)
         end
 
+        # @param [String, Object] input
+        # @return [Boolean?]
+        # @see TRUE_VALUES
+        # @see FALSE_VALUES
         def self.to_false(input)
           BOOLEAN_MAP.fetch(input.to_s, input)
         end
 
+        # @param [#to_int, #to_i, Object] input
+        # @return [Integer?, Object]
         def self.to_int(input)
           if empty_str?(input)
             nil
@@ -29,6 +39,8 @@ module Dry
           input
         end
 
+        # @param [#to_f, Object] input
+        # @return [Float?, Object]
         def self.to_float(input)
           if empty_str?(input)
             nil
@@ -39,6 +51,8 @@ module Dry
           input
         end
 
+        # @param [#to_d, Object] input
+        # @return [BigDecimal?, Object]
         def self.to_decimal(input)
           result = to_float(input)
 
@@ -49,10 +63,14 @@ module Dry
           end
         end
 
+        # @param [Array, '', Object] input
+        # @return [Array, Object]
         def self.to_ary(input)
           empty_str?(input) ? [] : input
         end
 
+        # @param [Hash, '', Object] input
+        # @return [Hash]
         def self.to_hash(input)
           empty_str?(input) ? {} : input
         end
