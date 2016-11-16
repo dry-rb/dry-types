@@ -55,12 +55,12 @@ module Dry
         end
       end
 
-      def success(*args)
-        Result::Success.new(*args)
+      def success(input)
+        Result::Success.new(input)
       end
 
-      def failure(*args)
-        Result::Failure.new(*args)
+      def failure(input, error)
+        Result::Failure.new(input, error)
       end
 
       def result(klass, *args)
