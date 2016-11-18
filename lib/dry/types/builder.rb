@@ -1,10 +1,6 @@
-require 'dry/core/constants'
-
 module Dry
   module Types
     module Builder
-      include Dry::Core::Constants
-
       def constrained_type
         Constrained
       end

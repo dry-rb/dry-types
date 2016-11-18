@@ -8,6 +8,7 @@ require 'concurrent'
 require 'dry-container'
 require 'dry-equalizer'
 require 'dry/core/extensions'
+require 'dry/core/constants'
 
 require 'dry/types/version'
 require 'dry/types/container'
@@ -20,6 +21,7 @@ module Dry
   module Types
     extend Dry::Configurable
     extend Dry::Core::Extensions
+    include Dry::Core::Constants
 
     setting :namespace, self
 

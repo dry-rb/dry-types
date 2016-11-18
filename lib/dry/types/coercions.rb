@@ -1,10 +1,6 @@
-require 'dry/core/constants'
-
 module Dry
   module Types
     module Coercions
-      include Dry::Core::Constants
-
       def to_nil(input)
         input unless empty_str?(input)
       end
