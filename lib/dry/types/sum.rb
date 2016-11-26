@@ -7,19 +7,26 @@ module Dry
       include Builder
       include Options
 
+      # @return [Definition]
       attr_reader :left
 
+      # @return [Definition]
       attr_reader :right
 
       class Constrained < Sum
+        # @return [Dry::Logic::Rule]
         def rule
           left.rule | right.rule
         end
 
+        # @return [true]
         def constrained?
           true
         end
 
+        # @param [Object] input
+        # @return [Object]
+        # @raise [ConstraintError] if given +input+ not passing {#try}
         def call(input)
           try(input) do |result|
             raise ConstraintError.new(result, input)
@@ -28,28 +35,37 @@ module Dry
         alias_method :[], :call
       end
 
+      # @param [Definition] left
+      # @param [Definition] right
+      # @param [Hash] options
       def initialize(left, right, options = {})
         super
         @left, @right = left, right
         freeze
       end
 
+      # @return [String]
       def name
         [left, right].map(&:name).join(' | ')
       end
 
+      # @return [false]
       def default?
         false
       end
 
+      # @return [false]
       def maybe?
         false
       end
 
+      # @return [false]
       def constrained?
         false
       end
 
+      # @param [Object] input
+      # @return [Object]
       def call(input)
         try(input).input
       end
@@ -69,10 +85,14 @@ module Dry
         end
       end
 
+      # @param [Object] value
+      # @return [Boolean]
       def primitive?(value)
         left.primitive?(value) || right.primitive?(value)
       end
 
+      # @param [Object] value
+      # @return [Boolean]
       def valid?(value)
         left.valid?(value) || right.valid?(value)
       end

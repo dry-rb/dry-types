@@ -9,6 +9,8 @@ module Dry
       module JSON
         extend Coercions
 
+        # @param [#to_d, Object] input
+        # @return [BigDecimal?]
         def self.to_decimal(input)
           input.to_d unless empty_str?(input)
         end

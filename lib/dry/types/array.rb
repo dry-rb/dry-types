@@ -3,6 +3,8 @@ require 'dry/types/array/member'
 module Dry
   module Types
     class Array < Definition
+      # @param [Definition] type
+      # @return [Array::Member]
       def member(type)
         member =
           case type

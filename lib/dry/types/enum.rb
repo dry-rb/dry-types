@@ -6,8 +6,15 @@ module Dry
       include Dry::Equalizer(:type, :options, :values)
       include Decorator
 
-      attr_reader :values, :mapping
+      # @return [Array]
+      attr_reader :values
 
+      # @return [Hash]
+      attr_reader :mapping
+
+      # @param [Definition] type
+      # @param [Hash] options
+      # @option options [Array] :values
       def initialize(type, options)
         super
         @values = options.fetch(:values).freeze
@@ -15,6 +22,8 @@ module Dry
         @mapping = values.each_with_object({}) { |v, h| h[values.index(v)] = v }.freeze
       end
 
+      # @param [Object] input
+      # @return [Object]
       def call(input)
         value =
           if values.include?(input)

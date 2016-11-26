@@ -23,16 +23,20 @@ module Dry
     extend Dry::Core::Extensions
     include Dry::Core::Constants
 
+    # @!attribute [r] namespace
+    #   @return [Container{String => Definition}]
     setting :namespace, self
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
+    # @return [Module]
     def self.module
       namespace = Module.new
       define_constants(namespace, type_keys)
       namespace
     end
 
+    # @deprecated Include {Dry::Types.module} instead
     def self.finalize
       warn 'Dry::Types.finalize and configuring namespace is deprecated. Just'\
        ' do `include Dry::Types.module` in places where you want to have access'\
@@ -41,19 +45,30 @@ module Dry
       define_constants(config.namespace, type_keys)
     end
 
+    # @return [Container{String => Definition}]
     def self.container
       @container ||= Container.new
     end
 
+    # @param [String] name
+    # @param [Definition] type
+    # @param [#call] block
+    # @return [Container{String => Definition}]
     def self.register(name, type = nil, &block)
       container.register(name, type || block.call)
     end
 
+    # Registers given +klass+ in {#container} using +meth+ constructor
+    # @param [Class] klass
+    # @param [Symbol] meth
+    # @return [Container{String => Definition}]
     def self.register_class(klass, meth = :new)
       type = Definition.new(klass).constructor(klass.method(meth))
       container.register(identifier(klass), type)
     end
 
+    # @param [String] name
+    # @return [Definition]
     def self.[](name)
       type_map.fetch_or_store(name) do
         case name
@@ -78,6 +93,9 @@ module Dry
       end
     end
 
+    # @param [Container{String => Definition}] namespace
+    # @param [<String>] identifiers
+    # @return [<Definition>]
     def self.define_constants(namespace, identifiers)
       names = identifiers.map do |id|
         parts = id.split('.')
@@ -93,14 +111,19 @@ module Dry
       end
     end
 
+    # @param [#to_s] klass
+    # @return [String]
     def self.identifier(klass)
       Inflecto.underscore(klass).tr('/', '.')
     end
 
+    # @return [Concurrent::Map]
     def self.type_map
       @type_map ||= Concurrent::Map.new
     end
 
+    # List of type keys defined in {Dry::Types.container}
+    # @return [<String>]
     def self.type_keys
       container._container.keys
     end

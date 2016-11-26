@@ -13,3 +13,7 @@ task :run_specs do
 end
 
 task default: :run_specs
+
+require 'yard'
+require 'yard/rake/yardoc_task'
+YARD::Rake::YardocTask.new(:doc)
