@@ -1,8 +1,12 @@
-# v0.9.2 to-be-released
+# v0.9.2 2016-12-03
 
 ## Added
 
 * Support for `"Y"` and `"N"` as `true` and `false` values, respectively (scare21410)
+
+## Fixed
+
+* Updated to dry-core >= 0.2.1 (ruby warnings are gone) (flash-gordon)
 
 ## Changed
 
