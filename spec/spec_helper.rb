@@ -1,6 +1,8 @@
-if RUBY_ENGINE == "rbx"
-  require "codeclimate-test-reporter"
-  CodeClimate::TestReporter.start
+if ENV['COVERAGE'] == 'true' && RUBY_ENGINE == 'ruby' && RUBY_VERSION == '2.3.1'
+  require "simplecov"
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
 end
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
