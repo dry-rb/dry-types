@@ -1,12 +1,16 @@
-# v0.9.2 2016-12-03
-
-## Added
-
-* Support for `"Y"` and `"N"` as `true` and `false` values, respectively (scare21410)
+# v0.9.3 2016-12-03
 
 ## Fixed
 
 * Updated to dry-core >= 0.2.1 (ruby warnings are gone) (flash-gordon)
+
+[Compare v0.9.2...v0.9.3](https://github.com/dryrb/dry-types/compare/v0.9.2...v0.9.3)
+
+# v0.9.2 2016-11-13
+
+## Added
+
+* Support for `"Y"` and `"N"` as `true` and `false` values, respectively (scare21410)
 
 ## Changed
 
