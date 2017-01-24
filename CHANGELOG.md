@@ -1,8 +1,10 @@
-# to-be-released
+# v0.9.4 2017-01-24
 
 ## Added
 
 * Added `Types::Object` which passes an object of any type (flash-gordon)
+
+[Compare v0.9.3...v0.9.4](https://github.com/dryrb/dry-types/compare/v0.9.3...v0.9.4)
 
 # v0.9.3 2016-12-03
 
