@@ -1,3 +1,9 @@
+# to-be-released
+
+## Added
+
+* Added `Types::Object` which passes an object of any type (flash-gordon)
+
 # v0.9.3 2016-12-03
 
 ## Fixed

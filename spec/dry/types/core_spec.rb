@@ -158,4 +158,24 @@ RSpec.describe Dry::Types::Definition do
       expect(value).to eql('SomeThing')
     end
   end
+
+  describe 'with Object' do
+    let(:object) { Dry::Types['object'] }
+    let(:constrained) { Dry::Types['object'].constrained(type: TrueClass) }
+
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { object }
+    end
+
+    it 'passes through any object' do
+      [Object.new, true, 1, BasicObject.new].each do |o|
+        expect(object[o]).to be o
+      end
+    end
+
+    it 'can be constrained with a specific type' do
+      expect(constrained[true]).to be true
+      expect { constrained[false] }.to raise_error(Dry::Types::ConstraintError)
+    end
+  end
 end
