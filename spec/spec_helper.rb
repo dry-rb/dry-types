@@ -1,4 +1,4 @@
-if ENV['COVERAGE'] == 'true' && RUBY_ENGINE == 'ruby' && RUBY_VERSION == '2.3.1'
+if ENV['CI'] == 'true' && RUBY_ENGINE == 'ruby'
   require "simplecov"
   SimpleCov.start do
     add_filter '/spec/'
