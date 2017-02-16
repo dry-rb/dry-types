@@ -102,6 +102,13 @@ module Dry
       def valid?(value)
         left.valid?(value) || right.valid?(value)
       end
+
+      # @api public
+      #
+      # @see Definition#to_ast
+      def to_ast
+        [:sum, [left.to_ast, right.to_ast]]
+      end
     end
   end
 end

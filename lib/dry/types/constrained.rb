@@ -72,6 +72,13 @@ module Dry
       def ===(value)
         valid?(value)
       end
+      #
+      # @api public
+      #
+      # @see Definition#to_ast
+      def to_ast
+        [:constrained, [type.to_ast, rule.to_ast]]
+      end
 
       private
 

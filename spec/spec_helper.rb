@@ -34,6 +34,8 @@ rescue LoadError; end
 Dir[Pathname(__dir__).join('shared/*.rb')].each(&method(:require))
 require_relative '../lib/spec/dry/types'
 
+Undefined = Dry::Core::Constants::Undefined
+
 RSpec.configure do |config|
   config.before do
     @types = Dry::Types.container._container.keys
