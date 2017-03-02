@@ -41,6 +41,13 @@ module Dry
         raise '.enum(*values).default(value) is not supported. Call '\
               '.default(value).enum(*values) instead'
       end
+
+      # @api public
+      #
+      # @see Definition#to_ast
+      def to_ast
+        [:enum, [type.to_ast]]
+      end
     end
   end
 end

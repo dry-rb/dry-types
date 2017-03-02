@@ -54,6 +54,42 @@ RSpec.describe Dry::Types, '#to_ast' do
       end
     end
   end
+
+  context 'Enum' do
+    subject(:type) { Dry::Types['strict.string'].enum('draft', 'published', 'archived') }
+
+    specify do
+      expect(type.to_ast).
+        to eql([
+                 :enum,
+                 [
+                   [
+                     :constrained,
+                     [
+                       [
+                         :definition, [:primitive, String]
+                       ],
+                       [
+                         :and,
+                         [
+                           [
+                             :predicate,
+                             [:type?, [[:type, String], [:input, Undefined]]]
+                           ],
+                           [
+                             :predicate,
+                             [:included_in?,
+                               [[:list, ["draft", "published", "archived"]], [:input, Undefined]]]
+                           ]
+                         ]
+                       ]
+                     ]
+                   ]
+                 ]
+               ])
+    end
+  end
+
   context 'Constructor' do
     subject(:type) do
       Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
