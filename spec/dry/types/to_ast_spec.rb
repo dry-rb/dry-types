@@ -90,6 +90,30 @@ RSpec.describe Dry::Types, '#to_ast' do
     end
   end
 
+  context 'Safe' do
+    subject(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).safe }
+
+    specify do
+      expect(type.to_ast).
+        to eql([
+                 :safe,
+                 [
+                   [
+                     :constrained,
+                     [
+                       [
+                         :constructor, [[:definition, [:primitive, String]]]
+                       ],
+                       [
+                         :predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]
+                       ]
+                     ]
+                   ]
+                 ]
+               ])
+    end
+  end
+
   context 'Constructor' do
     subject(:type) do
       Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
