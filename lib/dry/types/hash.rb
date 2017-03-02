@@ -50,10 +50,6 @@ module Dry
         schema(type_map, Symbolized)
       end
 
-      def to_ast
-        [:hash, [:primitive, primitive]]
-      end
-
       private
 
       # @param [Hash] _result

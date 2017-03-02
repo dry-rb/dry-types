@@ -16,19 +16,20 @@ module Dry
       end
 
       def visit_constructor(node)
-        primitive, fn = node
+        definition, fn = node
+        primitive = visit(definition)
         Types::Constructor.new(primitive, &fn)
       end
 
-      def visit_type(node)
-        type, args = node
-        meth = :"visit_#{type.tr('.', '_')}"
+      def visit_safe(node)
+        type, args = node[0]
+        Types::Safe.new(send(:"visit_#{type}", args))
+      end
 
-        if respond_to?(meth) && args
-          send(meth, args)
-        else
-          registry[type]
-        end
+      def visit_definition(node)
+        type, args = node
+
+        registry[args]
       end
 
       def visit_sum(node)
@@ -39,45 +40,19 @@ module Dry
         registry['array'].member(call(node))
       end
 
-      def visit_form_array(node)
-        registry['form.array'].member(call(node))
-      end
-
-      def visit_json_array(node)
-        registry['json.array'].member(call(node))
-      end
-
       def visit_hash(node)
         constructor, schema = node
         merge_with('hash', constructor, schema)
       end
 
-      def visit_form_hash(node)
-        if node
-          constructor, schema = node
-          merge_with('form.hash', constructor, schema)
-        else
-          registry['form.hash']
-        end
-      end
-
-      def visit_json_hash(node)
-        if node
-          constructor, schema = node
-          merge_with('json.hash', constructor, schema)
-        else
-          registry['json.hash']
-        end
-      end
-
-      def visit_key(node)
+      def visit_member(node)
         name, types = node
         { name => visit(types) }
       end
 
       def merge_with(hash_id, constructor, schema)
         registry[hash_id].__send__(
-          constructor, schema.map { |key| visit(key) }.reduce({}, :merge)
+          constructor, schema.first.map { |key| visit(key) }.reduce({}, :merge)
         )
       end
     end
