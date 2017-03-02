@@ -54,6 +54,17 @@ RSpec.describe Dry::Types, '#to_ast' do
       end
     end
   end
+  context 'Constructor' do
+    subject(:type) do
+      Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
+    end
+
+    specify do
+      expect(type.to_ast).
+        to eql([:constructor, [[:definition, [:primitive, String]]]])
+    end
+  end
+
   context 'Array' do
     subject(:type) { Dry::Types['array'] }
 

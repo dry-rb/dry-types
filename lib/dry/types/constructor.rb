@@ -72,6 +72,13 @@ module Dry
         Constrained::Coercible
       end
 
+      # @api public
+      #
+      # @see Definition#to_ast
+      def to_ast
+        [:constructor, [type.to_ast]]
+      end
+
       private
 
       # @param [Symbol] meth
