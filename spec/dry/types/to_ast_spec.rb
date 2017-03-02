@@ -54,4 +54,23 @@ RSpec.describe Dry::Types, '#to_ast' do
       end
     end
   end
+  context 'Array' do
+    subject(:type) { Dry::Types['array'] }
+
+    specify do
+      expect(type.to_ast).
+        to eql([:array, [:primitive, Array]])
+    end
+
+    context 'Member' do
+      subject(:type) do
+        Dry::Types['array'].member(Dry::Types['string'])
+      end
+
+      specify do
+        expect(type.to_ast).
+          to eql([:array, [:member, [[:definition, [:primitive, String]]]]])
+      end
+    end
+  end
 end

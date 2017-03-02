@@ -48,6 +48,13 @@ module Dry
             block ? yield(failure) : failure
           end
         end
+
+        # @api public
+        #
+        # @see Definition#to_ast
+        def to_ast
+          [:array, [:member, [member.to_ast]]]
+        end
       end
     end
   end

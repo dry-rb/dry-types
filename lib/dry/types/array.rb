@@ -14,6 +14,13 @@ module Dry
 
         Array::Member.new(primitive, options.merge(member: member))
       end
+
+      # @api public
+      #
+      # @see Definition#to_ast
+      def to_ast
+        [:array, [:primitive, primitive]]
+      end
     end
   end
 end
