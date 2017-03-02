@@ -76,7 +76,7 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast
-        [:constructor, [type.to_ast]]
+        [:constructor, [type.to_ast, fn]]
       end
 
       private

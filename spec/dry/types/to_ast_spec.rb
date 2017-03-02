@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Dry::Types, '#to_ast' do
+  let(:fn) { Kernel.method(:String) }
+
   context 'with a definition' do
     subject(:type) { Dry::Types::Definition.new(String) }
 
@@ -102,7 +104,7 @@ RSpec.describe Dry::Types, '#to_ast' do
                      :constrained,
                      [
                        [
-                         :constructor, [[:definition, [:primitive, String]]]
+                         :constructor, [[:definition, [:primitive, String]], fn ]
                        ],
                        [
                          :predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]
@@ -116,12 +118,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
   context 'Constructor' do
     subject(:type) do
-      Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
+      Dry::Types::Constructor.new(Dry::Types['string'], fn: fn)
     end
 
     specify do
       expect(type.to_ast).
-        to eql([:constructor, [[:definition, [:primitive, String]]]])
+        to eql([:constructor, [[:definition, [:primitive, String]], fn ]])
     end
   end
 
