@@ -59,9 +59,16 @@ module Dry
         end
 
         def to_ast
-          [:hash,
-           [hash_type,
-            [:member_types, [member_types.values.map(&:to_ast)]]]]
+          [
+            :hash,
+            [
+              hash_type,
+              [
+                :member_types,
+                [member_types.map { |name, member| [:member, [name, member.to_ast]] }]
+              ]
+            ]
+          ]
         end
 
         private
