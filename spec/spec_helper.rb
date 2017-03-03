@@ -37,6 +37,10 @@ require_relative '../lib/spec/dry/types'
 Undefined = Dry::Core::Constants::Undefined
 
 RSpec.configure do |config|
+  config.before(:example, :maybe) do
+    Dry::Types.load_extensions(:maybe)
+  end
+
   config.before do
     @types = Dry::Types.container._container.keys
 
@@ -57,10 +61,6 @@ RSpec.configure do |config|
   end
 
   config.order = 'random'
-
-  config.before(:example, :maybe) do
-    Dry::Types.load_extensions(:maybe)
-  end
 end
 
 srand RSpec.configuration.seed
