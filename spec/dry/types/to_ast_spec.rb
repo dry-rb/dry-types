@@ -41,7 +41,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:hash, [:primitive, Hash]])
+        to eql([:definition, [:primitive, Hash]])
     end
 
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
@@ -51,7 +51,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
         specify do
           expect(type.to_ast).
-            to eql([:hash, [schema, [:member_types, [ member_types_ast ]]]])
+            to eql([:hash, [schema, [ member_types_ast ]]])
         end
       end
     end
@@ -132,7 +132,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:array, [:primitive, Array]])
+        to eql([:definition, [:primitive, Array]])
     end
 
     context 'Member' do
@@ -142,7 +142,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
       specify do
         expect(type.to_ast).
-          to eql([:array, [:member, [[:definition, [:primitive, String]]]]])
+          to eql([:array, [:definition, [:primitive, String]]])
       end
     end
   end
