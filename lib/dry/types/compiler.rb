@@ -27,9 +27,13 @@ module Dry
       end
 
       def visit_definition(node)
-        type, args = node
+        _, primitive = node
 
-        registry[args]
+        if registry.registered?(primitive)
+          registry[primitive]
+        else
+          Definition.new(primitive)
+        end
       end
 
       def visit_sum(node)

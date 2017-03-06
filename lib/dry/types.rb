@@ -51,6 +51,11 @@ module Dry
       @container ||= Container.new
     end
 
+    # @api private
+    def self.registered?(class_or_identifier)
+      container.key?(identifier(class_or_identifier))
+    end
+
     # @param [String] name
     # @param [Type] type
     # @param [#call,nil] block

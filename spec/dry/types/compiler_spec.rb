@@ -3,6 +3,21 @@ require 'dry/types/compiler'
 RSpec.describe Dry::Types::Compiler, '#call' do
   subject(:compiler) { Dry::Types::Compiler.new(Dry::Types) }
 
+  it 'returns existing definition' do
+    ast = [:definition, [:primitive, Hash]]
+    type = compiler.(ast)
+
+    expect(type).to be(Dry::Types['hash'])
+  end
+
+  it 'builds a plain definition' do
+    ast = [:definition, [:primitive, Set]]
+    type = compiler.(ast)
+    expected = Dry::Types::Definition.new(Set)
+
+    expect(type).to eql(expected)
+  end
+
   it 'builds a safe coercible hash' do
     ast = Dry::Types['hash'].permissive(
       email: Dry::Types['string'],
