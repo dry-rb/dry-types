@@ -2,12 +2,12 @@ module Dry
   module Types
     class Array < Definition
       class Member < Array
-        # @return [Definition]
+        # @return [Type]
         attr_reader :member
 
         # @param [Class] primitive
         # @param [Hash] options
-        # @option options [Definition] :member
+        # @option options [Type] :member
         def initialize(primitive, options = {})
           @member = options.fetch(:member)
           super
@@ -21,17 +21,17 @@ module Dry
         end
         alias_method :[], :call
 
-        # @param [Array, #all?] value
+        # @param [Array, #all?, Object] value
         # @return [Boolean]
         def valid?(value)
           super && value.all? { |el| member.valid?(el) }
         end
 
         # @param [Array, Object] input
-        # @param [#call] block
+        # @param [#call,nil] block
         # @yieldparam [Failure] failure
         # @yieldreturn [Result]
-        # @return [Result]
+        # @return [Result,Logic::Result]
         def try(input, &block)
           if input.is_a?(::Array)
             result = call(input, :try)

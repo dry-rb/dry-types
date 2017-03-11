@@ -13,7 +13,7 @@ module Dry
       # @return [Hash]
       attr_reader :mapping
 
-      # @param [Definition] type
+      # @param [Type] type
       # @param [Hash] options
       # @option options [Array] :values
       def initialize(type, options)

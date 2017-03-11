@@ -17,7 +17,7 @@ module Dry
       attr_reader :primitive
 
       # @param [Class] primitive
-      # @return [Definition]
+      # @return [Type]
       def self.[](primitive)
         if primitive == ::Array
           Types::Array
@@ -28,7 +28,7 @@ module Dry
         end
       end
 
-      # @param [Class] primitive
+      # @param [Type,Class] primitive
       # @param [Hash] options
       def initialize(primitive, options = {})
         super
@@ -51,18 +51,19 @@ module Dry
         false
       end
 
-      # @param [Object] input
-      # @return [Object]
+      # @param [BasicObject] input
+      # @return [BasicObject]
       def call(input)
         input
       end
       alias_method :[], :call
 
       # @param [Object] input
-      # @param [#call] block
+      # @param [#call,nil] block
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]
-      # @return [Result]
+      # @return [Result,Logic::Result] when a block is not provided
+      # @return [nil] otherwise
       def try(input, &block)
         if valid?(input)
           success(input)
@@ -73,14 +74,14 @@ module Dry
       end
 
       # @param (see Dry::Types::Success#initialize)
-      # @return [Success]
+      # @return [Result::Success]
       def success(input)
         Result::Success.new(input)
       end
 
 
       # @param (see Failure#initialize)
-      # @return [Failure]
+      # @return [Result::Failure]
       def failure(input, error)
         Result::Failure.new(input, error)
       end

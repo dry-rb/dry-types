@@ -5,10 +5,10 @@ module Dry
 
       class Coercible < Constrained
         # @param [Object] input
-        # @param [#call] block
+        # @param [#call,nil] block
         # @yieldparam [Failure] failure
         # @yieldreturn [Result]
-        # @return [Result]
+        # @return [Result,Logic::Result,nil]
         def try(input, &block)
           result = type.try(input)
 

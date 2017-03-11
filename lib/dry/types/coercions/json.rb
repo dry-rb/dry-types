@@ -10,7 +10,7 @@ module Dry
         extend Coercions
 
         # @param [#to_d, Object] input
-        # @return [BigDecimal?]
+        # @return [BigDecimal,nil]
         def self.to_decimal(input)
           input.to_d unless empty_str?(input)
         end
