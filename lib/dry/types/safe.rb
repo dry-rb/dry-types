@@ -3,6 +3,7 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Safe
+      include Type
       include Dry::Equalizer(:type, :options)
       include Decorator
       include Builder

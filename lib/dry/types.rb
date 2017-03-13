@@ -12,6 +12,7 @@ require 'dry/core/constants'
 
 require 'dry/types/version'
 require 'dry/types/container'
+require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
 

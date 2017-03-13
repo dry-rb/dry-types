@@ -3,6 +3,7 @@ require 'dry/types/options'
 module Dry
   module Types
     class Sum
+      include Type
       include Dry::Equalizer(:left, :right, :options)
       include Builder
       include Options

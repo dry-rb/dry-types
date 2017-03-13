@@ -1,6 +1,8 @@
 module Dry
   module Types
     class Constrained
+      include Type
+
       class Coercible < Constrained
         # @param [Object] input
         # @param [#call] block

@@ -5,6 +5,7 @@ require 'dry/types/constrained/coercible'
 module Dry
   module Types
     class Constrained
+      include Type
       include Dry::Equalizer(:type, :options, :rule)
       include Decorator
       include Builder

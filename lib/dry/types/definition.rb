@@ -5,6 +5,7 @@ require 'dry/types/options'
 module Dry
   module Types
     class Definition
+      include Type
       include Dry::Equalizer(:primitive, :options)
       include Options
       include Builder
