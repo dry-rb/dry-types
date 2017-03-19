@@ -98,6 +98,7 @@ module Dry
         value.is_a?(primitive)
       end
       alias_method :valid?, :primitive?
+      alias_method :===, :primitive?
     end
   end
 end

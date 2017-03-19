@@ -65,6 +65,12 @@ module Dry
         true
       end
 
+      # @param [Object] value
+      # @return [Boolean]
+      def ===(value)
+        valid?(value)
+      end
+
       private
 
       # @param [Object] response

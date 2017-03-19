@@ -49,5 +49,24 @@ RSpec.describe Dry::Types::Definition do
         expect { |probe| type.try(value, &probe) }.to yield_with_args(result)
       end
     end
+
+    describe '#===' do
+      it 'return if the value pass is valid primitive' do
+        expect(type.===('hello')).to eq true
+      end
+
+      context 'In case statement' do
+        let(:value) do
+          case 'Hello'
+            when type then '0_o'
+            else 2
+          end
+        end
+
+        it 'use in case statement' do
+          expect(value).to eq '0_o'
+        end
+      end
+    end
   end
 end
