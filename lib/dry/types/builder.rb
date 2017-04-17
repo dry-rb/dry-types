@@ -3,12 +3,12 @@ module Dry
     module Builder
       include Dry::Core::Constants
 
-      # @return [Constrained]
+      # @return [Class]
       def constrained_type
         Constrained
       end
 
-      # @param [Definition] other
+      # @param [Type] other
       # @return [Sum, Sum::Constrained]
       def |(other)
         klass = constrained? && other.constrained? ? Sum::Constrained : Sum
@@ -27,7 +27,7 @@ module Dry
       end
 
       # @param [Object] input
-      # @param [#call] block
+      # @param [#call,nil] block
       # @raise [ConstraintError]
       # @return [Default]
       def default(input = Undefined, &block)
@@ -51,9 +51,9 @@ module Dry
         Safe.new(self)
       end
 
-      # @param [#call] constructor
+      # @param [#call,nil] constructor
       # @param [Hash] options
-      # @param [#call] block
+      # @param [#call,nil] block
       # @return [Constructor]
       def constructor(constructor = nil, **options, &block)
         Constructor.new(with(options), fn: constructor || block)

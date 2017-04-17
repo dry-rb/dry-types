@@ -54,7 +54,7 @@ module Dry
 
       # @param [Hash] _result
       # @param [Symbol] _key
-      # @param [Definition] _type
+      # @param [Type] _type
       def resolve_missing_value(_result, _key, _type)
         # noop
       end

@@ -3,6 +3,7 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Safe
+      include Type
       include Dry::Equalizer(:type, :options)
       include Decorator
       include Builder
@@ -21,10 +22,10 @@ module Dry
       alias_method :[], :call
 
       # @param [Object] input
-      # @param [#call] block
+      # @param [#call,nil] block
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]
-      # @return [Result]
+      # @return [Result,Logic::Result]
       def try(input, &block)
         type.try(input, &block)
       rescue TypeError, ArgumentError => e

@@ -3,18 +3,19 @@ require 'dry/types/options'
 module Dry
   module Types
     class Sum
+      include Type
       include Dry::Equalizer(:left, :right, :options)
       include Builder
       include Options
 
-      # @return [Definition]
+      # @return [Type]
       attr_reader :left
 
-      # @return [Definition]
+      # @return [Type]
       attr_reader :right
 
       class Constrained < Sum
-        # @return [Dry::Logic::Rule]
+        # @return [Dry::Logic::Operations::Or]
         def rule
           left.rule | right.rule
         end
@@ -35,8 +36,8 @@ module Dry
         alias_method :[], :call
       end
 
-      # @param [Definition] left
-      # @param [Definition] right
+      # @param [Type] left
+      # @param [Type] right
       # @param [Hash] options
       def initialize(left, right, options = {})
         super

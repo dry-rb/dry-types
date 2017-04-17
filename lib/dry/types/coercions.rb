@@ -3,8 +3,9 @@ module Dry
     module Coercions
       include Dry::Core::Constants
 
-      # @param [String] input
-      # @return [String?]
+      # @param [String, Object] input
+      # @return [nil] if the input is an empty string
+      # @return [Object] otherwise the input object is returned
       def to_nil(input)
         input unless empty_str?(input)
       end

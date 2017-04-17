@@ -3,6 +3,7 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Enum
+      include Type
       include Dry::Equalizer(:type, :options, :values)
       include Decorator
 
@@ -12,7 +13,7 @@ module Dry
       # @return [Hash]
       attr_reader :mapping
 
-      # @param [Definition] type
+      # @param [Type] type
       # @param [Hash] options
       # @option options [Array] :values
       def initialize(type, options)

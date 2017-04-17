@@ -3,6 +3,7 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Default
+      include Type
       include Dry::Equalizer(:type, :options, :value)
       include Decorator
       include Builder
@@ -23,7 +24,7 @@ module Dry
       alias_method :evaluate, :value
 
       # @param [Object, #call] value
-      # @return [Default, Dry::Types::Default::Callable]
+      # @return [Class] {Default} or {Default::Callable}
       def self.[](value)
         if value.respond_to?(:call)
           Callable
@@ -32,7 +33,7 @@ module Dry
         end
       end
 
-      # @param [Definition] type
+      # @param [Type] type
       # @param [Object] value
       def initialize(type, value, *)
         super
@@ -51,7 +52,7 @@ module Dry
       end
 
       # @param [Object] input
-      # @return [Success]
+      # @return [Result::Success]
       def try(input)
         success(call(input))
       end

@@ -5,6 +5,7 @@ require 'dry/types/constrained/coercible'
 module Dry
   module Types
     class Constrained
+      include Type
       include Dry::Equalizer(:type, :options, :rule)
       include Decorator
       include Builder
@@ -12,7 +13,7 @@ module Dry
       # @return [Dry::Logic::Rule]
       attr_reader :rule
 
-      # @param [Definition] type
+      # @param [Type] type
       # @param [Hash] options
       def initialize(type, options)
         super
@@ -30,10 +31,11 @@ module Dry
       alias_method :[], :call
 
       # @param [Object] input
-      # @param [#call] block
+      # @param [#call,nil] block
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]
-      # @return [Result]
+      # @return [Logic::Result, Result]
+      # @return [Object] if block given and try fails
       def try(input, &block)
         result = rule.(input)
 

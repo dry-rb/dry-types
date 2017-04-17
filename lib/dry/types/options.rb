@@ -12,13 +12,17 @@ module Dry
       end
 
       # @param [Hash] new_options
-      # @return [Definition]
+      # @return [Type]
       def with(new_options)
         self.class.new(*@__args__, options.merge(new_options))
       end
 
-      # @param [Hash] data
-      # @return [Hash, Definition]
+      # @overload meta
+      #   @return [Hash] metadata associated with type
+      #
+      # @overload meta(data)
+      #   @param [Hash] new metadata to merge into existing metadata
+      #   @return [Type] new type with added metadata
       def meta(data = nil)
         data ? with(meta: @meta.merge(data)) : @meta
       end

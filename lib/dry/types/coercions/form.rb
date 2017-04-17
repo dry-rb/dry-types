@@ -12,7 +12,7 @@ module Dry
         extend Coercions
 
         # @param [String, Object] input
-        # @return [Boolean?]
+        # @return [Boolean,Object]
         # @see TRUE_VALUES
         # @see FALSE_VALUES
         def self.to_true(input)
@@ -20,7 +20,7 @@ module Dry
         end
 
         # @param [String, Object] input
-        # @return [Boolean?]
+        # @return [Boolean,Object]
         # @see TRUE_VALUES
         # @see FALSE_VALUES
         def self.to_false(input)
@@ -28,7 +28,7 @@ module Dry
         end
 
         # @param [#to_int, #to_i, Object] input
-        # @return [Integer?, Object]
+        # @return [Integer, nil, Object]
         def self.to_int(input)
           if empty_str?(input)
             nil
@@ -40,7 +40,7 @@ module Dry
         end
 
         # @param [#to_f, Object] input
-        # @return [Float?, Object]
+        # @return [Float, nil, Object]
         def self.to_float(input)
           if empty_str?(input)
             nil
@@ -52,7 +52,7 @@ module Dry
         end
 
         # @param [#to_d, Object] input
-        # @return [BigDecimal?, Object]
+        # @return [BigDecimal, nil, Object]
         def self.to_decimal(input)
           result = to_float(input)
 
@@ -63,14 +63,14 @@ module Dry
           end
         end
 
-        # @param [Array, '', Object] input
+        # @param [Array, String, Object] input
         # @return [Array, Object]
         def self.to_ary(input)
           empty_str?(input) ? [] : input
         end
 
-        # @param [Hash, '', Object] input
-        # @return [Hash]
+        # @param [Hash, String, Object] input
+        # @return [Hash, Object]
         def self.to_hash(input)
           empty_str?(input) ? {} : input
         end

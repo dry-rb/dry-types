@@ -12,6 +12,7 @@ require 'dry/core/constants'
 
 require 'dry/types/version'
 require 'dry/types/container'
+require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
 
@@ -51,8 +52,8 @@ module Dry
     end
 
     # @param [String] name
-    # @param [Definition] type
-    # @param [#call] block
+    # @param [Type] type
+    # @param [#call,nil] block
     # @return [Container{String => Definition}]
     def self.register(name, type = nil, &block)
       container.register(name, type || block.call)
@@ -67,8 +68,8 @@ module Dry
       container.register(identifier(klass), type)
     end
 
-    # @param [String] name
-    # @return [Definition]
+    # @param [String,Class] name
+    # @return [Type,Class]
     def self.[](name)
       type_map.fetch_or_store(name) do
         case name
@@ -93,7 +94,7 @@ module Dry
       end
     end
 
-    # @param [Container{String => Definition}] namespace
+    # @param [Module] namespace
     # @param [<String>] identifiers
     # @return [<Definition>]
     def self.define_constants(namespace, identifiers)

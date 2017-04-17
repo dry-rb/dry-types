@@ -5,10 +5,10 @@ module Dry
     module Decorator
       include Options
 
-      # @return [Definition]
+      # @return [Type]
       attr_reader :type
 
-      # @param [Definition] type
+      # @param [Type] type
       def initialize(type, *)
         super
         @type = type
@@ -20,8 +20,9 @@ module Dry
       end
 
       # @param [Object] input
-      # @param [#call] block
-      # @return [Result]
+      # @param [#call, nil] block
+      # @return [Result,Logic::Result]
+      # @return [Object] if block given and try fails
       def try(input, &block)
         type.try(input, &block)
       end
@@ -60,7 +61,7 @@ module Dry
       # Delegates missing methods to {#type}
       # @param [Symbol] meth
       # @param [Array] args
-      # @param [#call] block
+      # @param [#call, nil] block
       def method_missing(meth, *args, &block)
         if type.respond_to?(meth)
           response = type.__send__(meth, *args, &block)

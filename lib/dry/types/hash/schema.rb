@@ -29,10 +29,11 @@ module Dry
         alias_method :[], :call
 
         # @param [Hash] hash
-        # @param [#call] block
+        # @param [#call,nil] block
         # @yieldparam [Failure] failure
         # @yieldreturn [Result]
-        # @return [Result]
+        # @return [Logic::Result]
+        # @return [Object] if coercion fails and a block is given
         def try(hash, &block)
           success = true
           output  = {}
@@ -95,7 +96,7 @@ module Dry
 
         # @param [Hash] result
         # @param [Symbol] key
-        # @param [Definition] type
+        # @param [Type] type
         # @return [Object]
         # @see Dry::Types::Default#evaluate
         # @see Dry::Types::Default::Callable#evaluate
@@ -135,6 +136,10 @@ module Dry
         # @return [Hash{Symbol => Object}]
         # @raise [UnknownKeysError]
         #   if there any unexpected key in given hash
+        # @raise [MissingKeyError]
+        #   if a required key is not present
+        # @raise [SchemaError]
+        #   if a value is the wrong type
         def resolve(hash)
           unexpected = hash.keys - member_types.keys
           raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
@@ -157,7 +162,7 @@ module Dry
 
         # @param [Hash] result
         # @param [Symbol] key
-        # @param [Definition] type
+        # @param [Type] type
         # @return [Object]
         # @see Dry::Types::Default#evaluate
         # @see Dry::Types::Default::Callable#evaluate
@@ -184,16 +189,17 @@ module Dry
           super(primitive, options.merge(member_types: member_types))
         end
 
-        # @param [Hash] hash
-        # @param [#call] block
+        # @param [Object] value
+        # @param [#call, nil] block
         # @yieldparam [Failure] failure
         # @yieldreturn [Result]
-        # @return [Result]
-        def try(hash, &block)
-          if hash.is_a?(::Hash)
+        # @return [Object] if block given
+        # @return [Result,Logic::Result] otherwise
+        def try(value, &block)
+          if value.is_a?(::Hash)
             super
           else
-            result = failure(hash, "#{hash} must be a hash")
+            result = failure(value, "#{value} must be a hash")
             block ? yield(result) : result
           end
         end

@@ -7,7 +7,7 @@ module Dry
     setting :namespace, self
 
     class SchemaError < TypeError
-      # @param [String] key
+      # @param [String,Symbol] key
       # @param [Object] value
       def initialize(key, value)
         super("#{value.inspect} (#{value.class}) has invalid type for :#{key}")
@@ -18,7 +18,7 @@ module Dry
     private_constant(:SchemaKeyError)
 
     class MissingKeyError < SchemaKeyError
-      # @param [String] key
+      # @param [String,Symbol] key
       def initialize(key)
         super(":#{key} is missing in Hash input")
       end
