@@ -5,16 +5,16 @@ module Dry
       attr_reader :options
 
       # @see Definition#initialize
-      def initialize(*args, **options)
+      def initialize(*args, meta: EMPTY_HASH, **options)
         @__args__ = args
         @options = options
-        @meta = options.fetch(:meta, {})
+        @meta = meta
       end
 
       # @param [Hash] new_options
       # @return [Type]
       def with(new_options)
-        self.class.new(*@__args__, options.merge(new_options))
+        self.class.new(*@__args__, **options, meta: @meta, **new_options)
       end
 
       # @overload meta

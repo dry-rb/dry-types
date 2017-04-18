@@ -42,6 +42,11 @@ RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
       expect(with_meta).to be_instance_of(type.class)
       expect(with_meta.meta).to eql(foo: :bar, baz: '1')
     end
+
+    it "doesn't use meta in equality checks" do
+      expect(type.meta(foo: :bar)).to eql(type)
+      expect(type.meta(foo: :bar).hash).to eql(type.hash)
+    end
   end
 end
 

@@ -77,7 +77,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
     it_behaves_like Dry::Types::Definition
 
     it 'creates a new type with provided options' do
-      expect(type.options).to eql(meta: { foo: :bar })
+      expect(type.options).to eql({})
       expect(type.meta).to eql(foo: :bar)
     end
 
