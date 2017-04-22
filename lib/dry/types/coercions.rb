@@ -16,7 +16,7 @@ module Dry
       def to_date(input)
         return input unless input.respond_to?(:to_str)
         Date.parse(input)
-      rescue ArgumentError
+      rescue ArgumentError, RangeError
         input
       end
 

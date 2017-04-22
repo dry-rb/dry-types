@@ -41,6 +41,7 @@ RSpec.describe Dry::Types::Definition do
 
     it 'returns original value when it was unparsable' do
       expect(type['not-a-date']).to eql('not-a-date')
+      expect(type['12345678912/04/2017']).to eql ('12345678912/04/2017')
     end
 
     it 'returns original value when it is not a string' do
