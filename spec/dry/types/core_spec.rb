@@ -159,9 +159,10 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'with Object' do
+  describe 'with Any' do
+    let(:any) { Dry::Types['any'] }
     let(:object) { Dry::Types['object'] }
-    let(:constrained) { Dry::Types['object'].constrained(type: TrueClass) }
+    let(:constrained) { Dry::Types['any'].constrained(type: TrueClass) }
 
     it_behaves_like Dry::Types::Definition do
       let(:type) { object }
@@ -169,13 +170,30 @@ RSpec.describe Dry::Types::Definition do
 
     it 'passes through any object' do
       [Object.new, true, 1, BasicObject.new].each do |o|
-        expect(object[o]).to be o
+        expect(any[o]).to be o
       end
     end
 
     it 'can be constrained with a specific type' do
       expect(constrained[true]).to be true
       expect { constrained[false] }.to raise_error(Dry::Types::ConstraintError)
+    end
+
+    context 'with BasicObject' do
+      let(:basic) { BasicObject.new }
+
+      it 'populates BasicObject' do
+        expect(any[basic]).to be basic
+        expect(any.valid?(basic)).to be true
+      end
+    end
+
+    it 'has Object alias' do
+      expect(any).to be(object)
+    end
+
+    it 'has a special name' do
+      expect(any.name).to eql('Any')
     end
   end
 end
