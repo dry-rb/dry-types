@@ -1,3 +1,9 @@
+# v0.9.5 to-be-released
+
+## Changed
+
+* `Types::Object` was renamed to `Types::Any` (flash-gordon)
+
 # v0.9.4 2017-01-24
 
 ## Added
