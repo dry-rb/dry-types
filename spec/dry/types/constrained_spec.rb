@@ -26,6 +26,30 @@ RSpec.describe Dry::Types::Constrained do
     end
   end
 
+  describe '#===' do
+    subject(:type) do
+      Dry::Types['strict.string'].constrained(size: 3..12)
+    end
+
+    it 'return boolean' do
+      expect(type.===('hello')).to eq true
+      expect(type.===('no')).to eq false
+    end
+
+    context 'In case statement' do
+      let(:value) do
+        case 'awesome'
+          when type then 'accepted'
+          else 'invalid'
+        end
+      end
+
+      it 'will return correct value' do
+        expect(value).to eq 'accepted'
+      end
+    end
+  end
+
   context 'with a constructor type' do
     subject(:type) do
       Dry::Types['coercible.hash'].constrained(size: 1)
