@@ -6,7 +6,7 @@ module Dry
   module Types
     class Definition
       include Type
-      include Dry::Equalizer(:primitive, :options)
+      include Dry::Equalizer(:primitive, :options, :meta)
       include Options
       include Builder
 
