@@ -1,5 +1,9 @@
 # v0.10.0 2017-04-26
 
+## Fixed
+
+* Return original value when Date.parse raises a RangeError (jviney)
+
 ## Changed
 
 * Meta data are now stored separately from options (flash-gordon)
