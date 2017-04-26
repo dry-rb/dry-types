@@ -1,3 +1,5 @@
+require 'dry/types/any'
+
 module Dry
   module Types
     COERCIBLE = {
@@ -53,7 +55,8 @@ module Dry
     register("bool", self["true"] | self["false"])
     register("strict.bool", self["strict.true"] | self["strict.false"])
 
-    register("object", Definition[::Object].new(::Object))
+    register("any", Any)
+    register("object", self['any'])
   end
 end
 
