@@ -1,8 +1,11 @@
-# v0.9.5 to-be-released
+# v0.10.0 2017-04-26
 
 ## Changed
 
+* Meta data are now stored separately from options (flash-gordon)
 * `Types::Object` was renamed to `Types::Any` (flash-gordon)
+
+[Compare v0.9.4...v0.10.0](https://github.com/dryrb/dry-types/compare/v0.9.4...v0.10.0)
 
 # v0.9.4 2017-01-24
 
