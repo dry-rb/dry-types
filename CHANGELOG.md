@@ -1,5 +1,9 @@
 # v0.10.0 2017-04-26
 
+## Added
+
+* Types can be used in `case` statements now (GustavoCaso)
+
 ## Fixed
 
 * Return original value when Date.parse raises a RangeError (jviney)
