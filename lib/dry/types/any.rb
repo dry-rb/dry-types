@@ -1,8 +1,8 @@
 module Dry
   module Types
     Any = Class.new(Definition) do
-      def initialize
-        super(::Object)
+      def initialize(**options)
+        super(::Object, options)
       end
 
       # @return [String]
@@ -14,6 +14,12 @@ module Dry
       # @return [true]
       def valid?(_)
         true
+      end
+
+      # @param [Hash] new_options
+      # @return [Type]
+      def with(new_options)
+        self.class.new(**options, meta: @meta, **new_options)
       end
     end.new
   end

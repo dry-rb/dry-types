@@ -195,5 +195,9 @@ RSpec.describe Dry::Types::Definition do
     it 'has a special name' do
       expect(any.name).to eql('Any')
     end
+
+    it 'supports meta' do
+      expect(any.meta(name: :age).meta).to eql(name: :age)
+    end
   end
 end
