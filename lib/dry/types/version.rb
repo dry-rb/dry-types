@@ -1,5 +1,5 @@
 module Dry
   module Types
-    VERSION = '0.9.4'.freeze
+    VERSION = '0.10.0'.freeze
   end
 end
