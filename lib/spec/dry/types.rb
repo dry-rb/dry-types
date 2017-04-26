@@ -43,9 +43,12 @@ RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
       expect(with_meta.meta).to eql(foo: :bar, baz: '1')
     end
 
-    it "doesn't use meta in equality checks" do
-      expect(type.meta(foo: :bar)).to eql(type)
-      expect(type.meta(foo: :bar).hash).to eql(type.hash)
+    it 'equalizes on empty meta' do
+      expect(type).to eql(type.meta({}))
+    end
+
+    it 'equalizes on filled meta' do
+      expect(type).to_not eql(type.meta(i_am: 'different'))
     end
   end
 end

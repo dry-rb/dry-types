@@ -4,7 +4,7 @@ module Dry
   module Types
     class Sum
       include Type
-      include Dry::Equalizer(:left, :right, :options)
+      include Dry::Equalizer(:left, :right, :options, :meta)
       include Builder
       include Options
 
