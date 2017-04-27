@@ -26,6 +26,12 @@ module Dry
       def meta(data = nil)
         data ? with(meta: @meta.merge(data)) : @meta
       end
+
+      # Resets meta
+      # @return [Dry::Types::Type]
+      def pristine
+        with(meta: EMPTY_HASH)
+      end
     end
   end
 end

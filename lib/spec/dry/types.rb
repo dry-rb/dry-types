@@ -51,6 +51,12 @@ RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
       expect(type).to_not eql(type.meta(i_am: 'different'))
     end
   end
+
+  describe '#pristine' do
+    it 'erases meta' do
+      expect(type.meta(foo: :bar).pristine).to eql(type)
+    end
+  end
 end
 
 RSpec.shared_examples_for Dry::Types::Definition do
