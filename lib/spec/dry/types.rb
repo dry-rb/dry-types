@@ -32,6 +32,12 @@ RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
       expect(type).to eq(type)
     end
   end
+
+  describe '#optional?' do
+    it 'returns a boolean value' do
+      expect(type.optional?).to be_boolean
+    end
+  end
 end
 
 RSpec.shared_examples_for 'Dry::Types::Definition#meta' do

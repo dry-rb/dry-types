@@ -1,3 +1,7 @@
+## Added
+
+* `Type#optional?` returns true if type is Sum and left is nil (GustavoCaso)
+
 # v0.10.0 2017-04-26
 
 ## Added
