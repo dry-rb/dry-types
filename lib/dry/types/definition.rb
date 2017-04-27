@@ -51,6 +51,11 @@ module Dry
         false
       end
 
+      # @return [false]
+      def optional?
+        false
+      end
+
       # @param [BasicObject] input
       # @return [BasicObject]
       def call(input)

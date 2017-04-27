@@ -26,11 +26,6 @@ module Dry
       def meta(data = nil)
         data ? with(meta: @meta.merge(data)) : @meta
       end
-
-      # @return [Boolean]
-      def optional?
-        self.class == Sum && left.primitive == NilClass
-      end
     end
   end
 end
