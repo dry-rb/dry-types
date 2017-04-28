@@ -1,3 +1,9 @@
+# v0.10.2 to-be-released
+
+## Fixed
+
+* Fixed `Type#optional?` for sum types (flash-gordon)
+
 # v0.10.1 2017-04-28
 
 ## Added

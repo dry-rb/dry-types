@@ -23,6 +23,12 @@ RSpec.describe Dry::Types::Sum do
 
       expect(type).to_not be_optional
     end
+
+    it 'works when left is a Sum type' do
+      type = Dry::Types['strict.int'] | Dry::Types['strict.date'] | Dry::Types['strict.string']
+
+      expect(type).to_not be_optional
+    end
   end
 
   describe '#[]' do
