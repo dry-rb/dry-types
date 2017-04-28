@@ -1,7 +1,6 @@
-# v0.10.1 to-be-released
-
 ## Added
 
+* `Type#optional?` returns true if type is Sum and left is nil (GustavoCaso)
 * `Type#pristine` returns a type without `meta` (flash-gordon)
 
 # v0.10.0 2017-04-26

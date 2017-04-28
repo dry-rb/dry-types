@@ -25,6 +25,11 @@ module Dry
           true
         end
 
+        # @return [Boolean]
+        def optional?
+          left.primitive == NilClass
+        end
+
         # @param [Object] input
         # @return [Object]
         # @raise [ConstraintError] if given +input+ not passing {#try}
@@ -63,6 +68,11 @@ module Dry
       # @return [false]
       def constrained?
         false
+      end
+
+      # @return [Boolean]
+      def optional?
+        left.primitive == NilClass
       end
 
       # @param [Object] input

@@ -11,6 +11,20 @@ RSpec.describe Dry::Types::Sum do
     end
   end
 
+  describe '#optional?' do
+    it 'return true if left side is nil' do
+      type = Dry::Types['strict.nil'] | Dry::Types['string']
+
+      expect(type).to be_optional
+    end
+
+    it 'return false if left is not nil' do
+      type = Dry::Types['string'] | Dry::Types['nil']
+
+      expect(type).to_not be_optional
+    end
+  end
+
   describe '#[]' do
     it 'works with two pass-through types' do
       type = Dry::Types['int'] | Dry::Types['string']
