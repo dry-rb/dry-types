@@ -15,13 +15,13 @@ RSpec.describe Dry::Types::Sum do
     it 'return true if left side is nil' do
       type = Dry::Types['strict.nil'] | Dry::Types['string']
 
-      expect(type.optional?).to eq true
+      expect(type).to be_optional
     end
 
     it 'return false if left is not nil' do
       type = Dry::Types['string'] | Dry::Types['nil']
 
-      expect(type.optional?).to eq false
+      expect(type).to_not be_optional
     end
   end
 
