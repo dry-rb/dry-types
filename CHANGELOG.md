@@ -1,7 +1,16 @@
+# v0.10.1 2017-04-28
+
 ## Added
 
 * `Type#optional?` returns true if type is Sum and left is nil (GustavoCaso)
 * `Type#pristine` returns a type without `meta` (flash-gordon)
+
+## Fixed
+
+* `meta` is used in type equality again (solnic)
+* `Any` works correctly with meta again (flash-gordon)
+
+[Compare v0.10.0...v0.10.1](https://github.com/dry-rb/dry-types/compare/v0.10.0...v0.10.1)
 
 # v0.10.0 2017-04-26
 
@@ -18,7 +27,7 @@
 * Meta data are now stored separately from options (flash-gordon)
 * `Types::Object` was renamed to `Types::Any` (flash-gordon)
 
-[Compare v0.9.4...v0.10.0](https://github.com/dryrb/dry-types/compare/v0.9.4...v0.10.0)
+[Compare v0.9.4...v0.10.0](https://github.com/dry-rb/dry-types/compare/v0.9.4...v0.10.0)
 
 # v0.9.4 2017-01-24
 
@@ -26,7 +35,7 @@
 
 * Added `Types::Object` which passes an object of any type (flash-gordon)
 
-[Compare v0.9.3...v0.9.4](https://github.com/dryrb/dry-types/compare/v0.9.3...v0.9.4)
+[Compare v0.9.3...v0.9.4](https://github.com/dry-rb/dry-types/compare/v0.9.3...v0.9.4)
 
 # v0.9.3 2016-12-03
 
@@ -34,7 +43,7 @@
 
 * Updated to dry-core >= 0.2.1 (ruby warnings are gone) (flash-gordon)
 
-[Compare v0.9.2...v0.9.3](https://github.com/dryrb/dry-types/compare/v0.9.2...v0.9.3)
+[Compare v0.9.2...v0.9.3](https://github.com/dry-rb/dry-types/compare/v0.9.2...v0.9.3)
 
 # v0.9.2 2016-11-13
 
@@ -46,7 +55,7 @@
 
 * Optimized object allocation in hash schemas, resulting in up to 25% speed boost (davydovanton)
 
-[Compare v0.9.1...v0.9.2](https://github.com/dryrb/dry-types/compare/v0.9.1...v0.9.2)
+[Compare v0.9.1...v0.9.2](https://github.com/dry-rb/dry-types/compare/v0.9.1...v0.9.2)
 
 # v0.9.1 2016-11-04
 
@@ -58,7 +67,7 @@
 
 * `Hash#weak` accepts Hash-descendants again (solnic)
 
-[Compare v0.9.0...v0.9.1](https://github.com/dryrb/dry-types/compare/v0.9.0...v0.9.1)
+[Compare v0.9.0...v0.9.1](https://github.com/dry-rb/dry-types/compare/v0.9.0...v0.9.1)
 
 # v0.9.0 2016-09-21
 
@@ -82,7 +91,7 @@
 * `Types::Form::{Date,DateTime,Time}` fail gracefully for invalid input (padde)
 * ice_nine dependency has been dropped as it was required by Struct only (flash-gordon)
 
-[Compare v0.8.1...v0.9.0](https://github.com/dryrb/dry-types/compare/v0.8.1...v0.9.0)
+[Compare v0.8.1...v0.9.0](https://github.com/dry-rb/dry-types/compare/v0.8.1...v0.9.0)
 
 # v0.8.1 2016-07-13
 
@@ -91,7 +100,7 @@
 * Compiler no longer chokes on type nodes without args (solnic)
 * Removed `bin/console` from gem package (solnic)
 
-[Compare v0.8.0...v0.8.1](https://github.com/dryrb/dry-types/compare/v0.8.0...v0.8.1)
+[Compare v0.8.0...v0.8.1](https://github.com/dry-rb/dry-types/compare/v0.8.0...v0.8.1)
 
 # v0.8.0 2016-07-01
 
@@ -111,7 +120,7 @@
 * `:symbolized` hash schema is now based on `:weak` schema (solnic)
 * `Struct::Value` instances are now **deeply frozen** via ice_nine (backus)
 
-[Compare v0.7.2...v0.8.0](https://github.com/dryrb/dry-types/compare/v0.7.2...v0.8.0)
+[Compare v0.7.2...v0.8.0](https://github.com/dry-rb/dry-types/compare/v0.7.2...v0.8.0)
 
 # v0.7.2 2016-05-11
 
@@ -130,7 +139,7 @@
 - Coerce empty strings in form posts to blank arrays and hashes (timriley)
 - update to use dry-logic v0.2.3 (fran-worley)
 
-[Compare v0.7.1...v0.7.2](https://github.com/dryrb/dry-types/compare/v0.7.1...v0.7.2)
+[Compare v0.7.1...v0.7.2](https://github.com/dry-rb/dry-types/compare/v0.7.1...v0.7.2)
 
 # v0.7.1 2016-04-06
 
@@ -143,7 +152,7 @@
 - Schema is properly inherited in Struct (backus)
 - `constructor_type` is properly inherited in Struct (fbernier)
 
-[Compare v0.7.0...v0.7.1](https://github.com/dryrb/dry-types/compare/v0.7.0...v0.7.1)
+[Compare v0.7.0...v0.7.1](https://github.com/dry-rb/dry-types/compare/v0.7.0...v0.7.1)
 
 # v0.7.0 2016-03-30
 
@@ -177,7 +186,7 @@ Major focus of this release is to make complex type composition possible and imp
 - `Type#default` will raise if `nil` was passed for `Maybe` type (solnic)
 - `Hash` with a schema will set maybe values for missing keys or nils (flash-gordon)
 
-[Compare v0.6.0...v0.7.0](https://github.com/dryrb/dry-types/compare/v0.6.0...v0.7.0)
+[Compare v0.6.0...v0.7.0](https://github.com/dry-rb/dry-types/compare/v0.6.0...v0.7.0)
 
 # v0.6.0 2016-03-16
 
@@ -212,7 +221,7 @@ Renamed from `dry-data` to `dry-types` and:
 * `Dry::Types::Definition` is now the base type definition object (solnic)
 * `Dry::Types::Constructor` is now a type definition with a constructor function (solnic)
 
-[Compare v0.5.1...v0.6.0](https://github.com/dryrb/dry-types/compare/v0.5.1...v0.6.0)
+[Compare v0.5.1...v0.6.0](https://github.com/dry-rb/dry-types/compare/v0.5.1...v0.6.0)
 
 # v0.5.1 2016-01-11
 
@@ -222,7 +231,7 @@ Renamed from `dry-data` to `dry-types` and:
   not match input's class (solnic)
 * `form.array` and `form.hash` safe types (solnic)
 
-[Compare v0.5.0...v0.5.1](https://github.com/dryrb/dry-types/compare/v0.5.0...v0.5.1)
+[Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-types/compare/v0.5.0...v0.5.1)
 
 # v0.5.0 2016-01-11
 
@@ -243,7 +252,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * `attribute` raises proper error when type definition is missing (solnic)
 
-[Compare v0.4.2...v0.5.0](https://github.com/dryrb/dry-types/compare/v0.4.2...v0.5.0)
+[Compare v0.4.2...v0.5.0](https://github.com/dry-rb/dry-types/compare/v0.4.2...v0.5.0)
 
 # v0.4.2 2015-12-27
 
@@ -255,7 +264,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * Array member uses type objects now rather than just their constructors (solnic)
 
-[Compare v0.4.1...v0.4.2](https://github.com/dryrb/dry-types/compare/v0.4.1...v0.4.2)
+[Compare v0.4.1...v0.4.2](https://github.com/dry-rb/dry-types/compare/v0.4.1...v0.4.2)
 
 # v0.4.0 2015-12-11
 
@@ -268,7 +277,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * `Dry::Data['optional']` was **removed** in favor of `Dry::Data::Type#optional` (solnic)
 
-[Compare v0.3.2...v0.4.0](https://github.com/dryrb/dry-types/compare/v0.3.2...v0.4.0)
+[Compare v0.3.2...v0.4.0](https://github.com/dry-rb/dry-types/compare/v0.3.2...v0.4.0)
 
 # v0.3.2 2015-12-10
 
@@ -280,7 +289,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * Added missing require for `dry-equalizer` (solnic)
 
-[Compare v0.3.1...v0.3.2](https://github.com/dryrb/dry-types/compare/v0.3.1...v0.3.2)
+[Compare v0.3.1...v0.3.2](https://github.com/dry-rb/dry-types/compare/v0.3.1...v0.3.2)
 
 # v0.3.1 2015-12-09
 
@@ -288,7 +297,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * Removed require of constrained type and make it optional (solnic)
 
-[Compare v0.3.0...v0.3.1](https://github.com/dryrb/dry-types/compare/v0.3.0...v0.3.1)
+[Compare v0.3.0...v0.3.1](https://github.com/dry-rb/dry-types/compare/v0.3.0...v0.3.1)
 
 # v0.3.0 2015-12-09
 
@@ -300,7 +309,7 @@ Renamed from `dry-data` to `dry-types` and:
 * `Dry::Data::Type#enum` for defining an enum from a specific type (solnic)
 * New types: `symbol` and `class` along with their `strict` versions (solnic)
 
-[Compare v0.2.1...v0.3.0](https://github.com/dryrb/dry-types/compare/v0.2.1...v0.3.0)
+[Compare v0.2.1...v0.3.0](https://github.com/dry-rb/dry-types/compare/v0.2.1...v0.3.0)
 
 # v0.2.1 2015-11-30
 
@@ -316,7 +325,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * Improved structure of the ast (solnic)
 
-[Compare v0.2.0...v0.2.1](https://github.com/dryrb/dry-types/compare/v0.2.0...v0.2.1)
+[Compare v0.2.0...v0.2.1](https://github.com/dry-rb/dry-types/compare/v0.2.0...v0.2.1)
 
 # v0.2.0 2015-11-29
 
@@ -330,7 +339,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * Constructing optional types uses the new `Dry::Data["optional"]` built-in type (solnic)
 
-[Compare v0.1.0...v0.2.0](https://github.com/dryrb/dry-types/compare/v0.1.0...v0.2.0)
+[Compare v0.1.0...v0.2.0](https://github.com/dry-rb/dry-types/compare/v0.1.0...v0.2.0)
 
 # v0.1.0 2015-11-27
 
@@ -343,7 +352,7 @@ Renamed from `dry-data` to `dry-types` and:
   setting its `.new` method as the constructor (solnic)
 * `Dry::Data::Compiler` for building a type from a simple ast (solnic)
 
-[Compare v0.0.1...HEAD](https://github.com/dryrb/dry-types/compare/v0.0.1...HEAD)
+[Compare v0.0.1...HEAD](https://github.com/dry-rb/dry-types/compare/v0.0.1...HEAD)
 
 # v0.0.1 2015-10-05
 
