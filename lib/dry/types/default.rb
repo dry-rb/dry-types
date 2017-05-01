@@ -14,7 +14,7 @@ module Dry
         # Evaluates given callable
         # @return [Object]
         def evaluate
-          value.call
+          value.call(type)
         end
       end
 
