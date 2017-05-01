@@ -16,7 +16,8 @@ module Dry
       end
 
       def visit_constructor(node)
-        definition, fn = node
+        definition, fn_object_id = node
+        fn = Dry::Types["fn_#{fn_object_id}"]
         primitive = visit(definition)
         Types::Constructor.new(primitive, &fn)
       end

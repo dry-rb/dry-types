@@ -93,26 +93,26 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'Safe' do
-    subject(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).safe }
+    subject(:type) { Dry::Types['string'].constrained(min_size: 5).safe }
 
     specify do
       expect(type.to_ast).
         to eql([
-                 :safe,
-                 [
-                   [
-                     :constrained,
-                     [
-                       [
-                         :constructor, [[:definition, [:primitive, String]], fn ]
-                       ],
-                       [
-                         :predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]
-                       ]
-                     ]
-                   ]
-                 ]
-               ])
+                :safe,
+                [
+                  [
+                    :constrained,
+                    [
+                      [
+                        :definition, [:primitive, String]
+                      ],
+                      [
+                        :predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]
+                      ]
+                    ]
+                  ]
+                ]
+              ])
     end
   end
 
@@ -123,7 +123,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:constructor, [[:definition, [:primitive, String]], fn ]])
+        to eql([:constructor, [[:definition, [:primitive, String]], fn.object_id ]])
     end
   end
 

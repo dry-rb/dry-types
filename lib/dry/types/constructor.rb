@@ -76,10 +76,15 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast
-        [:constructor, [type.to_ast, fn]]
+        [:constructor, [type.to_ast, register_fn(fn)]]
       end
 
       private
+
+      def register_fn(fn)
+        Dry::Types.register("fn_#{fn.object_id}", fn)
+        fn.object_id
+      end
 
       # @param [Symbol] meth
       # @param [Boolean] include_private
