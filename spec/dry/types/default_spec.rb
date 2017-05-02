@@ -25,6 +25,14 @@ RSpec.describe Dry::Types::Definition, '#default' do
         Dry::Types::ConstraintError, /123/
       )
     end
+
+    it 'allow to handle the default value using a type' do
+      expect(
+        Dry::Types['strict.string']
+        .constructor(&:to_s)
+        .default { |type| type[123] }[nil]
+      ).to eq '123'
+    end
   end
 
   context 'with an optional type' do
