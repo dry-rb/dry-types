@@ -29,10 +29,10 @@ RSpec.describe Dry::Types::Enum do
       expect(with_default[nil]).to eql('draft')
     end
 
-    it 'allows defining a default value for an enum' do
-      with_default = type.default('published')
-
-      expect(with_default[nil]).to eql('published')
+    it "doesn't allows defining a default value for an enum" do
+      expect do
+        type.default('published')
+      end.to raise_error(RuntimeError)
     end
 
     it 'aliases #[] as #call' do
