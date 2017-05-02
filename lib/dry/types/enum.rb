@@ -36,6 +36,11 @@ module Dry
         type[value || input]
       end
       alias_method :[], :call
+
+      def default(*)
+        raise '.enum(*values).default(value) is not supported. Call '\
+              '.default(value).enum(*values) instead'
+      end
     end
   end
 end
