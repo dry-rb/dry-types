@@ -123,7 +123,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:constructor, [[:definition, [:primitive, String]], fn.object_id ]])
+        to eql([:constructor, [[:definition, [:primitive, String]], "fn_#{fn.object_id}" ]])
     end
   end
 
