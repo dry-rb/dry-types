@@ -15,6 +15,7 @@ require 'dry/types/container'
 require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
+require 'dry/types/fn_container'
 
 require 'dry/types/errors'
 

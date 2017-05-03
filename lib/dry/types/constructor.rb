@@ -82,7 +82,7 @@ module Dry
       private
 
       def register_fn(fn)
-        Dry::Types.register("fn_#{fn.object_id}", fn)
+        Dry::Types::FnContainer.register("fn_#{fn.object_id}", fn)
         fn.object_id
       end
 
