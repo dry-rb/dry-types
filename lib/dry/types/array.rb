@@ -14,6 +14,8 @@ module Dry
 
         Array::Member.new(primitive, options.merge(member: member))
       end
+
+      alias_method :of, :member
     end
   end
 end
