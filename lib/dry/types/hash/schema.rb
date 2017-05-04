@@ -63,9 +63,7 @@ module Dry
             :hash,
             [
               hash_type,
-              [
-                member_types.map { |name, member| [:member, [name, member.to_ast]] }
-              ]
+              member_types.map { |name, member| [:member, [name, member.to_ast]] }
             ]
           ]
         end

@@ -37,7 +37,7 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast
-        [:safe, [type.to_ast]]
+        [:safe, type.to_ast]
       end
 
       private

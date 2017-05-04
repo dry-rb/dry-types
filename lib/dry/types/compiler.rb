@@ -23,7 +23,7 @@ module Dry
       end
 
       def visit_safe(node)
-        type, args = node[0]
+        type, args = node
         Types::Safe.new(send(:"visit_#{type}", args))
       end
 
@@ -57,7 +57,7 @@ module Dry
 
       def merge_with(hash_id, constructor, schema)
         registry[hash_id].__send__(
-          constructor, schema.first.map { |key| visit(key) }.reduce({}, :merge)
+          constructor, schema.map { |key| visit(key) }.reduce({}, :merge)
         )
       end
     end

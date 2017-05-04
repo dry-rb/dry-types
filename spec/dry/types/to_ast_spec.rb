@@ -51,7 +51,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
         specify do
           expect(type.to_ast).
-            to eql([:hash, [schema, [ member_types_ast ]]])
+            to eql([:hash, [schema, member_types_ast ]])
         end
       end
     end
@@ -65,24 +65,22 @@ RSpec.describe Dry::Types, '#to_ast' do
         to eql([
                  :enum,
                  [
+                   :constrained,
                    [
-                     :constrained,
                      [
+                       :definition, [:primitive, String]
+                     ],
+                     [
+                       :and,
                        [
-                         :definition, [:primitive, String]
-                       ],
-                       [
-                         :and,
                          [
-                           [
-                             :predicate,
-                             [:type?, [[:type, String], [:input, Undefined]]]
-                           ],
-                           [
-                             :predicate,
-                             [:included_in?,
-                               [[:list, ["draft", "published", "archived"]], [:input, Undefined]]]
-                           ]
+                           :predicate,
+                           [:type?, [[:type, String], [:input, Undefined]]]
+                         ],
+                         [
+                           :predicate,
+                           [:included_in?,
+                             [[:list, ["draft", "published", "archived"]], [:input, Undefined]]]
                          ]
                        ]
                      ]
@@ -100,15 +98,13 @@ RSpec.describe Dry::Types, '#to_ast' do
         to eql([
                 :safe,
                 [
+                  :constrained,
                   [
-                    :constrained,
                     [
-                      [
-                        :definition, [:primitive, String]
-                      ],
-                      [
-                        :predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]
-                      ]
+                      :definition, [:primitive, String]
+                    ],
+                    [
+                      :predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]
                     ]
                   ]
                 ]

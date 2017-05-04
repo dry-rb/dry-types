@@ -46,7 +46,7 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast
-        [:enum, [type.to_ast]]
+        [:enum, type.to_ast]
       end
     end
   end
