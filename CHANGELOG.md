@@ -1,3 +1,11 @@
+# v0.10.3 2017-05-06
+
+## Added
+
+* Callable defaults accept the underlying type (v-kolesnikov)
+
+[Compare v0.10.2...v0.10.3](https://github.com/dry-rb/dry-types/compare/v0.10.2...v0.10.3)
+
 # v0.10.2 2017-04-28
 
 ## Fixed
