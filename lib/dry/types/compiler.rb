@@ -23,8 +23,7 @@ module Dry
       end
 
       def visit_safe(node)
-        type, args = node
-        Types::Safe.new(send(:"visit_#{type}", args))
+        Types::Safe.new(call(node))
       end
 
       def visit_definition(node)
