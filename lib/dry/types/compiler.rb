@@ -28,7 +28,7 @@ module Dry
       end
 
       def visit_definition(node)
-        _, primitive = node
+        primitive = node
 
         if registry.registered?(primitive)
           registry[primitive]

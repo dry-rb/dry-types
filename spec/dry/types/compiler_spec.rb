@@ -4,14 +4,14 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   subject(:compiler) { Dry::Types::Compiler.new(Dry::Types) }
 
   it 'returns existing definition' do
-    ast = [:definition, [:primitive, Hash]]
+    ast = [:definition, Hash]
     type = compiler.(ast)
 
     expect(type).to be(Dry::Types['hash'])
   end
 
   it 'builds a plain definition' do
-    ast = [:definition, [:primitive, Set]]
+    ast = [:definition, Set]
     type = compiler.(ast)
     expected = Dry::Types::Definition.new(Set)
 
