@@ -16,18 +16,23 @@ module Dry
       end
 
       def visit_constructor(node)
-        primitive, fn = node
+        definition, fn_register_name = node
+        fn = Dry::Types::FnContainer[fn_register_name]
+        primitive = visit(definition)
         Types::Constructor.new(primitive, &fn)
       end
 
-      def visit_type(node)
-        type, args = node
-        meth = :"visit_#{type.tr('.', '_')}"
+      def visit_safe(node)
+        Types::Safe.new(call(node))
+      end
 
-        if respond_to?(meth) && args
-          send(meth, args)
+      def visit_definition(node)
+        primitive = node
+
+        if registry.registered?(primitive)
+          registry[primitive]
         else
-          registry[type]
+          Definition.new(primitive)
         end
       end
 
@@ -39,38 +44,12 @@ module Dry
         registry['array'].member(call(node))
       end
 
-      def visit_form_array(node)
-        registry['form.array'].member(call(node))
-      end
-
-      def visit_json_array(node)
-        registry['json.array'].member(call(node))
-      end
-
       def visit_hash(node)
         constructor, schema = node
         merge_with('hash', constructor, schema)
       end
 
-      def visit_form_hash(node)
-        if node
-          constructor, schema = node
-          merge_with('form.hash', constructor, schema)
-        else
-          registry['form.hash']
-        end
-      end
-
-      def visit_json_hash(node)
-        if node
-          constructor, schema = node
-          merge_with('json.hash', constructor, schema)
-        else
-          registry['json.hash']
-        end
-      end
-
-      def visit_key(node)
+      def visit_member(node)
         name, types = node
         { name => visit(types) }
       end

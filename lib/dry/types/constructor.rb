@@ -72,7 +72,18 @@ module Dry
         Constrained::Coercible
       end
 
+      # @api public
+      #
+      # @see Definition#to_ast
+      def to_ast
+        [:constructor, [type.to_ast, register_fn(fn)]]
+      end
+
       private
+
+      def register_fn(fn)
+        Dry::Types::FnContainer.register(fn)
+      end
 
       # @param [Symbol] meth
       # @param [Boolean] include_private

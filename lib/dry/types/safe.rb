@@ -33,6 +33,13 @@ module Dry
         block ? yield(result) : result
       end
 
+      # @api public
+      #
+      # @see Definition#to_ast
+      def to_ast
+        [:safe, type.to_ast]
+      end
+
       private
 
       # @param [Object, Dry::Types::Constructor] response

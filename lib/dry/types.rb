@@ -15,6 +15,7 @@ require 'dry/types/container'
 require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
+require 'dry/types/fn_container'
 
 require 'dry/types/errors'
 
@@ -49,6 +50,11 @@ module Dry
     # @return [Container{String => Definition}]
     def self.container
       @container ||= Container.new
+    end
+
+    # @api private
+    def self.registered?(class_or_identifier)
+      container.key?(identifier(class_or_identifier))
     end
 
     # @param [String] name

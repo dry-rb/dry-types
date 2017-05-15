@@ -3,28 +3,31 @@ require 'dry/types/compiler'
 RSpec.describe Dry::Types::Compiler, '#call' do
   subject(:compiler) { Dry::Types::Compiler.new(Dry::Types) }
 
+  it 'returns existing definition' do
+    ast = [:definition, Hash]
+    type = compiler.(ast)
+
+    expect(type).to be(Dry::Types['hash'])
+  end
+
+  it 'builds a plain definition' do
+    ast = [:definition, Set]
+    type = compiler.(ast)
+    expected = Dry::Types::Definition.new(Set)
+
+    expect(type).to eql(expected)
+  end
+
   it 'builds a safe coercible hash' do
-    ast = [
-      :type, [
-        'hash', [
-          :permissive, [
-            [:key, [:email, [:type, 'string']]],
-            [:key, [:age, [:type, 'form.int']]],
-            [:key, [:admin, [:type, 'form.bool']]],
-            [:key, [:address, [
-              :type, [
-                'hash', [
-                  :permissive, [
-                    [:key, [:city, [:type, 'string']]],
-                    [:key, [:street, [:type, 'string']]]
-                  ]
-                ]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ]]]
+    ast = Dry::Types['hash'].permissive(
+      email: Dry::Types['string'],
+      age: Dry::Types['form.int'],
+      admin: Dry::Types['form.bool'],
+      address: Dry::Types['hash'].permissive(
+        city: Dry::Types['string'],
+        street: Dry::Types['string']
+      )
+    ).to_ast
 
     hash = compiler.(ast)
 
@@ -48,15 +51,9 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a strict hash' do
-    ast = [
-      :type, [
-        'hash', [
-          :strict, [
-            [:key, [:email, [:type, 'string']]],
-          ]
-        ]
-      ]
-    ]
+    ast = Dry::Types['hash'].strict(
+      email: Dry::Types['string']
+    ).to_ast
 
     hash = compiler.(ast)
 
@@ -70,17 +67,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a coercible hash' do
-    ast = [
-      :type, [
-        'hash', [
-          :weak, [
-            [:key, [:email, [:type, 'string']]],
-            [:key, [:age, [:sum, [[:type, 'form.nil'], [:type, 'form.int']]]]],
-            [:key, [:admin, [:type, 'form.bool']]]
-          ]
-        ]
-      ]
-    ]
+    ast = Dry::Types['hash'].weak(
+      email: Dry::Types['string'],
+      age: Dry::Types['form.nil'] | Dry::Types['form.int'],
+      admin: Dry::Types['form.bool']
+    ).to_ast
 
     hash = compiler.(ast)
 
@@ -100,17 +91,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a coercible hash with symbolized keys' do
-    ast = [
-      :type, [
-        'hash', [
-          :symbolized, [
-            [:key, [:email, [:type, 'string']]],
-            [:key, [:age, [:type, 'form.int']]],
-            [:key, [:admin, [:type, 'form.bool']]]
-          ]
-        ]
-      ]
-    ]
+    ast = Dry::Types['hash'].symbolized(
+      email: Dry::Types['string'],
+      age: Dry::Types['form.int'],
+      admin: Dry::Types['form.bool']
+    ).to_ast
 
     hash = compiler.(ast)
 
@@ -126,11 +111,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a hash with empty schema' do
-    ast = [
-      :type, [
-        'hash', [:schema, []]
-      ]
-    ]
+
+    ast = Dry::Types['hash'].schema([]).to_ast
 
     hash = compiler.(ast)
 
@@ -138,21 +120,13 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds an array' do
-    ast = [
-      :type, [
-        'array', [
-          :type, [
-            'hash', [
-              :symbolized, [
-                [:key, [:email, [:type, 'string']]],
-                [:key, [:age, [:type, 'form.int']]],
-                [:key, [:admin, [:type, 'form.bool']]]
-              ]
-            ]
-          ]
-        ]
-      ]
-    ]
+    ast = Dry::Types['array'].member(
+      Dry::Types['hash'].symbolized(
+        email: Dry::Types['string'],
+        age: Dry::Types['form.int'],
+        admin: Dry::Types['form.bool'],
+      )
+    ).to_ast
 
     arr = compiler.(ast)
 
@@ -172,7 +146,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe form array' do
-    ast = [:type, ['form.array']]
+    ast = Dry::Types['form.array'].to_ast
 
     arr = compiler.(ast)
 
@@ -182,7 +156,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe form array with member' do
-    ast = [:type, ['form.array', [:type, ['coercible.int']]]]
+    ast = Dry::Types['form.array'].member(Dry::Types['coercible.int']).to_ast
 
     arr = compiler.(ast)
 
@@ -191,17 +165,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe form hash' do
-    ast = [
-      :type, [
-        'form.hash', [
-          :symbolized, [
-            [:key, [:email, [:type, 'string']]],
-            [:key, [:age, [:type, 'form.int']]],
-            [:key, [:admin, [:type, 'form.bool']]]
-          ]
-        ]
-      ]
-    ]
+    ast = Dry::Types['form.hash'].symbolized(
+        email: Dry::Types['string'],
+        age: Dry::Types['form.int'],
+        admin: Dry::Types['form.bool'],
+    ).to_ast
 
     hash = compiler.(ast)
 
@@ -217,18 +185,18 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds an schema-less form.hash' do
-    ast = [:type, ['form.hash']]
+    ast = Dry::Types['form.hash'].schema([]).to_ast
 
     type = compiler.(ast)
 
-    expect(type[nil]).to be(nil)
+    expect(type[nil]).to eql({})
     expect(type[{}]).to eql({})
   end
 
   it 'builds a constructor' do
     fn = -> v { v.to_s }
 
-    ast = [:constructor, [String, fn]]
+    ast = Dry::Types::Constructor.new(String, &fn).to_ast
 
     type = compiler.(ast)
 
