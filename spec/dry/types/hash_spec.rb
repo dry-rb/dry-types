@@ -118,7 +118,7 @@ RSpec.describe Dry::Types::Hash do
   shared_examples 'strict typing behavior' do
     it 'fails if any coercions are unsuccessful' do
       expect { hash.call(name: :Jane, age: 'oops', active: true, phone: []) }
-        .to raise_error(Dry::Types::SchemaError, '"oops" (String) has invalid type for :age')
+        .to raise_error(Dry::Types::SchemaError, '"oops" (String) has invalid type for :age violates constraints (type?(Integer, "oops") failed)')
     end
   end
 
@@ -182,7 +182,7 @@ RSpec.describe Dry::Types::Hash do
 
       it 'fills in default value when value is nil' do
         expect { hash.call(name: :John, active: '1', age: nil, phone: []) }
-          .to raise_error(Dry::Types::SchemaError, 'nil (NilClass) has invalid type for :age')
+          .to raise_error(Dry::Types::SchemaError, 'nil (NilClass) has invalid type for :age violates constraints (type?(Integer, nil) failed)')
       end
     end
   end

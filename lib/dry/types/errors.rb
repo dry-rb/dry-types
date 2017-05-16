@@ -9,8 +9,9 @@ module Dry
     class SchemaError < TypeError
       # @param [String,Symbol] key
       # @param [Object] value
-      def initialize(key, value)
-        super("#{value.inspect} (#{value.class}) has invalid type for :#{key}")
+      # @param [String, #to_s] result
+      def initialize(key, value, result)
+        super("#{value.inspect} (#{value.class}) has invalid type for :#{key} violates constraints (#{result} failed)")
       end
     end
 

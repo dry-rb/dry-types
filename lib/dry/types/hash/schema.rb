@@ -88,8 +88,8 @@ module Dry
           resolve(hash) do |type, key, value|
             begin
               type.call(value)
-            rescue ConstraintError
-              raise SchemaError.new(key, value)
+            rescue ConstraintError => e
+              raise SchemaError.new(key, value, e.result)
             end
           end
         end
