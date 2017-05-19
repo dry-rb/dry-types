@@ -48,6 +48,11 @@ RSpec.describe Dry::Types::Definition do
       object = Object.new
       expect(type[object]).to eql(object)
     end
+
+    it 'returns original value when it is not a string' do
+      object = Object.new
+      expect(type[object]).to eql(object)
+    end
   end
 
   describe 'form.date_time' do
