@@ -125,16 +125,22 @@ RSpec.describe Dry::Types::Hash do
   shared_examples 'sets default value behavior when keys are omitted' do
     context 'when default value for :age is 21' do
       let(:hash_schema) do
-        {
-          name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
-          active: "form.bool",
-          phone: Dry::Types['phone']
-        }
+        { name: "coercible.string", age: Dry::Types["strict.int"].default(21) }
       end
 
       it 'fills in default value when key is omitted' do
-        user = hash.call(name: :John, active: '1', phone: [])
+        user = hash.call(name: :John)
+        expect(user[:age]).to be(21)
+      end
+    end
+
+    context 'when default value for :age is a block' do
+      let(:hash_schema) do
+        { name: "coercible.string", age: Dry::Types["strict.int"].default { 21 } }
+      end
+
+      it 'fills in default value when key is omitted' do
+        user = hash.call(name: :John)
         expect(user[:age]).to be(21)
       end
     end
