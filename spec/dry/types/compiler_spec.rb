@@ -4,16 +4,24 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   subject(:compiler) { Dry::Types::Compiler.new(Dry::Types) }
 
   it 'returns existing definition' do
-    ast = [:definition, Hash]
+    ast = [:definition, {}, Hash]
     type = compiler.(ast)
 
     expect(type).to be(Dry::Types['hash'])
   end
 
   it 'builds a plain definition' do
-    ast = [:definition, Set]
+    ast = [:definition, {}, Set]
     type = compiler.(ast)
     expected = Dry::Types::Definition.new(Set)
+
+    expect(type).to eql(expected)
+  end
+
+  it 'builds a definition with meta' do
+    ast = [:definition, { key: :value }, Set]
+    type = compiler.(ast)
+    expected = Dry::Types::Definition.new(Set, meta: { key: :value })
 
     expect(type).to eql(expected)
   end
@@ -30,6 +38,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ).to_ast
 
     hash = compiler.(ast)
+    hash.member_types[:admin].left.call('1')
 
     expect(hash).to be_a(Dry::Types::Hash)
 

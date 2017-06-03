@@ -107,7 +107,7 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast
-        [:sum, [left.to_ast, right.to_ast]]
+        [:sum, meta, [left.to_ast, right.to_ast]]
       end
     end
   end

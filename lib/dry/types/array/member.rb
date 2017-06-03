@@ -53,7 +53,7 @@ module Dry
         #
         # @see Definition#to_ast
         def to_ast
-          [:array, member.to_ast]
+          [:array, meta, member.to_ast]
         end
       end
     end

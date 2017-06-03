@@ -24,7 +24,13 @@ module Dry
       #   @param [Hash] new metadata to merge into existing metadata
       #   @return [Type] new type with added metadata
       def meta(data = nil)
-        data ? with(meta: @meta.merge(data)) : @meta
+        if !data
+          @meta
+        elsif data.empty?
+          self
+        else
+          with(meta: @meta.merge(data))
+        end
       end
 
       # Resets meta

@@ -11,47 +11,46 @@ module Dry
         visit(ast)
       end
 
-      def visit(node, *args)
-        send(:"visit_#{node[0]}", node[1], *args)
+      def visit(node)
+        type, meta, ast = node
+        send(:"visit_#{ type }", ast || meta, meta)
       end
 
-      def visit_constructor(node)
+      def visit_constructor(node, meta)
         definition, fn_register_name = node
         fn = Dry::Types::FnContainer[fn_register_name]
         primitive = visit(definition)
         Types::Constructor.new(primitive, &fn)
       end
 
-      def visit_safe(node)
+      def visit_safe(node, meta)
         Types::Safe.new(call(node))
       end
 
-      def visit_definition(node)
-        primitive = node
-
-        if registry.registered?(primitive)
-          registry[primitive]
+      def visit_definition(node, meta)
+        if registry.registered?(node)
+          registry[node].meta(meta)
         else
-          Definition.new(primitive)
+          Definition.new(node, meta: meta)
         end
       end
 
-      def visit_sum(node)
-        node.map { |type| visit(type) }.reduce(:|)
+      def visit_sum(node, meta)
+        node.map { |type| visit(type) }.reduce(:|).meta(meta)
       end
 
-      def visit_array(node)
-        registry['array'].member(call(node))
+      def visit_array(node, meta)
+        registry['array'].member(call(node)).meta(meta)
       end
 
-      def visit_hash(node)
+      def visit_hash(node, meta)
         constructor, schema = node
         merge_with('hash', constructor, schema)
       end
 
-      def visit_member(node)
-        name, types = node
-        { name => visit(types) }
+      def visit_member(node, _)
+        name, type = node
+        { name => visit(type) }
       end
 
       def merge_with(hash_id, constructor, schema)
