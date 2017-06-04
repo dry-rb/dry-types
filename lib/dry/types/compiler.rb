@@ -12,50 +12,55 @@ module Dry
       end
 
       def visit(node)
-        type, meta, ast = node
-        send(:"visit_#{ type }", ast || meta, meta)
+        type, body = node
+        send(:"visit_#{ type }", body)
       end
 
-      def visit_constructor(node, meta)
-        definition, fn_register_name = node
+      def visit_constructor(node)
+        definition, fn_register_name, meta = node
         fn = Dry::Types::FnContainer[fn_register_name]
         primitive = visit(definition)
         Types::Constructor.new(primitive, &fn)
       end
 
-      def visit_safe(node, meta)
-        Types::Safe.new(call(node))
+      def visit_safe(node)
+        ast, meta = node
+        Types::Safe.new(call(ast), meta: meta)
       end
 
-      def visit_definition(node, meta)
-        if registry.registered?(node)
-          registry[node].meta(meta)
+      def visit_definition(node)
+        type, meta = node
+
+        if registry.registered?(type)
+          registry[type].meta(meta)
         else
-          Definition.new(node, meta: meta)
+          Definition.new(type, meta: meta)
         end
       end
 
-      def visit_sum(node, meta)
-        node.map { |type| visit(type) }.reduce(:|).meta(meta)
+      def visit_sum(node)
+        *types, meta = node
+        types.map { |type| visit(type) }.reduce(:|).meta(meta)
       end
 
-      def visit_array(node, meta)
-        registry['array'].member(call(node)).meta(meta)
+      def visit_array(node)
+        member, meta = node
+        registry['array'].member(call(member)).meta(meta)
       end
 
-      def visit_hash(node, meta)
-        constructor, schema = node
-        merge_with('hash', constructor, schema)
+      def visit_hash(node)
+        constructor, schema, meta = node
+        merge_with('hash', constructor, schema).meta(meta)
       end
 
-      def visit_member(node, _)
+      def visit_member(node)
         name, type = node
         { name => visit(type) }
       end
 
       def merge_with(hash_id, constructor, schema)
         registry[hash_id].__send__(
-          constructor, schema.map { |key| visit(key) }.reduce({}, :merge)
+          constructor, schema.map { |key| visit(key) }.reduce({}, :update)
         )
       end
     end

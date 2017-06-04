@@ -113,7 +113,7 @@ module Dry
       #
       # @return [Array]
       def to_ast
-        [:definition, meta, primitive]
+        [:definition, [primitive, meta]]
       end
     end
   end

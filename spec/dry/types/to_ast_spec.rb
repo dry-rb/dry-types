@@ -10,12 +10,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:definition, {}, String])
+        to eql([:definition, [String, {}]])
     end
 
     specify 'with meta' do
       expect(type_with_meta.to_ast)
-        .to eql([:definition, { key: :value }, String])
+        .to eql([:definition, [String, key: :value]])
     end
   end
 
@@ -24,17 +24,15 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:sum, {}, [
-                  [:definition, {}, String],
-                  [:definition, {}, Integer]
-                ]])
+        to eql([:sum, [[:definition, [String, {}]], [:definition, [Integer, {}]], {}]])
     end
 
     specify 'with meta' do
       expect(type_with_meta.to_ast).
-        to eql([:sum, { key: :value }, [
-                  [:definition, {}, String],
-                  [:definition, {}, Integer]
+        to eql([:sum, [
+                  [:definition, [String, {}]],
+                  [:definition, [Integer, {}]],
+                  key: :value
                 ]])
     end
   end
@@ -44,17 +42,19 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:constrained, {}, [
-                  [:definition, {}, Integer],
-                  [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]
+        to eql([:constrained, [
+                  [:definition, [Integer, {}]],
+                  [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]],
+                  {}
                ]])
     end
 
     specify 'with meta' do
       expect(type_with_meta.to_ast).
-        to eql([:constrained, { key: :value }, [
-                  [:definition, {}, Integer],
-                  [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]
+        to eql([:constrained, [
+                  [:definition, [Integer, {}]],
+                  [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]],
+                  key: :value
                 ]])
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:definition, {}, Hash])
+        to eql([:definition, [Hash, {}]])
     end
 
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
@@ -74,12 +74,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
         specify do
           expect(type.to_ast).
-            to eql([:hash, {}, [schema, member_types_ast]])
+            to eql([:hash, [schema, member_types_ast, {}]])
         end
 
         specify 'with meta' do
           expect(type_with_meta.to_ast).
-            to eql([:hash, { key: :value }, [schema, member_types_ast]])
+            to eql([:hash, [schema, member_types_ast, key: :value]])
         end
       end
     end
@@ -92,29 +92,29 @@ RSpec.describe Dry::Types, '#to_ast' do
       expect(type.to_ast).
         to eql([
                  :enum,
-                 { key: :value },
                  [
-                   :constrained,
-                   {},
                    [
+                     :constrained,
                      [
-                       :definition, {}, String
-                     ],
-                     [
-                       :and,
+                       [:definition, [String, {}]],
                        [
+                         :and,
                          [
-                           :predicate,
-                           [:type?, [[:type, String], [:input, Undefined]]]
-                         ],
-                         [
-                           :predicate,
-                           [:included_in?,
-                             [[:list, ["draft", "published", "archived"]], [:input, Undefined]]]
+                           [
+                             :predicate,
+                             [:type?, [[:type, String], [:input, Undefined]]]
+                           ],
+                           [
+                             :predicate,
+                             [:included_in?,
+                              [[:list, ["draft", "published", "archived"]], [:input, Undefined]]]
+                           ]
                          ]
-                       ]
+                       ],
+                       {}
                      ]
-                   ]
+                   ],
+                   key: :value
                  ]
                ])
     end
@@ -126,21 +126,19 @@ RSpec.describe Dry::Types, '#to_ast' do
     specify do
       expect(type.to_ast).
         to eql([
-                :safe,
-                { key: :value },
-                [
-                  :constrained,
-                  {},
-                  [
-                    [
-                      :definition, {}, String
-                    ],
-                    [
-                      :predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]
-                    ]
-                  ]
-                ]
-              ])
+                 :safe,
+                 [
+                   [
+                     :constrained,
+                     [
+                       [:definition, [String, {}]],
+                       [:predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]],
+                       {}
+                     ]
+                   ],
+                   key: :value
+                 ]
+               ])
     end
   end
 
@@ -151,7 +149,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:constructor, { key: :value }, [[:definition, {}, String], "fn_#{fn.object_id}" ]])
+        to eql([:constructor, [[:definition, [String, {}]], "fn_#{fn.object_id}", key: :value]])
     end
   end
 
@@ -160,12 +158,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:definition, {}, Array])
+        to eql([:definition, [Array, {}]])
     end
 
     specify 'with meta' do
       expect(type_with_meta.to_ast).
-        to eql([:definition, { key: :value }, Array])
+        to eql([:definition, [Array, key: :value]])
     end
 
     context 'Member' do
@@ -175,12 +173,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
       specify do
         expect(type.to_ast).
-          to eql([:array, {}, [:definition, {}, String]])
+          to eql([:array, [[:definition, [String, {}]], {}]])
       end
 
       specify 'with meta' do
         expect(type_with_meta.to_ast).
-          to eql([:array, { key: :value }, [:definition, {}, String]])
+          to eql([:array, [[:definition, [String, {}]], key: :value]])
       end
     end
   end

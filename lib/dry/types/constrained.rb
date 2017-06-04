@@ -77,7 +77,7 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast
-        [:constrained, meta, [type.to_ast, rule.to_ast]]
+        [:constrained, [type.to_ast, rule.to_ast, meta]]
       end
 
       private
