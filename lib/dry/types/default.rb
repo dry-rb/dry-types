@@ -21,7 +21,11 @@ module Dry
       # @return [Object]
       attr_reader :value
 
-      alias_method :evaluate, :value
+      def evaluate
+        value.dup
+      rescue
+        value
+      end
 
       # @param [Object, #call] value
       # @return [Class] {Default} or {Default::Callable}

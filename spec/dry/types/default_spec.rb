@@ -4,12 +4,21 @@ RSpec.describe Dry::Types::Definition, '#default' do
 
     it_behaves_like Dry::Types::Definition
 
-    it 'returns default value when nil is passed' do
-      expect(type[nil]).to eql('foo')
-    end
+    context 'when nil is passed' do
+      it 'returns default value' do
+        expect(type[nil]).to eql('foo')
+      end
 
-    it 'aliases #[] as #call' do
-      expect(type.call(nil)).to eql('foo')
+      it 'returns new instance of default value' do
+        ref_1 = type[nil]
+        ref_2 = type[nil]
+
+        expect(ref_1).not_to equal(ref_2)
+      end
+
+      it 'aliases #[] as #call' do
+        expect(type.call(nil)).to eql('foo')
+      end
     end
 
     it 'returns original value when it is not nil' do
