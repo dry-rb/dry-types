@@ -75,8 +75,10 @@ module Dry
       # @api public
       #
       # @see Definition#to_ast
-      def to_ast
-        [:constructor, [type.to_ast, register_fn(fn), meta]]
+      def to_ast(meta: true)
+        [:constructor, [type.to_ast(meta: meta),
+                        register_fn(fn),
+                        meta ? self.meta : EMPTY_HASH]]
       end
 
       private

@@ -17,6 +17,11 @@ RSpec.describe Dry::Types, '#to_ast' do
       expect(type_with_meta.to_ast)
         .to eql([:definition, [String, key: :value]])
     end
+
+    specify 'without meta' do
+      expect(type_with_meta.to_ast(meta: false))
+        .to eql(type.to_ast)
+    end
   end
 
   context 'with a sum' do
@@ -34,6 +39,14 @@ RSpec.describe Dry::Types, '#to_ast' do
                   [:definition, [Integer, {}]],
                   key: :value
                 ]])
+    end
+
+    specify 'without meta' do
+      type_with_meta = (
+        Dry::Types['string'].meta(type: :str) | Dry::Types['int'].meta(type: :int)
+      ).meta(type: :sum)
+
+      expect(type_with_meta.to_ast(meta: false)).to eql(type.to_ast)
     end
   end
 

@@ -106,8 +106,8 @@ module Dry
       # @api public
       #
       # @see Definition#to_ast
-      def to_ast
-        [:sum, [left.to_ast, right.to_ast, meta]]
+      def to_ast(meta: true)
+        [:sum, [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
       end
     end
   end

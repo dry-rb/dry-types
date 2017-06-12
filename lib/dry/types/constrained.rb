@@ -72,12 +72,14 @@ module Dry
       def ===(value)
         valid?(value)
       end
-      #
+
       # @api public
       #
       # @see Definition#to_ast
-      def to_ast
-        [:constrained, [type.to_ast, rule.to_ast, meta]]
+      def to_ast(meta: true)
+        [:constrained, [type.to_ast(meta: meta),
+                        rule.to_ast,
+                        meta ? self.meta : EMPTY_HASH]]
       end
 
       private

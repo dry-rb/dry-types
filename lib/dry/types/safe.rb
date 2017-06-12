@@ -36,8 +36,8 @@ module Dry
       # @api public
       #
       # @see Definition#to_ast
-      def to_ast
-        [:safe, [type.to_ast, meta]]
+      def to_ast(meta: true)
+        [:safe, [type.to_ast, meta ? self.meta : EMPTY_HASH]]
       end
 
       # @api public

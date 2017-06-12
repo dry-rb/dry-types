@@ -58,13 +58,13 @@ module Dry
           end
         end
 
-        def to_ast
+        def to_ast(meta: true)
           [
             :hash,
             [
               hash_type,
-              member_types.map { |name, member| [:member, [name, member.to_ast]] },
-              meta
+              member_types.map { |name, member| [:member, [name, member.to_ast(meta: meta)]] },
+              meta ? self.meta : EMPTY_HASH
             ]
           ]
         end
