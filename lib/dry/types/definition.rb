@@ -112,8 +112,8 @@ module Dry
       # @api public
       #
       # @return [Array]
-      def to_ast
-        [:definition, [primitive, meta]]
+      def to_ast(meta: true)
+        [:definition, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
     end
   end
