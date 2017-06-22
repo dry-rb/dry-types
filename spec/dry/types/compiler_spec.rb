@@ -201,6 +201,22 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type[{}]).to eql({})
   end
 
+  it 'builds a form hash from a :form_hash node' do
+    ast = [:form_hash, [[], {}]]
+
+    type = compiler.(ast)
+
+    expect(type.fn).to be(Dry::Types['form.hash'].fn)
+  end
+
+  it 'builds a form array from a :form_array node' do
+    ast = [:form_array, [[:definition, [String, {}]], {}]]
+
+    array = compiler.(ast)
+
+    expect(array.type.member.primitive).to be(String)
+  end
+
   it 'builds a constructor' do
     fn = -> v { v.to_s }
 

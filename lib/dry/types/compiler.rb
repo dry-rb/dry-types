@@ -53,6 +53,16 @@ module Dry
         merge_with('hash', constructor, schema).meta(meta)
       end
 
+      def visit_form_hash(node)
+        schema, meta = node
+        merge_with('form.hash', :symbolized, schema).meta(meta)
+      end
+
+      def visit_form_array(node)
+        member, meta = node
+        registry['form.array'].member(call(member)).meta(meta)
+      end
+
       def visit_member(node)
         name, type = node
         { name => visit(type) }
