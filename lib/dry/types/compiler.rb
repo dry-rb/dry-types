@@ -53,14 +53,30 @@ module Dry
         merge_with('hash', constructor, schema).meta(meta)
       end
 
+      def visit_json_array(node)
+        registry['json.array'].member(call(node))
+      end
+
+      def visit_json_hash(node)
+        if node
+          constructor, schema = node
+          merge_with('json.hash', constructor, schema)
+        else
+          registry['json.hash']
+        end
+      end
+
       def visit_form_hash(node)
-        schema, meta = node
-        merge_with('form.hash', :symbolized, schema).meta(meta)
+        if node
+          constructor, schema, meta = node
+          merge_with('form.hash', constructor, schema).meta(meta)
+        else
+          registry['form.hash']
+        end
       end
 
       def visit_form_array(node)
-        member, meta = node
-        registry['form.array'].member(call(member)).meta(meta)
+        registry['form.array'].member(call(node))
       end
 
       def visit_member(node)
