@@ -25,7 +25,7 @@ module Dry
 
       def visit_safe(node)
         ast, meta = node
-        Types::Safe.new(call(ast), meta: meta)
+        Types::Safe.new(visit(ast), meta: meta)
       end
 
       def visit_definition(node)
@@ -45,7 +45,7 @@ module Dry
 
       def visit_array(node)
         member, meta = node
-        registry['array'].member(call(member)).meta(meta)
+        registry['array'].member(visit(member)).meta(meta)
       end
 
       def visit_hash(node)
@@ -60,7 +60,7 @@ module Dry
 
       def visit_json_array(node)
         member, meta = node
-        registry['json.array'].member(call(member)).meta(meta)
+        registry['json.array'].member(visit(member)).meta(meta)
       end
 
       def visit_form_hash(node)
@@ -70,7 +70,7 @@ module Dry
 
       def visit_form_array(node)
         member, meta = node
-        registry['form.array'].member(call(member)).meta(meta)
+        registry['form.array'].member(visit(member)).meta(meta)
       end
 
       def visit_member(node)
