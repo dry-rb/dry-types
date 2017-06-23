@@ -16,6 +16,11 @@ module Dry
         send(:"visit_#{ type }", body)
       end
 
+      def visit_constrained(node)
+        definition, rule, meta = node
+        Types::Constrained.new(visit(definition), rule: visit(rule)).meta(meta)
+      end
+
       def visit_constructor(node)
         definition, fn_register_name, meta = node
         fn = Dry::Types::FnContainer[fn_register_name]
@@ -36,6 +41,14 @@ module Dry
         else
           Definition.new(type, meta: meta)
         end
+      end
+
+      def visit_or(node)
+        Dry::Types.rule_compiler.(node).reduce(:or)
+      end
+
+      def visit_and(node)
+        Dry::Types.rule_compiler.(node).reduce(:and)
       end
 
       def visit_sum(node)

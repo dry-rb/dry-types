@@ -246,4 +246,30 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.fn).to be(fn)
     expect(type.primitive).to be(String)
   end
+
+  it 'builds an and constrained' do
+    ast = Dry::Types['strict.string'].constrained(size: 3..12).to_ast
+
+    type = compiler.(ast)
+
+    expect(type['hello']).to eql('hello')
+    expect(type.primitive).to be(String)
+  end
+
+  it 'build or constrained' do
+    ast = [
+      :constrained, [[:definition, [Integer, {}]],
+      [:or,
+        [
+          [:predicate, [:lt?, [[:num, 5], [:input, Undefined]]]],
+          [:predicate, [:gt?, [[:num, 18], [:input, Undefined]]]]
+        ]
+      ],{}]]
+
+    type = compiler.(ast)
+
+    expect(type[4]).to eql(4)
+    expect(type[19]).to eql(19)
+    expect(type.primitive).to be(Integer)
+  end
 end
