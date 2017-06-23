@@ -217,6 +217,23 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(array.type.member.primitive).to be(String)
   end
 
+  it 'builds a json hash from a :json_hash node' do
+    ast = [:json_hash, [[], {}]]
+
+    type = compiler.(ast)
+    expected_result = Dry::Types['hash'].symbolized({}).safe
+
+    expect(type).to eq(expected_result)
+  end
+
+  it 'builds a json array from a :json_array node' do
+    ast = [:json_array, [[:definition, [String, {}]], {}]]
+
+    array = compiler.(ast)
+
+    expect(array.type.member.primitive).to be(String)
+  end
+
   it 'builds a constructor' do
     fn = -> v { v.to_s }
 
