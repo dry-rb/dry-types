@@ -18,7 +18,7 @@ module Dry
 
       def visit_constrained(node)
         definition, rule, meta = node
-        Types::Constrained.new(visit(definition), rule: visit(rule)).meta(meta)
+        Types::Constrained.new(visit(definition), rule: visit_rule(rule)).meta(meta)
       end
 
       def visit_constructor(node)
@@ -43,12 +43,9 @@ module Dry
         end
       end
 
-      def visit_or(node)
-        Dry::Types.rule_compiler.(node).reduce(:or)
-      end
-
-      def visit_and(node)
-        Dry::Types.rule_compiler.(node).reduce(:and)
+      def visit_rule(node)
+        operator, rule = node
+        Dry::Types.rule_compiler.(rule).reduce(operator)
       end
 
       def visit_sum(node)
