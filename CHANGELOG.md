@@ -1,3 +1,13 @@
+# v0.11.0 2017-06-30
+
+## Added
+
+* `#to_ast` available for all type objects (GustavoCaso)
+* `Types::Array#of` as an alias for `#member` (maliqq)
+* Detailed failure objects are passed to results which improves constraint violation messages (GustavoCaso)
+
+[Compare v0.10.3...v0.11.0](https://github.com/dry-rb/dry-types/compare/v0.10.3...v0.11.0)
+
 # v0.10.3 2017-05-06
 
 ## Added
