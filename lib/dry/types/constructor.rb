@@ -3,7 +3,7 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Constructor < Definition
-      include Dry::Equalizer(:type)
+      include Dry::Equalizer(:type, :fn)
 
       # @return [#call]
       attr_reader :fn
