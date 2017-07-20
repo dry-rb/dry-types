@@ -1,3 +1,11 @@
+# v0.11.1 to-be-released
+
+## Changed
+
+* Constructors are now equalized using `fn` too (flash-gordon)
+
+[Compare v0.11.0...v0.11.1](https://github.com/dry-rb/dry-types/compare/v0.11.0...v0.11.1)
+
 # v0.11.0 2017-06-30
 
 ## Added
