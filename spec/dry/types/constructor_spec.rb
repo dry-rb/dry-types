@@ -82,5 +82,12 @@ RSpec.describe Dry::Types::Constructor do
       expect(type.constructor(to_i)).to eql(type.constructor(to_i))
       expect(type.constructor(to_i)).not_to eql(type.constructor(to_s))
     end
+
+    it 'counts meta' do
+      to_i = :to_i.to_proc
+
+      expect(type.constructor(to_i).meta(pos: :left)).to eql(type.constructor(to_i).meta(pos: :left))
+      expect(type.constructor(to_i).meta(pos: :left)).not_to eql(type.constructor(to_i).meta(pos: :right))
+    end
   end
 end
