@@ -90,4 +90,12 @@ RSpec.describe Dry::Types::Constructor do
       expect(type.constructor(to_i).meta(pos: :left)).not_to eql(type.constructor(to_i).meta(pos: :right))
     end
   end
+
+  describe '#name' do
+    subject(:type) { Dry::Types['string'].optional.constructor(-> v { v.nil? ? nil : v.to_s }) }
+
+    it 'works with sum types' do
+      expect(type.name).to eql('NilClass | String')
+    end
+  end
 end

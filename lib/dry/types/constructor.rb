@@ -33,6 +33,11 @@ module Dry
         type.primitive
       end
 
+      # @return [String]
+      def name
+        type.name
+      end
+
       # @param [Object] input
       # @return [Object]
       def call(input)
