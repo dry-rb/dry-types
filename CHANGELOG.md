@@ -2,7 +2,11 @@
 
 ## Changed
 
-* Constructors are now equalized using `fn` too (flash-gordon)
+* Constructors are now equalized using `fn` and `meta` too (flash-gordon)
+
+## Fixed
+
+* Fixed `Constructor#name` with `Sum`-types (flash-gordon)
 
 [Compare v0.11.0...v0.11.1](https://github.com/dry-rb/dry-types/compare/v0.11.0...v0.11.1)
 
