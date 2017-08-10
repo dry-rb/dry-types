@@ -25,7 +25,7 @@ module Dry
       def initialize(type, options = {}, &block)
         @type = type
         @fn = options.fetch(:fn, block)
-        super
+        super(type, **options, fn: @fn)
       end
 
       # @return [Class]

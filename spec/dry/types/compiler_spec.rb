@@ -246,4 +246,18 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.fn).to be(fn)
     expect(type.primitive).to be(String)
   end
+
+  it 'builds a constructor with meta' do
+    fn = -> v { v.to_s }
+
+    ast = Dry::Types::Constructor.new(String, &fn).meta(foo: :bar).to_ast
+
+    type = compiler.(ast)
+
+    expect(type[:foo]).to eql('foo')
+
+    expect(type.fn).to be(fn)
+    expect(type.primitive).to be(String)
+    expect(type.meta).to eql(foo: :bar)
+  end
 end

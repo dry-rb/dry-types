@@ -20,7 +20,7 @@ module Dry
         definition, fn_register_name, meta = node
         fn = Dry::Types::FnContainer[fn_register_name]
         primitive = visit(definition)
-        Types::Constructor.new(primitive, &fn)
+        Types::Constructor.new(primitive, meta: meta, fn: fn)
       end
 
       def visit_safe(node)
