@@ -25,7 +25,10 @@ module Dry
       def initialize(type, options = {}, &block)
         @type = type
         @fn = options.fetch(:fn, block)
-        super(type, **options, fn: @fn)
+
+        raise ArgumentError, 'Missing constructor block' if fn.nil?
+
+        super(type, **options, fn: fn)
       end
 
       # @return [Class]

@@ -23,6 +23,12 @@ RSpec.describe Dry::Types::Constructor do
 
       expect(type[' foo ']).to eql('foo')
     end
+
+    it 'throws an error if no block given' do
+      expect {
+        Dry::Types::Constructor.new(String)
+      }.to raise_error(ArgumentError)
+    end
   end
 
   describe '#call' do
