@@ -64,7 +64,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'json.array' do
-    subject(:type) { Dry::Types['json.array'].member(Dry::Types['int']) }
+    subject(:type) { Dry::Types['json.array'].of(Dry::Types['int']) }
 
     it 'returns original value when it is not an array' do
       foo = 'foo'

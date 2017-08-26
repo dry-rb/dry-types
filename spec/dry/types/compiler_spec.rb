@@ -128,7 +128,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds an array' do
-    ast = Dry::Types['array'].member(
+    ast = Dry::Types['array'].of(
       Dry::Types['hash'].symbolized(
         email: Dry::Types['string'],
         age: Dry::Types['form.int'],
@@ -164,7 +164,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe form array with member' do
-    ast = Dry::Types['form.array'].member(Dry::Types['coercible.int']).to_ast
+    ast = Dry::Types['form.array'].of(Dry::Types['coercible.int']).to_ast
 
     arr = compiler.(ast)
 

@@ -14,6 +14,9 @@ end
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'pathname'
+
+SPEC_ROOT = Pathname(__FILE__).dirname
+
 require 'dry-types'
 
 begin
@@ -35,6 +38,9 @@ Dir[Pathname(__dir__).join('shared/*.rb')].each(&method(:require))
 require_relative '../lib/spec/dry/types'
 
 Undefined = Dry::Core::Constants::Undefined
+
+require 'dry/core/deprecations'
+Dry::Core::Deprecations.set_logger!(SPEC_ROOT.join('../log/deprecations.log'))
 
 RSpec.configure do |config|
   config.before(:example, :maybe) do

@@ -1,3 +1,11 @@
+# to-be-released
+
+## Changed
+
+* `Types::Array#member` was deprecated in favor of `Types::Array#of` (flash-gordon)
+
+[Compare v0.11.1...master](https://github.com/dry-rb/dry-types/compare/v0.11.1...master)
+
 # v0.11.1 2017-08-14
 
 ## Changed

@@ -84,7 +84,7 @@ module Dry
 
           if result
             type_id, member_id = result[1..2]
-            container[type_id].member(self[member_id])
+            container[type_id].of(self[member_id])
           else
             container[name]
           end
