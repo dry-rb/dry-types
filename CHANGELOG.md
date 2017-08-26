@@ -1,6 +1,6 @@
 # to-be-released
 
-## Changed
+## Deprecated
 
 * `Types::Array#member` was deprecated in favor of `Types::Array#of` (flash-gordon)
 
