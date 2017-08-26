@@ -16,6 +16,7 @@ require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
 require 'dry/types/fn_container'
+require 'dry/types/builder_methods'
 
 require 'dry/types/errors'
 
@@ -35,6 +36,7 @@ module Dry
     def self.module
       namespace = Module.new
       define_constants(namespace, type_keys)
+      namespace.extend(BuilderMethods)
       namespace
     end
 
