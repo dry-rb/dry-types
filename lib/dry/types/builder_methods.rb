@@ -20,6 +20,10 @@ module Dry
       def Constant(object)
         Definition.new(object.class).constrained(equal: object)
       end
+
+      def Constructor(klass, cons = nil, &block)
+        Definition.new(klass).constructor(cons || block)
+      end
     end
   end
 end
