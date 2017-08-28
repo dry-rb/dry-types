@@ -41,4 +41,16 @@ RSpec.describe Dry::Types do
         to eql(Dry::Types['hash'].symbolized(age: Dry::Types['strict.int']))
     end
   end
+
+  describe '.Constructor' do
+    it 'builds a constructor type' do
+      to_s = :to_s.to_proc
+
+      expect(mod.Constructor(String, &to_s)).
+        to eql(Dry::Types::Definition.new(String).constructor(to_s))
+
+      expect(mod.Constructor(String, to_s)).
+        to eql(Dry::Types::Definition.new(String).constructor(to_s))
+    end
+  end
 end
