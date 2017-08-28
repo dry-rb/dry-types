@@ -134,7 +134,23 @@ module Dry
     # List of type keys defined in {Dry::Types.container}
     # @return [<String>]
     def self.type_keys
-      container._container.keys
+      container.keys
+    end
+
+    private
+
+    # @api private
+    def self.const_missing(const)
+      underscored = Inflecto.underscore(const)
+
+      if type_keys.any? { |key| key.split('.')[0] == underscored }
+        raise NameError,
+              'dry-types does not define constants for default types. '\
+              'You can access the predefined types with [], e.g. Dry::Types["strict.int"] '\
+              'or generate a module with types using Dry::Types.module'
+      else
+        super
+      end
     end
   end
 end

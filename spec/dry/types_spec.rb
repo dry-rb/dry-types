@@ -93,4 +93,12 @@ RSpec.describe Dry::Types do
       expect(Test::Coercible::String).to be(Dry::Types['coercible.string'])
     end
   end
+
+  describe 'missing constant' do
+    it 'raises a nice error when a constant like Coercible or Strict is missing' do
+      expect {
+        Dry::Types::Strict::String
+      }.to raise_error(NameError, /dry-types does not define constants for default types/)
+    end
+  end
 end
