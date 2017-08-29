@@ -1,6 +1,12 @@
 module Dry
   module Types
     module BuilderMethods
+      # @api private
+      def included(base)
+        super
+        base.extend(BuilderMethods)
+      end
+
       # Build an array type.
       # It is a shortcut for Array.of
       #

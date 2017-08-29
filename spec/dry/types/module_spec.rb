@@ -66,4 +66,9 @@ RSpec.describe Dry::Types do
       expect(mod.Definition(String)).to eql(Dry::Types::Definition.new(String))
     end
   end
+
+  it 'defines methods when included' do
+    expect(Module.new.tap { |m| m.include mod }.Definition(String)).
+      to eql(mod.Definition(String))
+  end
 end
