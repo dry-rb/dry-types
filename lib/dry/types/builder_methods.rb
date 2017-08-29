@@ -59,6 +59,7 @@ module Dry
       end
 
       # Build a constructor type
+      # If no constructor block given it uses .new method
       #
       # @param [Class] klass
       # @param [#call,nil] cons Value constructor
@@ -68,6 +69,16 @@ module Dry
       # @api public
       def Constructor(klass, cons = nil, &block)
         Definition.new(klass).constructor(cons || block || klass.method(:new))
+      end
+
+      # Build a definiton type
+      #
+      # @param [Class] klass
+      #
+      # @return [Dry::Types::Type]
+      # @api public
+      def Definition(klass)
+        Definition.new(klass)
       end
     end
   end

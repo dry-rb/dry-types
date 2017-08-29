@@ -60,4 +60,10 @@ RSpec.describe Dry::Types do
       expect { type[1] }.to raise_error(TypeError)
     end
   end
+
+  describe '.Definition' do
+    it 'builds a definition type' do
+      expect(mod.Definition(String)).to eql(Dry::Types::Definition.new(String))
+    end
+  end
 end
