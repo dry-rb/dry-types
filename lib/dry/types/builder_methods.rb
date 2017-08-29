@@ -67,7 +67,7 @@ module Dry
       # @return [Dry::Types::Type]
       # @api public
       def Constructor(klass, cons = nil, &block)
-        Definition.new(klass).constructor(cons || block)
+        Definition.new(klass).constructor(cons || block || klass.method(:new))
       end
     end
   end

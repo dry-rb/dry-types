@@ -52,5 +52,12 @@ RSpec.describe Dry::Types do
       expect(mod.Constructor(String, to_s)).
         to eql(Dry::Types::Definition.new(String).constructor(to_s))
     end
+
+    it 'uses .new method by default' do
+      type = mod.Constructor(String)
+
+      expect(type['foo']).to eql('foo')
+      expect { type[1] }.to raise_error(TypeError)
+    end
   end
 end
