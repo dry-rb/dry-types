@@ -31,7 +31,7 @@ RSpec.describe Dry::Types do
       obj = Object.new
 
       expect(mod.Constant(obj)).
-        to eql(Dry::Types::Definition.new(Object).constrained(equal: obj))
+        to eql(Dry::Types::Definition.new(Object).constrained(is: obj))
     end
   end
 

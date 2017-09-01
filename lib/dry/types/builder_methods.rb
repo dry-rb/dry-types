@@ -61,7 +61,7 @@ module Dry
       # @return [Dry::Types::Type]
       # @api public
       def Constant(object)
-        Definition.new(object.class).constrained(equal: object)
+        Definition.new(object.class).constrained(is: object)
       end
 
       # Build a constructor type
