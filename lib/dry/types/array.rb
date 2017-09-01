@@ -18,8 +18,6 @@ module Dry
         Array::Member.new(primitive, **options, member: member)
       end
 
-      alias_method :member, :of
-
       deprecate :member, :of
     end
   end
