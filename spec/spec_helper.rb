@@ -47,6 +47,10 @@ RSpec.configure do |config|
     Dry::Types.load_extensions(:maybe)
   end
 
+  config.disable_monkey_patching!
+
+  config.warnings = true
+
   config.before do
     @types = Dry::Types.container._container.keys
 
