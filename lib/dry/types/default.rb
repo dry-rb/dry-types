@@ -59,8 +59,8 @@ module Dry
 
       # @param [Object] input
       # @return [Object] value passed through {#type} or {#default} value
-      def call(input)
-        if input.nil?
+      def call(input = Undefined)
+        if input.equal?(Undefined)
           evaluate
         else
           output = type[input]

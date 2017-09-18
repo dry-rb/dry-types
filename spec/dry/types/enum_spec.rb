@@ -46,7 +46,7 @@ RSpec.describe Dry::Types::Enum do
     it 'allows defining an enum from a default-value type' do
       with_default = string.default('draft').enum(*values)
 
-      expect(with_default[nil]).to eql('draft')
+      expect(with_default.call).to eql('draft')
     end
 
     it "doesn't allows defining a default value for an enum" do

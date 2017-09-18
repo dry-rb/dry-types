@@ -96,7 +96,11 @@ module Dry
         def coerce(hash)
           resolve(hash) do |type, key, value|
             begin
-              type.call(value)
+              if value.nil? && type.default?
+                type.evaluate
+              else
+                type.call(value)
+              end
             rescue ConstraintError => e
               raise SchemaError.new(key, value, e.result)
             end
@@ -264,7 +268,9 @@ module Dry
                 string_key
               end
 
-            if keyname
+            if keyname && hash[keyname].nil? && type.default?
+              result[key] = type.evaluate
+            elsif keyname
               result[key] = yield(type, key, hash[keyname])
             else
               resolve_missing_value(result, key, type)

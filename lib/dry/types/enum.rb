@@ -25,15 +25,19 @@ module Dry
 
       # @param [Object] input
       # @return [Object]
-      def call(input)
+      def call(input = Undefined)
         value =
-          if values.include?(input)
+          if input == Undefined
+            type.call
+          elsif values.include?(input)
             input
           elsif mapping.key?(input)
             mapping[input]
+          else
+            input
           end
 
-        type[value || input]
+        type[value]
       end
       alias_method :[], :call
 
