@@ -1,3 +1,11 @@
+# master
+
+## Fixed
+
+* `Constructor#try` rescues `ArgumentError` (raised in cases like `Integer('foo')`) (flash-gordon)
+
+[Compare v0.12.0...master](https://github.com/dry-rb/dry-types/compare/v0.12.0...master)
+
 # v0.12.0 2017-09-15
 
 ## Added

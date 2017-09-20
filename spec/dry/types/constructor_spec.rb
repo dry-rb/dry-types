@@ -104,4 +104,12 @@ RSpec.describe Dry::Types::Constructor do
       expect(type.name).to eql('NilClass | String')
     end
   end
+
+  describe '#try' do
+    subject(:type) { Dry::Types['coercible.int'] }
+
+    it 'rescues ArgumentError' do
+      expect(type.try('foo')).to be_failure
+    end
+  end
 end

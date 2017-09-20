@@ -54,7 +54,7 @@ module Dry
       # @return [Object] if block given and try fails
       def try(input, &block)
         type.try(fn[input], &block)
-      rescue TypeError => e
+      rescue TypeError, ArgumentError => e
         failure(input, e.message)
       end
 
