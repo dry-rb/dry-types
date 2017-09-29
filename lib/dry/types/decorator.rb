@@ -14,11 +14,6 @@ module Dry
         @type = type
       end
 
-      # @return [Constructor]
-      def constructor
-        type.constructor
-      end
-
       # @param [Object] input
       # @param [#call, nil] block
       # @return [Result,Logic::Result]
