@@ -1,17 +1,17 @@
-require 'spec_helper'
-
 RSpec.describe Dry::Types do
   describe '.register' do
     it 'registers a new type constructor' do
-      module FlatArray
-        def self.constructor(input)
-          input.flatten
+      module Test
+        module FlatArray
+          def self.constructor(input)
+            input.flatten
+          end
         end
       end
 
       Dry::Types.register(
         'custom_array',
-        Dry::Types::Definition.new(Array).constructor(FlatArray.method(:constructor))
+        Dry::Types::Definition.new(Array).constructor(Test::FlatArray.method(:constructor))
       )
 
       input = [[1], [2]]

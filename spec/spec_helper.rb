@@ -11,8 +11,6 @@ if RUBY_ENGINE == 'ruby' && ENV['COVERAGE'] == 'true'
   end
 end
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-
 require 'pathname'
 
 SPEC_ROOT = Pathname(__FILE__).dirname
@@ -35,7 +33,7 @@ begin
 rescue LoadError; end
 
 Dir[Pathname(__dir__).join('shared/*.rb')].each(&method(:require))
-require_relative '../lib/spec/dry/types'
+require 'dry/types/spec/types'
 
 Undefined = Dry::Core::Constants::Undefined
 
