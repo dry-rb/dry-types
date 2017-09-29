@@ -97,7 +97,15 @@ module Dry
         elsif right.valid?(input)
           right.success(input)
         else
-          raise ArgumentError, "Invalid success value for #{inspect}"
+          raise ArgumentError, "Invalid success value '#{input}' for #{inspect}"
+        end
+      end
+
+      def failure(input)
+        if !left.valid?(input)
+          left.failure(input, left.try(input).error)
+        else
+          right.failure(input, right.try(input).error)
         end
       end
 
