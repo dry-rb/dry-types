@@ -3,6 +3,7 @@ RSpec.describe Dry::Types::Constrained do
     subject(:type) { Dry::Types['strict.string'].constrained(size: 3..12) }
 
     it_behaves_like Dry::Types::Definition
+    it_behaves_like 'Dry::Types::Definition#meta'
   end
 
   describe '#[]' do
