@@ -4,6 +4,7 @@
 
 * `Constructor#try` rescues `ArgumentError` (raised in cases like `Integer('foo')`) (flash-gordon)
 * `#constructor` works correctly for default and enum types (solnic)
+* The equalizer of constrained types respects meta (flash-gordon)
 
 [Compare v0.12.0...master](https://github.com/dry-rb/dry-types/compare/v0.12.0...master)
 
