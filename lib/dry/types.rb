@@ -16,6 +16,7 @@ require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
 require 'dry/types/fn_container'
+require 'dry/types/builder_methods'
 
 require 'dry/types/errors'
 
@@ -35,6 +36,7 @@ module Dry
     def self.module
       namespace = Module.new
       define_constants(namespace, type_keys)
+      namespace.extend(BuilderMethods)
       namespace
     end
 
@@ -84,7 +86,7 @@ module Dry
 
           if result
             type_id, member_id = result[1..2]
-            container[type_id].member(self[member_id])
+            container[type_id].of(self[member_id])
           else
             container[name]
           end
@@ -132,7 +134,23 @@ module Dry
     # List of type keys defined in {Dry::Types.container}
     # @return [<String>]
     def self.type_keys
-      container._container.keys
+      container.keys
+    end
+
+    private
+
+    # @api private
+    def self.const_missing(const)
+      underscored = Inflecto.underscore(const)
+
+      if type_keys.any? { |key| key.split('.')[0] == underscored }
+        raise NameError,
+              'dry-types does not define constants for default types. '\
+              'You can access the predefined types with [], e.g. Dry::Types["strict.int"] '\
+              'or generate a module with types using Dry::Types.module'
+      else
+        super
+      end
     end
   end
 end

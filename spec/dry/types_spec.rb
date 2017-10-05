@@ -1,17 +1,17 @@
-require 'spec_helper'
-
 RSpec.describe Dry::Types do
   describe '.register' do
     it 'registers a new type constructor' do
-      module FlatArray
-        def self.constructor(input)
-          input.flatten
+      module Test
+        module FlatArray
+          def self.constructor(input)
+            input.flatten
+          end
         end
       end
 
       Dry::Types.register(
         'custom_array',
-        Dry::Types::Definition.new(Array).constructor(FlatArray.method(:constructor))
+        Dry::Types::Definition.new(Array).constructor(Test::FlatArray.method(:constructor))
       )
 
       input = [[1], [2]]
@@ -91,6 +91,14 @@ RSpec.describe Dry::Types do
 
       expect(constants).to eql([Dry::Types['coercible.string']])
       expect(Test::Coercible::String).to be(Dry::Types['coercible.string'])
+    end
+  end
+
+  describe 'missing constant' do
+    it 'raises a nice error when a constant like Coercible or Strict is missing' do
+      expect {
+        Dry::Types::Strict::String
+      }.to raise_error(NameError, /dry-types does not define constants for default types/)
     end
   end
 end

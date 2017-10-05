@@ -1,21 +1,24 @@
 require 'dry/types/array/member'
+require 'dry/core/deprecations'
 
 module Dry
   module Types
     class Array < Definition
+      extend Dry::Core::Deprecations[:'dry-types']
+
       # @param [Type] type
       # @return [Array::Member]
-      def member(type)
+      def of(type)
         member =
           case type
           when String, Class then Types[type]
           else type
           end
 
-        Array::Member.new(primitive, options.merge(member: member))
+        Array::Member.new(primitive, **options, member: member)
       end
 
-      alias_method :of, :member
+      deprecate :member, :of
     end
   end
 end

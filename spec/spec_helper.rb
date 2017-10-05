@@ -11,9 +11,10 @@ if RUBY_ENGINE == 'ruby' && ENV['COVERAGE'] == 'true'
   end
 end
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-
 require 'pathname'
+
+SPEC_ROOT = Pathname(__FILE__).dirname
+
 require 'dry-types'
 
 begin
@@ -32,14 +33,21 @@ begin
 rescue LoadError; end
 
 Dir[Pathname(__dir__).join('shared/*.rb')].each(&method(:require))
-require_relative '../lib/spec/dry/types'
+require 'dry/types/spec/types'
 
 Undefined = Dry::Core::Constants::Undefined
+
+require 'dry/core/deprecations'
+Dry::Core::Deprecations.set_logger!(SPEC_ROOT.join('../log/deprecations.log'))
 
 RSpec.configure do |config|
   config.before(:example, :maybe) do
     Dry::Types.load_extensions(:maybe)
   end
+
+  config.disable_monkey_patching!
+
+  config.warnings = true
 
   config.before do
     @types = Dry::Types.container._container.keys

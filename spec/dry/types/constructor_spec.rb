@@ -23,6 +23,12 @@ RSpec.describe Dry::Types::Constructor do
 
       expect(type[' foo ']).to eql('foo')
     end
+
+    it 'throws an error if no block given' do
+      expect {
+        Dry::Types::Constructor.new(String)
+      }.to raise_error(ArgumentError)
+    end
   end
 
   describe '#call' do
@@ -66,6 +72,44 @@ RSpec.describe Dry::Types::Constructor do
 
     it 'raises no-method error when it does not respond to a method' do
       expect { type.oh_noez }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe 'equality' do
+    subject(:type) { Dry::Types['string'] }
+
+    it 'counts .fn' do
+      to_i = :to_i.to_proc
+      to_s = :to_s.to_proc
+
+      expect(type.constructor(to_i)).to eq(type.constructor(to_i))
+      expect(type.constructor(to_i)).not_to eq(type.constructor(to_s))
+
+      expect(type.constructor(to_i)).to eql(type.constructor(to_i))
+      expect(type.constructor(to_i)).not_to eql(type.constructor(to_s))
+    end
+
+    it 'counts meta' do
+      to_i = :to_i.to_proc
+
+      expect(type.constructor(to_i).meta(pos: :left)).to eql(type.constructor(to_i).meta(pos: :left))
+      expect(type.constructor(to_i).meta(pos: :left)).not_to eql(type.constructor(to_i).meta(pos: :right))
+    end
+  end
+
+  describe '#name' do
+    subject(:type) { Dry::Types['string'].optional.constructor(-> v { v.nil? ? nil : v.to_s }) }
+
+    it 'works with sum types' do
+      expect(type.name).to eql('NilClass | String')
+    end
+  end
+
+  describe '#try' do
+    subject(:type) { Dry::Types['coercible.int'] }
+
+    it 'rescues ArgumentError' do
+      expect(type.try('foo')).to be_failure
     end
   end
 end

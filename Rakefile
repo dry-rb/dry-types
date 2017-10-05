@@ -7,7 +7,6 @@ task :run_specs do
   RSpec::Core::Runner.run(['spec/dry'])
   RSpec.clear_examples
 
-  load 'spec/dry/types.rb'
   Dry::Types.load_extensions(:maybe)
   RSpec::Core::Runner.run(['spec'])
 end

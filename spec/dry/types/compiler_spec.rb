@@ -128,7 +128,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds an array' do
-    ast = Dry::Types['array'].member(
+    ast = Dry::Types['array'].of(
       Dry::Types['hash'].symbolized(
         email: Dry::Types['string'],
         age: Dry::Types['form.int'],
@@ -164,7 +164,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe form array with member' do
-    ast = Dry::Types['form.array'].member(Dry::Types['coercible.int']).to_ast
+    ast = Dry::Types['form.array'].of(Dry::Types['coercible.int']).to_ast
 
     arr = compiler.(ast)
 
@@ -247,6 +247,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.primitive).to be(String)
   end
 
+
   it 'builds an and constrained' do
     ast = Dry::Types['strict.string'].constrained(size: 3..12).to_ast
 
@@ -271,5 +272,19 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type[4]).to eql(4)
     expect(type[19]).to eql(19)
     expect(type.primitive).to be(Integer)
+  end
+
+  it 'builds a constructor with meta' do
+    fn = -> v { v.to_s }
+
+    ast = Dry::Types::Constructor.new(String, &fn).meta(foo: :bar).to_ast
+
+    type = compiler.(ast)
+
+    expect(type[:foo]).to eql('foo')
+
+    expect(type.fn).to be(fn)
+    expect(type.primitive).to be(String)
+    expect(type.meta).to eql(foo: :bar)
   end
 end

@@ -1,7 +1,5 @@
-require 'spec/dry/types'
-
 RSpec.describe Dry::Types::Array do
-  describe '#member' do
+  describe '#of' do
     context 'primitive' do
       shared_context 'array with a member type' do
         it 'returns an array with correct member values' do
@@ -20,14 +18,14 @@ RSpec.describe Dry::Types::Array do
       end
 
       context 'using method' do
-        subject(:array) { Dry::Types['coercible.array'].member(Dry::Types['coercible.string']) }
+        subject(:array) { Dry::Types['coercible.array'].of(Dry::Types['coercible.string']) }
 
         include_context 'array with a member type'
       end
 
       context 'using a constrained type' do
         subject(:array) do
-          Dry::Types['array'].member(Dry::Types['coercible.int'].constrained(gt: 2))
+          Dry::Types['array'].of(Dry::Types['coercible.int'].constrained(gt: 2))
         end
 
         it 'passes values through member type' do
@@ -48,8 +46,16 @@ RSpec.describe Dry::Types::Array do
     end
   end
 
+  describe '#member' do
+    subject(:array) { Dry::Types['coercible.array'].member(Dry::Types['coercible.string']) }
+
+    it 'still works though deprecated' do
+      expect(array[Set[1, 2, 3]]).to eql(%w(1 2 3))
+    end
+  end
+
   describe '#valid?' do
-    subject(:array) { Dry::Types['strict.array'].member(Dry::Types['strict.string']) }
+    subject(:array) { Dry::Types['strict.array'].of(Dry::Types['strict.string']) }
 
     it 'detects invalid input of the completely wrong type' do
       expect(array.valid?(5)).to be(false)

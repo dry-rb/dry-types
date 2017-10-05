@@ -181,7 +181,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     context 'Member' do
       subject(:type) do
-        Dry::Types['array'].member(Dry::Types['string'])
+        Dry::Types['array'].of(Dry::Types['string'])
       end
 
       specify do

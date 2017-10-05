@@ -3,7 +3,7 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Constructor < Definition
-      include Dry::Equalizer(:type)
+      include Dry::Equalizer(:type, :options, :meta)
 
       # @return [#call]
       attr_reader :fn
@@ -25,12 +25,20 @@ module Dry
       def initialize(type, options = {}, &block)
         @type = type
         @fn = options.fetch(:fn, block)
-        super
+
+        raise ArgumentError, 'Missing constructor block' if fn.nil?
+
+        super(type, **options, fn: fn)
       end
 
       # @return [Class]
       def primitive
         type.primitive
+      end
+
+      # @return [String]
+      def name
+        type.name
       end
 
       # @param [Object] input
@@ -46,7 +54,7 @@ module Dry
       # @return [Object] if block given and try fails
       def try(input, &block)
         type.try(fn[input], &block)
-      rescue TypeError => e
+      rescue TypeError, ArgumentError => e
         failure(input, e.message)
       end
 

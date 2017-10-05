@@ -3,6 +3,7 @@ RSpec.describe Dry::Types::Constrained do
     subject(:type) { Dry::Types['strict.string'].constrained(size: 3..12) }
 
     it_behaves_like Dry::Types::Definition
+    it_behaves_like 'Dry::Types::Definition#meta'
   end
 
   describe '#[]' do
@@ -111,7 +112,7 @@ RSpec.describe Dry::Types::Constrained do
     subject(:type) do
       Dry::Types['strict.array']
         .constrained(size: 3)
-        .member(Dry::Types['coercible.string'])
+        .of(Dry::Types['coercible.string'])
     end
 
     it_behaves_like Dry::Types::Definition

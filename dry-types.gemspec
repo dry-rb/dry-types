@@ -1,4 +1,3 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'dry/types/version'
@@ -12,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc.'
   spec.description   = spec.summary
-  spec.homepage      = "https://github.com/dryrb/dry-types"
+  spec.homepage      = "https://github.com/dry-rb/dry-types"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
@@ -33,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dry-container', '~> 0.3'
   spec.add_runtime_dependency 'dry-equalizer', '~> 0.2'
   spec.add_runtime_dependency 'dry-configurable', '~> 0.1'
-  spec.add_runtime_dependency 'dry-logic', '~> 0.4', '>= 0.4.0'
+  spec.add_runtime_dependency 'dry-logic', '~> 0.4', '>= 0.4.2'
   spec.add_runtime_dependency 'inflecto', '~> 0.0.0', '>= 0.0.2'
 
   spec.add_development_dependency "bundler", "~> 1.6"

@@ -73,4 +73,12 @@ RSpec.shared_examples_for Dry::Types::Definition do
       expect(type.primitive).to be_instance_of(Class)
     end
   end
+
+  describe '#constructor' do
+    it 'returns a constructor' do
+      constructor = type.constructor(&:to_s)
+
+      expect(constructor).to be_instance_of(Dry::Types::Constructor)
+    end
+  end
 end

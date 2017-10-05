@@ -231,7 +231,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'form.array' do
-    subject(:type) { Dry::Types['form.array'].member(Dry::Types['form.int']) }
+    subject(:type) { Dry::Types['form.array'].of(Dry::Types['form.int']) }
 
     it 'returns coerced array' do
       arr = %w(1 2 3)

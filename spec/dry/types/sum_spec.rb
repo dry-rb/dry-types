@@ -79,15 +79,15 @@ RSpec.describe Dry::Types::Sum do
 
     it 'works with two complex types with constraints' do
       pair = Dry::Types['strict.array']
-        .member(Dry::Types['coercible.string'])
+        .of(Dry::Types['coercible.string'])
         .constrained(size: 2)
 
       string_list = Dry::Types['strict.array']
-        .member(Dry::Types['strict.string'])
+        .of(Dry::Types['strict.string'])
         .constrained(min_size: 1)
 
       string_pairs = Dry::Types['strict.array']
-        .member(pair)
+        .of(pair)
         .constrained(min_size: 1)
 
       type = string_list | string_pairs

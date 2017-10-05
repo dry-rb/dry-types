@@ -25,7 +25,7 @@ module Dry
         definition, fn_register_name, meta = node
         fn = Dry::Types::FnContainer[fn_register_name]
         primitive = visit(definition)
-        Types::Constructor.new(primitive, &fn)
+        Types::Constructor.new(primitive, meta: meta, fn: fn)
       end
 
       def visit_safe(node)
@@ -55,7 +55,7 @@ module Dry
 
       def visit_array(node)
         member, meta = node
-        registry['array'].member(visit(member)).meta(meta)
+        registry['array'].of(visit(member)).meta(meta)
       end
 
       def visit_hash(node)
@@ -70,7 +70,7 @@ module Dry
 
       def visit_json_array(node)
         member, meta = node
-        registry['json.array'].member(visit(member)).meta(meta)
+        registry['json.array'].of(visit(member)).meta(meta)
       end
 
       def visit_form_hash(node)
@@ -80,7 +80,7 @@ module Dry
 
       def visit_form_array(node)
         member, meta = node
-        registry['form.array'].member(visit(member)).meta(meta)
+        registry['form.array'].of(visit(member)).meta(meta)
       end
 
       def visit_member(node)
