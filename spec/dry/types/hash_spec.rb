@@ -120,6 +120,22 @@ RSpec.describe Dry::Types::Hash do
       expect { hash.call(name: :Jane, age: 'oops', active: true, phone: []) }
         .to raise_error(Dry::Types::SchemaError, '"oops" (String) has invalid type for :age violates constraints (type?(Integer, "oops") failed)')
     end
+
+    context 'when using coercible types' do
+      let(:hash_schema) do
+        {
+          name: "coercible.string",
+          age: "coercible.int",
+          active: "form.bool",
+          phone: Dry::Types['phone']
+        }
+      end
+
+      it 'raises a SchemaError when coercion fails' do
+        expect { hash.call(name: :John, active: '1', age: nil, phone: []) }
+          .to raise_error(Dry::Types::SchemaError, 'nil (NilClass) has invalid type for :age violates constraints (can\'t convert nil into Integer failed)')
+      end
+    end
   end
 
   shared_examples 'sets default value behavior when keys are omitted' do
