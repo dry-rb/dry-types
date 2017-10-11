@@ -137,7 +137,7 @@ RSpec.describe Dry::Types::Sum do
   describe '#failure' do
     subject(:type) { Dry::Types['int'] | Dry::Types['string'] }
 
-    it 'returns success when value passed' do
+    it 'returns failure when invalid value is passed' do
       expect(type.failure(true)).to be_failure
     end
   end
