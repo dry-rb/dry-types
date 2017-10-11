@@ -20,6 +20,7 @@ group :benchmarks do
   gem 'virtus'
   gem 'fast_attributes'
   gem 'attrio'
+  gem 'dry-struct'
 end
 
 gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic'
