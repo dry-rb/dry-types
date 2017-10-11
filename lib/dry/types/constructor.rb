@@ -74,6 +74,7 @@ module Dry
       def valid?(value)
         super && type.valid?(value)
       end
+      alias_method :===, :valid?
 
       # @return [Class]
       def constrained_type

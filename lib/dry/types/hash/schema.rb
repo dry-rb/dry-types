@@ -69,6 +69,13 @@ module Dry
           ]
         end
 
+        # @param [Hash] hash
+        # @return [Boolean]
+        def ===(hash)
+          result = try(hash)
+          result.success?
+        end
+
         private
 
         def hash_type

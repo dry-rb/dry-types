@@ -120,6 +120,7 @@ module Dry
       def valid?(value)
         left.valid?(value) || right.valid?(value)
       end
+      alias_method :===, :valid?
 
       # @api public
       #

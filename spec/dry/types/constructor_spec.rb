@@ -31,6 +31,26 @@ RSpec.describe Dry::Types::Constructor do
     end
   end
 
+  describe '#===' do
+    it 'returns boolean' do
+      expect(type.===('hello')).to eq true
+      expect(type.===(nil)).to eq false
+    end
+
+    context 'In case statement' do
+      let(:value) do
+        case 'world'
+        when type then 'accepted'
+          else 'invalid'
+        end
+      end
+
+      it 'will return correct value' do
+        expect(value).to eq 'accepted'
+      end
+    end
+  end
+
   describe '#call' do
     it 'uses constructor function to process input' do
       expect(type[:foo]).to eql('foo')

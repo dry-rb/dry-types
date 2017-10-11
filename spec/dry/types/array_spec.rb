@@ -69,4 +69,26 @@ RSpec.describe Dry::Types::Array do
       expect(array.valid?(['five'])).to be(true)
     end
   end
+
+  describe '#===' do
+    subject(:array) { Dry::Types['strict.array'].of(Dry::Types['strict.string']) }
+
+    it 'returns boolean' do
+      expect(array.===(%w(hello world))).to eq true
+      expect(array.===(['hello', 1234])).to eq false
+    end
+
+    context 'In case statement' do
+      let(:value) do
+        case %w(hello world)
+        when array then 'accepted'
+          else 'invalid'
+        end
+      end
+
+      it 'will return correct value' do
+        expect(value).to eq 'accepted'
+      end
+    end
+  end
 end

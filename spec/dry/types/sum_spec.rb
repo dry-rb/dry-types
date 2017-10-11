@@ -142,6 +142,28 @@ RSpec.describe Dry::Types::Sum do
     end
   end
 
+  describe '#===' do
+    subject(:type) { Dry::Types['int'] | Dry::Types['string']  }
+
+    it 'returns boolean' do
+      expect(type.===('hello')).to eq true
+      expect(type.===(nil)).to eq false
+    end
+
+    context 'In case statement' do
+      let(:value) do
+        case 'world'
+        when type then 'accepted'
+          else 'invalid'
+        end
+      end
+
+      it 'will return correct value' do
+        expect(value).to eq 'accepted'
+      end
+    end
+  end
+
   describe '#default' do
     it 'returns a default value sum type' do
       type = (Dry::Types['nil'] | Dry::Types['string']).default('foo')

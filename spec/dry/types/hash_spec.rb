@@ -90,6 +90,13 @@ RSpec.describe Dry::Types::Hash do
         expect(failure.error[:age].success?).to be(false)
       end
     end
+
+    describe '#===' do
+      it 'returns boolean' do
+        expect(hash.===(name: 'John', age: 23, active: 1, phone: 1)).to eq true
+        expect(hash.===(name: 'John', age: '23', active: 1, phone: 1)).to eq false
+      end
+    end
   end
 
   shared_examples 'strict schema behavior for missing keys' do
@@ -245,6 +252,7 @@ RSpec.describe Dry::Types::Hash do
     include_examples 'strict typing behavior'
     include_examples 'strict schema behavior for unexpected keys'
     include_examples 'strict schema behavior for nil values on fields with defaults'
+
 
     context 'with a sum' do
       let(:hash) { h1 | h2 }
