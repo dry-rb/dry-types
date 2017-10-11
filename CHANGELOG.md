@@ -7,7 +7,7 @@
 * Optional sum types work correctly in `safe` mode (GustavoCaso)
 * The equalizer of constrained types respects meta (flash-gordon)
 
-[Compare v0.12.0...master](https://github.com/dry-rb/dry-types/compare/v0.12.0...master)
+[Compare v0.12.0...v0.12.1](https://github.com/dry-rb/dry-types/compare/v0.12.0...v0.12.1)
 
 # v0.12.0 2017-09-15
 
