@@ -120,6 +120,28 @@ RSpec.describe Dry::Types::Sum do
     end
   end
 
+  describe '#success' do
+    subject(:type) { Dry::Types['strict.bool'] }
+
+    it 'returns success when value passed' do
+      expect(type.success(true)).to be_success
+    end
+
+    it 'raises ArgumentError when non of the types have a valid input' do
+      expect{
+        type.success('true')
+      }.to raise_error(ArgumentError, /Invalid success value 'true'/)
+    end
+  end
+
+  describe '#failure' do
+    subject(:type) { Dry::Types['int'] | Dry::Types['string'] }
+
+    it 'returns failure when invalid value is passed' do
+      expect(type.failure(true)).to be_failure
+    end
+  end
+
   describe '#default' do
     it 'returns a default value sum type' do
       type = (Dry::Types['nil'] | Dry::Types['string']).default('foo')

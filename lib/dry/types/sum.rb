@@ -91,6 +91,24 @@ module Dry
         end
       end
 
+      def success(input)
+        if left.valid?(input)
+          left.success(input)
+        elsif right.valid?(input)
+          right.success(input)
+        else
+          raise ArgumentError, "Invalid success value '#{input}' for #{inspect}"
+        end
+      end
+
+      def failure(input)
+        if !left.valid?(input)
+          left.failure(input, left.try(input).error)
+        else
+          right.failure(input, right.try(input).error)
+        end
+      end
+
       # @param [Object] value
       # @return [Boolean]
       def primitive?(value)
