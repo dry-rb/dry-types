@@ -12,6 +12,7 @@ module Dry
         # @param [#to_d, Object] input
         # @return [BigDecimal,nil]
         def self.to_decimal(input)
+          return if input.nil?
           input.to_d unless empty_str?(input)
         end
       end
