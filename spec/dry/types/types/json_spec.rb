@@ -61,6 +61,10 @@ RSpec.describe Dry::Types::Definition do
     it 'coerces floats to a decimal' do
       expect(type[3.12]).to eql(BigDecimal('3.12'))
     end
+
+    it 'returns nil for nil' do
+      expect(type[nil]).to eql(nil)
+    end
   end
 
   describe 'json.array' do
