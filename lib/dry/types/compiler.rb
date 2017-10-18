@@ -44,8 +44,7 @@ module Dry
       end
 
       def visit_rule(node)
-        operator, rule = node
-        Dry::Types.rule_compiler.(rule).reduce(operator)
+        Dry::Types.rule_compiler.([node])[0]
       end
 
       def visit_sum(node)

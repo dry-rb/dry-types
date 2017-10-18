@@ -1,3 +1,11 @@
+# v0.12.2 to-be-released
+
+## Fixed
+
+* The type compiler was fixed for simple rules such as used for strict type checks (flash-gordon)
+
+[Compare v0.12.1...master](https://github.com/dry-rb/dry-types/compare/v0.12.1...master)
+
 # v0.12.1 2017-10-11
 
 ## Fixed

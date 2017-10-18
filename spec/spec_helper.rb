@@ -18,7 +18,7 @@ SPEC_ROOT = Pathname(__FILE__).dirname
 require 'dry-types'
 
 begin
-  require 'byebug'
+  require 'pry-byebug'
   require 'mutant'
 
   module Mutant

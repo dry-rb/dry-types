@@ -247,6 +247,14 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.primitive).to be(String)
   end
 
+  it 'builds a strict type' do
+    ast = Dry::Types['strict.string'].to_ast
+
+    type = compiler.(ast)
+
+    expect(type['hello']).to eql('hello')
+    expect(type.primitive).to be(String)
+  end
 
   it 'builds an and constrained' do
     ast = Dry::Types['strict.string'].constrained(size: 3..12).to_ast
