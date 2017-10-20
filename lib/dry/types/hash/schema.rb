@@ -71,10 +71,11 @@ module Dry
 
         # @param [Hash] hash
         # @return [Boolean]
-        def ===(hash)
+        def valid?(hash)
           result = try(hash)
           result.success?
         end
+        alias_method :===, :valid?
 
         private
 

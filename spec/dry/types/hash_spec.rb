@@ -91,6 +91,13 @@ RSpec.describe Dry::Types::Hash do
       end
     end
 
+    describe '#valid?' do
+      it 'returns boolean' do
+        expect(hash.valid?(name: 'John', age: 23, active: 1, phone: 1)).to eq true
+        expect(hash.valid?(name: 'John', age: '23', active: 1, phone: 1)).to eq false
+      end
+    end
+
     describe '#===' do
       it 'returns boolean' do
         expect(hash.===(name: 'John', age: 23, active: 1, phone: 1)).to eq true
