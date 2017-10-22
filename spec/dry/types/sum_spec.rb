@@ -150,7 +150,7 @@ RSpec.describe Dry::Types::Sum do
       expect(type.===(nil)).to eql(false)
     end
 
-    context 'In case statement' do
+    context 'in case statement' do
       let(:value) do
         case 'world'
         when type then 'accepted'
@@ -158,7 +158,7 @@ RSpec.describe Dry::Types::Sum do
         end
       end
 
-      it 'will return correct value' do
+      it 'returns correct value' do
         expect(value).to eql('accepted')
       end
     end

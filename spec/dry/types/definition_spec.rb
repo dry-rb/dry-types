@@ -55,7 +55,7 @@ RSpec.describe Dry::Types::Definition do
         expect(type.===('hello')).to eql(true)
       end
 
-      context 'In case statement' do
+      context 'in case statement' do
         let(:value) do
           case 'Hello'
             when type then '0_o'

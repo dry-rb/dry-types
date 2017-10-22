@@ -37,7 +37,7 @@ RSpec.describe Dry::Types::Constrained do
       expect(type.===('no')).to eql(false)
     end
 
-    context 'In case statement' do
+    context 'in case statement' do
       let(:value) do
         case 'awesome'
           when type then 'accepted'
@@ -45,7 +45,7 @@ RSpec.describe Dry::Types::Constrained do
         end
       end
 
-      it 'will return correct value' do
+      it 'returns correct value' do
         expect(value).to eql('accepted')
       end
     end

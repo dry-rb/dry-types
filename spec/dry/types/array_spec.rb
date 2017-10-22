@@ -78,7 +78,7 @@ RSpec.describe Dry::Types::Array do
       expect(array.===(['hello', 1234])).to eql(false)
     end
 
-    context 'In case statement' do
+    context 'in case statement' do
       let(:value) do
         case %w(hello world)
         when array then 'accepted'
@@ -86,7 +86,7 @@ RSpec.describe Dry::Types::Array do
         end
       end
 
-      it 'will return correct value' do
+      it 'returns correct value' do
         expect(value).to eql('accepted')
       end
     end
