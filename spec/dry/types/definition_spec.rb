@@ -52,7 +52,7 @@ RSpec.describe Dry::Types::Definition do
 
     describe '#===' do
       it 'return if the value pass is valid primitive' do
-        expect(type.===('hello')).to eq true
+        expect(type.===('hello')).to eql(true)
       end
 
       context 'In case statement' do
@@ -64,7 +64,7 @@ RSpec.describe Dry::Types::Definition do
         end
 
         it 'use in case statement' do
-          expect(value).to eq '0_o'
+          expect(value).to eql('0_o')
         end
       end
     end

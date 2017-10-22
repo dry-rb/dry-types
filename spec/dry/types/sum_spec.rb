@@ -146,8 +146,8 @@ RSpec.describe Dry::Types::Sum do
     subject(:type) { Dry::Types['int'] | Dry::Types['string']  }
 
     it 'returns boolean' do
-      expect(type.===('hello')).to eq true
-      expect(type.===(nil)).to eq false
+      expect(type.===('hello')).to eql(true)
+      expect(type.===(nil)).to eql(false)
     end
 
     context 'In case statement' do
@@ -159,7 +159,7 @@ RSpec.describe Dry::Types::Sum do
       end
 
       it 'will return correct value' do
-        expect(value).to eq 'accepted'
+        expect(value).to eql('accepted')
       end
     end
   end

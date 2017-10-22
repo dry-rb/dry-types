@@ -33,8 +33,8 @@ RSpec.describe Dry::Types::Constrained do
     end
 
     it 'return boolean' do
-      expect(type.===('hello')).to eq true
-      expect(type.===('no')).to eq false
+      expect(type.===('hello')).to eql(true)
+      expect(type.===('no')).to eql(false)
     end
 
     context 'In case statement' do
@@ -46,7 +46,7 @@ RSpec.describe Dry::Types::Constrained do
       end
 
       it 'will return correct value' do
-        expect(value).to eq 'accepted'
+        expect(value).to eql('accepted')
       end
     end
   end

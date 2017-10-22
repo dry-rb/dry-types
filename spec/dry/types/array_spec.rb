@@ -74,8 +74,8 @@ RSpec.describe Dry::Types::Array do
     subject(:array) { Dry::Types['strict.array'].of(Dry::Types['strict.string']) }
 
     it 'returns boolean' do
-      expect(array.===(%w(hello world))).to eq true
-      expect(array.===(['hello', 1234])).to eq false
+      expect(array.===(%w(hello world))).to eql(true)
+      expect(array.===(['hello', 1234])).to eql(false)
     end
 
     context 'In case statement' do
@@ -87,7 +87,7 @@ RSpec.describe Dry::Types::Array do
       end
 
       it 'will return correct value' do
-        expect(value).to eq 'accepted'
+        expect(value).to eql('accepted')
       end
     end
   end

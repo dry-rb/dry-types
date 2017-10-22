@@ -31,7 +31,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
         Dry::Types['strict.string']
         .constructor(&:to_s)
         .default { |type| type[123] }[nil]
-      ).to eq '123'
+      ).to eql('123')
     end
   end
 
