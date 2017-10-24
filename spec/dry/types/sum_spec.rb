@@ -172,7 +172,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'supports a sum type which includes a constructor type' do
-      type = (Dry::Types['form.nil'] | Dry::Types['form.int']).default(3)
+      type = (Dry::Types['params.nil'] | Dry::Types['params.int']).default(3)
 
       expect(type['']).to be(3)
     end
