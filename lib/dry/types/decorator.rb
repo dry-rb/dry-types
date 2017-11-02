@@ -27,6 +27,7 @@ module Dry
       def valid?(value)
         type.valid?(value)
       end
+      alias_method :===, :valid?
 
       # @return [Boolean]
       def default?
