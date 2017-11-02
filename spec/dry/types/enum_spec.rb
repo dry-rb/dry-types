@@ -23,6 +23,26 @@ RSpec.describe Dry::Types::Enum do
       expect(type.values).to be_frozen
     end
 
+    describe '#===' do
+      it 'returns boolean' do
+        expect(type.===('draft')).to eql(true)
+        expect(array.===('deleted')).to eql(false)
+      end
+
+      context 'in case statement' do
+        let(:value) do
+          case 'draft'
+          when type then 'accepted'
+            else 'invalid'
+          end
+        end
+
+        it 'returns correct value' do
+          expect(value).to eql('accepted')
+        end
+      end
+    end
+
     it 'allows defining an enum from a default-value type' do
       with_default = string.default('draft').enum(*values)
 
