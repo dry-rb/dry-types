@@ -137,5 +137,9 @@ RSpec.describe Dry::Types::Constrained do
     it 'raises when a given constraint is violated' do
       expect { type[%w(a b)] }.to raise_error(Dry::Types::ConstraintError)
     end
+
+    it 'coerces values' do
+      expect(type.try(%i(foo aa)).input).to eql(%w(foo aa))
+    end
   end
 end

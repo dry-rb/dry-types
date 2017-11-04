@@ -35,12 +35,12 @@ module Dry
         def try(input, &block)
           if input.is_a?(::Array)
             result = call(input, :try)
+            output = result.map(&:input)
 
             if result.all?(&:success?)
-              output = result.map(&:input)
               success(output)
             else
-              failure = failure(input, result.select(&:failure?))
+              failure = failure(output, result.select(&:failure?))
               block ? yield(failure) : failure
             end
           else
