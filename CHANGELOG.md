@@ -1,10 +1,13 @@
-# v0.12.2 to-be-released
+# v0.12.2 2017-11-04
 
 ## Fixed
 
 * The type compiler was fixed for simple rules such as used for strict type checks (flash-gordon)
+* Fixed an error on `Dry::Types['json.decimal'].try(nil)` (nesaulov)
+* Fixed an error on calling `try` on an array type built of constrained types (flash-gordon)
+* Implemented `===` for enum types (GustavoCaso)
 
-[Compare v0.12.1...master](https://github.com/dry-rb/dry-types/compare/v0.12.1...master)
+[Compare v0.12.1...v0.12.2](https://github.com/dry-rb/dry-types/compare/v0.12.1...v0.12.2)
 
 # v0.12.1 2017-10-11
 
