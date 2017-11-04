@@ -26,7 +26,7 @@ RSpec.describe Dry::Types::Enum do
     describe '#===' do
       it 'returns boolean' do
         expect(type.===('draft')).to eql(true)
-        expect(array.===('deleted')).to eql(false)
+        expect(type.===('deleted')).to eql(false)
       end
 
       context 'in case statement' do
