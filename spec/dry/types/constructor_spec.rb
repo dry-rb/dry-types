@@ -79,6 +79,18 @@ RSpec.describe Dry::Types::Constructor do
     end
   end
 
+  describe '#constrained?' do
+    subject(:type) { Dry::Types['string'] }
+
+    it 'returns true when its type is constrained' do
+      expect(type.constrained(type: String).constructor(&:to_s)).to be_constrained
+    end
+
+    it 'returns true when its type is constrained' do
+      expect(type.constructor(&:to_s)).to_not be_constrained
+    end
+  end
+
   context 'decoration' do
     subject(:type) { Dry::Types['coercible.hash'] }
 

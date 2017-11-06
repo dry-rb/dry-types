@@ -11,6 +11,8 @@ module Dry
       # @return [Type]
       attr_reader :type
 
+      undef :constrained?
+
       # @param [Builder, Object] input
       # @param [Hash] options
       # @param [#call, nil] block
