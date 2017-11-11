@@ -6,7 +6,7 @@ require 'time'
 module Dry
   module Types
     module Coercions
-      module JSON
+      module Json
         extend Coercions
 
         # @param [#to_d, Object] input

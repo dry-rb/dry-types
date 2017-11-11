@@ -3,23 +3,23 @@ require 'dry/types/coercions/json'
 module Dry
   module Types
     register('json.nil') do
-      self['nil'].constructor(Coercions::JSON.method(:to_nil))
+      self['nil'].constructor(Coercions::Json.method(:to_nil))
     end
 
     register('json.date') do
-      self['date'].constructor(Coercions::JSON.method(:to_date))
+      self['date'].constructor(Coercions::Json.method(:to_date))
     end
 
     register('json.date_time') do
-      self['date_time'].constructor(Coercions::JSON.method(:to_date_time))
+      self['date_time'].constructor(Coercions::Json.method(:to_date_time))
     end
 
     register('json.time') do
-      self['time'].constructor(Coercions::JSON.method(:to_time))
+      self['time'].constructor(Coercions::Json.method(:to_time))
     end
 
     register('json.decimal') do
-      self['decimal'].constructor(Coercions::JSON.method(:to_decimal))
+      self['decimal'].constructor(Coercions::Json.method(:to_decimal))
     end
 
     register('json.array') do
