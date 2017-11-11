@@ -159,8 +159,8 @@
 * [BREAKING] Renamed `Hash##{schema=>permissive}` (backus)
 * [BREAKING] `dry-monads` dependency was made optional, Maybe types are available after `Dry::Types.load_extensions(:maybe)` (flash-gordon)
 * [BREAKING] `Dry::Types::Struct` and `Dry::Types::Value` have been extracted to [`dry-struct`](https://github.com/dry-rb/dry-struct) (backus)
-* `Types::Form::Bool` supports upcased true/false values (kirs)
-* `Types::Form::{Date,DateTime,Time}` fail gracefully for invalid input (padde)
+* `Types::Params::Bool` supports upcased true/false values (kirs)
+* `Types::Params::{Date,DateTime,Time}` fail gracefully for invalid input (padde)
 * ice_nine dependency has been dropped as it was required by Struct only (flash-gordon)
 
 [Compare v0.8.1...v0.9.0](https://github.com/dry-rb/dry-types/compare/v0.8.1...v0.9.0)
@@ -238,7 +238,7 @@ Major focus of this release is to make complex type composition possible and imp
 - `Struct` uses `Dry::Equalizer` too, just like `Value` (AMHOL)
 - `Sum::Constrained` which has a disjunction rule built from its types (solnic)
 - Compiler supports `[:constructor, [primitive, fn_proc]]` nodes (solnic)
-- Compiler supports building schema-less `form.hash` types (solnic)
+- Compiler supports building schema-less `params.hash` types (solnic)
 
 ## Fixed
 
@@ -301,7 +301,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 * `Dry::Data::Type#safe` for types which can skip constructor when primitive does
   not match input's class (solnic)
-* `form.array` and `form.hash` safe types (solnic)
+* `params.array` and `params.hash` safe types (solnic)
 
 [Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-types/compare/v0.5.0...v0.5.1)
 
@@ -391,7 +391,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 ## Fixed
 
-* `form.bool` sum is using correct right-side `form.false` type (solnic)
+* `params.bool` sum is using correct right-side `params.false` type (solnic)
 
 ## Changed
 
@@ -403,7 +403,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 ## Added
 
-* `form.nil` which coerces empty strings to `nil` (solnic)
+* `params.nil` which coerces empty strings to `nil` (solnic)
 * `bool` sum-type (true | false) (solnic)
 * Type compiler supports sum-types now (solnic)
 
@@ -417,7 +417,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 ## Added
 
-* `form.*` coercible types (solnic)
+* `params.*` coercible types (solnic)
 * `Type::Hash#strict` for defining hashes with a strict schema (solnic)
 * `Type::Hash#symbolized` for defining hashes that will symbolize keys (solnic)
 * `Dry::Data.register_class` short-cut interface for registering a class and
