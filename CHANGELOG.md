@@ -1,3 +1,13 @@
+## Added
+
+* `Types.Strict` is an alias for `Types.Instance`
+  ```ruby
+    strict_range = Types.Strict(Range)
+    strict_range == Types.Instance(Range) # => true
+  ```
+
+[Compare v0.12.2...master](https://github.com/dry-rb/dry-types/compare/v0.12.2...master)
+
 # v0.12.2 2017-11-04
 
 ## Fixed

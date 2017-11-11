@@ -71,4 +71,13 @@ RSpec.describe Dry::Types do
     expect(Module.new.tap { |m| m.include mod }.Definition(String)).
       to eql(mod.Definition(String))
   end
+
+  describe '.Strict' do
+    it 'is an alias for Instance' do
+      foo_type = Class.new
+
+      expect(mod.Strict(foo_type)).to eql(mod.Instance(foo_type))
+      expect(mod.Strict(Integer)).to eql(mod::Strict::Int)
+    end
+  end
 end
