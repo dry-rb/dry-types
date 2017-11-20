@@ -2,7 +2,6 @@ require 'bigdecimal'
 require 'date'
 require 'set'
 
-require 'inflecto'
 require 'concurrent'
 
 require 'dry-container'
@@ -13,6 +12,7 @@ require 'dry/core/class_attributes'
 
 require 'dry/types/version'
 require 'dry/types/container'
+require 'dry/types/inflector'
 require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
@@ -111,7 +111,7 @@ module Dry
     def self.define_constants(namespace, identifiers)
       names = identifiers.map do |id|
         parts = id.split('.')
-        [Inflecto.camelize(parts.pop), parts.map(&Inflecto.method(:camelize))]
+        [Inflector.camelize(parts.pop), parts.map(&Inflector.method(:camelize))]
       end
 
       names.map do |(klass, parts)|
@@ -126,7 +126,7 @@ module Dry
     # @param [#to_s] klass
     # @return [String]
     def self.identifier(klass)
-      Inflecto.underscore(klass).tr('/', '.')
+      Inflector.underscore(klass).tr('/', '.')
     end
 
     # @return [Concurrent::Map]
@@ -144,7 +144,7 @@ module Dry
 
     # @api private
     def self.const_missing(const)
-      underscored = Inflecto.underscore(const)
+      underscored = Inflector.underscore(const)
 
       if type_keys.any? { |key| key.split('.')[0] == underscored }
         raise NameError,
