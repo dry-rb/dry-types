@@ -9,6 +9,7 @@ require 'dry-container'
 require 'dry-equalizer'
 require 'dry/core/extensions'
 require 'dry/core/constants'
+require 'dry/core/class_attributes'
 
 require 'dry/types/version'
 require 'dry/types/container'
@@ -22,13 +23,15 @@ require 'dry/types/errors'
 
 module Dry
   module Types
-    extend Dry::Configurable
     extend Dry::Core::Extensions
+    extend Dry::Core::ClassAttributes
     include Dry::Core::Constants
 
     # @!attribute [r] namespace
     #   @return [Container{String => Definition}]
-    setting :namespace, self
+    defines :namespace
+
+    namespace self
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
@@ -46,7 +49,7 @@ module Dry
        ' do `include Dry::Types.module` in places where you want to have access'\
        ' to built-in types'
 
-      define_constants(config.namespace, type_keys)
+      define_constants(self.namespace, type_keys)
     end
 
     # @return [Container{String => Definition}]
