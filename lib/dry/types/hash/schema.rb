@@ -1,6 +1,4 @@
 require 'dry/core/class_attributes'
-require 'dry/types/hash'
-
 module Dry
   module Types
     class Hash < Definition
@@ -20,13 +18,12 @@ module Dry
 
         defines :hash_type
 
-        defines :extra_keys, type: %i(ignore raise).method(:include?).to_proc
-
-        extra_keys :ignore
+        def self.new(primitive, meta: EMPTY_HASH, **options)
+          super(primitive, **options, meta: { extra_keys: :ignore, **meta })
+        end
 
         # @return [Hash{Symbol => Definition}]
         attr_reader :member_types
-        alias_method :types, :member_types
 
         # @param [Class] _primitive
         # @param [Hash] options
@@ -100,7 +97,7 @@ module Dry
 
           result = {}
 
-          types.each do |k, type|
+          member_types.each do |k, type|
             key = key(hash, k)
 
             unless key.equal?(Undefined)
@@ -150,23 +147,30 @@ module Dry
       end
 
       class LegacyBase < Schema
+        defines :extra_keys
+
         defines :type_processor
 
-        # @return [Hash{Symbol => Definition}]
-        attr_reader :types
+        def self.new(primitive, meta: EMPTY_HASH, **options)
+          super(primitive, **options, meta: { **meta, extra_keys: extra_keys })
+        end
 
-        # @param [Class] _primitive
-        # @param [Hash] options
-        # @option options [Hash{Symbol => Definition}] :member_types
-        def initialize(_primitive, options)
-          @types = {}
-          options.fetch(:member_types).each { |k, t| types[k] = self.class.type_processor.(t) }
-          super
+        def self.build(primitive, options)
+          member_types = {}
+          options.fetch(:member_types).each { |k, t| member_types[k] = type_processor.(t) }
+
+          new(primitive, **options, member_types: member_types)
+        end
+
+        def hash_type
+          :"#{ self.class.hash_type }_transformed"
         end
       end
 
       class LegacySchema < LegacyBase
         hash_type :schema
+
+        extra_keys :ignore
 
         type_processor -> t do
           t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
@@ -175,7 +179,7 @@ module Dry
         private
 
         def key(hash, key)
-          if hash.key?(key) || types[key].default?
+          if hash.key?(key) || member_types[key].default?
             key
           else
             Undefined
@@ -187,6 +191,8 @@ module Dry
       # in provided hash.
       class Permissive < LegacyBase
         hash_type :permissive
+
+        extra_keys :ignore
 
         type_processor -> t do
           t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
@@ -244,7 +250,7 @@ module Dry
         private
 
         def key(hash, key)
-          if hash.key?(key) || types[key].default?
+          if hash.key?(key) || member_types[key].default?
             key
           else
             raise MissingKeyError, key
@@ -256,6 +262,8 @@ module Dry
       # @see Safe
       class Weak < LegacyBase
         hash_type :weak
+
+        extra_keys :ignore
 
         type_processor -> t do
           if t.default?
@@ -283,7 +291,7 @@ module Dry
         private
 
         def key(hash, key)
-          if hash.key?(key) || types[key].default?
+          if hash.key?(key) || member_types[key].default?
             key
           else
             Undefined
@@ -295,6 +303,8 @@ module Dry
       class Symbolized < Weak
         hash_type :symbolized
 
+        extra_keys :ignore
+
         private
 
         def key(hash, key)
@@ -302,7 +312,7 @@ module Dry
             key
           elsif hash.key?(string_key = key.to_s)
             string_key
-          elsif types[key].default?
+          elsif member_types[key].default?
             key
           else
             Undefined

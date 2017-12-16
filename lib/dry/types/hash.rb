@@ -3,6 +3,16 @@ require 'dry/types/hash/schema'
 module Dry
   module Types
     class Hash < Definition
+      SCHEMAS = {
+        schema: LegacySchema,
+        weak: Weak,
+        permissive: Permissive,
+        strict: Strict,
+        strict_with_defaults: StrictWithDefaults,
+        symbolized: Symbolized
+      }.freeze
+      private_constant(:SCHEMAS)
+
       # @param [{Symbol => Definition}] type_map
       # @param [Class] klass
       #   {Schema} or one of its subclasses ({Weak}, {Permissive}, {Strict},
@@ -17,15 +27,7 @@ module Dry
             end
         }
 
-        klass.new(
-          primitive,
-          **options,
-          member_types: member_types,
-          meta: {
-            **meta,
-            extra_keys: klass.extra_keys
-          }
-        )
+        klass.build(primitive, **options, member_types: member_types, meta: meta)
       end
 
       # @param [{Symbol => Definition}] type_map
@@ -56,6 +58,11 @@ module Dry
       # @return [Symbolized]
       def symbolized(type_map)
         schema(type_map, Symbolized)
+      end
+
+      def schema_transformed(constructor, member_types)
+        klass = SCHEMAS.fetch(constructor)
+        klass.new(primitive, **options, member_types: member_types, meta: meta)
       end
     end
   end
