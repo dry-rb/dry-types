@@ -1,22 +1,14 @@
-require 'dry/core/class_attributes'
+require 'dry/types/hash/schema'
 
 module Dry
   module Types
     class Hash < Definition
-      extend Dry::Core::ClassAttributes
-
-      defines :hash_type
-
-      defines :extra_keys, type: %i(ignore raise).method(:include?).to_proc
-
-      extra_keys :ignore
-
       # @param [{Symbol => Definition}] type_map
       # @param [Class] klass
       #   {Schema} or one of its subclasses ({Weak}, {Permissive}, {Strict},
       #   {StrictWithDefaults}, {Symbolized})
       # @return [Schema]
-      def schema(type_map, klass = Schema)
+      def schema(type_map, klass = Legacy)
         member_types = type_map.each_with_object({}) { |(name, type), result|
           result[name] =
             case type
@@ -63,23 +55,6 @@ module Dry
       def symbolized(type_map)
         schema(type_map, Symbolized)
       end
-
-      private
-
-      def extra_keys(hash)
-        case options[:extra_keys]
-        when :ignore
-          EMPTY_ARRAY
-        when :raise
-          hash.keys - member_types.keys
-        end
-      end
-
-      def hash_type
-        self.class.hash_type
-      end
     end
   end
 end
-
-require 'dry/types/hash/schema'

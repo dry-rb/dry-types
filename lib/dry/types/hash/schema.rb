@@ -1,8 +1,10 @@
+require 'dry/core/class_attributes'
 require 'dry/types/hash'
 
 module Dry
   module Types
     class Hash < Definition
+
       NIL_TO_UNDEFINED = -> v { v.nil? ? Undefined : v }
 
       # The built-in Hash type has constructors that you can use to define
@@ -14,20 +16,16 @@ module Dry
       # @see Dry::Types::Default#evaluate
       # @see Dry::Types::Default::Callable#evaluate
       class Schema < Hash
-        hash_type :schema
+        extend Dry::Core::ClassAttributes
 
-        defines :type_processor
+        defines :hash_type
 
-        type_processor -> t do
-          t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
-        end
+        defines :extra_keys, type: %i(ignore raise).method(:include?).to_proc
 
-        def self.new(primitive, options)
-          types = {}
+        extra_keys :ignore
 
-          options.fetch(:member_types).each { |k, t| types[k] = type_processor.(t) }
-
-          super(primitive, **options, types: types)
+        def self.new(primitive, member_types:, types: member_types, **options)
+          super(primitive, **options, member_types: member_types, types: types)
         end
 
         # @return [Hash{Symbol => Definition}]
@@ -147,11 +145,42 @@ module Dry
             end
           end
         end
+
+        def extra_keys(hash)
+          case options[:extra_keys]
+          when :ignore
+            EMPTY_ARRAY
+          when :raise
+            hash.keys - member_types.keys
+          end
+        end
+      end
+
+      class Legacy < Schema
+        def self.new(primitive, options)
+          types = {}
+
+          options.fetch(:member_types).each { |k, t| types[k] = type_processor.(t) }
+
+          super(primitive, **options, types: types)
+        end
+
+        defines :type_processor
+
+        hash_type :schema
+
+        type_processor -> t do
+          t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
+        end
+
+        def hash_type
+          self.class.hash_type
+        end
       end
 
       # Permissive schema raises a {MissingKeyError} if the given key is missing
       # in provided hash.
-      class Permissive < Schema
+      class Permissive < Legacy
         hash_type :permissive
 
         private
@@ -170,12 +199,19 @@ module Dry
       #   hash = Types::Hash.strict(name: Types::String, age: Types::Coercible::Int)
       #   hash[email: 'jane@doe.org', name: 'Jane', age: 21]
       #     # => Dry::Types::SchemaKeyError: :email is missing in Hash input
-      class Strict < Permissive
+      class Strict < Legacy
         hash_type :strict
 
         extra_keys :raise
 
         type_processor -> t { t.default? ? t.type : t }
+
+        private
+
+        def key(hash, key)
+          raise MissingKeyError, key unless hash.key?(key)
+          super
+        end
       end
 
       # {StrictWithDefaults} checks that there are no extra keys
@@ -183,8 +219,10 @@ module Dry
       # without default values given (raises {MissingKeyError} otherwise).
       # @see Default#evaluate
       # @see Default::Callable#evaluate
-      class StrictWithDefaults < Strict
+      class StrictWithDefaults < Legacy
         hash_type :strict_with_defaults
+
+        extra_keys :raise
 
         type_processor -> t { t }
 
@@ -201,7 +239,7 @@ module Dry
 
       # Weak schema provides safe types for every type given in schema hash
       # @see Safe
-      class Weak < Schema
+      class Weak < Legacy
         hash_type :weak
 
         type_processor -> t do
