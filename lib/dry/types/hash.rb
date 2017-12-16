@@ -8,7 +8,7 @@ module Dry
       #   {Schema} or one of its subclasses ({Weak}, {Permissive}, {Strict},
       #   {StrictWithDefaults}, {Symbolized})
       # @return [Schema]
-      def schema(type_map, klass = Legacy)
+      def schema(type_map, klass = LegacySchema)
         member_types = type_map.each_with_object({}) { |(name, type), result|
           result[name] =
             case type

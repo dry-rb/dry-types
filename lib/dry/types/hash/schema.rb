@@ -30,16 +30,13 @@ module Dry
 
         # @return [Hash{Symbol => Definition}]
         attr_reader :member_types
-
-        # @return [Hash{Symbol => Definition}]
-        attr_reader :types
+        alias_method :types, :member_types
 
         # @param [Class] _primitive
         # @param [Hash] options
         # @option options [Hash{Symbol => Definition}] :member_types
         def initialize(_primitive, options)
           @member_types = options.fetch(:member_types)
-          @types = options.fetch(:types)
           super
         end
 
@@ -154,9 +151,15 @@ module Dry
             hash.keys - member_types.keys
           end
         end
+
+        def hash_type
+          self.class.hash_type
+        end
       end
 
-      class Legacy < Schema
+      class LegacyBase < Schema
+        defines :type_processor
+
         def self.new(primitive, options)
           types = {}
 
@@ -165,23 +168,34 @@ module Dry
           super(primitive, **options, types: types)
         end
 
-        defines :type_processor
+        # @return [Hash{Symbol => Definition}]
+        attr_reader :types
 
+        # @param [Class] _primitive
+        # @param [Hash] options
+        # @option options [Hash{Symbol => Definition}] :member_types
+        def initialize(_primitive, options)
+          @types = options.fetch(:types)
+          super
+        end
+      end
+
+      class LegacySchema < LegacyBase
         hash_type :schema
 
         type_processor -> t do
           t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
         end
-
-        def hash_type
-          self.class.hash_type
-        end
       end
 
       # Permissive schema raises a {MissingKeyError} if the given key is missing
       # in provided hash.
-      class Permissive < Legacy
+      class Permissive < LegacyBase
         hash_type :permissive
+
+        type_processor -> t do
+          t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
+        end
 
         private
 
@@ -199,7 +213,7 @@ module Dry
       #   hash = Types::Hash.strict(name: Types::String, age: Types::Coercible::Int)
       #   hash[email: 'jane@doe.org', name: 'Jane', age: 21]
       #     # => Dry::Types::SchemaKeyError: :email is missing in Hash input
-      class Strict < Legacy
+      class Strict < LegacyBase
         hash_type :strict
 
         extra_keys :raise
@@ -219,7 +233,7 @@ module Dry
       # without default values given (raises {MissingKeyError} otherwise).
       # @see Default#evaluate
       # @see Default::Callable#evaluate
-      class StrictWithDefaults < Legacy
+      class StrictWithDefaults < LegacyBase
         hash_type :strict_with_defaults
 
         extra_keys :raise
@@ -239,7 +253,7 @@ module Dry
 
       # Weak schema provides safe types for every type given in schema hash
       # @see Safe
-      class Weak < Legacy
+      class Weak < LegacyBase
         hash_type :weak
 
         type_processor -> t do
