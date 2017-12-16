@@ -47,19 +47,25 @@ module Dry
         # @return [Logic::Result]
         # @return [Object] if coercion fails and a block is given
         def try(hash, &block)
-          success = true
-          output  = {}
+          if hash.is_a?(::Hash)
+            success = true
+            output  = {}
 
-          begin
-            result = try_coerce(hash) do |key, member_result|
-              success &&= member_result.success?
-              output[key] = member_result.input
+            begin
+              result = try_coerce(hash) do |key, member_result|
+                success &&= member_result.success?
+                output[key] = member_result.input
 
-              member_result
+                member_result
+              end
+            rescue ConstraintError, UnknownKeysError, SchemaError => e
+              success = false
+              result = e
             end
-          rescue ConstraintError, UnknownKeysError, SchemaError => e
+          else
             success = false
-            result = e
+            output = hash
+            result = "#{hash} must be a hash"
           end
 
           if success
@@ -270,21 +276,6 @@ module Dry
             t.safe.constructor(NIL_TO_UNDEFINED)
           else
             t.safe
-          end
-        end
-
-        # @param [Object] value
-        # @param [#call, nil] block
-        # @yieldparam [Failure] failure
-        # @yieldreturn [Result]
-        # @return [Object] if block given
-        # @return [Result,Logic::Result] otherwise
-        def try(value, &block)
-          if value.is_a?(::Hash)
-            super
-          else
-            result = failure(value, "#{value} must be a hash")
-            block ? yield(result) : result
           end
         end
 
