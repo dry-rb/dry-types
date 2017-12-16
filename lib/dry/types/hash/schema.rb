@@ -24,10 +24,6 @@ module Dry
 
         extra_keys :ignore
 
-        def self.new(primitive, member_types:, types: member_types, **options)
-          super(primitive, **options, member_types: member_types, types: types)
-        end
-
         # @return [Hash{Symbol => Definition}]
         attr_reader :member_types
         alias_method :types, :member_types
@@ -115,12 +111,8 @@ module Dry
           result
         end
 
-        def key(hash, key)
-          if hash.key?(key) || types[key].default?
-            key
-          else
-            Undefined
-          end
+        def key(_hash, key)
+          key
         end
 
         # @param [Hash] hash
@@ -160,14 +152,6 @@ module Dry
       class LegacyBase < Schema
         defines :type_processor
 
-        def self.new(primitive, options)
-          types = {}
-
-          options.fetch(:member_types).each { |k, t| types[k] = type_processor.(t) }
-
-          super(primitive, **options, types: types)
-        end
-
         # @return [Hash{Symbol => Definition}]
         attr_reader :types
 
@@ -175,7 +159,8 @@ module Dry
         # @param [Hash] options
         # @option options [Hash{Symbol => Definition}] :member_types
         def initialize(_primitive, options)
-          @types = options.fetch(:types)
+          @types = {}
+          options.fetch(:member_types).each { |k, t| types[k] = self.class.type_processor.(t) }
           super
         end
       end
@@ -185,6 +170,16 @@ module Dry
 
         type_processor -> t do
           t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
+        end
+
+        private
+
+        def key(hash, key)
+          if hash.key?(key) || types[key].default?
+            key
+          else
+            Undefined
+          end
         end
       end
 
@@ -200,8 +195,11 @@ module Dry
         private
 
         def key(hash, key)
-          raise MissingKeyError, key unless hash.key?(key)
-          super
+          if hash.key?(key)
+            key
+          else
+            raise MissingKeyError, key
+          end
         end
       end
 
@@ -223,8 +221,11 @@ module Dry
         private
 
         def key(hash, key)
-          raise MissingKeyError, key unless hash.key?(key)
-          super
+          if hash.key?(key)
+            key
+          else
+            raise MissingKeyError, key
+          end
         end
       end
 
@@ -276,6 +277,16 @@ module Dry
           else
             result = failure(value, "#{value} must be a hash")
             block ? yield(result) : result
+          end
+        end
+
+        private
+
+        def key(hash, key)
+          if hash.key?(key) || types[key].default?
+            key
+          else
+            Undefined
           end
         end
       end
