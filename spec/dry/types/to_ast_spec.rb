@@ -82,10 +82,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
       if %i(strict strict_with_defaults).include?(schema)
-        extra_keys = :raise
+        meta = { extra_keys: :raise }
       else
-        extra_keys = :ignore
+        meta = { extra_keys: :ignore }
       end
+
+      meta[:symbolized] = true if schema == :symbolized
 
       context "#{schema.capitalize}" do
         subject(:type) { Dry::Types['hash'].send(schema, name: Dry::Types['string'], age: Dry::Types['int']) }
@@ -93,12 +95,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
         specify do
           expect(type.to_ast).
-            to eql([:hash, [:"#{ schema }_transformed", member_types_ast, extra_keys: extra_keys]])
+            to eql([:hash, [:base, member_types_ast, meta]])
         end
 
         specify 'with meta' do
           expect(type_with_meta.to_ast).
-            to eql([:hash, [:"#{ schema }_transformed", member_types_ast, key: :value, extra_keys: extra_keys]])
+            to eql([:hash, [:base, member_types_ast, key: :value, **meta]])
         end
       end
     end

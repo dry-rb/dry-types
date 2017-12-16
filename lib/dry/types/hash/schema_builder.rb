@@ -1,3 +1,5 @@
+require 'dry/types/hash/schema'
+
 module Dry
   module Types
     class Hash < Definition
@@ -21,25 +23,16 @@ module Dry
           instantiate(primitive, **options, member_types: member_types)
         end
 
-        def instantiate(primitive, options)
-          constructor = options.fetch(:hash_type)
+        def instantiate(primitive, hash_type:, meta: EMPTY_HASH, **options)
           meta = {
-            **options.fetch(:meta, EMPTY_HASH),
-            extra_keys: extra_keys(constructor)
+            extra_keys: extra_keys(hash_type), **meta
           }
+          meta[:symbolized] = true if hash_type == :symbolized
 
-          schema_class(constructor).new(primitive, **options, meta: meta)
+          Schema.new(primitive, **options, meta: meta)
         end
 
         private
-
-        def schema_class(constructor)
-          if constructor == :symbolized
-            Symbolized
-          else
-            LegacySchema
-          end
-        end
 
         def omittable?(constructor)
           @omittable_keys.include?(constructor)

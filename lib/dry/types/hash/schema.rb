@@ -68,7 +68,7 @@ module Dry
           [
             :hash,
             [
-              hash_type,
+              :base,
               member_types.map { |name, member| [:member, [name, member.to_ast(meta: meta)]] },
               meta ? self.meta : EMPTY_HASH
             ]
@@ -82,6 +82,10 @@ module Dry
           result.success?
         end
         alias_method :===, :valid?
+
+        def symbolized?
+          meta[:symbolized]
+        end
 
         private
 
@@ -107,6 +111,8 @@ module Dry
         def key(hash, key)
           if hash.key?(key)
             key
+          elsif symbolized? && hash.key?(string_key = key.to_s)
+            string_key
           else
             Undefined
           end
@@ -138,33 +144,6 @@ module Dry
             EMPTY_ARRAY
           when :raise
             hash.keys - member_types.keys
-          end
-        end
-
-        def hash_type
-          self.options[:hash_type]
-        end
-      end
-
-      class LegacySchema < Schema
-        private
-
-        def hash_type
-          :"#{ super }_transformed"
-        end
-      end
-
-      # {Symbolized} hash will turn string key names into symbols.
-      class Symbolized < LegacyBase
-        private
-
-        def key(hash, key)
-          if hash.key?(key)
-            key
-          elsif hash.key?(string_key = key.to_s)
-            string_key
-          else
-            Undefined
           end
         end
       end

@@ -1,4 +1,3 @@
-require 'dry/types/hash/schema'
 require 'dry/types/hash/schema_builder'
 
 module Dry
@@ -59,7 +58,7 @@ module Dry
         schema(type_map, :symbolized)
       end
 
-      def schema_transformed(constructor, member_types)
+      def instantiate(constructor, member_types)
         SCHEMA_BUILDER.instantiate(
           primitive,
           **options,

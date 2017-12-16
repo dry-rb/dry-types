@@ -88,16 +88,10 @@ module Dry
       end
 
       def merge_with(hash_id, constructor, schema)
-        if constructor.to_s.end_with?('transformed')
-          registry[hash_id].schema_transformed(
-            constructor.to_s.sub('_transformed', '').to_sym,
-            schema.map { |key| visit(key) }.reduce({}, :update)
-          )
-        else
-          registry[hash_id].__send__(
-            constructor, schema.map { |key| visit(key) }.reduce({}, :update)
-          )
-        end
+        registry[hash_id].instantiate(
+          constructor,
+          schema.map { |key| visit(key) }.reduce({}, :update)
+        )
       end
     end
   end

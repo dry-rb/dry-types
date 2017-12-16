@@ -4,7 +4,7 @@ module Dry
   module Types
     class Safe
       include Type
-      include Dry::Equalizer(:type, :options)
+      include Dry::Equalizer(:type, :options, :meta)
       include Decorator
       include Builder
 
