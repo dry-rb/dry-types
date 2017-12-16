@@ -108,14 +108,20 @@ module Dry
 
             if !key.equal?(Undefined) || type.default?
               result[k] = yield(type, k, hash.fetch(key, Undefined))
+            elsif !type.meta[:omittable]
+              raise MissingKeyError, k
             end
           end
 
           result
         end
 
-        def key(_hash, key)
-          key
+        def key(hash, key)
+          if hash.key?(key)
+            key
+          else
+            Undefined
+          end
         end
 
         # @param [Hash] hash
@@ -157,13 +163,23 @@ module Dry
 
         defines :type_processor
 
+        defines :missing_keys
+
         def self.new(primitive, meta: EMPTY_HASH, **options)
           super(primitive, **options, meta: { **meta, extra_keys: extra_keys })
         end
 
         def self.build(primitive, options)
           member_types = {}
-          options.fetch(:member_types).each { |k, t| member_types[k] = type_processor.(t) }
+          options.fetch(:member_types).each do |k, t|
+            type = type_processor.(t)
+
+            member_types[k] = if missing_keys == :ignore
+                                type.meta(omittable: true)
+                              else
+                                type
+                              end
+          end
 
           new(primitive, **options, member_types: member_types)
         end
@@ -178,18 +194,10 @@ module Dry
 
         extra_keys :ignore
 
+        missing_keys :ignore
+
         type_processor -> t do
           t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
-        end
-
-        private
-
-        def key(hash, key)
-          if hash.key?(key)
-            key
-          else
-            Undefined
-          end
         end
       end
 
@@ -200,18 +208,10 @@ module Dry
 
         extra_keys :ignore
 
+        missing_keys :raise
+
         type_processor -> t do
           t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
-        end
-
-        private
-
-        def key(hash, key)
-          if hash.key?(key)
-            key
-          else
-            raise MissingKeyError, key
-          end
         end
       end
 
@@ -228,17 +228,9 @@ module Dry
 
         extra_keys :raise
 
+        missing_keys :raise
+
         type_processor -> t { t.default? ? t.type : t }
-
-        private
-
-        def key(hash, key)
-          if hash.key?(key)
-            key
-          else
-            raise MissingKeyError, key
-          end
-        end
       end
 
       # {StrictWithDefaults} checks that there are no extra keys
@@ -251,17 +243,9 @@ module Dry
 
         extra_keys :raise
 
+        missing_keys :raise
+
         type_processor -> t { t }
-
-        private
-
-        def key(hash, key)
-          if hash.key?(key) || member_types[key].default?
-            key
-          else
-            raise MissingKeyError, key
-          end
-        end
       end
 
       # Weak schema provides safe types for every type given in schema hash
@@ -271,21 +255,13 @@ module Dry
 
         extra_keys :ignore
 
+        missing_keys :ignore
+
         type_processor -> t do
           if t.default?
             t.safe.constructor(NIL_TO_UNDEFINED)
           else
             t.safe
-          end
-        end
-
-        private
-
-        def key(hash, key)
-          if hash.key?(key)
-            key
-          else
-            Undefined
           end
         end
       end
@@ -295,6 +271,8 @@ module Dry
         hash_type :symbolized
 
         extra_keys :ignore
+
+        missing_keys :ignore
 
         private
 
