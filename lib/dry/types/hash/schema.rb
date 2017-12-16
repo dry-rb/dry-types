@@ -1,10 +1,6 @@
-require 'dry/core/class_attributes'
 module Dry
   module Types
     class Hash < Definition
-
-      NIL_TO_UNDEFINED = -> v { v.nil? ? Undefined : v }
-
       # The built-in Hash type has constructors that you can use to define
       # hashes with explicit schemas and coercible values using the built-in types.
       #
@@ -14,14 +10,6 @@ module Dry
       # @see Dry::Types::Default#evaluate
       # @see Dry::Types::Default::Callable#evaluate
       class Schema < Hash
-        extend Dry::Core::ClassAttributes
-
-        defines :hash_type
-
-        def self.new(primitive, meta: EMPTY_HASH, **options)
-          super(primitive, **options, meta: { extra_keys: :ignore, **meta })
-        end
-
         # @return [Hash{Symbol => Definition}]
         attr_reader :member_types
 
@@ -154,119 +142,20 @@ module Dry
         end
 
         def hash_type
-          self.class.hash_type
+          self.options[:hash_type]
         end
       end
 
-      class LegacyBase < Schema
-        defines :extra_keys
-
-        defines :missing_keys
-
-        def self.new(primitive, meta: EMPTY_HASH, **options)
-          super(primitive, **options, meta: { **meta, extra_keys: extra_keys })
-        end
-
-        def self.build(primitive, options)
-          member_types = {}
-          options.fetch(:member_types).each do |k, t|
-            type = type(hash_type, t)
-
-            member_types[k] = if missing_keys == :ignore
-                                type.meta(omittable: true)
-                              else
-                                type
-                              end
-          end
-
-          new(primitive, **options, member_types: member_types)
-        end
-
-        def self.type(schema, type)
-          type = type.safe if schema == :weak || schema == :symbolized
-
-          type = case schema
-                 when :strict_with_defaults
-                   type
-                 when :strict
-                   type.type
-                 else
-                   type.constructor(NIL_TO_UNDEFINED)
-                 end if type.default?
-
-          type
-        end
+      class LegacySchema < Schema
+        private
 
         def hash_type
-          :"#{ self.class.hash_type }_transformed"
+          :"#{ super }_transformed"
         end
-      end
-
-      class LegacySchema < LegacyBase
-        hash_type :schema
-
-        extra_keys :ignore
-
-        missing_keys :ignore
-      end
-
-      # Permissive schema raises a {MissingKeyError} if the given key is missing
-      # in provided hash.
-      class Permissive < LegacyBase
-        hash_type :permissive
-
-        extra_keys :ignore
-
-        missing_keys :raise
-      end
-
-      # Strict hash will raise errors when keys are missing or value types are incorrect.
-      # Strict schema raises a {UnknownKeysError} if there are any unexpected
-      # keys in given hash, and raises a {MissingKeyError} if any key is missing
-      # in it.
-      # @example
-      #   hash = Types::Hash.strict(name: Types::String, age: Types::Coercible::Int)
-      #   hash[email: 'jane@doe.org', name: 'Jane', age: 21]
-      #     # => Dry::Types::SchemaKeyError: :email is missing in Hash input
-      class Strict < LegacyBase
-        hash_type :strict
-
-        extra_keys :raise
-
-        missing_keys :raise
-      end
-
-      # {StrictWithDefaults} checks that there are no extra keys
-      # (raises {UnknownKeysError} otherwise) and there a no missing keys
-      # without default values given (raises {MissingKeyError} otherwise).
-      # @see Default#evaluate
-      # @see Default::Callable#evaluate
-      class StrictWithDefaults < LegacyBase
-        hash_type :strict_with_defaults
-
-        extra_keys :raise
-
-        missing_keys :raise
-      end
-
-      # Weak schema provides safe types for every type given in schema hash
-      # @see Safe
-      class Weak < LegacyBase
-        hash_type :weak
-
-        extra_keys :ignore
-
-        missing_keys :ignore
       end
 
       # {Symbolized} hash will turn string key names into symbols.
       class Symbolized < LegacyBase
-        hash_type :symbolized
-
-        extra_keys :ignore
-
-        missing_keys :ignore
-
         private
 
         def key(hash, key)
@@ -279,8 +168,6 @@ module Dry
           end
         end
       end
-
-      private_constant(*constants(false))
     end
   end
 end
