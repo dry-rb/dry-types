@@ -174,9 +174,9 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
   it 'builds a safe form hash' do
     ast = Dry::Types['form.hash'].symbolized(
-        email: Dry::Types['string'],
-        age: Dry::Types['form.int'],
-        admin: Dry::Types['form.bool'],
+      email: Dry::Types['string'],
+      age: Dry::Types['form.int'],
+      admin: Dry::Types['form.bool'],
     ).to_ast
 
     hash = compiler.(ast)

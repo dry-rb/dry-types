@@ -43,6 +43,10 @@ module Dry
         type.name
       end
 
+      def default?
+        type.default?
+      end
+
       # @param [Object] input
       # @return [Object]
       def call(input)

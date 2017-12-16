@@ -194,7 +194,7 @@ RSpec.describe Dry::Types::Hash do
         }
       end
 
-      it 'fills in default value when value is nil' do
+      it 'raises an error when nil passed to a default' do
         expect { hash.call(name: :John, active: '1', age: nil, phone: []) }
           .to raise_error(Dry::Types::SchemaError, 'nil (NilClass) has invalid type for :age violates constraints (type?(Integer, nil) failed)')
       end

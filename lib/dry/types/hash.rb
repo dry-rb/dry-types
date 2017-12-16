@@ -1,8 +1,16 @@
-require 'dry/types/hash/schema'
+require 'dry/core/class_attributes'
 
 module Dry
   module Types
     class Hash < Definition
+      extend Dry::Core::ClassAttributes
+
+      defines :hash_type
+
+      defines :extra_keys, type: %i(ignore raise).method(:include?).to_proc
+
+      extra_keys :ignore
+
       # @param [{Symbol => Definition}] type_map
       # @param [Class] klass
       #   {Schema} or one of its subclasses ({Weak}, {Permissive}, {Strict},
@@ -17,7 +25,13 @@ module Dry
             end
         }
 
-        klass.new(primitive, options.merge(member_types: member_types, meta: meta))
+        klass.new(
+          primitive,
+          **options,
+          member_types: member_types,
+          meta: meta,
+          extra_keys: klass.extra_keys
+        )
       end
 
       # @param [{Symbol => Definition}] type_map
@@ -52,12 +66,20 @@ module Dry
 
       private
 
-      # @param [Hash] _result
-      # @param [Symbol] _key
-      # @param [Type] _type
-      def resolve_missing_value(_result, _key, _type)
-        # noop
+      def extra_keys(hash)
+        case options[:extra_keys]
+        when :ignore
+          EMPTY_ARRAY
+        when :raise
+          hash.keys - member_types.keys
+        end
+      end
+
+      def hash_type
+        self.class.hash_type
       end
     end
   end
 end
+
+require 'dry/types/hash/schema'

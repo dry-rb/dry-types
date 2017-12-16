@@ -56,11 +56,6 @@ module Dry
       end
 
       # @return [false]
-      def maybe?
-        false
-      end
-
-      # @return [false]
       def constrained?
         false
       end
@@ -101,7 +96,7 @@ module Dry
         end
       end
 
-      def failure(input)
+      def failure(input, _error = nil)
         if !left.valid?(input)
           left.failure(input, left.try(input).error)
         else
