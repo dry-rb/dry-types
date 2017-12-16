@@ -161,8 +161,6 @@ module Dry
       class LegacyBase < Schema
         defines :extra_keys
 
-        defines :type_processor
-
         defines :missing_keys
 
         def self.new(primitive, meta: EMPTY_HASH, **options)
@@ -172,7 +170,7 @@ module Dry
         def self.build(primitive, options)
           member_types = {}
           options.fetch(:member_types).each do |k, t|
-            type = type_processor.(t)
+            type = type(hash_type, t)
 
             member_types[k] = if missing_keys == :ignore
                                 type.meta(omittable: true)
@@ -182,6 +180,21 @@ module Dry
           end
 
           new(primitive, **options, member_types: member_types)
+        end
+
+        def self.type(schema, type)
+          type = type.safe if schema == :weak || schema == :symbolized
+
+          type = case schema
+                 when :strict_with_defaults
+                   type
+                 when :strict
+                   type.type
+                 else
+                   type.constructor(NIL_TO_UNDEFINED)
+                 end if type.default?
+
+          type
         end
 
         def hash_type
@@ -195,10 +208,6 @@ module Dry
         extra_keys :ignore
 
         missing_keys :ignore
-
-        type_processor -> t do
-          t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
-        end
       end
 
       # Permissive schema raises a {MissingKeyError} if the given key is missing
@@ -209,10 +218,6 @@ module Dry
         extra_keys :ignore
 
         missing_keys :raise
-
-        type_processor -> t do
-          t.default? ? t.constructor(NIL_TO_UNDEFINED) : t
-        end
       end
 
       # Strict hash will raise errors when keys are missing or value types are incorrect.
@@ -229,8 +234,6 @@ module Dry
         extra_keys :raise
 
         missing_keys :raise
-
-        type_processor -> t { t.default? ? t.type : t }
       end
 
       # {StrictWithDefaults} checks that there are no extra keys
@@ -244,8 +247,6 @@ module Dry
         extra_keys :raise
 
         missing_keys :raise
-
-        type_processor -> t { t }
       end
 
       # Weak schema provides safe types for every type given in schema hash
@@ -256,18 +257,10 @@ module Dry
         extra_keys :ignore
 
         missing_keys :ignore
-
-        type_processor -> t do
-          if t.default?
-            t.safe.constructor(NIL_TO_UNDEFINED)
-          else
-            t.safe
-          end
-        end
       end
 
       # {Symbolized} hash will turn string key names into symbols.
-      class Symbolized < Weak
+      class Symbolized < LegacyBase
         hash_type :symbolized
 
         extra_keys :ignore
