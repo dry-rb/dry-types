@@ -106,7 +106,7 @@ module Dry
           member_types.each do |k, type|
             key = key(hash, k)
 
-            unless key.equal?(Undefined)
+            if !key.equal?(Undefined) || type.default?
               result[k] = yield(type, k, hash.fetch(key, Undefined))
             end
           end
@@ -185,7 +185,7 @@ module Dry
         private
 
         def key(hash, key)
-          if hash.key?(key) || member_types[key].default?
+          if hash.key?(key)
             key
           else
             Undefined
@@ -282,7 +282,7 @@ module Dry
         private
 
         def key(hash, key)
-          if hash.key?(key) || member_types[key].default?
+          if hash.key?(key)
             key
           else
             Undefined
@@ -303,8 +303,6 @@ module Dry
             key
           elsif hash.key?(string_key = key.to_s)
             string_key
-          elsif member_types[key].default?
-            key
           else
             Undefined
           end
