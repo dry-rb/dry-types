@@ -38,7 +38,7 @@ RSpec.describe Dry::Types::Hash do
     it_behaves_like 'Dry::Types::Definition#meta'
 
     it 'preserves metadata' do
-      expect(hash.meta).to eql(my: :metadata)
+      expect(hash.meta[:my]).to eql(:metadata)
     end
 
     it 'has a Hash primitive' do

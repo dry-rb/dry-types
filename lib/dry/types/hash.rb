@@ -21,8 +21,10 @@ module Dry
           primitive,
           **options,
           member_types: member_types,
-          meta: meta,
-          extra_keys: klass.extra_keys
+          meta: {
+            **meta,
+            extra_keys: klass.extra_keys
+          }
         )
       end
 

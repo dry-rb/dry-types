@@ -136,7 +136,7 @@ module Dry
         end
 
         def extra_keys(hash)
-          case options[:extra_keys]
+          case meta[:extra_keys]
           when :ignore
             EMPTY_ARRAY
           when :raise

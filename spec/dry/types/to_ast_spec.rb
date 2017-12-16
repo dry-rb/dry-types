@@ -81,18 +81,24 @@ RSpec.describe Dry::Types, '#to_ast' do
     end
 
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
+      if %i(strict strict_with_defaults).include?(schema)
+        extra_keys = :raise
+      else
+        extra_keys = :ignore
+      end
+
       context "#{schema.capitalize}" do
         subject(:type) { Dry::Types['hash'].send(schema, name: Dry::Types['string'], age: Dry::Types['int']) }
         let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
 
         specify do
           expect(type.to_ast).
-            to eql([:hash, [schema, member_types_ast, {}]])
+            to eql([:hash, [schema, member_types_ast, extra_keys: extra_keys]])
         end
 
         specify 'with meta' do
           expect(type_with_meta.to_ast).
-            to eql([:hash, [schema, member_types_ast, key: :value]])
+            to eql([:hash, [schema, member_types_ast, key: :value, extra_keys: extra_keys]])
         end
       end
     end
