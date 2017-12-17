@@ -87,6 +87,10 @@ module Dry
           meta[:symbolized]
         end
 
+        def permissive?
+          meta[:permissive]
+        end
+
         private
 
         def resolve(hash)
@@ -139,10 +143,9 @@ module Dry
         end
 
         def extra_keys(hash)
-          case meta[:extra_keys]
-          when :ignore
+          if permissive?
             EMPTY_ARRAY
-          when :raise
+          else
             hash.keys - member_types.keys
           end
         end

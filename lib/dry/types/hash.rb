@@ -59,11 +59,7 @@ module Dry
       end
 
       def instantiate(member_types)
-        SCHEMA_BUILDER.instantiate(
-          primitive,
-          **options,
-          member_types: member_types
-        )
+        SCHEMA_BUILDER.instantiate(primitive, **options, member_types: member_types)
       end
     end
   end

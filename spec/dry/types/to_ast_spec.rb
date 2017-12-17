@@ -81,12 +81,8 @@ RSpec.describe Dry::Types, '#to_ast' do
     end
 
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
-      if %i(strict strict_with_defaults).include?(schema)
-        meta = { extra_keys: :raise }
-      else
-        meta = { extra_keys: :ignore }
-      end
-
+      meta = {}
+      meta[:permissive] = true if %i(schema weak symbolized permissive).include?(schema)
       meta[:symbolized] = true if schema == :symbolized
 
       context "#{schema.capitalize}" do

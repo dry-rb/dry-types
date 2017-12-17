@@ -13,20 +13,19 @@ module Dry
         end
 
         def call(primitive, options)
-          constructor = options.fetch(:hash_type)
+          hash_type = options.fetch(:hash_type)
           member_types = {}
 
           options.fetch(:member_types).each do |k, t|
-            member_types[k] = build_type(constructor, t)
+            member_types[k] = build_type(hash_type, t)
           end
 
           instantiate(primitive, **options, member_types: member_types)
         end
 
         def instantiate(primitive, hash_type: :base, meta: EMPTY_HASH, **options)
-          meta = {
-            extra_keys: extra_keys(hash_type), **meta
-          }
+          meta = meta.dup
+          meta[:permissive] = true if permissive?(hash_type)
           meta[:symbolized] = true if hash_type == :symbolized
 
           Schema.new(primitive, **options, meta: meta)
@@ -38,8 +37,8 @@ module Dry
           @omittable_keys.include?(constructor)
         end
 
-        def extra_keys(hash_type)
-          @permissive.include?(hash_type) ? :ignore : :raise
+        def permissive?(constructor)
+          @permissive.include?(constructor)
         end
 
         def build_type(constructor, type)
