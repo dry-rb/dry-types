@@ -62,6 +62,11 @@ module Dry
         merge_with('hash', constructor, schema).meta(meta)
       end
 
+      def visit_hash_schema(node)
+        schema, meta = node
+        merge_with_schema('hash', schema).meta(meta)
+      end
+
       def visit_json_hash(node)
         schema, meta = node
         merge_with('json.hash', :symbolized, schema).meta(meta)
@@ -88,16 +93,16 @@ module Dry
       end
 
       def merge_with(hash_id, constructor, schema)
-        if constructor == :base
-          registry[hash_id].instantiate(
-            schema.map { |key| visit(key) }.reduce({}, :update)
-          )
-        else
-          registry[hash_id].schema(
-            schema.map { |key| visit(key) }.reduce({}, :update),
-            constructor
-          )
-        end
+        registry[hash_id].schema(
+          schema.map { |key| visit(key) }.reduce({}, :update),
+          constructor
+        )
+      end
+
+      def merge_with_schema(hash_id, schema)
+        registry[hash_id].instantiate(
+          schema.map { |key| visit(key) }.reduce({}, :update)
+        )
       end
     end
   end

@@ -66,9 +66,8 @@ module Dry
 
         def to_ast(meta: true)
           [
-            :hash,
+            :hash_schema,
             [
-              :base,
               member_types.map { |name, member| [:member, [name, member.to_ast(meta: meta)]] },
               meta ? self.meta : EMPTY_HASH
             ]

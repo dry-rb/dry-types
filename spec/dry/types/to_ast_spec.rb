@@ -91,12 +91,12 @@ RSpec.describe Dry::Types, '#to_ast' do
 
         specify do
           expect(type.to_ast).
-            to eql([:hash, [:base, member_types_ast, meta]])
+            to eql([:hash_schema, [member_types_ast, meta]])
         end
 
         specify 'with meta' do
           expect(type_with_meta.to_ast).
-            to eql([:hash, [:base, member_types_ast, key: :value, **meta]])
+            to eql([:hash_schema, [member_types_ast, key: :value, **meta]])
         end
       end
     end
