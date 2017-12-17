@@ -23,7 +23,7 @@ module Dry
           instantiate(primitive, **options, member_types: member_types)
         end
 
-        def instantiate(primitive, hash_type:, meta: EMPTY_HASH, **options)
+        def instantiate(primitive, hash_type: :base, meta: EMPTY_HASH, **options)
           meta = {
             extra_keys: extra_keys(hash_type), **meta
           }

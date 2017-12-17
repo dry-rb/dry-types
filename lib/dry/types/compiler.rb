@@ -88,10 +88,16 @@ module Dry
       end
 
       def merge_with(hash_id, constructor, schema)
-        registry[hash_id].instantiate(
-          constructor,
-          schema.map { |key| visit(key) }.reduce({}, :update)
-        )
+        if constructor == :base
+          registry[hash_id].instantiate(
+            schema.map { |key| visit(key) }.reduce({}, :update)
+          )
+        else
+          registry[hash_id].schema(
+            schema.map { |key| visit(key) }.reduce({}, :update),
+            constructor
+          )
+        end
       end
     end
   end

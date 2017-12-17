@@ -58,12 +58,11 @@ module Dry
         schema(type_map, :symbolized)
       end
 
-      def instantiate(constructor, member_types)
+      def instantiate(member_types)
         SCHEMA_BUILDER.instantiate(
           primitive,
           **options,
-          member_types: member_types,
-          hash_type: constructor
+          member_types: member_types
         )
       end
     end

@@ -154,10 +154,10 @@ RSpec.describe Dry::Types, '#to_ast' do
                      [
                        [:definition, [String, {}]],
                        [:predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]],
-                       {}
+                       key: :value
                      ]
                    ],
-                   key: :value
+                   {}
                  ]
                ])
     end
