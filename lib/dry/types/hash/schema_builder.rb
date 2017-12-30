@@ -1,4 +1,5 @@
 require 'dry/types/hash/schema'
+require 'dry/types/fn_container'
 
 module Dry
   module Types
@@ -25,8 +26,9 @@ module Dry
 
         def instantiate(primitive, hash_type: :base, meta: EMPTY_HASH, **options)
           meta = meta.dup
+
           meta[:permissive] = true if permissive?(hash_type)
-          meta[:symbolized] = true if hash_type == :symbolized
+          meta[:key_transform_fn] = Schema::SYMBOLIZE_KEY if hash_type == :symbolized
 
           Schema.new(primitive, **options, meta: meta)
         end

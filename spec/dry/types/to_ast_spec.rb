@@ -83,7 +83,7 @@ RSpec.describe Dry::Types, '#to_ast' do
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
       meta = {}
       meta[:permissive] = true if %i(schema weak symbolized permissive).include?(schema)
-      meta[:symbolized] = true if schema == :symbolized
+      meta[:key_transform_fn] = Dry::Types::Hash::Schema::SYMBOLIZE_KEY if schema == :symbolized
 
       context "#{schema.capitalize}" do
         subject(:type) { Dry::Types['hash'].send(schema, name: Dry::Types['string'], age: Dry::Types['int']) }

@@ -1,3 +1,5 @@
+require 'dry/types/fn_container'
+
 module Dry
   module Types
     class Hash < Definition
@@ -10,14 +12,26 @@ module Dry
       # @see Dry::Types::Default#evaluate
       # @see Dry::Types::Default::Callable#evaluate
       class Schema < Hash
+        NO_TRANSFORM = Dry::Types::FnContainer.register(-> (x) { x })
+        SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
+
         # @return [Hash{Symbol => Definition}]
         attr_reader :member_types
+
+        # @return [#call]
+        attr_reader :transform_key
 
         # @param [Class] _primitive
         # @param [Hash] options
         # @option options [Hash{Symbol => Definition}] :member_types
         def initialize(_primitive, options)
           @member_types = options.fetch(:member_types)
+
+          meta = options[:meta] || EMPTY_HASH
+          key_fn = meta.fetch(:key_transform_fn, NO_TRANSFORM)
+
+          @transform_key = Dry::Types::FnContainer[key_fn]
+
           super
         end
 
@@ -82,10 +96,6 @@ module Dry
         end
         alias_method :===, :valid?
 
-        def symbolized?
-          meta[:symbolized]
-        end
-
         def permissive?
           meta[:permissive]
         end
@@ -93,32 +103,35 @@ module Dry
         private
 
         def resolve(hash)
-          unexpected = extra_keys(hash)
-          raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
-
           result = {}
 
-          member_types.each do |k, type|
-            key = key(hash, k)
+          hash.each do |key, value|
+            k = transform_key.(key)
 
-            if !key.equal?(Undefined) || type.default?
-              result[k] = yield(type, k, hash.fetch(key, Undefined))
-            elsif !type.meta[:omittable]
-              raise MissingKeyError, k
+            if member_types.key?(k)
+              result[k] = yield(member_types[k], k, value)
+            elsif !permissive?
+              raise UnknownKeysError.new(*unexpected_keys(hash.keys))
+            end
+          end
+
+          if result.size < member_types.size
+            member_types.each do |k, type|
+              next if result.key?(k)
+
+              if type.default?
+                result[k] = yield(type, k, Undefined)
+              elsif !type.meta[:omittable]
+                raise MissingKeyError, k
+              end
             end
           end
 
           result
         end
 
-        def key(hash, key)
-          if hash.key?(key)
-            key
-          elsif symbolized? && hash.key?(string_key = key.to_s)
-            string_key
-          else
-            Undefined
-          end
+        def unexpected_keys(keys)
+          unexpected = keys.map(&transform_key) - member_types.keys
         end
 
         # @param [Hash] hash
@@ -138,14 +151,6 @@ module Dry
             rescue ConstraintError => e
               raise SchemaError.new(key, value, e.result)
             end
-          end
-        end
-
-        def extra_keys(hash)
-          if permissive?
-            EMPTY_ARRAY
-          else
-            hash.keys - member_types.keys
           end
         end
       end

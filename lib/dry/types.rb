@@ -16,7 +16,6 @@ require 'dry/types/inflector'
 require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
-require 'dry/types/fn_container'
 require 'dry/types/builder_methods'
 
 require 'dry/types/errors'

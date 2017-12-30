@@ -1,4 +1,5 @@
 require 'dry/types/decorator'
+require 'dry/types/fn_container'
 
 module Dry
   module Types
