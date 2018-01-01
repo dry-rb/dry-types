@@ -4,15 +4,16 @@ require 'dry/types/fn_container'
 module Dry
   module Types
     class Hash < Definition
+      # A bulder for legacy schemas
+      # @api private
       class SchemaBuilder
-        def initialize
-          @nil_to_undefined = -> v { v.nil? ? Undefined : v }
-          @omittable_keys = %i(schema weak symbolized).freeze
-          @permissive = %i(schema permissive weak symbolized).freeze
+        NIL_TO_UNDEFINED = -> v { v.nil? ? Undefined : v }
+        OMITTABLE_KEYS = %i(schema weak symbolized).freeze
+        PEMISSIVE = %i(schema permissive weak symbolized).freeze
 
-          freeze
-        end
-
+        # @param primitive [Type]
+        # @option options [Hash{Symbol => Definition}] :member_types
+        # @option options [Symbol] :hash_type
         def call(primitive, options)
           hash_type = options.fetch(:hash_type)
           member_types = {}
@@ -36,11 +37,11 @@ module Dry
         private
 
         def omittable?(constructor)
-          @omittable_keys.include?(constructor)
+          OMITTABLE_KEYS.include?(constructor)
         end
 
         def permissive?(constructor)
-          @permissive.include?(constructor)
+          PEMISSIVE.include?(constructor)
         end
 
         def build_type(constructor, type)
@@ -65,7 +66,7 @@ module Dry
           when :strict
             type.type
           else
-            type.constructor(@nil_to_undefined)
+            type.constructor(NIL_TO_UNDEFINED)
           end
         end
       end

@@ -24,6 +24,7 @@ module Dry
         # @param [Class] _primitive
         # @param [Hash] options
         # @option options [Hash{Symbol => Definition}] :member_types
+        # @option options [String] :key_transform_fn
         def initialize(_primitive, options)
           @member_types = options.fetch(:member_types)
 
@@ -48,7 +49,7 @@ module Dry
         # @yieldreturn [Result]
         # @return [Logic::Result]
         # @return [Object] if coercion fails and a block is given
-        def try(hash, &block)
+        def try(hash)
           if hash.is_a?(::Hash)
             success = true
             output  = {}
@@ -74,10 +75,12 @@ module Dry
             success(output)
           else
             failure = failure(output, result)
-            block ? yield(failure) : failure
+            block_given? ? yield(failure) : failure
           end
         end
 
+        # @param meta [Boolean] Whether to dump the meta to the AST
+        # @return [Array] An AST representation
         def to_ast(meta: true)
           [
             :hash_schema,
@@ -96,8 +99,10 @@ module Dry
         end
         alias_method :===, :valid?
 
+        # Whether the schema accepts unknown keys
+        # @return [Boolean]
         def permissive?
-          meta[:permissive]
+          meta.fetch(:permissive, false)
         end
 
         private
@@ -116,22 +121,28 @@ module Dry
           end
 
           if result.size < member_types.size
-            member_types.each do |k, type|
-              next if result.key?(k)
-
-              if type.default?
-                result[k] = yield(type, k, Undefined)
-              elsif !type.meta[:omittable]
-                raise MissingKeyError, k
-              end
-            end
+            resolve_missing_keys(result, &Proc.new)
           end
 
           result
         end
 
+        def resolve_missing_keys(result)
+          member_types.each do |k, type|
+            next if result.key?(k)
+
+            if type.default?
+              result[k] = yield(type, k, Undefined)
+            elsif !type.meta[:omittable]
+              raise MissingKeyError, k
+            end
+          end
+        end
+
+        # @param [Array<Symbol>]
+        # @return [Array<Symbol>]
         def unexpected_keys(keys)
-          unexpected = keys.map(&transform_key) - member_types.keys
+          keys.map(&transform_key) - member_types.keys
         end
 
         # @param [Hash] hash

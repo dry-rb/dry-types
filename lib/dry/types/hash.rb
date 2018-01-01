@@ -3,12 +3,10 @@ require 'dry/types/hash/schema_builder'
 module Dry
   module Types
     class Hash < Definition
-      SCHEMA_BUILDER = SchemaBuilder.new
+      SCHEMA_BUILDER = SchemaBuilder.new.freeze
 
       # @param [{Symbol => Definition}] type_map
-      # @param [Class] klass
-      #   {Schema} or one of its subclasses ({Weak}, {Permissive}, {Strict},
-      #   {StrictWithDefaults}, {Symbolized})
+      # @param [Symbol] constructor
       # @return [Schema]
       def schema(type_map, constructor = :schema)
         member_types = type_map.each_with_object({}) { |(name, type), result|
@@ -29,35 +27,39 @@ module Dry
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Weak]
+      # @return [Schema]
       def weak(type_map)
         schema(type_map, :weak)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Permissive]
+      # @return [Schema]
       def permissive(type_map)
         schema(type_map, :permissive)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Strict]
+      # @return [Schema]
       def strict(type_map)
         schema(type_map, :strict)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [StrictWithDefaults]
+      # @return [Schema]
       def strict_with_defaults(type_map)
         schema(type_map, :strict_with_defaults)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Symbolized]
+      # @return [Schema]
       def symbolized(type_map)
         schema(type_map, :symbolized)
       end
 
+      # Build a schema from an AST
+      # @api private
+      # @param [{Symbol => Definition}] type_map
+      # @return [Schema]
       def instantiate(member_types)
         SCHEMA_BUILDER.instantiate(primitive, **options, member_types: member_types)
       end
