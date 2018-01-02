@@ -27,7 +27,7 @@ module Dry
       # @return [Object]
       def call(input = Undefined)
         value =
-          if input == Undefined
+          if input.equal?(Undefined)
             type.call
           elsif values.include?(input)
             input

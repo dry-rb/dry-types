@@ -31,7 +31,7 @@ module Dry
       # @raise [ConstraintError]
       # @return [Default]
       def default(input = Undefined, &block)
-        value = input == Undefined ? block : input
+        value = input.equal?(Undefined) ? block : input
 
         if value.is_a?(Proc) || valid?(value)
           Default[value].new(self, value)
