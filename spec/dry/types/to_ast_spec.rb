@@ -80,13 +80,44 @@ RSpec.describe Dry::Types, '#to_ast' do
         to eql([:definition, [Hash, {}]])
     end
 
+    context 'schema' do
+      subject(:type) { Dry::Types['hash'].schema(name: Dry::Types['string'], age: Dry::Types['int']) }
+      let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
+
+      specify do
+        expect(type.to_ast).
+          to eql([:hash_schema, [member_types_ast, {}]])
+      end
+
+      specify 'with meta' do
+        expect(type_with_meta.to_ast).
+          to eql([:hash_schema, [member_types_ast, key: :value]])
+      end
+    end
+  end
+
+  context 'lagacy Hash schemas' do
+    subject(:type) { Dry::Types['hash'] }
+    let(:members) { { name: Dry::Types['string'], age: Dry::Types['int'] } }
+
+    specify do
+      expect(type.to_ast).
+        to eql([:definition, [Hash, {}]])
+    end
+
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
       meta = {}
       meta[:permissive] = true if %i(schema weak symbolized permissive).include?(schema)
       meta[:key_transform_fn] = Dry::Types::Hash::Schema::SYMBOLIZE_KEY if schema == :symbolized
 
       context "#{schema.capitalize}" do
-        subject(:type) { Dry::Types['hash'].send(schema, name: Dry::Types['string'], age: Dry::Types['int']) }
+        subject(:type) do
+          if schema == :schema
+            Dry::Types['hash'].schema(members, :schema )
+          else
+            Dry::Types['hash'].send(schema, members)
+          end
+        end
         let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
 
         specify do

@@ -8,7 +8,7 @@ module Dry
       # @param [{Symbol => Definition}] type_map
       # @param [Symbol] constructor
       # @return [Schema]
-      def schema(type_map, constructor = :schema)
+      def schema(type_map, constructor = nil)
         member_types = type_map.each_with_object({}) { |(name, type), result|
           result[name] =
             case type
@@ -17,13 +17,17 @@ module Dry
             end
         }
 
-        SCHEMA_BUILDER.(
-          primitive,
-          **options,
-          member_types: member_types,
-          meta: meta,
-          hash_type: constructor
-        )
+        if constructor.nil?
+          Schema.new(primitive, member_types: member_types, **options, meta: meta)
+        else
+          SCHEMA_BUILDER.(
+            primitive,
+            **options,
+            member_types: member_types,
+            meta: meta,
+            hash_type: constructor
+          )
+        end
       end
 
       # @param [{Symbol => Definition}] type_map
