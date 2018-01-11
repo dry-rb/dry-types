@@ -9,12 +9,16 @@ module Dry
       # @param [Symbol] constructor
       # @return [Schema]
       def schema(type_map, constructor = nil)
+        type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
+        type_transform = Dry::Types::FnContainer[type_fn]
+
         member_types = type_map.each_with_object({}) { |(name, type), result|
-          result[name] =
-            case type
-            when String, Class then Types[type]
-            else type
-            end
+          t = case type
+              when String, Class then Types[type]
+              else type
+              end
+
+          result[name] = type_transform.(t)
         }
 
         if constructor.nil?
@@ -66,6 +70,21 @@ module Dry
       # @return [Schema]
       def instantiate(member_types)
         SCHEMA_BUILDER.instantiate(primitive, **options, member_types: member_types)
+      end
+
+      # Injects a type transformation function for building schemas
+      # @param [#call,nil] proc
+      # @param [#call,nil] block
+      # @return [Hash]
+      def with_type_transform(proc = nil, &block)
+        fn = proc || block
+
+        if fn.nil?
+          raise ArgumentError, "a block or callable argument is required"
+        end
+
+        handle = Dry::Types::FnContainer.register(fn)
+        meta(type_transform_fn: handle)
       end
     end
   end

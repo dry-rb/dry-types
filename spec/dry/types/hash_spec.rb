@@ -1,5 +1,5 @@
 RSpec.describe Dry::Types::Hash do
-  let(:type) { Dry::Types['hash'] }
+  subject(:type) { Dry::Types['hash'] }
 
   it_behaves_like Dry::Types::Definition
   it_behaves_like 'Dry::Types::Definition#meta'
@@ -8,6 +8,19 @@ RSpec.describe Dry::Types::Hash do
     it 'accepts any hash input' do
       expect(type.({})).to eql({})
       expect(type.(name: 'Jane')).to eql(name: 'Jane')
+    end
+  end
+
+  describe '#with_type_transform' do
+    it 'adds a type transformation for schemas' do
+      optional_keys = type.with_type_transform { |t| t.meta(omittable: true) }
+      schema = optional_keys.schema(name: "strict.string", age: "strict.int")
+      expect(schema.(name: 'Jane')).to eql(name: 'Jane')
+    end
+
+    it 'accepts a proc' do
+      fn = -> t { t.meta(omittable: true) }
+      expect(subject.with_type_transform(fn)). to eql(subject.with_type_transform(&fn))
     end
   end
 
