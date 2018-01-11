@@ -12,6 +12,25 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe 'hash schema' do
+    let(:phone_struct) do
+      Struct.new(:prefix, :number) do
+        def self.name
+          'Phone'
+        end
+
+        def self.to_ary
+          [prefix, number]
+        end
+      end
+    end
+
+    before do
+      Dry::Types.register(
+        "phone",
+        Dry::Types::Definition.new(phone_struct).constructor(-> args { phone_struct.new(*args) })
+      )
+    end
+
     let(:hash_schema) do
       {
         name: "coercible.string",
@@ -25,22 +44,11 @@ RSpec.describe Dry::Types::Hash do
       type.meta(my: :metadata)
     end
 
-    let(:hash) { primitive.schema(hash_schema) }
+    subject(:hash) { primitive.schema(hash_schema) }
+
+    let(:valid_input) { { name: 'John', age: 23, active: true, phone: phone_struct.new(1, 23) } }
 
     let(:phone) { Dry::Types['phone'].primitive }
-
-    before do
-      phone = Struct.new(:prefix, :number) do
-        def self.name
-          'Phone'
-        end
-      end
-
-      Dry::Types.register(
-        "phone",
-        Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
-      )
-    end
 
     it_behaves_like Dry::Types::Definition do
       let(:type) { Dry::Types['hash'].schema(hash_schema) }
@@ -157,6 +165,38 @@ RSpec.describe Dry::Types::Hash do
       expect { hash.call(expected_input.merge(unexpected_input)) }
         .to raise_error(Dry::Types::UnknownKeysError)
               .with_message('unexpected keys [:gender, :email] in Hash input')
+    end
+
+    describe '#permissive' do
+      it 'makes a schema permissive' do
+        schema = subject.permissive
+        expect(schema.(**valid_input, not: :expect)).not_to have_key(:not)
+      end
+    end
+
+    describe '#permissive?' do
+      example do
+        expect(subject).not_to be_permissive
+        expect(subject.permissive).to be_permissive
+      end
+    end
+
+    describe '#with_key_transform' do
+      it 'adds a key transformation' do
+        schema = subject.with_key_transform { |k| k.downcase.to_sym }
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23]))
+          .to eql(valid_input)
+      end
+
+      it 'accepts a proc' do
+        schema = subject.with_key_transform(-> k { k.downcase.to_sym })
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23]))
+          .to eql(valid_input)
+      end
+
+      it 'raises an error on missing fn' do
+        expect { subject.with_key_transform }.to raise_error(ArgumentError)
+      end
     end
   end
 end

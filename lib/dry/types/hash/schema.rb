@@ -99,10 +99,31 @@ module Dry
         end
         alias_method :===, :valid?
 
-        # Whether the schema accepts unknown keys
+        # Whether the schema accepts (i.e. omits) unknown keys
         # @return [Boolean]
         def permissive?
           meta.fetch(:permissive, false)
+        end
+
+        # Make the schema tolerant to unknown keys
+        # @return [Schema]
+        def permissive
+          meta(permissive: true)
+        end
+
+        # Injects a key transformation function
+        # @param [#call,nil] proc
+        # @param [#call,nil] block
+        # @return [Schema]
+        def with_key_transform(proc = nil, &block)
+          fn = proc || block
+
+          if fn.nil?
+            raise ArgumentError, "a block or callable argument is required"
+          end
+
+          handle = Dry::Types::FnContainer.register(fn)
+          meta(key_transform_fn: handle)
         end
 
         private
