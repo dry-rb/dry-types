@@ -7,7 +7,7 @@ RSpec.describe Dry::Types::Hash do
   describe '#call' do
     it 'accepts any hash input' do
       expect(type.({})).to eql({})
-      expect(type.(name: 'Jade')).to eql(name: 'Jade')
+      expect(type.(name: 'Jane')).to eql(name: 'Jane')
     end
   end
 
@@ -150,8 +150,9 @@ RSpec.describe Dry::Types::Hash do
     end
 
     it 'fails if any coercions are unsuccessful' do
-      expect { hash.call(name: :Jane, age: 'oops', active: true, phone: []) }
-        .to raise_error(
+      expect {
+        hash.call(name: :Jane, age: 'oops', active: true, phone: [])
+      }.to raise_error(
               Dry::Types::SchemaError,
               '"oops" (String) has invalid type for :age violates '\
               'constraints (type?(Integer, "oops") failed)'
@@ -162,9 +163,10 @@ RSpec.describe Dry::Types::Hash do
       expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
       unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
 
-      expect { hash.call(expected_input.merge(unexpected_input)) }
-        .to raise_error(Dry::Types::UnknownKeysError)
-              .with_message('unexpected keys [:gender, :email] in Hash input')
+      expect {
+        hash.call(expected_input.merge(unexpected_input))
+      }.to raise_error(Dry::Types::UnknownKeysError)
+             .with_message('unexpected keys [:gender, :email] in Hash input')
     end
 
     describe '#permissive' do
@@ -184,18 +186,34 @@ RSpec.describe Dry::Types::Hash do
     describe '#with_key_transform' do
       it 'adds a key transformation' do
         schema = subject.with_key_transform { |k| k.downcase.to_sym }
-        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23]))
-          .to eql(valid_input)
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23])).
+          to eql(valid_input)
       end
 
       it 'accepts a proc' do
         schema = subject.with_key_transform(-> k { k.downcase.to_sym })
-        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23]))
-          .to eql(valid_input)
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23])).
+          to eql(valid_input)
       end
 
       it 'raises an error on missing fn' do
         expect { subject.with_key_transform }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe 'omittable keys' do
+      let(:hash_schema) do
+        {
+          name: "coercible.string",
+          age: "strict.int",
+          active: "form.bool",
+          phone: Dry::Types['phone'].meta(omittable: true)
+        }
+      end
+
+      it 'allows to skip certain keys' do
+        expect(subject.(name: :Jane, age: 21, active: '1')).
+          to eql(name: 'Jane', age: 21, active: true)
       end
     end
   end
