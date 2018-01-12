@@ -25,7 +25,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'with a sum' do
-    subject(:type) { Dry::Types['string'] | Dry::Types['int'] }
+    subject(:type) { Dry::Types['string'] | Dry::Types['integer'] }
 
     specify do
       expect(type.to_ast).
@@ -43,7 +43,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify 'without meta' do
       type_with_meta = (
-        Dry::Types['string'].meta(type: :str) | Dry::Types['int'].meta(type: :int)
+        Dry::Types['string'].meta(type: :str) | Dry::Types['integer'].meta(type: :int)
       ).meta(type: :sum)
 
       expect(type_with_meta.to_ast(meta: false)).to eql(type.to_ast)
@@ -51,7 +51,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'with a constrained type' do
-    subject(:type) { Dry::Types['strict.int'] }
+    subject(:type) { Dry::Types['strict.integer'] }
 
     specify do
       expect(type.to_ast).
@@ -81,7 +81,7 @@ RSpec.describe Dry::Types, '#to_ast' do
     end
 
     context 'schema' do
-      subject(:type) { Dry::Types['hash'].schema(name: Dry::Types['string'], age: Dry::Types['int']) }
+      subject(:type) { Dry::Types['hash'].schema(name: Dry::Types['string'], age: Dry::Types['integer']) }
       let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
 
       specify do
@@ -98,7 +98,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
   context 'lagacy Hash schemas' do
     subject(:type) { Dry::Types['hash'] }
-    let(:members) { { name: Dry::Types['string'], age: Dry::Types['int'] } }
+    let(:members) { { name: Dry::Types['string'], age: Dry::Types['integer'] } }
 
     specify do
       expect(type.to_ast).

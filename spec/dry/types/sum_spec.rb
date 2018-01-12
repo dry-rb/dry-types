@@ -25,7 +25,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'works when left is a Sum type' do
-      type = Dry::Types['strict.int'] | Dry::Types['strict.date'] | Dry::Types['strict.string']
+      type = Dry::Types['strict.integer'] | Dry::Types['strict.date'] | Dry::Types['strict.string']
 
       expect(type).to_not be_optional
     end
@@ -33,7 +33,7 @@ RSpec.describe Dry::Types::Sum do
 
   describe '#[]' do
     it 'works with two pass-through types' do
-      type = Dry::Types['int'] | Dry::Types['string']
+      type = Dry::Types['integer'] | Dry::Types['string']
 
       expect(type[312]).to be(312)
       expect(type['312']).to eql('312')
@@ -41,7 +41,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'works with two strict types' do
-      type = Dry::Types['strict.int'] | Dry::Types['strict.string']
+      type = Dry::Types['strict.integer'] | Dry::Types['strict.string']
 
       expect(type[312]).to be(312)
       expect(type['312']).to eql('312')
@@ -59,7 +59,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'is aliased as #call' do
-      type = Dry::Types['int'] | Dry::Types['string']
+      type = Dry::Types['integer'] | Dry::Types['string']
       expect(type.call(312)).to be(312)
       expect(type.call('312')).to eql('312')
     end
@@ -135,7 +135,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#failure' do
-    subject(:type) { Dry::Types['int'] | Dry::Types['string'] }
+    subject(:type) { Dry::Types['integer'] | Dry::Types['string'] }
 
     it 'returns failure when invalid value is passed' do
       expect(type.failure(true)).to be_failure
@@ -143,7 +143,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#===' do
-    subject(:type) { Dry::Types['int'] | Dry::Types['string']  }
+    subject(:type) { Dry::Types['integer'] | Dry::Types['string']  }
 
     it 'returns boolean' do
       expect(type.===('hello')).to eql(true)
@@ -172,13 +172,13 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'supports a sum type which includes a constructor type' do
-      type = (Dry::Types['form.nil'] | Dry::Types['form.int']).default(3)
+      type = (Dry::Types['form.nil'] | Dry::Types['form.integer']).default(3)
 
       expect(type['']).to be(3)
     end
 
     it 'supports a sum type which includes a constrained constructor type' do
-      type = (Dry::Types['strict.nil'] | Dry::Types['coercible.int']).default(3)
+      type = (Dry::Types['strict.nil'] | Dry::Types['coercible.integer']).default(3)
 
       expect(type[]).to be(3)
       expect(type['3']).to be(3)

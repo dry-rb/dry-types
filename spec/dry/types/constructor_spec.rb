@@ -138,7 +138,7 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe '#try' do
-    subject(:type) { Dry::Types['coercible.int'] }
+    subject(:type) { Dry::Types['coercible.integer'] }
 
     it 'rescues ArgumentError' do
       expect(type.try('foo')).to be_failure

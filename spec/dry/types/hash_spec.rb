@@ -15,7 +15,7 @@ RSpec.describe Dry::Types::Hash do
     let(:hash_schema) do
       {
         name: "coercible.string",
-        age: "strict.int",
+        age: "strict.integer",
         active: "form.bool",
         phone: Dry::Types['phone']
       }
@@ -54,7 +54,7 @@ RSpec.describe Dry::Types::Hash do
       let(:hash) {
         primitive.schema(
           **hash_schema,
-          age: Dry::Types["strict.int"].default(21)
+          age: Dry::Types["strict.integer"].default(21)
         )
       }
 

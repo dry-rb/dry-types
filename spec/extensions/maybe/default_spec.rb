@@ -1,9 +1,9 @@
 RSpec.describe Dry::Types::Definition, '#default', :maybe do
   context 'with a maybe' do
-    subject(:type) { Dry::Types['strict.int'].maybe }
+    subject(:type) { Dry::Types['strict.integer'].maybe }
 
     it_behaves_like 'Dry::Types::Definition without primitive' do
-      let(:type) { Dry::Types['strict.int'].maybe.default(0) }
+      let(:type) { Dry::Types['strict.integer'].maybe.default(0) }
     end
 
     it 'does not allow nil' do

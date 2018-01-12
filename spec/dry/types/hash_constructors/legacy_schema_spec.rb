@@ -6,7 +6,7 @@ RSpec.describe Dry::Types::Hash do
   let(:hash_schema) do
     {
       name: "coercible.string",
-      age: "strict.int",
+      age: "strict.integer",
       active: "form.bool",
       phone: Dry::Types['phone']
     }
@@ -141,7 +141,7 @@ RSpec.describe Dry::Types::Hash do
       let(:hash_schema) do
         {
           name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
+          age: Dry::Types["strict.integer"].default(21),
           active: "form.bool",
           phone: Dry::Types['phone']
         }
@@ -170,7 +170,7 @@ RSpec.describe Dry::Types::Hash do
       let(:hash_schema) do
         {
           name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
+          age: Dry::Types["strict.integer"].default(21),
           active: "form.bool",
           phone: Dry::Types['phone']
         }
@@ -188,7 +188,7 @@ RSpec.describe Dry::Types::Hash do
       let(:hash_schema) do
         {
           name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
+          age: Dry::Types["strict.integer"].default(21),
           active: "form.bool",
           phone: Dry::Types['phone']
         }
@@ -265,7 +265,7 @@ RSpec.describe Dry::Types::Hash do
       let(:hash) { h1 | h2 }
 
       let(:h1) { Dry::Types['strict.hash'].strict(name: Dry::Types['strict.string']) }
-      let(:h2) { Dry::Types['strict.hash'].strict(age: Dry::Types['strict.int']) }
+      let(:h2) { Dry::Types['strict.hash'].strict(age: Dry::Types['strict.integer']) }
 
       it 'returns input when it is valid for the left side' do
         expect(hash[name: 'Jane']).to eql(name: 'Jane')
