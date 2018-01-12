@@ -229,5 +229,12 @@ RSpec.describe Dry::Types::Hash do
           to eql(name: 'Jane', age: 21, active: true)
       end
     end
+
+    describe '#schema' do
+      it 'extends existing schema' do
+        extended = subject.schema(city: "coercible.string")
+        expect(extended.(**valid_input, city: :London)).to include(city: 'London')
+      end
+    end
   end
 end

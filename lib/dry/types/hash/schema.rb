@@ -126,6 +126,13 @@ module Dry
           meta(key_transform_fn: handle)
         end
 
+        # @param [{Symbol => Definition}] type_map
+        # @return [Schema]
+        def schema(type_map)
+          member_types = self.member_types.merge(transform_types(type_map))
+          Schema.new(primitive, **options, member_types: member_types, meta: meta)
+        end
+
         private
 
         def resolve(hash)

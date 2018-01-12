@@ -9,17 +9,7 @@ module Dry
       # @param [Symbol] constructor
       # @return [Schema]
       def schema(type_map, constructor = nil)
-        type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
-        type_transform = Dry::Types::FnContainer[type_fn]
-
-        member_types = type_map.each_with_object({}) { |(name, type), result|
-          t = case type
-              when String, Class then Types[type]
-              else type
-              end
-
-          result[name] = type_transform.(t)
-        }
+        member_types = transform_types(type_map)
 
         if constructor.nil?
           Schema.new(primitive, member_types: member_types, **options, meta: meta)
@@ -85,6 +75,22 @@ module Dry
 
         handle = Dry::Types::FnContainer.register(fn)
         meta(type_transform_fn: handle)
+      end
+
+      private
+
+      def transform_types(type_map)
+        type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
+        type_transform = Dry::Types::FnContainer[type_fn]
+
+        type_map.each_with_object({}) { |(name, type), result|
+          t = case type
+              when String, Class then Types[type]
+              else type
+              end
+
+          result[name] = type_transform.(t)
+        }
       end
     end
   end
