@@ -172,27 +172,28 @@ RSpec.describe Dry::Types::Hash do
             )
     end
 
-    it 'rejects unexpected keys' do
-      expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
-      unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
-
-      expect {
-        hash.call(expected_input.merge(unexpected_input))
-      }.to raise_error(Dry::Types::UnknownKeysError)
-             .with_message('unexpected keys [:gender, :email] in Hash input')
+    it 'ignores unexpected keys' do
+      expect(subject.(**valid_input, not: :expect)).not_to have_key(:not)
     end
 
-    describe '#permissive' do
-      it 'makes a schema permissive' do
-        schema = subject.permissive
-        expect(schema.(**valid_input, not: :expect)).not_to have_key(:not)
+    describe '#strict' do
+      subject { hash.strict }
+
+      it 'makes the schema strict' do
+        expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
+        unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
+
+        expect {
+          subject.(expected_input.merge(unexpected_input))
+        }.to raise_error(Dry::Types::UnknownKeysError)
+               .with_message('unexpected keys [:gender, :email] in Hash input')
       end
     end
 
-    describe '#permissive?' do
+    describe '#strict?' do
       example do
-        expect(subject).not_to be_permissive
-        expect(subject.permissive).to be_permissive
+        expect(subject).not_to be_strict
+        expect(subject.strict).to be_strict
       end
     end
 

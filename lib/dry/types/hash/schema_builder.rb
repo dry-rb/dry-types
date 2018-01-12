@@ -9,7 +9,7 @@ module Dry
       class SchemaBuilder
         NIL_TO_UNDEFINED = -> v { v.nil? ? Undefined : v }
         OMITTABLE_KEYS = %i(schema weak symbolized).freeze
-        PEMISSIVE = %i(schema permissive weak symbolized).freeze
+        STRICT = %i(strict strict_with_defaults).freeze
 
         # @param primitive [Type]
         # @option options [Hash{Symbol => Definition}] :member_types
@@ -28,7 +28,7 @@ module Dry
         def instantiate(primitive, hash_type: :base, meta: EMPTY_HASH, **options)
           meta = meta.dup
 
-          meta[:permissive] = true if permissive?(hash_type)
+          meta[:strict] = true if strict?(hash_type)
           meta[:key_transform_fn] = Schema::SYMBOLIZE_KEY if hash_type == :symbolized
 
           Schema.new(primitive, **options, meta: meta)
@@ -40,8 +40,8 @@ module Dry
           OMITTABLE_KEYS.include?(constructor)
         end
 
-        def permissive?(constructor)
-          PEMISSIVE.include?(constructor)
+        def strict?(constructor)
+          STRICT.include?(constructor)
         end
 
         def build_type(constructor, type)

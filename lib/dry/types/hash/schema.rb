@@ -99,16 +99,16 @@ module Dry
         end
         alias_method :===, :valid?
 
-        # Whether the schema accepts (i.e. omits) unknown keys
+        # Whether the schema rejects unknown keys
         # @return [Boolean]
-        def permissive?
-          meta.fetch(:permissive, false)
+        def strict?
+          meta.fetch(:strict, false)
         end
 
-        # Make the schema tolerant to unknown keys
+        # Make the schema intolerant to unknown keys
         # @return [Schema]
-        def permissive
-          meta(permissive: true)
+        def strict
+          meta(strict: true)
         end
 
         # Injects a key transformation function
@@ -143,7 +143,7 @@ module Dry
 
             if member_types.key?(k)
               result[k] = yield(member_types[k], k, value)
-            elsif !permissive?
+            elsif strict?
               raise UnknownKeysError.new(*unexpected_keys(hash.keys))
             end
           end
