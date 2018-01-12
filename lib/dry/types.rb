@@ -148,7 +148,7 @@ module Dry
       if type_keys.any? { |key| key.split('.')[0] == underscored }
         raise NameError,
               'dry-types does not define constants for default types. '\
-              'You can access the predefined types with [], e.g. Dry::Types["strict.int"] '\
+              'You can access the predefined types with [], e.g. Dry::Types["strict.integer"] '\
               'or generate a module with types using Dry::Types.module'
       else
         super

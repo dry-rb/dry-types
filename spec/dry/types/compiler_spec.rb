@@ -29,7 +29,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a safe coercible hash' do
     ast = Dry::Types['hash'].permissive(
       email: Dry::Types['string'],
-      age: Dry::Types['form.int'],
+      age: Dry::Types['form.integer'],
       admin: Dry::Types['form.bool'],
       address: Dry::Types['hash'].permissive(
         city: Dry::Types['string'],
@@ -77,7 +77,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a coercible hash' do
     ast = Dry::Types['hash'].weak(
       email: Dry::Types['string'],
-      age: Dry::Types['form.nil'] | Dry::Types['form.int'],
+      age: Dry::Types['form.nil'] | Dry::Types['form.integer'],
       admin: Dry::Types['form.bool']
     ).to_ast
 
@@ -101,7 +101,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a coercible hash with symbolized keys' do
     ast = Dry::Types['hash'].symbolized(
       email: Dry::Types['string'],
-      age: Dry::Types['form.int'],
+      age: Dry::Types['form.integer'],
       admin: Dry::Types['form.bool']
     ).to_ast
 
@@ -130,7 +130,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = Dry::Types['array'].of(
       Dry::Types['hash'].symbolized(
         email: Dry::Types['string'],
-        age: Dry::Types['form.int'],
+        age: Dry::Types['form.integer'],
         admin: Dry::Types['form.bool'],
       )
     ).to_ast
@@ -163,7 +163,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe form array with member' do
-    ast = Dry::Types['form.array'].of(Dry::Types['coercible.int']).to_ast
+    ast = Dry::Types['form.array'].of(Dry::Types['coercible.integer']).to_ast
 
     arr = compiler.(ast)
 
@@ -174,7 +174,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a safe form hash' do
     ast = Dry::Types['form.hash'].symbolized(
       email: Dry::Types['string'],
-      age: Dry::Types['form.int'],
+      age: Dry::Types['form.integer'],
       admin: Dry::Types['form.bool'],
     ).to_ast
 

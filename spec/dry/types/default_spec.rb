@@ -32,7 +32,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
   end
 
   context 'with an optional type' do
-    subject(:type) { Dry::Types['strict.int'].optional.default(nil) }
+    subject(:type) { Dry::Types['strict.integer'].optional.default(nil) }
 
     it_behaves_like 'Dry::Types::Definition without primitive'
 

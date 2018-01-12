@@ -26,7 +26,7 @@ RSpec.describe Dry::Types::Definition, '#maybe', :maybe do
   end
 
   context 'with a strict type' do
-    subject(:type) { Dry::Types['strict.int'].maybe }
+    subject(:type) { Dry::Types['strict.integer'].maybe }
 
     it_behaves_like 'Dry::Types::Definition without primitive'
 

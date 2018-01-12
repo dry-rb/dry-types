@@ -16,8 +16,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.nil | form.int' do
-    subject(:type) { Dry::Types['form.nil'] | Dry::Types['form.int'] }
+  describe 'form.nil | form.integer' do
+    subject(:type) { Dry::Types['form.nil'] | Dry::Types['form.integer'] }
 
     it 'coerces empty string to nil' do
       expect(type['']).to be(nil)
@@ -147,8 +147,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.int' do
-    subject(:type) { Dry::Types['form.int'] }
+  describe 'form.integer' do
+    subject(:type) { Dry::Types['form.integer'] }
 
     it 'coerces to a integer' do
       expect(type['312']).to be(312)
@@ -231,7 +231,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'form.array' do
-    subject(:type) { Dry::Types['form.array'].of(Dry::Types['form.int']) }
+    subject(:type) { Dry::Types['form.array'].of(Dry::Types['form.integer']) }
 
     it 'returns coerced array' do
       arr = %w(1 2 3)
@@ -255,7 +255,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'form.hash' do
-    subject(:type) { Dry::Types['form.hash'].weak(age: Dry::Types['form.int']) }
+    subject(:type) { Dry::Types['form.hash'].weak(age: Dry::Types['form.integer']) }
 
     it 'returns coerced hash' do
       hash = { age: '21' }

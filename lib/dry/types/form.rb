@@ -30,8 +30,8 @@ module Dry
       (self['form.true'] | self['form.false']).safe
     end
 
-    register('form.int') do
-      self['int'].constructor(Coercions::Form.method(:to_int))
+    register('form.integer') do
+      self['integer'].constructor(Coercions::Form.method(:to_int))
     end
 
     register('form.float') do
