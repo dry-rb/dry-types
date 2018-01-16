@@ -14,7 +14,7 @@ RSpec.describe Dry::Types::Hash do
   describe '#with_type_transform' do
     it 'adds a type transformation for schemas' do
       optional_keys = type.with_type_transform { |t| t.meta(omittable: true) }
-      schema = optional_keys.schema(name: "strict.string", age: "strict.int")
+      schema = optional_keys.schema(name: "strict.string", age: "strict.integer")
       expect(schema.(name: 'Jane')).to eql(name: 'Jane')
     end
 
@@ -219,7 +219,7 @@ RSpec.describe Dry::Types::Hash do
       let(:hash_schema) do
         {
           name: "coercible.string",
-          age: "strict.int",
+          age: "strict.integer",
           active: "form.bool",
           phone: Dry::Types['phone'].meta(omittable: true)
         }
