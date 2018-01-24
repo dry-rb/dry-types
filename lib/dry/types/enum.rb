@@ -46,6 +46,9 @@ module Dry
               '.default(value).enum(*values) instead'
       end
 
+      # Check whether a value is in the enum
+      # @param [Object] value
+      # @return [Boolean]
       alias_method :include?, :valid?
 
       # @api public
