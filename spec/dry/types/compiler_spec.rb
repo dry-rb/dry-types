@@ -294,4 +294,16 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.primitive).to be(String)
     expect(type.meta).to eql(foo: :bar)
   end
+
+  it 'builds a enum' do
+    enum = Dry::Types['strict.integer'].enum(1, 2, 3).meta(color: :red)
+
+    ast = enum.to_ast
+
+    type = compiler.(ast)
+
+    expect(type).to eql(enum)
+    expect(type.valid?(1)).to be(true)
+    expect(type.valid?(4)).to be(false)
+  end
 end

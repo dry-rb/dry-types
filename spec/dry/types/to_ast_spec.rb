@@ -162,6 +162,7 @@ RSpec.describe Dry::Types, '#to_ast' do
                        {}
                      ]
                    ],
+                   ["draft", "published", "archived"],
                    key: :value
                  ]
                ])

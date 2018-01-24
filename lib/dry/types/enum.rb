@@ -55,7 +55,9 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast(meta: true)
-        [:enum, [type.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
+        [:enum, [type.to_ast(meta: meta),
+                 values,
+                 meta ? self.meta : EMPTY_HASH]]
       end
     end
   end
