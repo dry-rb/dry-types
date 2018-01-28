@@ -93,8 +93,8 @@ module Dry
       end
 
       def visit_enum(node)
-        type, values, meta = node
-        Enum.new(visit(type), values: values, meta: meta)
+        type, mapping, meta = node
+        Enum.new(visit(type), mapping: mapping, meta: meta)
       end
 
       def merge_with(hash_id, constructor, schema)

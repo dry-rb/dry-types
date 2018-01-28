@@ -43,7 +43,14 @@ module Dry
       # @param [Array] values
       # @return [Enum]
       def enum(*values)
-        Enum.new(constrained(included_in: values), values: values)
+        mapping =
+          if values.length == 1 && values[0].is_a?(::Hash)
+            values[0]
+          else
+            ::Hash[values.zip(0...values.size)]
+          end
+
+        Enum.new(constrained(included_in: mapping.keys), mapping: mapping)
       end
 
       # @return [Safe]
