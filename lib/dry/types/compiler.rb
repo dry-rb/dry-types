@@ -54,7 +54,8 @@ module Dry
 
       def visit_array(node)
         member, meta = node
-        registry['array'].of(visit(member)).meta(meta)
+        member = member.is_a?(Class) ? member : visit(member)
+        registry['array'].of(member).meta(meta)
       end
 
       def visit_hash(node)

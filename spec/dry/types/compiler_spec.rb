@@ -152,6 +152,26 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ])
   end
 
+  it 'builds an array with a struct member' do
+    struct = Class.new do
+      extend Dry::Types::Type
+
+      def self.call(obj)
+        obj
+      end
+    end
+
+    ast = Dry::Types['array'].of(struct).to_ast
+
+    arr = compiler.(ast)
+
+    expect(arr).to be_a(Dry::Types::Array)
+
+    obj = struct.new
+
+    expect(arr[[obj]]).to eql([obj])
+  end
+
   it 'builds a safe form array' do
     ast = Dry::Types['form.array'].to_ast
 

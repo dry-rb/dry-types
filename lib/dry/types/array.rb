@@ -11,7 +11,7 @@ module Dry
       def of(type)
         member =
           case type
-          when String, Class then Types[type]
+          when String then Types[type]
           else type
           end
 

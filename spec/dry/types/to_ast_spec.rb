@@ -230,5 +230,19 @@ RSpec.describe Dry::Types, '#to_ast' do
           to eql([:array, [[:definition, [String, {}]], key: :value]])
       end
     end
+
+    context 'Member of structs' do
+      let(:struct) do
+        Test::Struct = Class.new { extend Dry::Types::Type }
+      end
+
+      subject(:type) do
+        Dry::Types['array'].of(struct)
+      end
+
+      specify do
+        expect(type.to_ast).to eql([:array, [struct, {}]])
+      end
+    end
   end
 end
