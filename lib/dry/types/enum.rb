@@ -13,13 +13,18 @@ module Dry
       # @return [Hash]
       attr_reader :mapping
 
+      # @return [Hash]
+      attr_reader :inverted_mapping
+
       # @param [Type] type
       # @param [Hash] options
       # @option options [Array] :values
       def initialize(type, options)
         super
         @mapping = options.fetch(:mapping).freeze
-        @values = @mapping.keys.freeze.each(&:freeze)
+        @values = @mapping.keys.freeze
+        @inverted_mapping = @mapping.invert.freeze
+        freeze
       end
 
       # @param [Object] input
@@ -28,14 +33,10 @@ module Dry
         value =
           if input.equal?(Undefined)
             type.call
-          elsif values.include?(input)
-            input
           elsif mapping.key?(input)
-            mapping[input]
-          elsif mapping.values.include?(input)
-            mapping.key(input)
-          else
             input
+          else
+            inverted_mapping.fetch(input, input)
           end
 
         type[value]
