@@ -66,13 +66,13 @@ module Dry
         # @param [Array, String, Object] input
         # @return [Array, Object]
         def self.to_ary(input)
-          empty_str?(input) ? [] : input
+          empty?(input) ? [] : input
         end
 
         # @param [Hash, String, Object] input
         # @return [Hash, Object]
         def self.to_hash(input)
-          empty_str?(input) ? {} : input
+          empty?(input) ? {} : input
         end
       end
     end
