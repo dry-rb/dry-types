@@ -46,14 +46,6 @@ RSpec.describe Dry::Types::Array do
     end
   end
 
-  describe '#member' do
-    subject(:array) { Dry::Types['coercible.array'].member(Dry::Types['coercible.string']) }
-
-    it 'still works though deprecated' do
-      expect(array[Set[1, 2, 3]]).to eql(%w(1 2 3))
-    end
-  end
-
   describe '#valid?' do
     subject(:array) { Dry::Types['strict.array'].of(Dry::Types['strict.string']) }
 

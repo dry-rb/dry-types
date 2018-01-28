@@ -17,8 +17,6 @@ module Dry
 
         Array::Member.new(primitive, **options, member: member)
       end
-
-      deprecate :member, :of
     end
   end
 end
