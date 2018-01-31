@@ -17,9 +17,9 @@ RSpec.describe Dry::Types::Definition, '#safe' do
     end
   end
 
-  context 'with a form hash' do
+  context 'with a params hash' do
     subject(:type) do
-      Dry::Types['form.hash'].weak(age: 'coercible.int', active: 'form.bool')
+      Dry::Types['params.hash'].weak(age: 'coercible.int', active: 'params.bool')
     end
 
     it_behaves_like Dry::Types::Definition
