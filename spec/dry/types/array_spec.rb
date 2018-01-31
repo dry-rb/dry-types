@@ -25,7 +25,7 @@ RSpec.describe Dry::Types::Array do
 
       context 'using a constrained type' do
         subject(:array) do
-          Dry::Types['array'].of(Dry::Types['coercible.int'].constrained(gt: 2))
+          Dry::Types['array'].of(Dry::Types['coercible.integer'].constrained(gt: 2))
         end
 
         it 'passes values through member type' do
@@ -43,14 +43,6 @@ RSpec.describe Dry::Types::Array do
           subject(:type) { array }
         end
       end
-    end
-  end
-
-  describe '#member' do
-    subject(:array) { Dry::Types['coercible.array'].member(Dry::Types['coercible.string']) }
-
-    it 'still works though deprecated' do
-      expect(array[Set[1, 2, 3]]).to eql(%w(1 2 3))
     end
   end
 

@@ -5,8 +5,8 @@ RSpec.describe Dry::Types do
 
   describe '.Array' do
     it 'builds an array type' do
-      expect(mod.Array(mod::Strict::Int)).
-        to eql(Dry::Types['array<strict.int>'])
+      expect(mod.Array(mod::Strict::Integer)).
+        to eql(Dry::Types['array<strict.integer>'])
     end
   end
 
@@ -37,8 +37,8 @@ RSpec.describe Dry::Types do
 
   describe '.Hash' do
     it 'builds a hash schema' do
-      expect(mod.Hash(:symbolized, age: Dry::Types['strict.int'])).
-        to eql(Dry::Types['hash'].symbolized(age: Dry::Types['strict.int']))
+      expect(mod.Hash(:symbolized, age: Dry::Types['strict.integer'])).
+        to eql(Dry::Types['hash'].symbolized(age: Dry::Types['strict.integer']))
     end
   end
 
@@ -70,5 +70,14 @@ RSpec.describe Dry::Types do
   it 'defines methods when included' do
     expect(Module.new.tap { |m| m.include mod }.Definition(String)).
       to eql(mod.Definition(String))
+  end
+
+  describe '.Strict' do
+    it 'is an alias for Instance' do
+      foo_type = Class.new
+
+      expect(mod.Strict(foo_type)).to eql(mod.Instance(foo_type))
+      expect(mod.Strict(Integer)).to eql(mod::Strict::Integer)
+    end
   end
 end

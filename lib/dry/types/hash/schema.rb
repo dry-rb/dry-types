@@ -1,3 +1,5 @@
+require 'dry/types/fn_container'
+
 module Dry
   module Types
     class Hash < Definition
@@ -10,14 +12,27 @@ module Dry
       # @see Dry::Types::Default#evaluate
       # @see Dry::Types::Default::Callable#evaluate
       class Schema < Hash
+        NO_TRANSFORM = Dry::Types::FnContainer.register(-> (x) { x })
+        SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
+
         # @return [Hash{Symbol => Definition}]
         attr_reader :member_types
+
+        # @return [#call]
+        attr_reader :transform_key
 
         # @param [Class] _primitive
         # @param [Hash] options
         # @option options [Hash{Symbol => Definition}] :member_types
+        # @option options [String] :key_transform_fn
         def initialize(_primitive, options)
           @member_types = options.fetch(:member_types)
+
+          meta = options[:meta] || EMPTY_HASH
+          key_fn = meta.fetch(:key_transform_fn, NO_TRANSFORM)
+
+          @transform_key = Dry::Types::FnContainer[key_fn]
+
           super
         end
 
@@ -34,35 +49,42 @@ module Dry
         # @yieldreturn [Result]
         # @return [Logic::Result]
         # @return [Object] if coercion fails and a block is given
-        def try(hash, &block)
-          success = true
-          output  = {}
+        def try(hash)
+          if hash.is_a?(::Hash)
+            success = true
+            output  = {}
 
-          begin
-            result = try_coerce(hash) do |key, member_result|
-              success &&= member_result.success?
-              output[key] = member_result.input
+            begin
+              result = try_coerce(hash) do |key, member_result|
+                success &&= member_result.success?
+                output[key] = member_result.input
 
-              member_result
+                member_result
+              end
+            rescue ConstraintError, UnknownKeysError, SchemaError => e
+              success = false
+              result = e
             end
-          rescue ConstraintError, UnknownKeysError, SchemaError => e
+          else
             success = false
-            result = e
+            output = hash
+            result = "#{hash} must be a hash"
           end
 
           if success
             success(output)
           else
             failure = failure(output, result)
-            block ? yield(failure) : failure
+            block_given? ? yield(failure) : failure
           end
         end
 
+        # @param meta [Boolean] Whether to dump the meta to the AST
+        # @return [Array] An AST representation
         def to_ast(meta: true)
           [
-            :hash,
+            :hash_schema,
             [
-              hash_type,
               member_types.map { |name, member| [:member, [name, member.to_ast(meta: meta)]] },
               meta ? self.meta : EMPTY_HASH
             ]
@@ -77,10 +99,78 @@ module Dry
         end
         alias_method :===, :valid?
 
+        # Whether the schema rejects unknown keys
+        # @return [Boolean]
+        def strict?
+          meta.fetch(:strict, false)
+        end
+
+        # Make the schema intolerant to unknown keys
+        # @return [Schema]
+        def strict
+          meta(strict: true)
+        end
+
+        # Injects a key transformation function
+        # @param [#call,nil] proc
+        # @param [#call,nil] block
+        # @return [Schema]
+        def with_key_transform(proc = nil, &block)
+          fn = proc || block
+
+          if fn.nil?
+            raise ArgumentError, "a block or callable argument is required"
+          end
+
+          handle = Dry::Types::FnContainer.register(fn)
+          meta(key_transform_fn: handle)
+        end
+
+        # @param [{Symbol => Definition}] type_map
+        # @return [Schema]
+        def schema(type_map)
+          member_types = self.member_types.merge(transform_types(type_map))
+          Schema.new(primitive, **options, member_types: member_types, meta: meta)
+        end
+
         private
 
-        def hash_type
-          :schema
+        def resolve(hash)
+          result = {}
+
+          hash.each do |key, value|
+            k = transform_key.(key)
+
+            if member_types.key?(k)
+              result[k] = yield(member_types[k], k, value)
+            elsif strict?
+              raise UnknownKeysError.new(*unexpected_keys(hash.keys))
+            end
+          end
+
+          if result.size < member_types.size
+            resolve_missing_keys(result, &Proc.new)
+          end
+
+          result
+        end
+
+        def resolve_missing_keys(result)
+          member_types.each do |k, type|
+            next if result.key?(k)
+
+            if type.default?
+              result[k] = yield(type, k, Undefined)
+            elsif !type.meta[:omittable]
+              raise MissingKeyError, k
+            end
+          end
+        end
+
+        # @param [Array<Symbol>]
+        # @return [Array<Symbol>]
+        def unexpected_keys(keys)
+          keys.map(&transform_key) - member_types.keys
         end
 
         # @param [Hash] hash
@@ -102,179 +192,7 @@ module Dry
             end
           end
         end
-
-        # @param [Hash] hash
-        # @return [Hash{Symbol => Object}]
-        def resolve(hash)
-          result = {}
-          member_types.each do |key, type|
-            if hash.key?(key)
-              result[key] = yield(type, key, hash[key])
-            else
-              resolve_missing_value(result, key, type)
-            end
-          end
-          result
-        end
-
-        # @param [Hash] result
-        # @param [Symbol] key
-        # @param [Type] type
-        # @return [Object]
-        # @see Dry::Types::Default#evaluate
-        # @see Dry::Types::Default::Callable#evaluate
-        def resolve_missing_value(result, key, type)
-          if type.default?
-            result[key] = type.evaluate
-          else
-            super
-          end
-        end
       end
-
-      # Permissive schema raises a {MissingKeyError} if the given key is missing
-      # in provided hash.
-      class Permissive < Schema
-        private
-
-        def hash_type
-          :permissive
-        end
-
-        # @param [Symbol] key
-        # @raise [MissingKeyError] when key is missing in given input
-        def resolve_missing_value(_, key, _)
-          raise MissingKeyError, key
-        end
-      end
-
-      # Strict hash will raise errors when keys are missing or value types are incorrect.
-      # Strict schema raises a {UnknownKeysError} if there are any unexpected
-      # keys in given hash, and raises a {MissingKeyError} if any key is missing
-      # in it.
-      # @example
-      #   hash = Types::Hash.strict(name: Types::String, age: Types::Coercible::Int)
-      #   hash[email: 'jane@doe.org', name: 'Jane', age: 21]
-      #     # => Dry::Types::SchemaKeyError: :email is missing in Hash input
-      class Strict < Permissive
-        private
-
-        def hash_type
-          :strict
-        end
-
-        # @param [Hash] hash
-        # @return [Hash{Symbol => Object}]
-        # @raise [UnknownKeysError]
-        #   if there any unexpected key in given hash
-        # @raise [MissingKeyError]
-        #   if a required key is not present
-        # @raise [SchemaError]
-        #   if a value is the wrong type
-        def resolve(hash)
-          unexpected = hash.keys - member_types.keys
-          raise UnknownKeysError.new(*unexpected) unless unexpected.empty?
-
-          super do |member_type, key, value|
-            type = member_type.default? ? member_type.type : member_type
-
-            yield(type, key, value)
-          end
-        end
-      end
-
-      # {StrictWithDefaults} checks that there are no extra keys
-      # (raises {UnknownKeysError} otherwise) and there a no missing keys
-      # without default values given (raises {MissingKeyError} otherwise).
-      # @see Default#evaluate
-      # @see Default::Callable#evaluate
-      class StrictWithDefaults < Strict
-        private
-
-        def hash_type
-          :strict_with_defaults
-        end
-
-        # @param [Hash] result
-        # @param [Symbol] key
-        # @param [Type] type
-        # @return [Object]
-        # @see Dry::Types::Default#evaluate
-        # @see Dry::Types::Default::Callable#evaluate
-        def resolve_missing_value(result, key, type)
-          if type.default?
-            result[key] = type.evaluate
-          else
-            super
-          end
-        end
-      end
-
-      # Weak schema provides safe types for every type given in schema hash
-      # @see Safe
-      class Weak < Schema
-        # @param [Class] primitive
-        # @param [Hash] options
-        # @see #initialize
-        def self.new(primitive, options)
-          member_types = options.
-            fetch(:member_types).
-            each_with_object({}) { |(k, t), res| res[k] = t.safe }
-
-          super(primitive, options.merge(member_types: member_types))
-        end
-
-        # @param [Object] value
-        # @param [#call, nil] block
-        # @yieldparam [Failure] failure
-        # @yieldreturn [Result]
-        # @return [Object] if block given
-        # @return [Result,Logic::Result] otherwise
-        def try(value, &block)
-          if value.is_a?(::Hash)
-            super
-          else
-            result = failure(value, "#{value} must be a hash")
-            block ? yield(result) : result
-          end
-        end
-
-        private
-
-        def hash_type
-          :weak
-        end
-      end
-
-      # {Symbolized} hash will turn string key names into symbols.
-      class Symbolized < Weak
-        private
-
-        def hash_type
-          :symbolized
-        end
-
-        def resolve(hash)
-          result = {}
-          member_types.each do |key, type|
-            keyname =
-              if hash.key?(key)
-                key
-              elsif hash.key?(string_key = key.to_s)
-                string_key
-              end
-
-            if keyname
-              result[key] = yield(type, key, hash[keyname])
-            else
-              resolve_missing_value(result, key, type)
-            end
-          end
-          result
-        end
-      end
-
-      private_constant(*constants(false))
     end
   end
 end

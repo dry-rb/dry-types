@@ -54,12 +54,18 @@ module Dry
 
       def visit_array(node)
         member, meta = node
-        registry['array'].of(visit(member)).meta(meta)
+        member = member.is_a?(Class) ? member : visit(member)
+        registry['array'].of(member).meta(meta)
       end
 
       def visit_hash(node)
         constructor, schema, meta = node
         merge_with('hash', constructor, schema).meta(meta)
+      end
+
+      def visit_hash_schema(node)
+        schema, meta = node
+        merge_with_schema('hash', schema).meta(meta)
       end
 
       def visit_json_hash(node)
@@ -87,9 +93,21 @@ module Dry
         { name => visit(type) }
       end
 
+      def visit_enum(node)
+        type, mapping, meta = node
+        Enum.new(visit(type), mapping: mapping, meta: meta)
+      end
+
       def merge_with(hash_id, constructor, schema)
-        registry[hash_id].__send__(
-          constructor, schema.map { |key| visit(key) }.reduce({}, :update)
+        registry[hash_id].schema(
+          schema.map { |key| visit(key) }.reduce({}, :update),
+          constructor
+        )
+      end
+
+      def merge_with_schema(hash_id, schema)
+        registry[hash_id].instantiate(
+          schema.map { |key| visit(key) }.reduce({}, :update)
         )
       end
     end

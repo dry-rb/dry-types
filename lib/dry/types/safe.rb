@@ -4,9 +4,10 @@ module Dry
   module Types
     class Safe
       include Type
-      include Dry::Equalizer(:type, :options)
+      include Dry::Equalizer(:type)
       include Decorator
       include Builder
+      private :options, :meta
 
       # @param [Object] input
       # @return [Object]
@@ -37,7 +38,7 @@ module Dry
       #
       # @see Definition#to_ast
       def to_ast(meta: true)
-        [:safe, [type.to_ast, meta ? self.meta : EMPTY_HASH]]
+        [:safe, [type.to_ast(meta: meta), EMPTY_HASH]]
       end
 
       # @api public

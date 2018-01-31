@@ -1,10 +1,12 @@
 module Dry
   module Types
-    extend Dry::Configurable
+    extend Dry::Core::ClassAttributes
 
     # @!attribute [r] namespace
     #   @return [Container{String => Definition}]
-    setting :namespace, self
+    defines :namespace
+
+    namespace self
 
     class SchemaError < TypeError
       # @param [String,Symbol] key

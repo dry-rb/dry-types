@@ -1,4 +1,30 @@
 RSpec.describe Dry::Types::Enum do
+  context 'with mapping' do
+    subject(:type) { string.enum(mapping) }
+
+    let(:mapping) { {'draft' => 0, 'published' => 10, 'archived' => 20} }
+    let(:values) { mapping.keys }
+    let(:string) { Dry::Types['strict.string'] }
+
+    it_behaves_like Dry::Types::Definition
+
+    it 'allows defining an enum from a specific type' do
+      expect(type['draft']).to eql(mapping.key(0))
+      expect(type['published']).to eql(mapping.key(10))
+      expect(type['archived']).to eql(mapping.key(20))
+
+      expect(type[0]).to be(mapping.key(0))
+      expect(type[10]).to be(mapping.key(10))
+      expect(type[20]).to eql(mapping.key(20))
+
+      expect(type.mapping).to eql(mapping)
+
+      expect { type['oops'] }.to raise_error(Dry::Types::ConstraintError, /oops/)
+
+      expect(type.mapping).to be_frozen
+    end
+  end
+
   context 'with string type' do
     subject(:type) { string.enum(*values) }
 
@@ -12,8 +38,8 @@ RSpec.describe Dry::Types::Enum do
       expect(type['published']).to eql(values[1])
       expect(type['archived']).to eql(values[2])
 
-      expect(type[0]).to be(values[0])
-      expect(type[1]).to be(values[1])
+      expect(type[0]).to eql(values[0])
+      expect(type[1]).to eql(values[1])
       expect(type[2]).to eql(values[2])
 
       expect(type.values).to eql(values)
@@ -23,10 +49,30 @@ RSpec.describe Dry::Types::Enum do
       expect(type.values).to be_frozen
     end
 
+    describe '#===' do
+      it 'returns boolean' do
+        expect(type.===('draft')).to eql(true)
+        expect(type.===('deleted')).to eql(false)
+      end
+
+      context 'in case statement' do
+        let(:value) do
+          case 'draft'
+          when type then 'accepted'
+            else 'invalid'
+          end
+        end
+
+        it 'returns correct value' do
+          expect(value).to eql('accepted')
+        end
+      end
+    end
+
     it 'allows defining an enum from a default-value type' do
       with_default = string.default('draft').enum(*values)
 
-      expect(with_default[nil]).to eql('draft')
+      expect(with_default.call).to eql('draft')
     end
 
     it "doesn't allows defining a default value for an enum" do
@@ -42,7 +88,7 @@ RSpec.describe Dry::Types::Enum do
   end
 
   context 'with int type' do
-    subject(:type) { Dry::Types['int'].enum(*values) }
+    subject(:type) { Dry::Types['integer'].enum(*values) }
 
     let(:values) { [2, 3, 4] }
 
@@ -61,8 +107,20 @@ RSpec.describe Dry::Types::Enum do
     end
   end
 
+  describe '#include?' do
+    subject(:enum) { Dry::Types['integer'].enum(4, 5, 6) }
+
+    it 'returns true for input that is included in the values' do
+      expect(enum.include?(5)).to be true
+    end
+
+    it 'returns false for input that is not included in the values' do
+      expect(enum.include?(7)).to be false
+    end
+  end
+
   describe '#try' do
-    subject(:enum) { Dry::Types['int'].enum(4, 5, 6) }
+    subject(:enum) { Dry::Types['integer'].enum(4, 5, 6) }
 
     it 'returns a success result for valid input' do
       expect(enum.try(5)).to be_success
@@ -78,7 +136,7 @@ RSpec.describe Dry::Types::Enum do
   end
 
   describe '#with' do
-    subject(:enum_with_meta) { Dry::Types['int'].enum(4, 5, 6).with(meta: { foo: :bar }) }
+    subject(:enum_with_meta) { Dry::Types['integer'].enum(4, 5, 6).with(meta: { foo: :bar }) }
 
     it_behaves_like Dry::Types::Definition do
       let(:type) { enum_with_meta }

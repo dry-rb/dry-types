@@ -16,8 +16,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'params.nil | params.int' do
-    subject(:type) { Dry::Types['params.nil'] | Dry::Types['params.int'] }
+  describe 'params.nil | params.integer' do
+    subject(:type) { Dry::Types['params.nil'] | Dry::Types['params.integer'] }
 
     it 'coerces empty string to nil' do
       expect(type['']).to be(nil)
@@ -147,8 +147,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'params.int' do
-    subject(:type) { Dry::Types['params.int'] }
+  describe 'params.integer' do
+    subject(:type) { Dry::Types['params.integer'] }
 
     it 'coerces to a integer' do
       expect(type['312']).to be(312)
@@ -231,7 +231,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'params.array' do
-    subject(:type) { Dry::Types['params.array'].of(Dry::Types['params.int']) }
+    subject(:type) { Dry::Types['params.array'].of(Dry::Types['params.integer']) }
 
     it 'returns coerced array' do
       arr = %w(1 2 3)
@@ -255,7 +255,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'params.hash' do
-    subject(:type) { Dry::Types['params.hash'].weak(age: Dry::Types['params.int']) }
+    subject(:type) { Dry::Types['params.hash'].weak(age: Dry::Types['params.integer']) }
 
     it 'returns coerced hash' do
       hash = { age: '21' }

@@ -1,4 +1,5 @@
 require 'dry/types/decorator'
+require 'dry/types/fn_container'
 
 module Dry
   module Types
@@ -10,6 +11,8 @@ module Dry
 
       # @return [Type]
       attr_reader :type
+
+      undef :constrained?
 
       # @param [Builder, Object] input
       # @param [Hash] options
@@ -39,6 +42,10 @@ module Dry
       # @return [String]
       def name
         type.name
+      end
+
+      def default?
+        type.default?
       end
 
       # @param [Object] input

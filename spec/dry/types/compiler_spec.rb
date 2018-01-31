@@ -29,7 +29,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a safe coercible hash' do
     ast = Dry::Types['hash'].permissive(
       email: Dry::Types['string'],
-      age: Dry::Types['params.int'],
+      age: Dry::Types['params.integer'],
       admin: Dry::Types['params.bool'],
       address: Dry::Types['hash'].permissive(
         city: Dry::Types['string'],
@@ -77,7 +77,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a coercible hash' do
     ast = Dry::Types['hash'].weak(
       email: Dry::Types['string'],
-      age: Dry::Types['params.nil'] | Dry::Types['params.int'],
+      age: Dry::Types['params.nil'] | Dry::Types['params.integer'],
       admin: Dry::Types['params.bool']
     ).to_ast
 
@@ -101,7 +101,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a coercible hash with symbolized keys' do
     ast = Dry::Types['hash'].symbolized(
       email: Dry::Types['string'],
-      age: Dry::Types['params.int'],
+      age: Dry::Types['params.integer'],
       admin: Dry::Types['params.bool']
     ).to_ast
 
@@ -119,20 +119,19 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a hash with empty schema' do
-
     ast = Dry::Types['hash'].schema([]).to_ast
 
     hash = compiler.(ast)
 
-    expect(hash['foo' => 'bar']).to eql({})
+    expect(hash[{}]).to eql({})
   end
 
   it 'builds an array' do
     ast = Dry::Types['array'].of(
       Dry::Types['hash'].symbolized(
         email: Dry::Types['string'],
-        age: Dry::Types['params.int'],
-        admin: Dry::Types['params.bool'],
+        age: Dry::Types['params.integer'],
+        admin: Dry::Types['params.bool']
       )
     ).to_ast
 
@@ -164,7 +163,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params array with member' do
-    ast = Dry::Types['params.array'].of(Dry::Types['coercible.int']).to_ast
+    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).to_ast
 
     arr = compiler.(ast)
 
@@ -175,7 +174,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a safe params hash' do
     ast = Dry::Types['params.hash'].symbolized(
         email: Dry::Types['string'],
-        age: Dry::Types['params.int'],
+        age: Dry::Types['params.integer'],
         admin: Dry::Types['params.bool'],
     ).to_ast
 
@@ -192,12 +191,12 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     )
   end
 
-  it 'builds an schema-less params.hash' do
+  it 'builds a schema-less form.hash' do
     ast = Dry::Types['params.hash'].schema([]).to_ast
 
     type = compiler.(ast)
 
-    expect(type[nil]).to eql({})
+    expect(type[nil]).to eql(nil)
     expect(type[{}]).to eql({})
   end
 
@@ -294,5 +293,17 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.fn).to be(fn)
     expect(type.primitive).to be(String)
     expect(type.meta).to eql(foo: :bar)
+  end
+
+  it 'builds a enum' do
+    enum = Dry::Types['strict.integer'].enum(1, 2, 3).meta(color: :red)
+
+    ast = enum.to_ast
+
+    type = compiler.(ast)
+
+    expect(type).to eql(enum)
+    expect(type.valid?(1)).to be(true)
+    expect(type.valid?(4)).to be(false)
   end
 end

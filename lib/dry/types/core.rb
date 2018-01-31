@@ -4,7 +4,7 @@ module Dry
   module Types
     COERCIBLE = {
       string: String,
-      int: Integer,
+      integer: Integer,
       float: Float,
       decimal: BigDecimal,
       array: ::Array,

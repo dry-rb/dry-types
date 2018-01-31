@@ -34,6 +34,11 @@ module Dry
       # Build a type which values are instances of a given class
       # Values are checked using `is_a?` call
       #
+      # @example
+      #   Types::Error = Types.Instance(StandardError)
+      #   Types::Error = Types.Strict(StandardError)
+      #   Types.Strict(Integer) == Types::Strict::Int # => true
+      #
       # @param [Class,Module] klass Class or module
       #
       # @return [Dry::Types::Type]
@@ -41,6 +46,7 @@ module Dry
       def Instance(klass)
         Definition.new(klass).constrained(type: klass)
       end
+      alias_method :Strict, :Instance
 
       # Build a type with a single value
       # The equality check done with `eql?`

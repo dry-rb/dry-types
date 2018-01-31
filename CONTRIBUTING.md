@@ -6,11 +6,11 @@ If you found a bug, report an issue and describe what's the expected behavior ve
 
 ## Reporting feature requests
 
-Report a feature request **only after discussing it first on [discuss.dry-rb.org](https://discuss.dry-rb.org)** where it was accepted. Please provide a concise description of the feature, don't link to a discussion thread, and instead summarize what was discussed.
+Report a feature request **only after discussing it first on [discourse.dry-rb.org](https://discourse.dry-rb.org)** where it was accepted. Please provide a concise description of the feature, don't link to a discussion thread, and instead summarize what was discussed.
 
 ## Reporting questions, support requests, ideas, concerns etc.
 
-**PLEASE DON'T** - use [discuss.dry-rb.org](http://discuss.dry-rb.org) instead.
+**PLEASE DON'T** - use [discourse.dry-rb.org](https://discourse.dry-rb.org) instead.
 
 # Pull Request Guidelines
 
@@ -26,4 +26,4 @@ Other requirements:
 
 # Asking for help
 
-If these guidelines aren't helpful, and you're stuck, please post a message on [discuss.dry-rb.org](https://discuss.dry-rb.org).
+If these guidelines aren't helpful, and you're stuck, please post a message on [discourse.dry-rb.org](https://discourse.dry-rb.org).

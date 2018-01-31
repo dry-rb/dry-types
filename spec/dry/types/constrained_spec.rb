@@ -125,4 +125,21 @@ RSpec.describe Dry::Types::Constrained do
       expect { type[%w(foo bar)] }.to raise_error(Dry::Types::ConstraintError)
     end
   end
+
+  context 'with an array on a constrained type' do
+    subject(:type) do
+      Dry::Types['strict.array']
+        .of(Dry::Types['coercible.string'].constrained(min_size: 3))
+    end
+
+    it_behaves_like Dry::Types::Definition
+
+    it 'raises when a given constraint is violated' do
+      expect { type[%w(a b)] }.to raise_error(Dry::Types::ConstraintError)
+    end
+
+    it 'coerces values' do
+      expect(type.try(%i(foo aa)).input).to eql(%w(foo aa))
+    end
+  end
 end

@@ -30,8 +30,8 @@ module Dry
       (self['params.true'] | self['params.false']).safe
     end
 
-    register('params.int') do
-      self['int'].constructor(Coercions::Params.method(:to_int))
+    register('params.integer') do
+      self['integer'].constructor(Coercions::Params.method(:to_int))
     end
 
     register('params.float') do

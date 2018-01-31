@@ -2,33 +2,35 @@ require 'bigdecimal'
 require 'date'
 require 'set'
 
-require 'inflecto'
 require 'concurrent'
 
 require 'dry-container'
 require 'dry-equalizer'
 require 'dry/core/extensions'
 require 'dry/core/constants'
+require 'dry/core/class_attributes'
 
 require 'dry/types/version'
 require 'dry/types/container'
+require 'dry/types/inflector'
 require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
-require 'dry/types/fn_container'
 require 'dry/types/builder_methods'
 
 require 'dry/types/errors'
 
 module Dry
   module Types
-    extend Dry::Configurable
     extend Dry::Core::Extensions
+    extend Dry::Core::ClassAttributes
     include Dry::Core::Constants
 
     # @!attribute [r] namespace
     #   @return [Container{String => Definition}]
-    setting :namespace, self
+    defines :namespace
+
+    namespace self
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
@@ -46,7 +48,7 @@ module Dry
        ' do `include Dry::Types.module` in places where you want to have access'\
        ' to built-in types'
 
-      define_constants(config.namespace, type_keys)
+      define_constants(self.namespace, type_keys)
     end
 
     # @return [Container{String => Definition}]
@@ -108,7 +110,7 @@ module Dry
     def self.define_constants(namespace, identifiers)
       names = identifiers.map do |id|
         parts = id.split('.')
-        [Inflecto.camelize(parts.pop), parts.map(&Inflecto.method(:camelize))]
+        [Inflector.camelize(parts.pop), parts.map(&Inflector.method(:camelize))]
       end
 
       names.map do |(klass, parts)|
@@ -123,7 +125,7 @@ module Dry
     # @param [#to_s] klass
     # @return [String]
     def self.identifier(klass)
-      Inflecto.underscore(klass).tr('/', '.')
+      Inflector.underscore(klass).tr('/', '.')
     end
 
     # @return [Concurrent::Map]
@@ -141,12 +143,12 @@ module Dry
 
     # @api private
     def self.const_missing(const)
-      underscored = Inflecto.underscore(const)
+      underscored = Inflector.underscore(const)
 
       if type_keys.any? { |key| key.split('.')[0] == underscored }
         raise NameError,
               'dry-types does not define constants for default types. '\
-              'You can access the predefined types with [], e.g. Dry::Types["strict.int"] '\
+              'You can access the predefined types with [], e.g. Dry::Types["strict.integer"] '\
               'or generate a module with types using Dry::Types.module'
       else
         super
