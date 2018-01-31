@@ -48,7 +48,7 @@ RSpec.describe Dry::Types::Hash do
       {
         name: "coercible.string",
         age: "strict.integer",
-        active: "form.bool",
+        active: "params.bool",
         phone: Dry::Types['phone']
       }
     end
@@ -220,7 +220,7 @@ RSpec.describe Dry::Types::Hash do
         {
           name: "coercible.string",
           age: "strict.integer",
-          active: "form.bool",
+          active: "params.bool",
           phone: Dry::Types['phone'].meta(omittable: true)
         }
       end

@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Definition do
-  describe 'form.nil' do
-    subject(:type) { Dry::Types['form.nil'] }
+  describe 'params.nil' do
+    subject(:type) { Dry::Types['params.nil'] }
 
     it 'coerces empty string to nil' do
       expect(type['']).to be(nil)
@@ -16,8 +16,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.nil | form.integer' do
-    subject(:type) { Dry::Types['form.nil'] | Dry::Types['form.integer'] }
+  describe 'params.nil | params.integer' do
+    subject(:type) { Dry::Types['params.nil'] | Dry::Types['params.integer'] }
 
     it 'coerces empty string to nil' do
       expect(type['']).to be(nil)
@@ -28,8 +28,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.date' do
-    subject(:type) { Dry::Types['form.date'] }
+  describe 'params.date' do
+    subject(:type) { Dry::Types['params.date'] }
 
     it 'coerces to a date' do
       expect([
@@ -50,8 +50,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.date_time' do
-    subject(:type) { Dry::Types['form.date_time'] }
+  describe 'params.date_time' do
+    subject(:type) { Dry::Types['params.date_time'] }
 
     it 'coerces to a date time' do
       expect(type['2015-11-26 12:00:00']).to eql(DateTime.new(2015, 11, 26, 12))
@@ -67,8 +67,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.time' do
-    subject(:type) { Dry::Types['form.time'] }
+  describe 'params.time' do
+    subject(:type) { Dry::Types['params.time'] }
 
     it 'coerces to a time' do
       expect(type['2015-11-26 12:00:00']).to eql(Time.new(2015, 11, 26, 12))
@@ -84,17 +84,17 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.bool' do
-    subject(:type) { Dry::Types['form.bool'] }
+  describe 'params.bool' do
+    subject(:type) { Dry::Types['params.bool'] }
 
     it 'coerces to true' do
-      (Dry::Types::Coercions::Form::TRUE_VALUES + [1]).each do |value|
+      (Dry::Types::Coercions::Params::TRUE_VALUES + [1]).each do |value|
         expect(type[value]).to be(true)
       end
     end
 
     it 'coerces to false' do
-      (Dry::Types::Coercions::Form::FALSE_VALUES + [0]).each do |value|
+      (Dry::Types::Coercions::Params::FALSE_VALUES + [0]).each do |value|
         expect(type[value]).to be(false)
       end
     end
@@ -109,8 +109,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.true' do
-    subject(:type) { Dry::Types['form.true'] }
+  describe 'params.true' do
+    subject(:type) { Dry::Types['params.true'] }
 
     it 'coerces to true' do
       %w[1 on  t true  y yes].each do |value|
@@ -128,8 +128,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.false' do
-    subject(:type) { Dry::Types['form.false'] }
+  describe 'params.false' do
+    subject(:type) { Dry::Types['params.false'] }
 
     it 'coerces to false' do
       %w[0 off f false n no].each do |value|
@@ -147,8 +147,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.integer' do
-    subject(:type) { Dry::Types['form.integer'] }
+  describe 'params.integer' do
+    subject(:type) { Dry::Types['params.integer'] }
 
     it 'coerces to a integer' do
       expect(type['312']).to be(312)
@@ -171,8 +171,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.float' do
-    subject(:type) { Dry::Types['form.float'] }
+  describe 'params.float' do
+    subject(:type) { Dry::Types['params.float'] }
 
     it 'coerces to a float' do
       expect(type['3.12']).to eql(3.12)
@@ -199,8 +199,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.decimal' do
-    subject(:type) { Dry::Types['form.decimal'] }
+  describe 'params.decimal' do
+    subject(:type) { Dry::Types['params.decimal'] }
 
     it 'coerces to a decimal' do
       expect(type['3.12']).to eql(BigDecimal('3.12'))
@@ -230,8 +230,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.array' do
-    subject(:type) { Dry::Types['form.array'].of(Dry::Types['form.integer']) }
+  describe 'params.array' do
+    subject(:type) { Dry::Types['params.array'].of(Dry::Types['params.integer']) }
 
     it 'returns coerced array' do
       arr = %w(1 2 3)
@@ -254,8 +254,8 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
-  describe 'form.hash' do
-    subject(:type) { Dry::Types['form.hash'].weak(age: Dry::Types['form.integer']) }
+  describe 'params.hash' do
+    subject(:type) { Dry::Types['params.hash'].weak(age: Dry::Types['params.integer']) }
 
     it 'returns coerced hash' do
       hash = { age: '21' }

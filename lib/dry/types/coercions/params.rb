@@ -4,7 +4,7 @@ require 'bigdecimal/util'
 module Dry
   module Types
     module Coercions
-      module Form
+      module Params
         TRUE_VALUES = %w[1 on On ON t true True TRUE T y yes Yes YES Y].freeze
         FALSE_VALUES = %w[0 off Off OFF f false False FALSE F n no No NO N].freeze
         BOOLEAN_MAP = ::Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze

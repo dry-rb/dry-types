@@ -7,8 +7,8 @@ module SchemaBench
   def self.hash_schema(type)
     Dry::Types['hash'].public_send(type,
       email:   Dry::Types['string'],
-      age:     Dry::Types['form.integer'],
-      admin:   Dry::Types['form.bool'],
+      age:     Dry::Types['params.integer'],
+      admin:   Dry::Types['params.bool'],
       address: Dry::Types['hash'].public_send(type,
         city: Dry::Types['string'],
         street: Dry::Types['string']

@@ -29,8 +29,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a safe coercible hash' do
     ast = Dry::Types['hash'].permissive(
       email: Dry::Types['string'],
-      age: Dry::Types['form.integer'],
-      admin: Dry::Types['form.bool'],
+      age: Dry::Types['params.integer'],
+      admin: Dry::Types['params.bool'],
       address: Dry::Types['hash'].permissive(
         city: Dry::Types['string'],
         street: Dry::Types['string']
@@ -77,8 +77,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a coercible hash' do
     ast = Dry::Types['hash'].weak(
       email: Dry::Types['string'],
-      age: Dry::Types['form.nil'] | Dry::Types['form.integer'],
-      admin: Dry::Types['form.bool']
+      age: Dry::Types['params.nil'] | Dry::Types['params.integer'],
+      admin: Dry::Types['params.bool']
     ).to_ast
 
     hash = compiler.(ast)
@@ -101,8 +101,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'builds a coercible hash with symbolized keys' do
     ast = Dry::Types['hash'].symbolized(
       email: Dry::Types['string'],
-      age: Dry::Types['form.integer'],
-      admin: Dry::Types['form.bool']
+      age: Dry::Types['params.integer'],
+      admin: Dry::Types['params.bool']
     ).to_ast
 
     hash = compiler.(ast)
@@ -130,8 +130,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = Dry::Types['array'].of(
       Dry::Types['hash'].symbolized(
         email: Dry::Types['string'],
-        age: Dry::Types['form.integer'],
-        admin: Dry::Types['form.bool'],
+        age: Dry::Types['params.integer'],
+        admin: Dry::Types['params.bool']
       )
     ).to_ast
 
@@ -152,28 +152,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ])
   end
 
-  it 'builds an array with a struct member' do
-    struct = Class.new do
-      extend Dry::Types::Type
-
-      def self.call(obj)
-        obj
-      end
-    end
-
-    ast = Dry::Types['array'].of(struct).to_ast
-
-    arr = compiler.(ast)
-
-    expect(arr).to be_a(Dry::Types::Array)
-
-    obj = struct.new
-
-    expect(arr[[obj]]).to eql([obj])
-  end
-
-  it 'builds a safe form array' do
-    ast = Dry::Types['form.array'].to_ast
+  it 'builds a safe params array' do
+    ast = Dry::Types['params.array'].to_ast
 
     arr = compiler.(ast)
 
@@ -182,8 +162,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(arr[%w(a b c)]).to eql(%w(a b c))
   end
 
-  it 'builds a safe form array with member' do
-    ast = Dry::Types['form.array'].of(Dry::Types['coercible.integer']).to_ast
+  it 'builds a safe params array with member' do
+    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).to_ast
 
     arr = compiler.(ast)
 
@@ -191,11 +171,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(arr[%w(1 2 3)]).to eql([1, 2, 3])
   end
 
-  it 'builds a safe form hash' do
-    ast = Dry::Types['form.hash'].symbolized(
-      email: Dry::Types['string'],
-      age: Dry::Types['form.integer'],
-      admin: Dry::Types['form.bool'],
+  it 'builds a safe params hash' do
+    ast = Dry::Types['params.hash'].symbolized(
+        email: Dry::Types['string'],
+        age: Dry::Types['params.integer'],
+        admin: Dry::Types['params.bool'],
     ).to_ast
 
     hash = compiler.(ast)
@@ -212,7 +192,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a schema-less form.hash' do
-    ast = Dry::Types['form.hash'].schema([]).to_ast
+    ast = Dry::Types['params.hash'].schema([]).to_ast
 
     type = compiler.(ast)
 
@@ -220,16 +200,16 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type[{}]).to eql({})
   end
 
-  it 'builds a form hash from a :form_hash node' do
-    ast = [:form_hash, [[], {}]]
+  it 'builds a params hash from a :params_hash node' do
+    ast = [:params_hash, [[], {}]]
 
     type = compiler.(ast)
 
-    expect(type.fn).to be(Dry::Types['form.hash'].fn)
+    expect(type.fn).to be(Dry::Types['params.hash'].fn)
   end
 
-  it 'builds a form array from a :form_array node' do
-    ast = [:form_array, [[:definition, [String, {}]], {}]]
+  it 'builds a params array from a :params_array node' do
+    ast = [:params_array, [[:definition, [String, {}]], {}]]
 
     array = compiler.(ast)
 
