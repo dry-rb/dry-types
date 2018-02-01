@@ -123,6 +123,17 @@ module Dry
       def to_ast(meta: true)
         [:sum, [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
       end
+
+      # @param [Hash] options
+      # @return [Constrained,Sum]
+      # @see Builder#constrained
+      def constrained(options)
+        if optional?
+          right.constrained(options).optional
+        else
+          super
+        end
+      end
     end
   end
 end

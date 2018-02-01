@@ -142,4 +142,16 @@ RSpec.describe Dry::Types::Constrained do
       expect(type.try(%i(foo aa)).input).to eql(%w(foo aa))
     end
   end
+
+  context 'defined on optional' do
+    subject(:type) do
+      Dry::Types['strict.string'].optional.constrained(min_size: 3)
+    end
+
+    it 'gets applied to the underlying type' do
+      expect(type['foo']).to eql('foo')
+      expect { type['fo'] }.to raise_error(Dry::Types::ConstraintError)
+      expect(type[nil]).to be_nil
+    end
+  end
 end
