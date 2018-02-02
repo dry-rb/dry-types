@@ -189,7 +189,7 @@ module Dry
               type.call(value)
             rescue ConstraintError => e
               raise SchemaError.new(key, value, e.result)
-            rescue TypeError => e
+            rescue TypeError, ArgumentError => e
               raise SchemaError.new(key, value, e.message)
             end
           end

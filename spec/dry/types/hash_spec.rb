@@ -182,6 +182,16 @@ RSpec.describe Dry::Types::Hash do
            )
     end
 
+    it 'provides a key for argument errors' do
+      expect {
+        hash.schema(age: 'coercible.integer').call(name: :Jane, age: 'oops', active: true, phone: [])
+      }.to raise_error(
+             Dry::Types::SchemaError,
+             "\"oops\" (String) has invalid type for :age violates constraints"\
+             " (invalid value for Integer(): \"oops\" failed)"
+           )
+    end
+
     it 'ignores unexpected keys' do
       expect(subject.(**valid_input, not: :expect)).not_to have_key(:not)
     end
