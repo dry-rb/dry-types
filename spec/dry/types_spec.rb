@@ -20,36 +20,6 @@ RSpec.describe Dry::Types do
     end
   end
 
-  describe '.register_class' do
-    before do
-      module Test
-        User = Struct.new(:name) do
-          def self.build(name)
-            new(name.upcase)
-          end
-        end
-      end
-    end
-
-    it 'registers a class and uses `.new` method as default constructor' do
-      Dry::Types.register_class(Test::User)
-
-      expect(Dry::Types['test.user'].primitive).to be(Test::User)
-
-      user = Dry::Types['test.user']['jane']
-      expect(user.name).to eql('jane')
-    end
-
-    it 'registers a class and uses a custom constructor method' do
-      Dry::Types.register_class(Test::User, :build)
-
-      expect(Dry::Types['test.user'].primitive).to be(Test::User)
-
-      user = Dry::Types['test.user']['jane']
-      expect(user.name).to eql('JANE')
-    end
-  end
-
   describe '.[]' do
     before do
       module Test

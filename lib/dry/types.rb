@@ -65,17 +65,9 @@ module Dry
     # @param [Type] type
     # @param [#call,nil] block
     # @return [Container{String => Definition}]
+    # @api private
     def self.register(name, type = nil, &block)
       container.register(name, type || block.call)
-    end
-
-    # Registers given +klass+ in {#container} using +meth+ constructor
-    # @param [Class] klass
-    # @param [Symbol] meth
-    # @return [Container{String => Definition}]
-    def self.register_class(klass, meth = :new)
-      type = Definition.new(klass).constructor(klass.method(meth))
-      container.register(identifier(klass), type)
     end
 
     # @param [String,Class] name
