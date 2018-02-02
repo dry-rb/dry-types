@@ -43,6 +43,20 @@ RSpec.describe Dry::Types::Array do
           subject(:type) { array }
         end
       end
+
+      context 'undefined' do
+        subject(:array) {
+          Dry::Types['strict.array'].of(
+            Dry::Types['strict.string'].constructor { |value|
+              value == '' ? Dry::Types::Undefined : value
+            }
+          )
+        }
+
+        it 'filters out undefined values' do
+          expect(array[['', 'foo']]).to eql(['foo'])
+        end
+      end
     end
   end
 

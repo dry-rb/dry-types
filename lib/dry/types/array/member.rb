@@ -34,7 +34,7 @@ module Dry
         # @return [Result,Logic::Result]
         def try(input, &block)
           if input.is_a?(::Array)
-            result = call(input, :try)
+            result = call(input, :try).reject { |r| r.input.equal?(Undefined) }
             output = result.map(&:input)
 
             if result.all?(&:success?)
