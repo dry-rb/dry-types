@@ -1,44 +1,92 @@
 RSpec.describe Dry::Types::Hash do
-  subject(:hash) do
-    Dry::Types['hash'].schema(hash_schema)
+  subject(:type) { Dry::Types['hash'] }
+
+  it_behaves_like Dry::Types::Definition
+  it_behaves_like 'Dry::Types::Definition#meta'
+
+  describe '#call' do
+    it 'accepts any hash input' do
+      expect(type.({})).to eql({})
+      expect(type.(name: 'Jane')).to eql(name: 'Jane')
+    end
   end
 
-  let(:hash_schema) do
-    {
-      name: "coercible.string",
-      age: "strict.int",
-      active: "form.bool",
-      phone: Dry::Types['phone']
-    }
+  describe '#with_type_transform' do
+    it 'adds a type transformation for schemas' do
+      optional_keys = type.with_type_transform { |t| t.meta(omittable: true) }
+      schema = optional_keys.schema(name: "strict.string", age: "strict.integer")
+      expect(schema.(name: 'Jane')).to eql(name: 'Jane')
+    end
+
+    it 'accepts a proc' do
+      fn = -> t { t.meta(omittable: true) }
+      expect(subject.with_type_transform(fn)). to eql(subject.with_type_transform(&fn))
+    end
   end
 
-  let(:phone) { Dry::Types['phone'].primitive }
+  describe 'hash schema' do
+    let(:phone_struct) do
+      Struct.new(:prefix, :number) do
+        def self.name
+          'Phone'
+        end
 
-  before do
-    phone = Struct.new(:prefix, :number) do
-      def self.name
-        'Phone'
+        def self.to_ary
+          [prefix, number]
+        end
       end
     end
 
-    Dry::Types.register(
-      "phone",
-      Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
-    )
-  end
+    before do
+      Dry::Types.register(
+        "phone",
+        Dry::Types::Definition.new(phone_struct).constructor(-> args { phone_struct.new(*args) })
+      )
+    end
 
-  shared_examples 'hash schema behavior' do
-    let(:type) { Dry::Types['hash'] }
+    let(:hash_schema) do
+      {
+        name: "coercible.string",
+        age: "strict.integer",
+        active: "params.bool",
+        phone: Dry::Types['phone']
+      }
+    end
 
     let(:primitive) do
       type.meta(my: :metadata)
     end
 
-    it_behaves_like Dry::Types::Definition
-    it_behaves_like 'Dry::Types::Definition#meta'
+    subject(:hash) { primitive.schema(hash_schema) }
+
+    let(:valid_input) { { name: 'John', age: 23, active: true, phone: phone_struct.new(1, 23) } }
+
+    let(:phone) { Dry::Types['phone'].primitive }
+
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { Dry::Types['hash'].schema(hash_schema) }
+    end
+
+    it_behaves_like 'Dry::Types::Definition#meta' do
+      let(:type) { Dry::Types['hash'].schema(hash_schema) }
+    end
+
+    context 'members with default values' do
+      let(:hash) {
+        primitive.schema(
+          **hash_schema,
+          age: Dry::Types["strict.integer"].default(21)
+        )
+      }
+
+      it 'resolves missing keys with default values' do
+        params = { name: 'Jane', active: true, phone: [] }
+        expect(hash[params][:age]).to eql(21)
+      end
+    end
 
     it 'preserves metadata' do
-      expect(hash.meta).to eql(my: :metadata)
+      expect(hash.meta[:my]).to eql(:metadata)
     end
 
     it 'has a Hash primitive' do
@@ -56,10 +104,11 @@ RSpec.describe Dry::Types::Hash do
         phone: ['+48', '123-456-789']
       )
 
-      expect(user_hash).to eql(
-        name: 'Jane', age: 21, active: true,
-        phone: phone.new('+48', '123-456-789')
-      )
+      expect(user_hash).
+        to eql(
+             name: 'Jane', age: 21, active: true,
+             phone: phone.new('+48', '123-456-789')
+           )
     end
 
     it 'applies member types' do
@@ -90,206 +139,113 @@ RSpec.describe Dry::Types::Hash do
         expect(failure.error[:age].success?).to be(false)
       end
     end
-  end
 
-  shared_examples 'strict schema behavior for missing keys' do
+    describe '#valid?' do
+      it 'returns boolean' do
+        expect(hash.valid?(name: 'John', age: 23, active: 1, phone: 1)).to eql(true)
+        expect(hash.valid?(name: 'John', age: '23', active: 1, phone: 1)).to eql(false)
+      end
+    end
+
+    describe '#===' do
+      it 'returns boolean' do
+        expect(hash.===(name: 'John', age: 23, active: 1, phone: 1)).to eql(true)
+        expect(hash.===(name: 'John', age: '23', active: 1, phone: 1)).to eql(false)
+      end
+    end
+
     it 'raises MissingKeyError if input is missing a key' do
       expect {
         hash.call(name: :Jane, active: true, phone: ['+48', '123-456-789'])
       }.to raise_error(
-        Dry::Types::MissingKeyError, /:age is missing in Hash input/
-      )
+             Dry::Types::MissingKeyError, /:age is missing in Hash input/
+           )
     end
-  end
 
-  shared_examples 'weak schema behavior for missing keys' do
-    it 'allows omitting keys' do
-      expect(hash[{}]).to eql({})
-    end
-  end
-
-  shared_examples 'weak typing behavior' do
-    it 'preserves successful coercions and ignores failed coercions' do
-      expect(hash.call(name: :Jane, age: 'oops', active: true, phone: []))
-        .to eql(name: 'Jane', age: 'oops', active: true, phone: phone.new)
-    end
-  end
-
-  shared_examples 'strict typing behavior' do
     it 'fails if any coercions are unsuccessful' do
-      expect { hash.call(name: :Jane, age: 'oops', active: true, phone: []) }
-        .to raise_error(Dry::Types::SchemaError, '"oops" (String) has invalid type for :age violates constraints (type?(Integer, "oops") failed)')
+      expect {
+        hash.call(name: :Jane, age: 'oops', active: true, phone: [])
+      }.to raise_error(
+              Dry::Types::SchemaError,
+              '"oops" (String) has invalid type for :age violates '\
+              'constraints (type?(Integer, "oops") failed)'
+            )
     end
 
-    context 'when using coercible types' do
+    it 'provides a key for type errors' do
+      expect {
+        hash.schema(age: 'coercible.integer').call(name: :Jane, age: nil, active: true, phone: [])
+      }.to raise_error(
+             Dry::Types::SchemaError,
+             "nil (NilClass) has invalid type for :age violates constraints"\
+             " (can't convert nil into Integer failed)"
+           )
+    end
+
+    it 'ignores unexpected keys' do
+      expect(subject.(**valid_input, not: :expect)).not_to have_key(:not)
+    end
+
+    describe '#strict' do
+      subject { hash.strict }
+
+      it 'makes the schema strict' do
+        expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
+        unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
+
+        expect {
+          subject.(expected_input.merge(unexpected_input))
+        }.to raise_error(Dry::Types::UnknownKeysError)
+               .with_message('unexpected keys [:gender, :email] in Hash input')
+      end
+    end
+
+    describe '#strict?' do
+      example do
+        expect(subject).not_to be_strict
+        expect(subject.strict).to be_strict
+      end
+    end
+
+    describe '#with_key_transform' do
+      it 'adds a key transformation' do
+        schema = subject.with_key_transform { |k| k.downcase.to_sym }
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23])).
+          to eql(valid_input)
+      end
+
+      it 'accepts a proc' do
+        schema = subject.with_key_transform(-> k { k.downcase.to_sym })
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23])).
+          to eql(valid_input)
+      end
+
+      it 'raises an error on missing fn' do
+        expect { subject.with_key_transform }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe 'omittable keys' do
       let(:hash_schema) do
         {
           name: "coercible.string",
-          age: "coercible.int",
-          active: "form.bool",
-          phone: Dry::Types['phone']
+          age: "strict.integer",
+          active: "params.bool",
+          phone: Dry::Types['phone'].meta(omittable: true)
         }
       end
 
-      it 'raises a SchemaError when coercion fails' do
-        expect { hash.call(name: :John, active: '1', age: nil, phone: []) }
-          .to raise_error(Dry::Types::SchemaError, 'nil (NilClass) has invalid type for :age violates constraints (can\'t convert nil into Integer failed)')
+      it 'allows to skip certain keys' do
+        expect(subject.(name: :Jane, age: 21, active: '1')).
+          to eql(name: 'Jane', age: 21, active: true)
       end
     end
-  end
 
-  shared_examples 'sets default value behavior when keys are omitted' do
-    context 'when default value for :age is 21' do
-      let(:hash_schema) do
-        {
-          name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
-          active: "form.bool",
-          phone: Dry::Types['phone']
-        }
-      end
-
-      it 'fills in default value when key is omitted' do
-        user = hash.call(name: :John, active: '1', phone: [])
-        expect(user[:age]).to be(21)
+    describe '#schema' do
+      it 'extends existing schema' do
+        extended = subject.schema(city: "coercible.string")
+        expect(extended.(**valid_input, city: :London)).to include(city: 'London')
       end
     end
-  end
-
-  shared_examples 'strict schema behavior for unexpected keys' do
-    it 'rejects unexpected keys' do
-      expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
-      unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
-
-      expect { hash.call(expected_input.merge(unexpected_input)) }
-        .to raise_error(Dry::Types::UnknownKeysError)
-        .with_message('unexpected keys [:gender, :email] in Hash input')
-    end
-  end
-
-  shared_examples 'permissive schema behavior for nil values on fields with defaults' do
-    context 'when default value for :age is 21' do
-      let(:hash_schema) do
-        {
-          name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
-          active: "form.bool",
-          phone: Dry::Types['phone']
-        }
-      end
-
-      it 'fills in default value when value is nil' do
-        user = hash.call(name: :John, active: '1', age: nil, phone: [])
-        expect(user[:age]).to be(21)
-      end
-    end
-  end
-
-  shared_examples 'strict schema behavior for nil values on fields with defaults' do
-    context 'when default value for :age is 21' do
-      let(:hash_schema) do
-        {
-          name: "coercible.string",
-          age: Dry::Types["strict.int"].default(21),
-          active: "form.bool",
-          phone: Dry::Types['phone']
-        }
-      end
-
-      it 'fills in default value when value is nil' do
-        expect { hash.call(name: :John, active: '1', age: nil, phone: []) }
-          .to raise_error(Dry::Types::SchemaError, 'nil (NilClass) has invalid type for :age violates constraints (type?(Integer, nil) failed)')
-      end
-    end
-  end
-
-  describe '#schema' do
-    let(:hash) { primitive.schema(hash_schema) }
-
-    include_examples 'hash schema behavior'
-    include_examples 'weak schema behavior for missing keys'
-    include_examples 'sets default value behavior when keys are omitted'
-    include_examples 'permissive schema behavior for nil values on fields with defaults'
-    include_examples 'strict typing behavior'
-  end
-
-  describe '#weak' do
-    let(:hash) { primitive.weak(hash_schema) }
-
-    include_examples 'hash schema behavior'
-    include_examples 'weak schema behavior for missing keys'
-    include_examples 'weak typing behavior'
-    include_examples 'permissive schema behavior for nil values on fields with defaults'
-    include_examples 'sets default value behavior when keys are omitted'
-
-    it 'yields a special failure if #try is given a non-hash' do
-      invalid_input = double(:not_a_hash)
-
-      expect { |rspec_probe| hash.try(invalid_input, &rspec_probe) }
-        .to yield_with_args(instance_of(Dry::Types::Result::Failure))
-
-      hash.try(invalid_input) do |failure|
-        expect(failure.error).to eql('#[Double :not_a_hash] must be a hash')
-      end
-    end
-  end
-
-  describe '#symbolized' do
-    let(:hash) { primitive.symbolized(hash_schema) }
-
-    include_examples 'hash schema behavior'
-    include_examples 'weak schema behavior for missing keys'
-    include_examples 'weak typing behavior'
-    include_examples 'permissive schema behavior for nil values on fields with defaults'
-    include_examples 'sets default value behavior when keys are omitted'
-  end
-
-  describe '#permissive' do
-    let(:hash) { primitive.permissive(hash_schema) }
-
-    include_examples 'hash schema behavior'
-    include_examples 'strict schema behavior for missing keys'
-    include_examples 'strict typing behavior'
-    include_examples 'permissive schema behavior for nil values on fields with defaults'
-  end
-
-  describe '#strict' do
-    let(:hash) { primitive.strict(hash_schema) }
-
-    include_examples 'hash schema behavior'
-    include_examples 'strict schema behavior for missing keys'
-    include_examples 'strict typing behavior'
-    include_examples 'strict schema behavior for unexpected keys'
-    include_examples 'strict schema behavior for nil values on fields with defaults'
-
-    context 'with a sum' do
-      let(:hash) { h1 | h2 }
-
-      let(:h1) { Dry::Types['strict.hash'].strict(name: Dry::Types['strict.string']) }
-      let(:h2) { Dry::Types['strict.hash'].strict(age: Dry::Types['strict.int']) }
-
-      it 'returns input when it is valid for the left side' do
-        expect(hash[name: 'Jane']).to eql(name: 'Jane')
-      end
-
-      it 'returns input when it is valid for the right side' do
-        expect(hash[age: 21]).to eql(age: 21)
-      end
-
-      it 'raises error when it is invalid for both sides' do
-        expect { hash[oops: 'boom!'] }.to raise_error(Dry::Types::ConstraintError, /oops/)
-      end
-    end
-  end
-
-  describe '#strict_with_defaults' do
-    let(:hash) { primitive.strict_with_defaults(hash_schema) }
-
-    include_examples 'hash schema behavior'
-    include_examples 'strict schema behavior for missing keys'
-    include_examples 'strict typing behavior'
-    include_examples 'strict schema behavior for unexpected keys'
-    include_examples 'sets default value behavior when keys are omitted'
-    include_examples 'strict schema behavior for nil values on fields with defaults'
   end
 end

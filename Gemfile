@@ -10,7 +10,7 @@ group :test do
 end
 
 group :tools do
-  gem 'byebug', platform: :mri
+  gem 'pry-byebug', platform: :mri
   gem 'mutant'
   gem 'mutant-rspec'
 end
@@ -20,6 +20,7 @@ group :benchmarks do
   gem 'virtus'
   gem 'fast_attributes'
   gem 'attrio'
+  gem 'dry-struct'
 end
 
 gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic'

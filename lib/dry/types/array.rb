@@ -11,14 +11,12 @@ module Dry
       def of(type)
         member =
           case type
-          when String, Class then Types[type]
+          when String then Types[type]
           else type
           end
 
         Array::Member.new(primitive, **options, member: member)
       end
-
-      deprecate :member, :of
     end
   end
 end

@@ -3,7 +3,7 @@ RSpec.describe Dry::Types::Hash, ':symbolized constructor' do
     Dry::Types['hash'].symbolized(
       name: 'string',
       email: email,
-      age: 'int',
+      age: 'integer',
       password: password
     )
   end

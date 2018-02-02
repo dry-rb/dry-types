@@ -12,19 +12,32 @@ module Dry
 
       # @param [Dry::Monads::Maybe, Object] input
       # @return [Dry::Monads::Maybe]
-      def call(input)
-        input.is_a?(Dry::Monads::Maybe) ? input : Maybe(type[input])
+      def call(input = Undefined)
+        case input
+        when Dry::Monads::Maybe
+          input
+        when Undefined
+          None()
+        else
+          Maybe(type[input])
+        end
       end
       alias_method :[], :call
 
       # @param [Object] input
       # @return [Result::Success]
-      def try(input)
-        Result::Success.new(Maybe(type[input]))
+      def try(input = Undefined)
+        res = if input.equal?(Undefined)
+                None()
+              else
+                Maybe(type[input])
+              end
+
+        Result::Success.new(res)
       end
 
       # @return [true]
-      def maybe?
+      def default?
         true
       end
 
@@ -44,29 +57,6 @@ module Dry
       # @return [Maybe]
       def maybe
         Maybe.new(Types['strict.nil'] | self)
-      end
-    end
-
-    class Hash
-      module MaybeTypes
-        # @param [Hash] result
-        # @param [Symbol] key
-        # @param [Definition] type
-        def resolve_missing_value(result, key, type)
-          if type.respond_to?(:maybe?) && type.maybe?
-            result[key] = type[nil]
-          else
-            super
-          end
-        end
-      end
-
-      class StrictWithDefaults < Strict
-        include MaybeTypes
-      end
-
-      class Schema < Hash
-        include MaybeTypes
       end
     end
 

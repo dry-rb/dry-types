@@ -33,11 +33,11 @@ RSpec.describe Dry::Types::Constrained do
     end
 
     it 'return boolean' do
-      expect(type.===('hello')).to eq true
-      expect(type.===('no')).to eq false
+      expect(type.===('hello')).to eql(true)
+      expect(type.===('no')).to eql(false)
     end
 
-    context 'In case statement' do
+    context 'in case statement' do
       let(:value) do
         case 'awesome'
           when type then 'accepted'
@@ -45,8 +45,8 @@ RSpec.describe Dry::Types::Constrained do
         end
       end
 
-      it 'will return correct value' do
-        expect(value).to eq 'accepted'
+      it 'returns correct value' do
+        expect(value).to eql('accepted')
       end
     end
   end
@@ -123,6 +123,35 @@ RSpec.describe Dry::Types::Constrained do
 
     it 'raises when a given constraint is violated' do
       expect { type[%w(foo bar)] }.to raise_error(Dry::Types::ConstraintError)
+    end
+  end
+
+  context 'with an array on a constrained type' do
+    subject(:type) do
+      Dry::Types['strict.array']
+        .of(Dry::Types['coercible.string'].constrained(min_size: 3))
+    end
+
+    it_behaves_like Dry::Types::Definition
+
+    it 'raises when a given constraint is violated' do
+      expect { type[%w(a b)] }.to raise_error(Dry::Types::ConstraintError)
+    end
+
+    it 'coerces values' do
+      expect(type.try(%i(foo aa)).input).to eql(%w(foo aa))
+    end
+  end
+
+  context 'defined on optional' do
+    subject(:type) do
+      Dry::Types['strict.string'].optional.constrained(min_size: 3)
+    end
+
+    it 'gets applied to the underlying type' do
+      expect(type['foo']).to eql('foo')
+      expect { type['fo'] }.to raise_error(Dry::Types::ConstraintError)
+      expect(type[nil]).to be_nil
     end
   end
 end

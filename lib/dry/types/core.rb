@@ -4,7 +4,7 @@ module Dry
   module Types
     COERCIBLE = {
       string: String,
-      int: Integer,
+      integer: Integer,
       float: Float,
       decimal: BigDecimal,
       array: ::Array,
@@ -61,5 +61,5 @@ module Dry
 end
 
 require 'dry/types/coercions'
-require 'dry/types/form'
+require 'dry/types/params'
 require 'dry/types/json'

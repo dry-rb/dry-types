@@ -25,7 +25,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'with a sum' do
-    subject(:type) { Dry::Types['string'] | Dry::Types['int'] }
+    subject(:type) { Dry::Types['string'] | Dry::Types['integer'] }
 
     specify do
       expect(type.to_ast).
@@ -43,7 +43,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify 'without meta' do
       type_with_meta = (
-        Dry::Types['string'].meta(type: :str) | Dry::Types['int'].meta(type: :int)
+        Dry::Types['string'].meta(type: :str) | Dry::Types['integer'].meta(type: :int)
       ).meta(type: :sum)
 
       expect(type_with_meta.to_ast(meta: false)).to eql(type.to_ast)
@@ -51,7 +51,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'with a constrained type' do
-    subject(:type) { Dry::Types['strict.int'] }
+    subject(:type) { Dry::Types['strict.integer'] }
 
     specify do
       expect(type.to_ast).
@@ -80,19 +80,54 @@ RSpec.describe Dry::Types, '#to_ast' do
         to eql([:definition, [Hash, {}]])
     end
 
+    context 'schema' do
+      subject(:type) { Dry::Types['hash'].schema(name: Dry::Types['string'], age: Dry::Types['integer']) }
+      let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
+
+      specify do
+        expect(type.to_ast).
+          to eql([:hash_schema, [member_types_ast, {}]])
+      end
+
+      specify 'with meta' do
+        expect(type_with_meta.to_ast).
+          to eql([:hash_schema, [member_types_ast, key: :value]])
+      end
+    end
+  end
+
+  context 'lagacy Hash schemas' do
+    subject(:type) { Dry::Types['hash'] }
+    let(:members) { { name: Dry::Types['string'], age: Dry::Types['integer'] } }
+
+    specify do
+      expect(type.to_ast).
+        to eql([:definition, [Hash, {}]])
+    end
+
     %i(schema weak permissive strict strict_with_defaults symbolized).each do |schema|
+      meta = {}
+      meta[:strict] = true if %i(strict strict_with_defaults).include?(schema)
+      meta[:key_transform_fn] = Dry::Types::Hash::Schema::SYMBOLIZE_KEY if schema == :symbolized
+
       context "#{schema.capitalize}" do
-        subject(:type) { Dry::Types['hash'].send(schema, name: Dry::Types['string'], age: Dry::Types['int']) }
+        subject(:type) do
+          if schema == :schema
+            Dry::Types['hash'].schema(members, :schema )
+          else
+            Dry::Types['hash'].send(schema, members)
+          end
+        end
         let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
 
         specify do
           expect(type.to_ast).
-            to eql([:hash, [schema, member_types_ast, {}]])
+            to eql([:hash_schema, [member_types_ast, meta]])
         end
 
         specify 'with meta' do
           expect(type_with_meta.to_ast).
-            to eql([:hash, [schema, member_types_ast, key: :value]])
+            to eql([:hash_schema, [member_types_ast, key: :value, **meta]])
         end
       end
     end
@@ -127,6 +162,7 @@ RSpec.describe Dry::Types, '#to_ast' do
                        {}
                      ]
                    ],
+                   {"draft" => 0, "published" => 1, "archived" => 2},
                    key: :value
                  ]
                ])
@@ -146,10 +182,10 @@ RSpec.describe Dry::Types, '#to_ast' do
                      [
                        [:definition, [String, {}]],
                        [:predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]],
-                       {}
+                       key: :value
                      ]
                    ],
-                   key: :value
+                   {}
                  ]
                ])
     end
@@ -192,6 +228,20 @@ RSpec.describe Dry::Types, '#to_ast' do
       specify 'with meta' do
         expect(type_with_meta.to_ast).
           to eql([:array, [[:definition, [String, {}]], key: :value]])
+      end
+    end
+
+    context 'Member of structs' do
+      let(:struct) do
+        Test::Struct = Class.new { extend Dry::Types::Type }
+      end
+
+      subject(:type) do
+        Dry::Types['array'].of(struct)
+      end
+
+      specify do
+        expect(type.to_ast).to eql([:array, [struct, {}]])
       end
     end
   end

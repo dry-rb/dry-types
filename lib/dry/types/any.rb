@@ -15,6 +15,7 @@ module Dry
       def valid?(_)
         true
       end
+      alias_method :===, :valid?
 
       # @param [Hash] new_options
       # @return [Type]

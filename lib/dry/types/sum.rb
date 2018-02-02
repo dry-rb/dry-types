@@ -56,11 +56,6 @@ module Dry
       end
 
       # @return [false]
-      def maybe?
-        false
-      end
-
-      # @return [false]
       def constrained?
         false
       end
@@ -91,6 +86,24 @@ module Dry
         end
       end
 
+      def success(input)
+        if left.valid?(input)
+          left.success(input)
+        elsif right.valid?(input)
+          right.success(input)
+        else
+          raise ArgumentError, "Invalid success value '#{input}' for #{inspect}"
+        end
+      end
+
+      def failure(input, _error = nil)
+        if !left.valid?(input)
+          left.failure(input, left.try(input).error)
+        else
+          right.failure(input, right.try(input).error)
+        end
+      end
+
       # @param [Object] value
       # @return [Boolean]
       def primitive?(value)
@@ -102,12 +115,24 @@ module Dry
       def valid?(value)
         left.valid?(value) || right.valid?(value)
       end
+      alias_method :===, :valid?
 
       # @api public
       #
       # @see Definition#to_ast
       def to_ast(meta: true)
         [:sum, [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
+      end
+
+      # @param [Hash] options
+      # @return [Constrained,Sum]
+      # @see Builder#constrained
+      def constrained(options)
+        if optional?
+          right.constrained(options).optional
+        else
+          super
+        end
       end
     end
   end

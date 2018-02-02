@@ -1,62 +1,96 @@
-require 'dry/types/hash/schema'
+require 'dry/types/hash/schema_builder'
 
 module Dry
   module Types
     class Hash < Definition
+      SCHEMA_BUILDER = SchemaBuilder.new.freeze
+
       # @param [{Symbol => Definition}] type_map
-      # @param [Class] klass
-      #   {Schema} or one of its subclasses ({Weak}, {Permissive}, {Strict},
-      #   {StrictWithDefaults}, {Symbolized})
+      # @param [Symbol] constructor
       # @return [Schema]
-      def schema(type_map, klass = Schema)
-        member_types = type_map.each_with_object({}) { |(name, type), result|
-          result[name] =
-            case type
-            when String, Class then Types[type]
-            else type
-            end
-        }
+      def schema(type_map, constructor = nil)
+        member_types = transform_types(type_map)
 
-        klass.new(primitive, options.merge(member_types: member_types, meta: meta))
+        if constructor.nil?
+          Schema.new(primitive, member_types: member_types, **options, meta: meta)
+        else
+          SCHEMA_BUILDER.(
+            primitive,
+            **options,
+            member_types: member_types,
+            meta: meta,
+            hash_type: constructor
+          )
+        end
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Weak]
+      # @return [Schema]
       def weak(type_map)
-        schema(type_map, Weak)
+        schema(type_map, :weak)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Permissive]
+      # @return [Schema]
       def permissive(type_map)
-        schema(type_map, Permissive)
+        schema(type_map, :permissive)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Strict]
+      # @return [Schema]
       def strict(type_map)
-        schema(type_map, Strict)
+        schema(type_map, :strict)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [StrictWithDefaults]
+      # @return [Schema]
       def strict_with_defaults(type_map)
-        schema(type_map, StrictWithDefaults)
+        schema(type_map, :strict_with_defaults)
       end
 
       # @param [{Symbol => Definition}] type_map
-      # @return [Symbolized]
+      # @return [Schema]
       def symbolized(type_map)
-        schema(type_map, Symbolized)
+        schema(type_map, :symbolized)
+      end
+
+      # Build a schema from an AST
+      # @api private
+      # @param [{Symbol => Definition}] type_map
+      # @return [Schema]
+      def instantiate(member_types)
+        SCHEMA_BUILDER.instantiate(primitive, **options, member_types: member_types)
+      end
+
+      # Injects a type transformation function for building schemas
+      # @param [#call,nil] proc
+      # @param [#call,nil] block
+      # @return [Hash]
+      def with_type_transform(proc = nil, &block)
+        fn = proc || block
+
+        if fn.nil?
+          raise ArgumentError, "a block or callable argument is required"
+        end
+
+        handle = Dry::Types::FnContainer.register(fn)
+        meta(type_transform_fn: handle)
       end
 
       private
 
-      # @param [Hash] _result
-      # @param [Symbol] _key
-      # @param [Type] _type
-      def resolve_missing_value(_result, _key, _type)
-        # noop
+      def transform_types(type_map)
+        type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
+        type_transform = Dry::Types::FnContainer[type_fn]
+
+        type_map.each_with_object({}) { |(name, type), result|
+          t = case type
+              when String, Class then Types[type]
+              else type
+              end
+
+          result[name] = type_transform.(t)
+        }
       end
     end
   end

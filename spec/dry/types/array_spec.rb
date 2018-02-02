@@ -25,7 +25,7 @@ RSpec.describe Dry::Types::Array do
 
       context 'using a constrained type' do
         subject(:array) do
-          Dry::Types['array'].of(Dry::Types['coercible.int'].constrained(gt: 2))
+          Dry::Types['array'].of(Dry::Types['coercible.integer'].constrained(gt: 2))
         end
 
         it 'passes values through member type' do
@@ -46,14 +46,6 @@ RSpec.describe Dry::Types::Array do
     end
   end
 
-  describe '#member' do
-    subject(:array) { Dry::Types['coercible.array'].member(Dry::Types['coercible.string']) }
-
-    it 'still works though deprecated' do
-      expect(array[Set[1, 2, 3]]).to eql(%w(1 2 3))
-    end
-  end
-
   describe '#valid?' do
     subject(:array) { Dry::Types['strict.array'].of(Dry::Types['strict.string']) }
 
@@ -67,6 +59,28 @@ RSpec.describe Dry::Types::Array do
 
     it 'recognizes valid input' do
       expect(array.valid?(['five'])).to be(true)
+    end
+  end
+
+  describe '#===' do
+    subject(:array) { Dry::Types['strict.array'].of(Dry::Types['strict.string']) }
+
+    it 'returns boolean' do
+      expect(array.===(%w(hello world))).to eql(true)
+      expect(array.===(['hello', 1234])).to eql(false)
+    end
+
+    context 'in case statement' do
+      let(:value) do
+        case %w(hello world)
+        when array then 'accepted'
+          else 'invalid'
+        end
+      end
+
+      it 'returns correct value' do
+        expect(value).to eql('accepted')
+      end
     end
   end
 end

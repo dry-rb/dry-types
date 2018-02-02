@@ -1,14 +1,12 @@
 module Dry
   module Types
     class Constrained
-      include Type
-
       class Coercible < Constrained
         # @param [Object] input
         # @param [#call,nil] block
         # @yieldparam [Failure] failure
         # @yieldreturn [Result]
-        # @return [Result,Logic::Result,nil]
+        # @return [Result,nil]
         def try(input, &block)
           result = type.try(input)
 
@@ -18,7 +16,8 @@ module Dry
             if validation.success?
               result
             else
-              block ? yield(validation) : validation
+              failure = failure(result.input, validation)
+              block ? yield(failure) : failure
             end
           else
             block ? yield(result) : result

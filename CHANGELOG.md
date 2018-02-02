@@ -1,12 +1,34 @@
-# v0.12.1 to-be-released
+## Added
+
+* `Types.Strict` is an alias for `Types.Instance`
+  ```ruby
+    strict_range = Types.Strict(Range)
+    strict_range == Types.Instance(Range) # => true
+  ```
+
+[Compare v0.12.2...master](https://github.com/dry-rb/dry-types/compare/v0.12.2...master)
+
+# v0.12.2 2017-11-04
+
+## Fixed
+
+* The type compiler was fixed for simple rules such as used for strict type checks (flash-gordon)
+* Fixed an error on `Dry::Types['json.decimal'].try(nil)` (nesaulov)
+* Fixed an error on calling `try` on an array type built of constrained types (flash-gordon)
+* Implemented `===` for enum types (GustavoCaso)
+
+[Compare v0.12.1...v0.12.2](https://github.com/dry-rb/dry-types/compare/v0.12.1...v0.12.2)
+
+# v0.12.1 2017-10-11
 
 ## Fixed
 
 * `Constructor#try` rescues `ArgumentError` (raised in cases like `Integer('foo')`) (flash-gordon)
 * `#constructor` works correctly for default and enum types (solnic)
+* Optional sum types work correctly in `safe` mode (GustavoCaso)
 * The equalizer of constrained types respects meta (flash-gordon)
 
-[Compare v0.12.0...master](https://github.com/dry-rb/dry-types/compare/v0.12.0...master)
+[Compare v0.12.0...v0.12.1](https://github.com/dry-rb/dry-types/compare/v0.12.0...v0.12.1)
 
 # v0.12.0 2017-09-15
 

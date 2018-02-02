@@ -4,16 +4,20 @@ RSpec.describe Dry::Types::Definition, '#default' do
 
     it_behaves_like Dry::Types::Definition
 
-    it 'returns default value when nil is passed' do
-      expect(type[nil]).to eql('foo')
+    it 'returns default value when no value is passed' do
+      expect(type[]).to eql('foo')
     end
 
     it 'aliases #[] as #call' do
-      expect(type.call(nil)).to eql('foo')
+      expect(type.call).to eql('foo')
     end
 
     it 'returns original value when it is not nil' do
       expect(type['bar']).to eql('bar')
+    end
+
+    it 'returns default value when nil is passed too' do
+      expect(type[nil]).to eql('foo')
     end
   end
 
@@ -25,18 +29,10 @@ RSpec.describe Dry::Types::Definition, '#default' do
         Dry::Types::ConstraintError, /123/
       )
     end
-
-    it 'allow to handle the default value using a type' do
-      expect(
-        Dry::Types['strict.string']
-        .constructor(&:to_s)
-        .default { |type| type[123] }[nil]
-      ).to eq '123'
-    end
   end
 
   context 'with an optional type' do
-    subject(:type) { Dry::Types['strict.int'].optional.default(nil) }
+    subject(:type) { Dry::Types['strict.integer'].optional.default(nil) }
 
     it_behaves_like 'Dry::Types::Definition without primitive'
 
@@ -53,21 +49,37 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
 
     it 'allows setting false' do
-      expect(type.default(false)[nil]).to be(false)
+      expect(type.default(false).call).to be(false)
     end
 
     it 'allows setting true' do
-      expect(type.default(true)[nil]).to be(true)
+      expect(type.default(true).call).to be(true)
     end
   end
 
   context 'with a callable value' do
-    subject(:type) { Dry::Types['time'].default { Time.now } }
+     context 'with 0-arity block' do
+      subject(:type) { Dry::Types['time'].default { Time.now } }
 
-    it_behaves_like Dry::Types::Definition
+      it_behaves_like Dry::Types::Definition
 
-    it 'calls the value' do
-      expect(type[nil]).to be_instance_of(Time)
+      it 'calls the value' do
+        expect(type.call).to be_instance_of(Time)
+      end
+    end
+
+     context 'with 1-arg block' do
+      let(:floor_to_date) { -> t { Time.new(t.year, t.month, t.day) } }
+
+      subject(:type) do
+        Dry::Types['time'].constructor(&floor_to_date).default { |type| type[Time.now] }
+      end
+
+      it_behaves_like Dry::Types::Definition
+
+      it 'can call the next type in the chain' do
+        expect(type.call).to eql(floor_to_date[Time.now])
+      end
     end
   end
 
@@ -90,7 +102,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
 
     it 'calls the value' do
-      expect(type[nil]).to be_instance_of(Time)
+      expect(type.call).to be_instance_of(Time)
     end
   end
 end

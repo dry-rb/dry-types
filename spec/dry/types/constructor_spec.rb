@@ -31,6 +31,26 @@ RSpec.describe Dry::Types::Constructor do
     end
   end
 
+  describe '#===' do
+    it 'returns boolean' do
+      expect(type.===('hello')).to eql(true)
+      expect(type.===(nil)).to eql(false)
+    end
+
+    context 'in case statement' do
+      let(:value) do
+        case 'world'
+        when type then 'accepted'
+          else 'invalid'
+        end
+      end
+
+      it 'returns correct value' do
+        expect(value).to eql('accepted')
+      end
+    end
+  end
+
   describe '#call' do
     it 'uses constructor function to process input' do
       expect(type[:foo]).to eql('foo')
@@ -56,6 +76,18 @@ RSpec.describe Dry::Types::Constructor do
 
       expect(upcaser[:foo]).to eql('FOO')
       expect(upcaser.options[:id]).to be(:upcaser)
+    end
+  end
+
+  describe '#constrained?' do
+    subject(:type) { Dry::Types['string'] }
+
+    it 'returns true when its type is constrained' do
+      expect(type.constrained(type: String).constructor(&:to_s)).to be_constrained
+    end
+
+    it 'returns true when its type is constrained' do
+      expect(type.constructor(&:to_s)).to_not be_constrained
     end
   end
 
@@ -106,7 +138,7 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe '#try' do
-    subject(:type) { Dry::Types['coercible.int'] }
+    subject(:type) { Dry::Types['coercible.integer'] }
 
     it 'rescues ArgumentError' do
       expect(type.try('foo')).to be_failure

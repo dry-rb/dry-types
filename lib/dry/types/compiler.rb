@@ -44,8 +44,7 @@ module Dry
       end
 
       def visit_rule(node)
-        operator, rule = node
-        Dry::Types.rule_compiler.(rule).reduce(operator)
+        Dry::Types.rule_compiler.([node])[0]
       end
 
       def visit_sum(node)
@@ -55,12 +54,18 @@ module Dry
 
       def visit_array(node)
         member, meta = node
-        registry['array'].of(visit(member)).meta(meta)
+        member = member.is_a?(Class) ? member : visit(member)
+        registry['array'].of(member).meta(meta)
       end
 
       def visit_hash(node)
         constructor, schema, meta = node
         merge_with('hash', constructor, schema).meta(meta)
+      end
+
+      def visit_hash_schema(node)
+        schema, meta = node
+        merge_with_schema('hash', schema).meta(meta)
       end
 
       def visit_json_hash(node)
@@ -73,14 +78,14 @@ module Dry
         registry['json.array'].of(visit(member)).meta(meta)
       end
 
-      def visit_form_hash(node)
+      def visit_params_hash(node)
         schema, meta = node
-        merge_with('form.hash', :symbolized, schema).meta(meta)
+        merge_with('params.hash', :symbolized, schema).meta(meta)
       end
 
-      def visit_form_array(node)
+      def visit_params_array(node)
         member, meta = node
-        registry['form.array'].of(visit(member)).meta(meta)
+        registry['params.array'].of(visit(member)).meta(meta)
       end
 
       def visit_member(node)
@@ -88,9 +93,21 @@ module Dry
         { name => visit(type) }
       end
 
+      def visit_enum(node)
+        type, mapping, meta = node
+        Enum.new(visit(type), mapping: mapping, meta: meta)
+      end
+
       def merge_with(hash_id, constructor, schema)
-        registry[hash_id].__send__(
-          constructor, schema.map { |key| visit(key) }.reduce({}, :update)
+        registry[hash_id].schema(
+          schema.map { |key| visit(key) }.reduce({}, :update),
+          constructor
+        )
+      end
+
+      def merge_with_schema(hash_id, schema)
+        registry[hash_id].instantiate(
+          schema.map { |key| visit(key) }.reduce({}, :update)
         )
       end
     end

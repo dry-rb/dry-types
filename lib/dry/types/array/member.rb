@@ -53,7 +53,11 @@ module Dry
         #
         # @see Definition#to_ast
         def to_ast(meta: true)
-          [:array, [member.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
+          if member.respond_to?(:to_ast)
+            [:array, [member.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
+          else
+            [:array, [member, meta ? self.meta : EMPTY_HASH]]
+          end
         end
       end
     end

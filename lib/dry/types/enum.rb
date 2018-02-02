@@ -4,7 +4,7 @@ module Dry
   module Types
     class Enum
       include Type
-      include Dry::Equalizer(:type, :options, :values)
+      include Dry::Equalizer(:type, :options, :mapping)
       include Decorator
 
       # @return [Array]
@@ -13,27 +13,33 @@ module Dry
       # @return [Hash]
       attr_reader :mapping
 
+      # @return [Hash]
+      attr_reader :inverted_mapping
+
       # @param [Type] type
       # @param [Hash] options
       # @option options [Array] :values
       def initialize(type, options)
         super
-        @values = options.fetch(:values).freeze
-        @values.each(&:freeze)
-        @mapping = values.each_with_object({}) { |v, h| h[values.index(v)] = v }.freeze
+        @mapping = options.fetch(:mapping).freeze
+        @values = @mapping.keys.freeze
+        @inverted_mapping = @mapping.invert.freeze
+        freeze
       end
 
       # @param [Object] input
       # @return [Object]
-      def call(input)
+      def call(input = Undefined)
         value =
-          if values.include?(input)
-            input
+          if input.equal?(Undefined)
+            type.call
           elsif mapping.key?(input)
-            mapping[input]
+            input
+          else
+            inverted_mapping.fetch(input, input)
           end
 
-        type[value || input]
+        type[value]
       end
       alias_method :[], :call
 
@@ -42,11 +48,18 @@ module Dry
               '.default(value).enum(*values) instead'
       end
 
+      # Check whether a value is in the enum
+      # @param [Object] value
+      # @return [Boolean]
+      alias_method :include?, :valid?
+
       # @api public
       #
       # @see Definition#to_ast
       def to_ast(meta: true)
-        [:enum, [type.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
+        [:enum, [type.to_ast(meta: meta),
+                 mapping,
+                 meta ? self.meta : EMPTY_HASH]]
       end
     end
   end

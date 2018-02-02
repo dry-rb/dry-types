@@ -3,15 +3,18 @@ dist: trusty
 sudo: required
 cache: bundler
 bundler_args: --without benchmarks tools
-after_success:
-  - '[ -d coverage ] && bundle exec codeclimate-test-reporter'
 script:
   - bundle exec rake
+before_install:
+  - gem update --system
+after_success:
+  - '[ -d coverage ] && bundle exec codeclimate-test-reporter'
 rvm:
-  - 2.2.7
-  - 2.3.4
-  - 2.4.1
-  - jruby-9.1.10.0
+  - 2.2.9
+  - 2.3.6
+  - 2.4.3
+  - 2.5.0
+  - jruby-9.1.15.0
 env:
   global:
     - COVERAGE=true
