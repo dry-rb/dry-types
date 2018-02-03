@@ -89,6 +89,20 @@ RSpec.describe Dry::Types::Definition do
     end
   end
 
+  describe 'with Range' do
+    let(:range) { Dry::Types["strict.range"] }
+
+    it_behaves_like Dry::Types::Definition do
+      let(:type) { range }
+    end
+
+    it 'accepts a range object' do
+      input = 1..3
+
+      expect(range[input]).to be(input)
+    end
+  end
+
   describe 'with built-in optional types' do
     context 'with strict string' do
       let(:string) { Dry::Types["optional.strict.string"] }

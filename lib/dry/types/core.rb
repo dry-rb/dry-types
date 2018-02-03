@@ -19,7 +19,8 @@ module Dry
       false: FalseClass,
       date: Date,
       date_time: DateTime,
-      time: Time
+      time: Time,
+      range: Range
     }.freeze
 
     ALL_PRIMITIVES = COERCIBLE.merge(NON_COERCIBLE).freeze
