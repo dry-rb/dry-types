@@ -56,7 +56,7 @@ module Dry
 
       # Build a schema from an AST
       # @api private
-      # @param [{Symbol => Definition}] type_map
+      # @param [{Symbol => Definition}] member_types
       # @return [Schema]
       def instantiate(member_types)
         SCHEMA_BUILDER.instantiate(primitive, **options, member_types: member_types)
