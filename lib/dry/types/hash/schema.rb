@@ -44,7 +44,6 @@ module Dry
         alias_method :[], :call
 
         # @param [Hash] hash
-        # @param [#call,nil] block
         # @yieldparam [Failure] failure
         # @yieldreturn [Result]
         # @return [Logic::Result]
@@ -167,7 +166,7 @@ module Dry
           end
         end
 
-        # @param [Array<Symbol>]
+        # @param keys [Array<Symbol>]
         # @return [Array<Symbol>]
         def unexpected_keys(keys)
           keys.map(&transform_key) - member_types.keys
