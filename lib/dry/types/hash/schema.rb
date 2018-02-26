@@ -12,7 +12,7 @@ module Dry
       # @see Dry::Types::Default#evaluate
       # @see Dry::Types::Default::Callable#evaluate
       class Schema < Hash
-        NO_TRANSFORM = Dry::Types::FnContainer.register(-> (x) { x })
+        NO_TRANSFORM = Dry::Types::FnContainer.register { |x| x }
         SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
 
         # @return [Hash{Symbol => Definition}]

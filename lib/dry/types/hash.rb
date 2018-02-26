@@ -89,7 +89,7 @@ module Dry
               else type
               end
 
-          result[name] = type_transform.(t)
+          result[name] = type_transform.(t, name)
         }
       end
     end

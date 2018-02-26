@@ -22,6 +22,12 @@ RSpec.describe Dry::Types::Hash do
       fn = -> t { t.meta(omittable: true) }
       expect(subject.with_type_transform(fn)). to eql(subject.with_type_transform(&fn))
     end
+
+    it 'passes in a key name' do
+      optional_age = type.with_type_transform { |t, k| k.eql?(:age) ? t.meta(omittable: true) : t }
+      schema = optional_age.schema(name: "strict.string", age: "strict.integer")
+      expect(schema.(name: 'Jane')).to eql(name: 'Jane')
+    end
   end
 
   describe 'hash schema' do
