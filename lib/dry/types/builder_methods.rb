@@ -83,7 +83,7 @@ module Dry
         Definition.new(klass).constructor(cons || block || klass.method(:new))
       end
 
-      # Build a definiton type
+      # Build a definition type
       #
       # @param [Class] klass
       #
@@ -91,6 +91,19 @@ module Dry
       # @api public
       def Definition(klass)
         Definition.new(klass)
+      end
+
+      # Build a map type
+      #
+      # @example
+      #   Types::IntMap = Types.Map(keys: Types::Integer)
+      #
+      # @param [Hash] options
+      #
+      # @return [Dry::Types::Map]
+      # @api public
+      def Map(**options)
+        Dry::Types::Map.new(**options)
       end
     end
   end

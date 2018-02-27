@@ -17,6 +17,8 @@ module Dry
       end
     end
 
+    MapError = Class.new(TypeError)
+
     SchemaKeyError = Class.new(KeyError)
     private_constant(:SchemaKeyError)
 

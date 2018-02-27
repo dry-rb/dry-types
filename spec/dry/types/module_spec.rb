@@ -42,6 +42,13 @@ RSpec.describe Dry::Types do
     end
   end
 
+  describe '.Map' do
+    it 'builds a map type' do
+      expected = Dry::Types::Map.new(key_type: Dry::Types['integer'])
+      expect(mod.Map(key_type: mod::Integer)).to eql(expected)
+    end
+  end
+
   describe '.Constructor' do
     it 'builds a constructor type' do
       to_s = :to_s.to_proc

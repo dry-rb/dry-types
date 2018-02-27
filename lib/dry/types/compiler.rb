@@ -98,6 +98,14 @@ module Dry
         Enum.new(visit(type), mapping: mapping, meta: meta)
       end
 
+      def visit_map(node)
+        options, meta = node
+        types = options.reduce({}) do |h,(k,v)|
+                  h[k] = visit(v); h
+                end
+        Map.new(**types, meta: meta)
+      end
+
       def merge_with(hash_id, constructor, schema)
         registry[hash_id].schema(
           schema.map { |key| visit(key) }.reduce({}, :update),

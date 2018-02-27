@@ -6,9 +6,9 @@ module Dry
 
       # @see Definition#initialize
       def initialize(*args, meta: EMPTY_HASH, **options)
-        @__args__ = args
-        @options = options
-        @meta = meta
+        @__args__ = args.freeze
+        @options = options.freeze
+        @meta = meta.freeze
       end
 
       # @param [Hash] new_options
