@@ -306,4 +306,38 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.valid?(1)).to be(true)
     expect(type.valid?(4)).to be(false)
   end
+
+  let(:any_ast){ [:definition, [Object, {}]] }
+
+  it 'builds the empty map' do
+    ast = Dry::Types['map'].to_ast
+    expect(ast).to eql([:map, [{key_type: any_ast, value_type: any_ast}, {}]])
+    type = compiler.(ast)
+    expect(type).to eql(Dry::Types['map'])
+  end
+
+  it 'builds a complex map' do
+    map = Dry::Types['map'] \
+          .meta(abc: 123) \
+          .meta(foo: 'bar') \
+          .with(key_type: Dry::Types['string']) \
+          .with(value_type: Dry::Types['integer'])
+
+    ast = map.to_ast
+
+    expect(ast).to eql([
+      :map, [
+        {   key_type: [:definition, [String, {}]],
+          value_type: [:definition, [Integer, {}]] },
+        { abc: 123, foo: 'bar' }
+      ]
+    ])
+
+    type = compiler.(ast)
+
+    expect(type).to eql(map)
+    expect(type.meta).to eql(foo: 'bar', abc: 123)
+    expect(type.valid?({ 'x' => 5 })).to eql(true)
+    expect(type.valid?({ 5 => 'x' })).to eql(false)
+  end
 end

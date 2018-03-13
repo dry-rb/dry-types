@@ -6,12 +6,9 @@ module Dry
   module Types
     class Definition
       include Type
-      include Dry::Equalizer(:primitive, :options, :meta)
       include Options
       include Builder
-
-      # @return [Hash]
-      attr_reader :options
+      include Dry::Equalizer(:primitive, :options, :meta)
 
       # @return [Class]
       attr_reader :primitive
@@ -84,18 +81,10 @@ module Dry
         Result::Success.new(input)
       end
 
-
       # @param (see Failure#initialize)
       # @return [Result::Failure]
       def failure(input, error)
         Result::Failure.new(input, error)
-      end
-
-      # @param [Object] klass class of the result instance
-      # @param [Array] args arguments for the +klass#initialize+ method
-      # @return [Object] new instance of the given +klass+
-      def result(klass, *args)
-        klass.new(*args)
       end
 
       # Checks whether value is of a #primitive class
@@ -121,3 +110,4 @@ end
 
 require 'dry/types/array'
 require 'dry/types/hash'
+require 'dry/types/map'

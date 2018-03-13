@@ -38,6 +38,13 @@ RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
       expect(type.optional?).to be_boolean
     end
   end
+
+  context '#options' do
+    it 'are immutable' do
+      expect(type.options).to be_a ::Hash
+      expect(type.options).to be_frozen
+    end
+  end
 end
 
 RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
@@ -55,6 +62,16 @@ RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
 
     it 'equalizes on filled meta' do
       expect(type).to_not eql(type.meta(i_am: 'different'))
+    end
+
+    it 'is locally immutable' do
+      expect(type.meta).to be_a ::Hash
+      expect(type.meta).to be_frozen
+      expect(type.meta).not_to have_key :immutable_test
+      derived = type.with(meta: {immutable_test: 1})
+      expect(derived.meta).to be_frozen
+      expect(derived.meta).to eql({immutable_test: 1})
+      expect(type.meta).not_to have_key :immutable_test
     end
   end
 
