@@ -24,3 +24,4 @@ group :benchmarks do
 end
 
 gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic'
+gem 'dry-inflector', git: 'https://github.com/dry-rb/dry-inflector'

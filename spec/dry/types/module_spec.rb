@@ -87,4 +87,10 @@ RSpec.describe Dry::Types do
       expect(mod.Strict(Integer)).to eql(mod::Strict::Integer)
     end
   end
+
+  describe 'JSON' do
+    it 'defines json types' do
+      expect(mod::JSON::Decimal).to be(Dry::Types['json.decimal'])
+    end
+  end
 end
