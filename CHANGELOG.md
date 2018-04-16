@@ -10,7 +10,7 @@
     type[nil] # => constraint error
     type[] # => "hello"
   ```
-  This change allowed to greatly simplify hash schemas, make them a lot more flexible yet predictable (see below). 
+  This change allowed to greatly simplify hash schemas, make them a lot more flexible yet predictable (see below).
 * [BREAKING] `Dry::Types.register_class` was removed, `Dry::Types.register` was made private API, do not register your types in the global `dry-types` container, use a module instead, e.g. `Types` (flash-gordon)
 
 
@@ -20,8 +20,8 @@
 
   1. `Schema#with_key_transform`—transforms keys of input hashes, for things like symbolizing etc.
   2. `Schema#strict`—makes a schema intolerant to unknown keys.
-  3. `Hash#with_type_transform`—transforms member types with an arbitrary block. For instance, 
-  
+  3. `Hash#with_type_transform`—transforms member types with an arbitrary block. For instance,
+
     ```ruby
     optional_keys = Types::Hash.with_type_transform { |t, _key| t.optional }
     schema = optional_keys.schema(name: 'strict.string', age: 'strict.int')
@@ -29,7 +29,7 @@
     ```
 
   Note that by default all keys are required, if a key is expected to absent, add to the corresponding type's meta `omittable: true`:
-  
+
   ```ruby
   intolerant = Types::Hash.schema(name: Types::Strict::String)
   intolerant[{}] # => Dry::Types::MissingKeyError
@@ -38,21 +38,21 @@
   tolerant_with_default = Types::Hash.schema(name: Types::Strict::String.meta(omittable: true).default("John"))
   tolerant[{}] # => {name: "John"}
   ```
-  
+
   The new API is composable in a natural way:
-  
+
   ```ruby
   TOLERANT = Types::Hash.with_type_transform { |t| t.meta(omittable: true) }.freeze
   user = TOLERANT.schema(name: 'strict.string', age: 'strict.int')
   user.(name: "Jane") # => {name: "Jane"}
-  
+
   TOLERANT_SYMBOLIZED = TOLERANT.with_key_transform(&:to_sym)
   user_sym = TOLERANT_SYMBOLIZED.schema(name: 'strict.string', age: 'strict.int')
   user_sym.("name" => "Jane") # => {name: "Jane"}
   ```
-  
+
   (flash-gordon)
-  
+
 * `Types.Strict` is an alias for `Types.Instance` (flash-gordon)
   ```ruby
   strict_range = Types.Strict(Range)
@@ -63,18 +63,25 @@
 * `Array` types filter out `Undefined` values, if you have an array type with a constructor type as its member, the constructor now can return `Dry::Types::Undefined` to indicate empty value:
   ```ruby
   filter_empty_strings = Types::Strict::Array.of(
-    Types::Strict::String.constructor { |input| 
-      input.to_s.yield_self { |s| s.empty? ? Dry::Types::Undefined : s } 
+    Types::Strict::String.constructor { |input|
+      input.to_s.yield_self { |s| s.empty? ? Dry::Types::Undefined : s }
     }
   )
   filter_empty_strings.(["John", nil, "", "Jane"]) # => ["John", "Jane"]
   ```
 * `Types::Map` was added for homogeneous hashes, when only types of keys and values are known in advance, not specific key names (fledman)
+* Enum supports mappings (bolshakov + flash-gordon)
+  ```ruby
+  dict = Types::Strict::String.enum('draft' => 0, 'published' => 10, 'archived' => 20)
+  dict['published'] # => 'published'
+  dict[10] # => 'published'
+  ```
 
 ## Fixed
 
 * Fixed applying constraints to optional type, i.e. `.optional.constrained` works correctly (flash-gordon)
-  
+* Fixed enum working with optionals (flash-gordon)
+
 ## Internal
 
 * Dropped the `dry-configurable` dependency (GustavoCaso)
