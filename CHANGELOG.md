@@ -1,10 +1,84 @@
+# v0.13 to be released
+
+## Changed
+
+* [BREAKING] Renamed `Types::Form` to `Types::Params`. You can opt-in the former name with `require 'dry/types/compat/form_types'`. It will be dropped in the next release (ndrluis)
+* [BREAKING] The `Int` types was renamed to `Integer`, this was the only type named differently from the standard Ruby classes so it has been made consistent. The former name is available with `require 'dry/types/compat/int'` (GustavoCaso + flash-gordon)
+* [BREAKING] Default types are not evaluated on `nil`. Default values are evaluated _only_ if no value were given.
+  ```ruby
+    type = Types::Strict::String.default("hello")
+    type[nil] # => constraint error
+    type[] # => "hello"
+  ```
+  This change allowed to greatly simplify hash schemas, make them a lot more flexible yet predictable (see below). 
+* [BREAKING] `Dry::Types.register_class` was removed, `Dry::Types.register` was made private API, do not register your types in the global `dry-types` container, use a module instead, e.g. `Types` (flash-gordon)
+
+
 ## Added
 
-* `Types.Strict` is an alias for `Types.Instance`
+* Hash schemas were rewritten. The old API is still around but is going to be deprecated and removed before 1.0. The new API is simpler and more flexible. Instead of having a bunch of predefined schemas you can build your own by combining the following methods:
+
+  1. `Schema#with_key_transform`—transforms keys of input hashes, for things like symbolizing etc.
+  2. `Schema#strict`—makes a schema intolerant to unknown keys.
+  3. `Hash#with_type_transform`—transforms member types with an arbitrary block. For instance, 
+  
+    ```ruby
+    optional_keys = Types::Hash.with_type_transform { |t, _key| t.optional }
+    schema = optional_keys.schema(name: 'strict.string', age: 'strict.int')
+    schema.(name: "Jane", age: nil) # => {name: "Jane", age: nil}
+    ```
+
+  Note that by default all keys are required, if a key is expected to absent, add to the corresponding type's meta `omittable: true`:
+  
   ```ruby
-    strict_range = Types.Strict(Range)
-    strict_range == Types.Instance(Range) # => true
+  intolerant = Types::Hash.schema(name: Types::Strict::String)
+  intolerant[{}] # => Dry::Types::MissingKeyError
+  tolerant = Types::Hash.schema(name: Types::Strict::String.meta(omittable: true))
+  tolerant[{}] # => {}
+  tolerant_with_default = Types::Hash.schema(name: Types::Strict::String.meta(omittable: true).default("John"))
+  tolerant[{}] # => {name: "John"}
   ```
+  
+  The new API is composable in a natural way:
+  
+  ```ruby
+  TOLERANT = Types::Hash.with_type_transform { |t| t.meta(omittable: true) }.freeze
+  user = TOLERANT.schema(name: 'strict.string', age: 'strict.int')
+  user.(name: "Jane") # => {name: "Jane"}
+  
+  TOLERANT_SYMBOLIZED = TOLERANT.with_key_transform(&:to_sym)
+  user_sym = TOLERANT_SYMBOLIZED.schema(name: 'strict.string', age: 'strict.int')
+  user_sym.("name" => "Jane") # => {name: "Jane"}
+  ```
+  
+  (flash-gordon)
+  
+* `Types.Strict` is an alias for `Types.Instance` (flash-gordon)
+  ```ruby
+  strict_range = Types.Strict(Range)
+  strict_range == Types.Instance(Range) # => true
+  ```
+* `Enum#include?` is an alias to `Enum#valud?` (d-Pixie + flash-gordon)
+* `Range` was added (GustavoCaso)
+* `Array` types filter out `Undefined` values, if you have an array type with a constructor type as its member, the constructor now can return `Dry::Types::Undefined` to indicate empty value:
+  ```ruby
+  filter_empty_strings = Types::Strict::Array.of(
+    Types::Strict::String.constructor { |input| 
+      input.to_s.yield_self { |s| s.empty? ? Dry::Types::Undefined : s } 
+    }
+  )
+  filter_empty_strings.(["John", nil, "", "Jane"]) # => ["John", "Jane"]
+  ```
+* `Types::Map` was added for homogeneous hashes, when only types of keys and values are known in advance, not specific key names (fledman)
+
+## Fixed
+
+* Fixed applying constraints to optional type, i.e. `.optional.constrained` works correctly (flash-gordon)
+  
+## Internal
+
+* Dropped the `dry-configurable` dependency (GustavoCaso)
+* The gem now uses `dry-inflector` for inflections instead of `inflecto` (GustavoCaso)
 
 [Compare v0.12.2...master](https://github.com/dry-rb/dry-types/compare/v0.12.2...master)
 
