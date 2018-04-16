@@ -23,6 +23,12 @@ RSpec.describe Dry::Types::Enum do
 
       expect(type.mapping).to be_frozen
     end
+
+    it "works with optionasl" do
+      expect(type.optional['draft']).to eql(mapping.key(0))
+      expect(type.optional[0]).to be(mapping.key(0))
+      expect(type.optional[nil]).to be nil
+    end
   end
 
   context 'with string type' do
@@ -127,11 +133,11 @@ RSpec.describe Dry::Types::Enum do
     end
 
     it 'returns a failure result for invalid input' do
-      expect(enum.try(2)).to be_failure
+      expect(enum.try(7)).to be_failure
     end
 
     it 'accepts a block for the fallback mechanism' do
-      expect(enum.try(2) { 5 }).to be(5)
+      expect(enum.try(7) { 5 }).to be(5)
     end
   end
 

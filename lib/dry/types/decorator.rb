@@ -39,6 +39,11 @@ module Dry
         type.constrained?
       end
 
+      # @return [Sum]
+      def optional
+        Types['strict.nil'] | self
+      end
+
       # @param [Symbol] meth
       # @param [Boolean] include_private
       # @return [Boolean]

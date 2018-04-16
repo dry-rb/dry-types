@@ -30,18 +30,18 @@ module Dry
       # @param [Object] input
       # @return [Object]
       def call(input = Undefined)
-        value =
-          if input.equal?(Undefined)
-            type.call
-          elsif mapping.key?(input)
-            input
-          else
-            inverted_mapping.fetch(input, input)
-          end
-
-        type[value]
+        type[map_value(input)]
       end
       alias_method :[], :call
+
+      # @param [Object] input
+      # @yieldparam [Failure] failure
+      # @yieldreturn [Result]
+      # @return [Logic::Result]
+      # @return [Object] if coercion fails and a block is given
+      def try(input)
+        super(map_value(input))
+      end
 
       def default(*)
         raise '.enum(*values).default(value) is not supported. Call '\
@@ -58,6 +58,23 @@ module Dry
         [:enum, [type.to_ast(meta: meta),
                  mapping,
                  meta ? self.meta : EMPTY_HASH]]
+      end
+
+      private
+
+      # Maps a value
+      #
+      # @params [Object]
+      # @return [Object]
+      # @api private
+      def map_value(input)
+        if input.equal?(Undefined)
+          type.call
+        elsif mapping.key?(input)
+          input
+        else
+          inverted_mapping.fetch(input, input)
+        end
       end
     end
   end
