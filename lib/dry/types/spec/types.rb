@@ -38,13 +38,6 @@ RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
       expect(type.optional?).to be_boolean
     end
   end
-
-  context '#options' do
-    it 'are immutable' do
-      expect(type.options).to be_a ::Hash
-      expect(type.options).to be_frozen
-    end
-  end
 end
 
 RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
