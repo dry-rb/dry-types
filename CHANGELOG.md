@@ -69,7 +69,12 @@
   )
   filter_empty_strings.(["John", nil, "", "Jane"]) # => ["John", "Jane"]
   ```
-* `Types::Map` was added for homogeneous hashes, when only types of keys and values are known in advance, not specific key names (fledman)
+* `Types::Map` was added for homogeneous hashes, when only types of keys and values are known in advance, not specific key names (fledman + flash-gordon)
+  ```ruby
+    int_to_string = Types::Hash.map('strict.integer', 'strict.string')
+    int_to_string[0 => 'foo'] # => { 0 => "foo" }
+    int_to_string[0 => 1] # Dry::Types::MapError: input value 1 for key 0 is invalid: type?(String, 1)
+  ```
 * Enum supports mappings (bolshakov + flash-gordon)
   ```ruby
   dict = Types::Strict::String.enum('draft' => 0, 'published' => 10, 'archived' => 20)
