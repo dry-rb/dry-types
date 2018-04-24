@@ -1,9 +1,8 @@
 module Dry
   module Types
     class Map < Definition
-
-      def initialize(key_type: Any, value_type: Any, meta: EMPTY_HASH)
-        super(::Hash, key_type: key_type, value_type: value_type, meta: meta)
+      def initialize(_primitive, key_type: Types['any'], value_type: Types['any'], meta: EMPTY_HASH)
+        super(_primitive, key_type: key_type, value_type: value_type, meta: meta)
         validate_options!
       end
 
@@ -49,16 +48,9 @@ module Dry
       # @param meta [Boolean] Whether to dump the meta to the AST
       # @return [Array] An AST representation
       def to_ast(meta: true)
-        recurse = options.each_with_object({}) do |(k,v),h|
-                    h[k] = v.to_ast(meta: meta)
-                  end
-        [:map, [recurse, meta ? self.meta : EMPTY_HASH]]
-      end
-
-      # @param [Hash] new_options
-      # @return [Map]
-      def with(new_options)
-        self.class.new(**options, meta: @meta, **new_options)
+        [:map,
+         [key_type.to_ast(meta: true), value_type.to_ast(meta: true),
+          meta ? self.meta : EMPTY_HASH]]
       end
 
       private
@@ -90,13 +82,12 @@ module Dry
       end
 
       def validate_options!
-        [:key_type, :value_type].each do |opt|
-          type = options[opt]
+        %i(key_type value_type).each do |opt|
+          type = send(opt)
           next if type.is_a?(Type)
           raise MapError, ":#{opt} must be a #{Type}, got: #{type.inspect}"
         end
       end
-
     end
   end
 end

@@ -56,8 +56,6 @@ module Dry
     register("bool", self["true"] | self["false"])
     register("strict.bool", self["strict.true"] | self["strict.false"])
 
-    register("map", Map.new)
-
     register("any", Any)
     register("object", self['any'])
   end

@@ -24,6 +24,20 @@ module Dry
         end
       end
 
+      # Build a map type
+      #
+      # @param [Type] key_type
+      # @param [Type] value_type
+      # @return [Map]
+      def map(key_type, value_type)
+        Map.new(
+          primitive,
+          key_type: resolve_type(key_type),
+          value_type: resolve_type(value_type),
+          meta: meta
+        )
+      end
+
       # @param [{Symbol => Definition}] type_map
       # @return [Schema]
       def weak(type_map)
@@ -79,18 +93,25 @@ module Dry
 
       private
 
+      # @api private
       def transform_types(type_map)
         type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
         type_transform = Dry::Types::FnContainer[type_fn]
 
         type_map.each_with_object({}) { |(name, type), result|
-          t = case type
-              when String, Class then Types[type]
-              else type
-              end
-
-          result[name] = type_transform.(t, name)
+          result[name] = type_transform.(
+            resolve_type(type),
+            name
+          )
         }
+      end
+
+      # @api private
+      def resolve_type(type)
+        case type
+        when String, Class then Types[type]
+        else type
+        end
       end
     end
   end

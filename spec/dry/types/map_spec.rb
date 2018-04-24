@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Map do
   context 'shared examples' do
-    let(:type) { Dry::Types::Map.new }
+    let(:type) { Dry::Types::Map.new(::Hash) }
 
     it_behaves_like 'Dry::Types::Definition#meta'
 
@@ -8,44 +8,45 @@ RSpec.describe Dry::Types::Map do
   end
 
   context 'options' do
-    let(:empty_map) { Dry::Types::Map.new }
-    let(:keyed_map) { Dry::Types::Map.new(key_type: Dry::Types['strict.integer']) }
-    let(:value_map) { Dry::Types::Map.new(value_type: Dry::Types['strict.string']) }
+    let(:empty_map) { Dry::Types::Map.new(::Hash) }
+    let(:keyed_map) { Dry::Types::Map.new(::Hash, key_type: Dry::Types['strict.integer']) }
+    let(:value_map) { Dry::Types::Map.new(::Hash, value_type: Dry::Types['strict.string']) }
 
     let(:complex_map) do
       Dry::Types::Map.new(
+        ::Hash,
         key_type:   Dry::Types['strict.integer'],
         value_type: Dry::Types['strict.string'],
-        meta:   { a:1, b:2, c:3 }
+        meta:   { a: 1, b: 2, c: 3 }
       )
     end
 
     describe '#key_type' do
       it 'can be read' do
-        expect(empty_map.key_type).to eql Dry::Types::Any
-        expect(value_map.key_type).to eql Dry::Types::Any
+        expect(empty_map.key_type).to eql Dry::Types['any']
+        expect(value_map.key_type).to eql Dry::Types['any']
         expect(keyed_map.key_type).to eql Dry::Types['strict.integer']
         expect(complex_map.key_type).to eql Dry::Types['strict.integer']
       end
 
       it 'must be a Type' do
         expect {
-          Dry::Types::Map.new(key_type: "seven")
+          Dry::Types::Map.new(::Hash, key_type: "seven")
         }.to raise_error(Dry::Types::MapError, /must be a Dry::Types::Type/)
       end
     end
 
     describe '#value_type' do
       it 'can be read' do
-        expect(empty_map.value_type).to eql Dry::Types::Any
-        expect(keyed_map.value_type).to eql Dry::Types::Any
+        expect(empty_map.value_type).to eql Dry::Types['any']
+        expect(keyed_map.value_type).to eql Dry::Types['any']
         expect(value_map.value_type).to eql Dry::Types['strict.string']
         expect(complex_map.value_type).to eql Dry::Types['strict.string']
       end
 
       it 'must be a Type' do
         expect {
-          Dry::Types::Map.new(value_type: "seven")
+          Dry::Types::Map.new(::Hash, value_type: "seven")
         }.to raise_error(Dry::Types::MapError, /must be a Dry::Types::Type/)
       end
     end
@@ -81,24 +82,24 @@ RSpec.describe Dry::Types::Map do
     describe '#to_ast' do
       let(:any_ast) { Dry::Types::Any.to_ast }
       it 'decomposes the map into an ast array' do
-        expect(empty_map.to_ast).to eql [:map, [{key_type: any_ast, value_type: any_ast}, {}]]
-        expect(complex_map.to_ast).to eql [:map, [
-          {
-            key_type:
-              [:constrained, [
-                [:definition, [Integer, {}]],
-                [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]],
-                {}
-              ]],
-            value_type:
-              [:constrained, [
-                [:definition, [String, {}]],
-                [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]],
-                {}
-              ]]
-          },
-          { a:1, b:2, c:3 }
-        ]]
+        expect(empty_map.to_ast).to eql [:map, [any_ast, any_ast, {}]]
+        expect(complex_map.to_ast).
+          to eql(
+               [:map, [
+                  [:constrained, [
+                     [:definition, [Integer, {}]],
+                     [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]],
+                     {}
+                   ]],
+                  [:constrained, [
+                     [:definition, [String, {}]],
+                     [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]],
+                     {}
+                   ]],
+                  { a:1, b:2, c:3 }
+                ]
+               ]
+             )
       end
     end
   end
@@ -112,6 +113,7 @@ RSpec.describe Dry::Types::Map do
 
     let(:map) do
       Dry::Types::Map.new(
+        ::Hash,
         key_type:   cleaned_string.constrained(format: /\Aopt_/),
         value_type: Dry::Types['strict.bool']
       )
@@ -187,21 +189,4 @@ RSpec.describe Dry::Types::Map do
       end
     end
   end
-
-  context 'core' do
-    subject { Dry::Types['map'] }
-
-    it 'is registered' do
-      expect(subject).to eql Dry::Types::Map.new
-    end
-
-    it 'is a Dry::Types::Type' do
-      expect(subject).to be_a Dry::Types::Type
-    end
-
-    it 'is a Dry::Types::Definition' do
-      expect(subject).to be_a Dry::Types::Definition
-    end
-  end
-
 end

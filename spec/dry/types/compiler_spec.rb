@@ -310,28 +310,30 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   let(:any_ast){ [:definition, [Object, {}]] }
 
   it 'builds the empty map' do
-    ast = Dry::Types['map'].to_ast
-    expect(ast).to eql([:map, [{key_type: any_ast, value_type: any_ast}, {}]])
+    ast = Dry::Types['hash'].map('any', 'any').to_ast
+    expect(ast).to eql([:map, [any_ast, any_ast, {}]])
     type = compiler.(ast)
-    expect(type).to eql(Dry::Types['map'])
+    expect(type).to eql(Dry::Types::Map.new(::Hash))
   end
 
   it 'builds a complex map' do
-    map = Dry::Types['map'] \
-          .meta(abc: 123) \
-          .meta(foo: 'bar') \
-          .with(key_type: Dry::Types['string']) \
-          .with(value_type: Dry::Types['integer'])
+    map = Dry::Types['hash'].
+            map('any', 'any').
+            meta(abc: 123).
+            meta(foo: 'bar').
+            with(key_type: Dry::Types['string']).
+            with(value_type: Dry::Types['integer'])
 
     ast = map.to_ast
 
-    expect(ast).to eql([
-      :map, [
-        {   key_type: [:definition, [String, {}]],
-          value_type: [:definition, [Integer, {}]] },
-        { abc: 123, foo: 'bar' }
-      ]
-    ])
+    expect(ast).
+      to eql([
+               :map, [
+                 [:definition, [String, {}]],
+                 [:definition, [Integer, {}]],
+                 abc: 123, foo: 'bar'
+               ]
+             ])
 
     type = compiler.(ast)
 

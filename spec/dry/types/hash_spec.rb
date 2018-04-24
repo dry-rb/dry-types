@@ -264,4 +264,14 @@ RSpec.describe Dry::Types::Hash do
       end
     end
   end
+
+  describe '#map' do
+    it 'builds a map type' do
+      map = type.map('strict.string', 'strict.integer')
+
+      expect(map.('foo' => 1)).to eql('foo' => 1)
+
+      expect { map.('foo' => '2') }.to raise_error(Dry::Types::MapError)
+    end
+  end
 end

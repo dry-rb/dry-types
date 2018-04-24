@@ -99,11 +99,8 @@ module Dry
       end
 
       def visit_map(node)
-        options, meta = node
-        types = options.reduce({}) do |h,(k,v)|
-                  h[k] = visit(v); h
-                end
-        Map.new(**types, meta: meta)
+        key_type, value_type, meta = node
+        registry['hash'].map(visit(key_type), visit(value_type)).meta(meta)
       end
 
       def merge_with(hash_id, constructor, schema)
