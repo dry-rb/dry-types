@@ -96,14 +96,16 @@ module Dry
       # Build a map type
       #
       # @example
-      #   Types::IntMap = Types.Map(keys: Types::Integer)
+      #   Types::IntMap = Types.Map(Types::Strict::Integer, 'any')
+      #   Types::IntStringMap = Types.Map(Types::Strict::Integer, Types::Strict::String)
       #
-      # @param [Hash] options
+      # @param [Type] key_type Key type
+      # @param [Type] value_type Value type
       #
       # @return [Dry::Types::Map]
       # @api public
-      def Map(**options)
-        Dry::Types::Map.new(**options)
+      def Map(key_type, value_type)
+        Types['hash'].map(key_type, value_type)
       end
     end
   end
