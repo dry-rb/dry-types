@@ -22,6 +22,3 @@ group :benchmarks do
   gem 'attrio'
   gem 'dry-struct'
 end
-
-gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic'
-gem 'dry-inflector', git: 'https://github.com/dry-rb/dry-inflector'
