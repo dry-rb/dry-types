@@ -47,7 +47,7 @@ module Dry
           if values.length == 1 && values[0].is_a?(::Hash)
             values[0]
           else
-            ::Hash[values.zip(0...values.size)]
+            ::Hash[values.zip(values)]
           end
 
         Enum.new(constrained(included_in: mapping.keys), mapping: mapping)

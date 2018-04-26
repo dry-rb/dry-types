@@ -24,7 +24,7 @@ RSpec.describe Dry::Types::Enum do
       expect(type.mapping).to be_frozen
     end
 
-    it "works with optionasl" do
+    it "works with optionals" do
       expect(type.optional['draft']).to eql(mapping.key(0))
       expect(type.optional[0]).to be(mapping.key(0))
       expect(type.optional[nil]).to be nil
@@ -43,10 +43,6 @@ RSpec.describe Dry::Types::Enum do
       expect(type['draft']).to eql(values[0])
       expect(type['published']).to eql(values[1])
       expect(type['archived']).to eql(values[2])
-
-      expect(type[0]).to eql(values[0])
-      expect(type[1]).to eql(values[1])
-      expect(type[2]).to eql(values[2])
 
       expect(type.values).to eql(values)
 
@@ -89,7 +85,6 @@ RSpec.describe Dry::Types::Enum do
 
     it 'aliases #[] as #call' do
       expect(type.call('draft')).to eql(values[0])
-      expect(type.call(0)).to eql(values[0])
     end
   end
 
@@ -101,10 +96,6 @@ RSpec.describe Dry::Types::Enum do
     it_behaves_like Dry::Types::Definition
 
     it 'allows defining an enum from a specific type' do
-      expect(type[0]).to be(2)
-      expect(type[1]).to be(3)
-      expect(type[2]).to be(2)
-
       expect(type[2]).to be(2)
       expect(type[3]).to be(3)
       expect(type[4]).to be(4)
