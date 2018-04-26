@@ -12,6 +12,7 @@
   ```
   This change allowed to greatly simplify hash schemas, make them a lot more flexible yet predictable (see below).
 * [BREAKING] `Dry::Types.register_class` was removed, `Dry::Types.register` was made private API, do not register your types in the global `dry-types` container, use a module instead, e.g. `Types` (flash-gordon)
+* [BREAKING] Enum types don't accept value index anymore. Instead, explicit mapping is supported, see below (flash-gordon)
 
 
 ## Added
