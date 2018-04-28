@@ -10,6 +10,7 @@ module Dry
     end
 
     register('form.int', self['params.integer'])
+    register('form.integer', self['params.integer'])
 
     class Compiler
       def visit_form_hash(node)
