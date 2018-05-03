@@ -1,4 +1,4 @@
-# v0.13 2018-03-03
+# v0.13.0 2018-03-03
 
 ## Changed
 
@@ -93,7 +93,7 @@
 * Dropped the `dry-configurable` dependency (GustavoCaso)
 * The gem now uses `dry-inflector` for inflections instead of `inflecto` (GustavoCaso)
 
-[Compare v0.12.2...v0.13](https://github.com/dry-rb/dry-types/compare/v0.12.2...v0.13)
+[Compare v0.12.2...v0.13.0](https://github.com/dry-rb/dry-types/compare/v0.12.2...v0.13.0)
 
 # v0.12.2 2017-11-04
 
