@@ -29,7 +29,7 @@
     schema.(name: "Jane", age: nil) # => {name: "Jane", age: nil}
     ```
 
-  Note that by default all keys are required, if a key is expected to absent, add to the corresponding type's meta `omittable: true`:
+  Note that by default all keys are required, if a key is expected to be absent, add to the corresponding type's meta `omittable: true`:
 
   ```ruby
   intolerant = Types::Hash.schema(name: Types::Strict::String)
@@ -59,7 +59,7 @@
   strict_range = Types.Strict(Range)
   strict_range == Types.Instance(Range) # => true
   ```
-* `Enum#include?` is an alias to `Enum#valud?` (d-Pixie + flash-gordon)
+* `Enum#include?` is an alias to `Enum#valid?` (d-Pixie + flash-gordon)
 * `Range` was added (GustavoCaso)
 * `Array` types filter out `Undefined` values, if you have an array type with a constructor type as its member, the constructor now can return `Dry::Types::Undefined` to indicate empty value:
   ```ruby
