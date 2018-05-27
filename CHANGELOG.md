@@ -1,3 +1,16 @@
+# v0.13.1 2018-05-28
+
+## Fixed
+
+* Defaults now works fine with meta (GustavoCaso)
+* Defaults are now re-decorated properly (flash-gordon)
+
+## Added
+
+* `params.int` was added to make the upgrade process in dry-validation smoother (available after you `require 'dry/types/compat/int'`) (flash-gordon)
+
+[Compare v0.13.0...v0.13.1](https://github.com/dry-rb/dry-types/compare/v0.13.0...v0.13.1)
+
 # v0.13.0 2018-05-03
 
 ## Changed
