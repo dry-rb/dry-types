@@ -68,13 +68,18 @@ module Dry
           response = type.__send__(meth, *args, &block)
 
           if decorate?(response)
-            self.class.new(response, options)
+            __new__(response)
           else
             response
           end
         else
           super
         end
+      end
+
+      # Replace underlying type
+      def __new__(type)
+        self.class.new(type, options)
       end
     end
   end

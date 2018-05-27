@@ -68,6 +68,13 @@ module Dry
         end
       end
       alias_method :[], :call
+
+      private
+
+      # Replace underlying type
+      def __new__(type)
+        self.class.new(type, value, options)
+      end
     end
   end
 end

@@ -127,4 +127,11 @@ RSpec.describe Dry::Types::Definition, '#default' do
       expect(type.call).to be_instance_of(Time)
     end
   end
+
+  it 'works with coercible.array' do
+    base = Dry::Types['coercible.array'].default([].freeze)
+    type = base.of(Dry::Types['string'])
+
+    expect(type[]).to eql([])
+  end
 end
