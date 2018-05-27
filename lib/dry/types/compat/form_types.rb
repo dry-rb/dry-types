@@ -5,7 +5,7 @@ Dry::Core::Deprecations.warn('Form types were renamed to Params', tag: :'dry-typ
 module Dry
   module Types
     container.keys.grep(/^params\./).each do |key|
-      next if key == 'params.integer'
+      next if key.start_with?('params.int')
       register(key.sub('params.', 'form.'), container[key])
     end
 

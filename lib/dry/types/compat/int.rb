@@ -9,5 +9,6 @@ module Dry
     register('coercible.int', self['coercible.integer'])
     register('optional.strict.int', self['optional.strict.integer'])
     register('optional.coercible.int', self['optional.coercible.integer'])
+    register('params.int', self['params.integer'])
   end
 end
