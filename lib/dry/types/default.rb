@@ -35,7 +35,7 @@ module Dry
 
       # @param [Type] type
       # @param [Object] value
-      def initialize(type, value, *)
+      def initialize(type, value, **options)
         super
         @value = value
       end

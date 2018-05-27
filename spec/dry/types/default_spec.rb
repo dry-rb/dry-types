@@ -31,6 +31,28 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
   end
 
+  context 'with meta attributes' do
+    context 'default called first' do
+      subject(:type) { Dry::Types['hash'].default({}).meta(omittable: true) }
+
+      it_behaves_like 'Dry::Types::Definition without primitive'
+
+      it 'allows nil' do
+        expect(type[]).to eq({})
+      end
+    end
+
+    context 'default called last' do
+      subject(:type) { Dry::Types['hash'].meta(omittable: true).default({}) }
+
+      it_behaves_like 'Dry::Types::Definition without primitive'
+
+      it 'allows nil' do
+        expect(type[]).to eq({})
+      end
+    end
+  end
+
   context 'with an optional type' do
     subject(:type) { Dry::Types['strict.integer'].optional.default(nil) }
 
