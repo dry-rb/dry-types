@@ -2,6 +2,7 @@
 
 ## Fixed
 
+* `Defaults#valid?` now works fine when passing `Dry::Core::Constans::Undefined` as value (GustavoCaso)
 * Defaults now works fine with meta (GustavoCaso)
 * Defaults are now re-decorated properly (flash-gordon)
 
