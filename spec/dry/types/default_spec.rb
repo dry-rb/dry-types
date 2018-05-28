@@ -134,4 +134,24 @@ RSpec.describe Dry::Types::Definition, '#default' do
 
     expect(type[]).to eql([])
   end
+
+  describe '#valid?' do
+    subject(:type) { Dry::Types['string'].default('foo') }
+
+    it 'returns true if value is valid' do
+      expect(type.valid?('bar')).to eq true
+    end
+
+    it 'returns false if value is not valid' do
+      expect(type.valid?(nil)).to eq false
+    end
+
+    it 'returns true if value is Undefined' do
+      expect(type.valid?(Dry::Core::Constants::Undefined)).to eq true
+    end
+
+    it 'returns true if no value is passed' do
+      expect(type.valid?).to eq true
+    end
+  end
 end
