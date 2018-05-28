@@ -58,8 +58,7 @@ module Dry
       end
 
       def valid?(value = Undefined)
-        return true if value == Undefined
-        super
+        value.equal?(Undefined) || super
       end
 
       # @param [Object] input
