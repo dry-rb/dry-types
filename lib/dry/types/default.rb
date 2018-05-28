@@ -57,6 +57,11 @@ module Dry
         success(call(input))
       end
 
+      def valid?(value = Undefined)
+        return true if value == Undefined
+        super
+      end
+
       # @param [Object] input
       # @return [Object] value passed through {#type} or {#default} value
       def call(input = Undefined)
