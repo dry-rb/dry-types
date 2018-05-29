@@ -186,6 +186,22 @@ RSpec.describe Dry::Types::Sum do
     end
   end
 
+  describe '#constructor' do
+    let(:type) {  (Dry::Types['string'] |  Dry::Types['nil']).constructor { |input| input ? input.to_s + ' world' : input } }
+
+    it 'returns the correct value' do
+      expect(type.call('hello')).to eql('hello world')
+      expect(type.call(nil)).to eql(nil)
+      expect(type.call(10)).to eql('10 world')
+    end
+
+    it 'returns if value is valid' do
+      expect(type.valid?('hello')).to eql(true)
+      expect(type.valid?(nil)).to eql(true)
+      expect(type.valid?(10)).to eql(false)
+    end
+  end
+
   describe '#rule' do
     let(:two_addends) { Dry::Types['strict.nil'] | Dry::Types['strict.string'] }
 
