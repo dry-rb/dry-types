@@ -2,6 +2,7 @@
 
 ## Fixed
 
+* `Defaults#valid?` now works fine when passing `Dry::Core::Constans::Undefined` as value (GustavoCaso)
 * `valid?` for constructor types wrapping `Sum`s  (GustavoCaso)
 
 [Compare v0.13.1...v0.13.2](https://github.com/dry-rb/dry-types/compare/v0.13.1...v0.13.2)
@@ -10,7 +11,6 @@
 
 ## Fixed
 
-* `Defaults#valid?` now works fine when passing `Dry::Core::Constans::Undefined` as value (GustavoCaso)
 * Defaults now works fine with meta (GustavoCaso)
 * Defaults are now re-decorated properly (flash-gordon)
 
