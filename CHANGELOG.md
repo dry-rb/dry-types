@@ -1,3 +1,9 @@
+# v0.13.2 2018-05-30
+
+## Fixed
+
+* `valid?` for constructor types wrapping `Sum`s  (GustavoCaso)
+
 # v0.13.1 2018-05-28
 
 ## Fixed
