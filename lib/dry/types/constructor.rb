@@ -79,7 +79,7 @@ module Dry
       # @param [Object] value
       # @return [Boolean]
       def valid?(value)
-        super && type.valid?(value)
+        type.valid?(value)
       end
       alias_method :===, :valid?
 
