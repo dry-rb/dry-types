@@ -4,6 +4,8 @@
 
 * `valid?` for constructor types wrapping `Sum`s  (GustavoCaso)
 
+[Compare v0.13.1...v0.13.2](https://github.com/dry-rb/dry-types/compare/v0.13.1...v0.13.2)
+
 # v0.13.1 2018-05-28
 
 ## Fixed
