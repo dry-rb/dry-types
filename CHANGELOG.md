@@ -1,3 +1,11 @@
+# v0.12.3 2018-06-12
+
+## Fixed
+
+* Fixed `constrained?` for constructor types (solnic)
+
+[Compare v0.12.2...v0.12.3](https://github.com/dry-rb/dry-types/compare/v0.12.2...v0.12.3)
+
 # v0.12.2 2017-11-04
 
 ## Fixed
