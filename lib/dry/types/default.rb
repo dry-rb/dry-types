@@ -67,8 +67,7 @@ module Dry
         if input.equal?(Undefined)
           evaluate
         else
-          output = type[input]
-          output.nil? ? evaluate : output
+          type[input]
         end
       end
       alias_method :[], :call

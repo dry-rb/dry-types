@@ -16,8 +16,8 @@ RSpec.describe Dry::Types::Definition, '#default' do
       expect(type['bar']).to eql('bar')
     end
 
-    it 'returns default value when nil is passed too' do
-      expect(type[nil]).to eql('foo')
+    it 'does not returns default value when nil is passed too' do
+      expect(type[nil]).to eql(nil)
     end
   end
 
