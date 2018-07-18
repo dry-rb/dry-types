@@ -1,7 +1,5 @@
 require 'dry/core/deprecations'
 
-Dry::Core::Deprecations.warn('Form types were renamed to Params', tag: :'dry-types')
-
 module Dry
   module Types
     container.keys.grep(/^params\./).each do |key|

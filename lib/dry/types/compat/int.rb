@@ -1,7 +1,5 @@
 require 'dry/core/deprecations'
 
-Dry::Core::Deprecations.warn('Int type was renamed to Integer', tag: :'dry-types')
-
 module Dry
   module Types
     register('int', self['integer'])
