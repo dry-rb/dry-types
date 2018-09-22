@@ -146,6 +146,14 @@ RSpec.describe Dry::Types::Hash do
       end
     end
 
+    it 'returns failure on #try when a member is missing' do
+      input = { active: '0', name: 'John', phone: %w[1 234] }
+
+      result = hash.try(input)
+
+      expect(result).to be_failure
+    end
+
     describe '#valid?' do
       it 'returns boolean' do
         expect(hash.valid?(name: 'John', age: 23, active: 1, phone: 1)).to eql(true)
