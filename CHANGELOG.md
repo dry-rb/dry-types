@@ -1,3 +1,11 @@
+# to-be-released
+
+## Fixed
+
+* `Dry::Types::Hash#try` returns `Failure` instead of throwing an exception on missing keys (GustavoCaso)
+
+[Compare v0.13.2...master](https://github.com/dry-rb/dry-types/compare/v0.13.2...master)
+
 # v0.13.2 2018-05-30
 
 ## Fixed
