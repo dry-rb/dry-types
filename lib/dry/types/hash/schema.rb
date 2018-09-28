@@ -60,7 +60,7 @@ module Dry
 
                 member_result
               end
-            rescue ConstraintError, UnknownKeysError, SchemaError => e
+            rescue ConstraintError, UnknownKeysError, SchemaError, MissingKeyError => e
               success = false
               result = e
             end
