@@ -167,4 +167,20 @@ RSpec.describe Dry::Types::Constructor do
       expect(type.method(:append)).to eql(type.method(:constructor))
     end
   end
+
+  describe '#<<' do
+    subject(:type) { Dry::Types['coercible.integer'] }
+
+    it 'is an alias for #prepend' do
+      expect(type.method(:<<)).to eql(type.method(:prepend))
+    end
+  end
+
+  describe '#>>' do
+    subject(:type) { Dry::Types['coercible.integer'] }
+
+    it 'is an alias for #append' do
+      expect(type.method(:>>)).to eql(type.method(:append))
+    end
+  end
 end

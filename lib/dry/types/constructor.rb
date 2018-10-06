@@ -77,6 +77,7 @@ module Dry
         with(**options, fn: -> input { left[right[input]] })
       end
       alias_method :append, :constructor
+      alias_method :>>, :constructor
 
       # @param [Object] value
       # @return [Boolean]
@@ -111,6 +112,7 @@ module Dry
 
         with(**options, fn: -> input { right[left[input]] })
       end
+      alias_method :<<, :prepend
 
       private
 
