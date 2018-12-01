@@ -198,7 +198,7 @@ RSpec.describe Dry::Types::Sum do
     it 'returns if value is valid' do
       expect(type.valid?('hello')).to eql(true)
       expect(type.valid?(nil)).to eql(true)
-      expect(type.valid?(10)).to eql(false)
+      expect(type.valid?(10)).to eql(true)
     end
   end
 

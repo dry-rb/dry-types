@@ -79,7 +79,9 @@ module Dry
       # @param [Object] value
       # @return [Boolean]
       def valid?(value)
-        type.valid?(value)
+        type.valid?(fn[value])
+      rescue NoMethodError, TypeError
+        false
       end
       alias_method :===, :valid?
 

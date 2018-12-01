@@ -31,10 +31,34 @@ RSpec.describe Dry::Types::Constructor do
     end
   end
 
-  describe '#===' do
+  describe '#valid?' do
     it 'returns boolean' do
-      expect(type.===('hello')).to eql(true)
-      expect(type.===(nil)).to eql(false)
+      expect(type.valid?('hello')).to eql(true)
+    end
+
+    context 'fn makes invalid input valid' do
+      it 'returns true' do
+        expect(type.valid?(nil)).to eql(true)
+      end
+    end
+
+    context 'fn raises NoMethodError' do
+      let(:type) { Dry::Types::Constructor.new(String, &:strip) }
+
+      it 'returns false' do
+        expect(type.valid?(nil)).to eql(false)
+      end
+    end
+
+    context 'fn raises TypeError' do
+      let(:type) do
+        array = [1, 2, 3]
+        Dry::Types::Constructor.new(String) { |x| array[x + 1].to_s }
+      end
+
+      it 'returns false' do
+        expect(type.valid?('one')).to eql(false)
+      end
     end
 
     context 'in case statement' do
