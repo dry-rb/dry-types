@@ -1,4 +1,3 @@
-require 'dry/types/decorator'
 require 'dry/types/fn_container'
 
 module Dry
@@ -79,9 +78,11 @@ module Dry
       # @param [Object] value
       # @return [Boolean]
       def valid?(value)
-        type.valid?(fn[value])
+        constructed_value = fn[value]
       rescue NoMethodError, TypeError
         false
+      else
+        type.valid?(constructed_value)
       end
       alias_method :===, :valid?
 
