@@ -79,10 +79,10 @@ RSpec.describe Dry::Types::Hash do
 
     context 'members with default values' do
       let(:hash) {
-        primitive.schema(
-          **hash_schema,
-          age: Dry::Types["strict.integer"].default(21)
-        )
+        primitive.schema({
+                           **hash_schema,
+                           age: Dry::Types["strict.integer"].default(21)
+                         })
       }
 
       it 'resolves missing keys with default values' do
@@ -207,7 +207,7 @@ RSpec.describe Dry::Types::Hash do
     end
 
     it 'ignores unexpected keys' do
-      expect(subject.(**valid_input, not: :expect)).not_to have_key(:not)
+      expect(subject.({**valid_input, not: :expect})).not_to have_key(:not)
     end
 
     describe '#strict' do
@@ -268,7 +268,7 @@ RSpec.describe Dry::Types::Hash do
     describe '#schema' do
       it 'extends existing schema' do
         extended = subject.schema(city: "coercible.string")
-        expect(extended.(**valid_input, city: :London)).to include(city: 'London')
+        expect(extended.({**valid_input, city: :London})).to include(city: 'London')
       end
     end
   end

@@ -17,15 +17,15 @@ module Dry
       # @param [Builder, Object] input
       # @param [Hash] options
       # @param [#call, nil] block
-      def self.new(input, options = {}, &block)
+      def self.new(input, **options, &block)
         type = input.is_a?(Builder) ? input : Definition.new(input)
-        super(type, options, &block)
+        super(type, **options, &block)
       end
 
       # @param [Type] type
       # @param [Hash] options
       # @param [#call, nil] block
-      def initialize(type, options = {}, &block)
+      def initialize(type, **options, &block)
         @type = type
         @fn = options.fetch(:fn, block)
 

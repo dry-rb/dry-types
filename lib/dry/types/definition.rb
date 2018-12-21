@@ -27,7 +27,7 @@ module Dry
 
       # @param [Type,Class] primitive
       # @param [Hash] options
-      def initialize(primitive, options = {})
+      def initialize(primitive, **options)
         super
         @primitive = primitive
         freeze
