@@ -4,6 +4,12 @@
 
 * [BREAKING] Support for Ruby 2.2 was dropped. It reached EOL on March 31, 2018.
 
+# v0.13.4 2018-12-21
+
+## Fixed
+
+* Fixed warnings about keyword arguments from Ruby 2.6. See https://bugs.ruby-lang.org/issues/14183 for all the details (flash-gordon)
+
 # v0.13.3 2018-11-25
 
 ## Fixed
