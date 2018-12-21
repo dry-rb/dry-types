@@ -14,7 +14,7 @@ module Dry
         # @param primitive [Type]
         # @option options [Hash{Symbol => Definition}] :member_types
         # @option options [Symbol] :hash_type
-        def call(primitive, options)
+        def call(primitive, **options)
           hash_type = options.fetch(:hash_type)
           member_types = {}
 
