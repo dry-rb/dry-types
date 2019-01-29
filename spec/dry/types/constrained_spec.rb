@@ -72,6 +72,28 @@ RSpec.describe Dry::Types::Constrained do
     it 'fails when coercion fails' do
       expect { type['foo'] }.to raise_error(Dry::Types::ConstraintError, /foo/)
     end
+
+    context 'constructor fn changes validity' do
+      context 'from invalid to valid' do
+        subject(:type) do
+          Dry::Types['strict.integer'].constrained(gt: 1).constructor { |x| x + 1 }
+        end
+
+        it 'passes' do
+          expect(type.valid?(1)).to eql(true)
+        end
+      end
+
+      context 'from valid to invalid' do
+        subject(:type) do
+          Dry::Types['strict.integer'].constrained(gt: 1).constructor { |x| x - 1 }
+        end
+
+        it 'fails' do
+          expect(type.valid?(2)).to eql(false)
+        end
+      end
+    end
   end
 
   context 'with an optional sum type' do
