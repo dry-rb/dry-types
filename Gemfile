@@ -4,7 +4,6 @@ gemspec
 
 group :test do
   platform :mri do
-    gem "codeclimate-test-reporter", require: false
     gem 'simplecov', require: false
   end
 end
