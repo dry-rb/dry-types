@@ -82,16 +82,16 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     context 'schema' do
       subject(:type) { Dry::Types['hash'].schema(name: Dry::Types['string'], age: Dry::Types['integer']) }
-      let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
+      let(:keys_ast)  { type.keys.map(&:to_ast) }
 
       specify do
         expect(type.to_ast).
-          to eql([:hash_schema, [member_types_ast, {}]])
+          to eql([:hash_schema, [keys_ast, {}]])
       end
 
       specify 'with meta' do
         expect(type_with_meta.to_ast).
-          to eql([:hash_schema, [member_types_ast, key: :value]])
+          to eql([:hash_schema, [keys_ast, key: :value]])
       end
     end
   end
@@ -118,16 +118,16 @@ RSpec.describe Dry::Types, '#to_ast' do
             Dry::Types['hash'].send(schema, members)
           end
         end
-        let(:member_types_ast)  { type.member_types.map { |name, member| [:member, [name, member.to_ast]] } }
+        let(:keys_ast)  { type.keys.map(&:to_ast) }
 
         specify do
           expect(type.to_ast).
-            to eql([:hash_schema, [member_types_ast, meta]])
+            to eql([:hash_schema, [keys_ast, meta]])
         end
 
         specify 'with meta' do
           expect(type_with_meta.to_ast).
-            to eql([:hash_schema, [member_types_ast, key: :value, **meta]])
+            to eql([:hash_schema, [keys_ast, key: :value, **meta]])
         end
       end
     end

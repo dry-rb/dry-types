@@ -32,8 +32,12 @@ module Dry
           options.fetch(:required)
         end
 
-        def required(required = true)
-          with(required: required)
+        def required(required = Undefined)
+          if Undefined.equal?(required)
+            options.fetch(:required)
+          else
+            with(required: required)
+          end
         end
 
         def default(input = Undefined, &block)
@@ -42,6 +46,10 @@ module Dry
 
         def new(type)
           self.class.new(type, name, options)
+        end
+
+        def safe
+          new(type.safe)
         end
 
         def to_ast(meta: true)
