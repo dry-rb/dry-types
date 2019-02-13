@@ -18,11 +18,11 @@ module Dry
           hash_type = options.fetch(:hash_type)
           member_types = {}
 
-          options.fetch(:member_types).each do |k, t|
-            member_types[k] = build_type(hash_type, t)
+          keys = options.fetch(:keys).map do |key|
+            transform_key_type(hash_type, key)
           end
 
-          instantiate(primitive, **options, member_types: member_types)
+          instantiate(primitive, **options, keys: keys)
         end
 
         def instantiate(primitive, hash_type: :base, meta: EMPTY_HASH, **options)
@@ -44,11 +44,11 @@ module Dry
           STRICT.include?(constructor)
         end
 
-        def build_type(constructor, type)
-          type = safe(constructor, type)
-          type = default(constructor, type) if type.default?
-          type = type.meta(omittable: true) if omittable?(constructor)
-          type
+        def transform_key_type(constructor, key)
+          key = safe(constructor, key)
+          key = default(constructor, key) if key.default?
+          key = key.required(false) if omittable?(constructor)
+          key
         end
 
         def safe(constructor, type)
@@ -59,14 +59,15 @@ module Dry
           end
         end
 
-        def default(constructor, type)
+        def default(constructor, key)
           case constructor
           when :strict_with_defaults
-            type
+            key
           when :strict
-            type.type
+            default = key.type
+            key.new(default.type)
           else
-            type.constructor(NIL_TO_UNDEFINED)
+            key.constructor(NIL_TO_UNDEFINED)
           end
         end
       end

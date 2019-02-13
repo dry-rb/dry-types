@@ -15,8 +15,10 @@ module Dry
         NO_TRANSFORM = Dry::Types::FnContainer.register { |x| x }
         SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
 
-        # @return [Hash{Symbol => Definition}]
-        attr_reader :member_types
+        # @return [Array[Dry::Types::Hash::Key]]
+        attr_reader :keys
+
+        attr_reader :index
 
         # @return [#call]
         attr_reader :transform_key
@@ -26,7 +28,10 @@ module Dry
         # @option options [Hash{Symbol => Definition}] :member_types
         # @option options [String] :key_transform_fn
         def initialize(_primitive, **options)
-          @member_types = options.fetch(:member_types)
+          @keys = options.fetch(:keys)
+          @index = keys.each_with_object({}) do |key, index|
+            index[key.name] = key
+          end
 
           meta = options[:meta] || EMPTY_HASH
           key_fn = meta.fetch(:key_transform_fn, NO_TRANSFORM)
@@ -54,11 +59,11 @@ module Dry
             output  = {}
 
             begin
-              result = try_coerce(hash) do |key, member_result|
-                success &&= member_result.success?
-                output[key] = member_result.input
+              result = try_coerce(hash) do |key, key_result|
+                success &&= key_result.success?
+                output[key.name] = key_result.input
 
-                member_result
+                key_result
               end
             rescue ConstraintError, UnknownKeysError, SchemaError, MissingKeyError => e
               success = false
@@ -84,7 +89,7 @@ module Dry
           [
             :hash_schema,
             [
-              member_types.map { |name, member| [:member, [name, member.to_ast(meta: meta)]] },
+              keys.map { |key| key.to_ast(meta: meta) },
               meta ? self.meta : EMPTY_HASH
             ]
           ]
@@ -128,40 +133,41 @@ module Dry
         # @param [{Symbol => Definition}] type_map
         # @return [Schema]
         def schema(type_map)
-          member_types = self.member_types.merge(transform_types(type_map))
-          Schema.new(primitive, **options, member_types: member_types, meta: meta)
+          keys = merge_keys(self.keys, build_keys(type_map))
+          Schema.new(primitive, **options, keys: keys, meta: meta)
         end
 
         private
 
-        def resolve(hash)
+        def resolve(hash, &block)
           result = {}
 
           hash.each do |key, value|
             k = transform_key.(key)
 
-            if member_types.key?(k)
-              result[k] = yield(member_types[k], k, value)
+            if index.key?(k)
+              result[k] = yield(index[k], value)
             elsif strict?
+
               raise UnknownKeysError.new(*unexpected_keys(hash.keys))
             end
           end
 
-          if result.size < member_types.size
-            resolve_missing_keys(result, &Proc.new)
+          if result.size < keys.size
+            resolve_missing_keys(result, &block)
           end
 
           result
         end
 
         def resolve_missing_keys(result)
-          member_types.each do |k, type|
-            next if result.key?(k)
+          keys.each do |key|
+            next if result.key?(key.name)
 
-            if type.default?
-              result[k] = yield(type, k, Undefined)
-            elsif !type.meta[:omittable]
-              raise MissingKeyError, k
+            if key.default?
+              result[key.name] = yield(key, Undefined)
+            elsif key.required?
+              raise MissingKeyError, key.name
             end
           end
         end
@@ -169,27 +175,27 @@ module Dry
         # @param keys [Array<Symbol>]
         # @return [Array<Symbol>]
         def unexpected_keys(keys)
-          keys.map(&transform_key) - member_types.keys
+          keys.map(&transform_key) - index.keys
         end
 
         # @param [Hash] hash
         # @return [Hash{Symbol => Object}]
         def try_coerce(hash)
-          resolve(hash) do |type, key, value|
-            yield(key, type.try(value))
+          resolve(hash) do |key, value|
+            yield(key, key.try(value))
           end
         end
 
         # @param [Hash] hash
         # @return [Hash{Symbol => Object}]
         def coerce(hash)
-          resolve(hash) do |type, key, value|
+          resolve(hash) do |key, value|
             begin
-              type.call(value)
+              key.(value)
             rescue ConstraintError => e
-              raise SchemaError.new(key, value, e.result)
+              raise SchemaError.new(key.name, value, e.result)
             rescue TypeError, ArgumentError => e
-              raise SchemaError.new(key, value, e.message)
+              raise SchemaError.new(key.name, value, e.message)
             end
           end
         end

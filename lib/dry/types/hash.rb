@@ -1,4 +1,5 @@
 require 'dry/types/hash/schema_builder'
+require 'dry/types/hash/key'
 
 module Dry
   module Types
@@ -9,15 +10,15 @@ module Dry
       # @param [Symbol] constructor
       # @return [Schema]
       def schema(type_map, constructor = nil)
-        member_types = transform_types(type_map)
+        keys = build_keys(type_map)
 
         if constructor.nil?
-          Schema.new(primitive, member_types: member_types, **options, meta: meta)
+          Schema.new(primitive, keys: keys, **options, meta: meta)
         else
           SCHEMA_BUILDER.(
             primitive,
             **options,
-            member_types: member_types,
+            keys: keys,
             meta: meta,
             hash_type: constructor
           )
@@ -72,8 +73,8 @@ module Dry
       # @api private
       # @param [{Symbol => Definition}] member_types
       # @return [Schema]
-      def instantiate(member_types)
-        SCHEMA_BUILDER.instantiate(primitive, **options, member_types: member_types)
+      def instantiate(keys)
+        SCHEMA_BUILDER.instantiate(primitive, **options, keys: keys)
       end
 
       # Injects a type transformation function for building schemas
@@ -94,16 +95,20 @@ module Dry
       private
 
       # @api private
-      def transform_types(type_map)
+      def build_keys(type_map)
         type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
         type_transform = Dry::Types::FnContainer[type_fn]
 
-        type_map.each_with_object({}) { |(name, type), result|
-          result[name] = type_transform.(
-            resolve_type(type),
-            name
-          )
-        }
+        type_map.map do |name, type|
+          Key.new(type_transform.(resolve_type(type), name), name)
+        end
+      end
+
+      def merge_keys(*keys)
+        keys.
+          flatten(1).
+          each_with_object({}) { |key, merged| merged[key.name] = key }.
+          values
       end
 
       # @api private
