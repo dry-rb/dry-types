@@ -42,6 +42,12 @@ RSpec.describe Dry::Types::Constructor do
       end
     end
 
+    it 'returns boolean for invalid integer' do
+      type = Dry::Types['coercible.integer']
+
+      expect(type.valid?('hello')).to eql(false)
+    end
+
     context 'fn raises NoMethodError' do
       let(:type) { Dry::Types::Constructor.new(String, &:strip) }
 
@@ -54,6 +60,16 @@ RSpec.describe Dry::Types::Constructor do
       let(:type) do
         array = [1, 2, 3]
         Dry::Types::Constructor.new(String) { |x| array[x + 1].to_s }
+      end
+
+      it 'returns false' do
+        expect(type.valid?('one')).to eql(false)
+      end
+    end
+
+    context 'fn raises ArgumentError' do
+      let(:type) do
+        Dry::Types::Constructor.new(String) { |x| Integer(x) }
       end
 
       it 'returns false' do

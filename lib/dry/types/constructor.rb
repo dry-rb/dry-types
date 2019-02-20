@@ -79,7 +79,7 @@ module Dry
       # @return [Boolean]
       def valid?(value)
         constructed_value = fn[value]
-      rescue NoMethodError, TypeError
+      rescue NoMethodError, TypeError, ArgumentError
         false
       else
         type.valid?(constructed_value)
