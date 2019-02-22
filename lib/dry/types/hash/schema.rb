@@ -18,7 +18,8 @@ module Dry
         # @return [Array[Dry::Types::Hash::Key]]
         attr_reader :keys
 
-        attr_reader :index
+        # @return [Hash[Symbol, Dry::Types::Hash::Key]]
+        attr_reader :name_key_map
 
         # @return [#call]
         attr_reader :transform_key
@@ -29,8 +30,8 @@ module Dry
         # @option options [String] :key_transform_fn
         def initialize(_primitive, **options)
           @keys = options.fetch(:keys)
-          @index = keys.each_with_object({}) do |key, index|
-            index[key.name] = key
+          @name_key_map = keys.each_with_object({}) do |key, idx|
+            idx[key.name] = key
           end
 
           meta = options[:meta] || EMPTY_HASH
@@ -139,14 +140,21 @@ module Dry
 
         private
 
+        def merge_keys(*keys)
+          keys.
+            flatten(1).
+            each_with_object({}) { |key, merged| merged[key.name] = key }.
+            values
+        end
+
         def resolve(hash, &block)
           result = {}
 
           hash.each do |key, value|
             k = transform_key.(key)
 
-            if index.key?(k)
-              result[k] = yield(index[k], value)
+            if name_key_map.key?(k)
+              result[k] = yield(name_key_map[k], value)
             elsif strict?
 
               raise UnknownKeysError.new(*unexpected_keys(hash.keys))
@@ -175,7 +183,7 @@ module Dry
         # @param keys [Array<Symbol>]
         # @return [Array<Symbol>]
         def unexpected_keys(keys)
-          keys.map(&transform_key) - index.keys
+          keys.map(&transform_key) - name_key_map.keys
         end
 
         # @param [Hash] hash

@@ -104,13 +104,6 @@ module Dry
         end
       end
 
-      def merge_keys(*keys)
-        keys.
-          flatten(1).
-          each_with_object({}) { |key, merged| merged[key.name] = key }.
-          values
-      end
-
       # @api private
       def resolve_type(type)
         case type
