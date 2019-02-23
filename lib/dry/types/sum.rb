@@ -62,7 +62,7 @@ module Dry
 
       # @return [Boolean]
       def optional?
-        left == Types['strict.nil']
+        primitive?(nil)
       end
 
       # @param [Object] input
