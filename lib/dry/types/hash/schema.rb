@@ -26,7 +26,7 @@ module Dry
 
         # @param [Class] _primitive
         # @param [Hash] options
-        # @option options [Hash{Symbol => Definition}] :member_types
+        # @option options [Array[Dry::Types::Hash::Key]] :keys
         # @option options [String] :key_transform_fn
         def initialize(_primitive, **options)
           @keys = options.fetch(:keys)

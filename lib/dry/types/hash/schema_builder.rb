@@ -12,11 +12,10 @@ module Dry
         STRICT = %i(strict strict_with_defaults).freeze
 
         # @param primitive [Type]
-        # @option options [Hash{Symbol => Definition}] :member_types
+        # @option options [Array[Dry::Types::Hash::Key]] :keys
         # @option options [Symbol] :hash_type
         def call(primitive, **options)
           hash_type = options.fetch(:hash_type)
-          member_types = {}
 
           keys = options.fetch(:keys).map do |key|
             transform_key_type(hash_type, key)

@@ -71,7 +71,7 @@ module Dry
 
       # Build a schema from an AST
       # @api private
-      # @param [{Symbol => Definition}] member_types
+      # @param [Array[Dry::Types::Hash::Key]] keys
       # @return [Schema]
       def instantiate(keys)
         SCHEMA_BUILDER.instantiate(primitive, **options, keys: keys)
