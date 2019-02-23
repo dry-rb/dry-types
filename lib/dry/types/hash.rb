@@ -1,5 +1,6 @@
 require 'dry/types/hash/schema_builder'
 require 'dry/types/hash/key'
+require 'dry/types/hash/constructor'
 
 module Dry
   module Types
@@ -90,6 +91,11 @@ module Dry
 
         handle = Dry::Types::FnContainer.register(fn)
         meta(type_transform_fn: handle)
+      end
+
+      # @api private
+      def constructor_type
+        ::Dry::Types::Hash::Constructor
       end
 
       private

@@ -62,6 +62,14 @@ module Dry
             ]
           ]
         end
+
+        def meta(data = nil)
+          if data.nil?
+            type.meta
+          else
+            new(type.meta(data))
+          end
+        end
       end
     end
   end

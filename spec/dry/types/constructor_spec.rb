@@ -134,6 +134,12 @@ RSpec.describe Dry::Types::Constructor do
       schema = type.schema(age: 'strict.integer').constructor { |input| input.transform_keys(&:to_sym) }
       expect(schema.key(:age)).to be_a(Dry::Types::Hash::Key)
     end
+
+    it 'chooses the right constructor types' do
+      sum = type.schema(age: 'strict.integer').optional
+      schema = sum.constructor { |input| input.transform_keys(&:to_sym) if input }
+      expect(schema.right.key(:age)).to be_a(Dry::Types::Hash::Key)
+    end
   end
 
   describe 'equality' do

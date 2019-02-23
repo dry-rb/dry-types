@@ -138,8 +138,8 @@ module Dry
         if type.respond_to?(method)
           response = type.__send__(method, *args, &block)
 
-          if composable?(method, response)
-            self.class.new(response, options)
+          if composable?(response)
+            response.constructor_type.new(response, options)
           else
             response
           end
@@ -148,9 +148,8 @@ module Dry
         end
       end
 
-      def composable?(method, value)
-        # This check isn't reliable, we may want to introduce Constructor::Schema later
-        value.kind_of?(Builder) && method != :key
+      def composable?(value)
+        value.kind_of?(Builder)
       end
     end
   end

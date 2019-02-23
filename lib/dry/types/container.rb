@@ -1,3 +1,5 @@
+require 'dry/container'
+
 module Dry
   module Types
     class Container
