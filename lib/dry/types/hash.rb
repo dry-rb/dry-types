@@ -6,6 +6,7 @@ module Dry
   module Types
     class Hash < Definition
       SCHEMA_BUILDER = SchemaBuilder.new.freeze
+      NOT_REQUIRED = { required: false }.freeze
 
       # @param [{Symbol => Definition}] type_map
       # @param [Symbol] constructor
@@ -105,8 +106,9 @@ module Dry
         type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
         type_transform = Dry::Types::FnContainer[type_fn]
 
-        type_map.map do |name, type|
-          key = Key.new(resolve_type(type), name)
+        type_map.map do |map_key, type|
+          name, options = key_name(map_key)
+          key = Key.new(resolve_type(type), name, options)
           type_transform.(key)
         end
       end
@@ -116,6 +118,15 @@ module Dry
         case type
         when String, Class then Types[type]
         else type
+        end
+      end
+
+      # @api private
+      def key_name(key)
+        if key.to_s.end_with?('?')
+          [key.to_s.chop.to_sym, NOT_REQUIRED]
+        else
+          [key, EMPTY_HASH]
         end
       end
     end

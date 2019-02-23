@@ -110,12 +110,12 @@ RSpec.describe Dry::Types::Hash::Schema do
     end
 
     context 'members with default values' do
-      let(:hash) {
+      let(:hash) do
         primitive.schema({
-                           **hash_schema,
-                           age: Dry::Types["strict.integer"].default(21)
-                         })
-      }
+          **hash_schema,
+          age: Dry::Types["strict.integer"].default(21)
+        })
+      end
 
       it 'resolves missing keys with default values' do
         params = { name: 'Jane', active: true, phone: [] }
@@ -281,7 +281,7 @@ RSpec.describe Dry::Types::Hash::Schema do
       end
     end
 
-    describe 'omittable keys' do
+    describe 'optional keys' do
       let(:hash_schema) do
         {
           name: "coercible.string",
@@ -301,6 +301,16 @@ RSpec.describe Dry::Types::Hash::Schema do
       it 'extends existing schema' do
         extended = subject.schema(city: "coercible.string")
         expect(extended.({**valid_input, city: :London})).to include(city: 'London')
+      end
+    end
+
+    describe 'keys ending with question mark' do
+      let(:hash_schema) do
+        { name: "coercible.string", age?: "strict.integer" }
+      end
+
+      example 'not required' do
+        expect(subject.key(:age)).not_to be_required
       end
     end
   end
