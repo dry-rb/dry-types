@@ -33,7 +33,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
 
   context 'with meta attributes' do
     context 'default called first' do
-      subject(:type) { Dry::Types['hash'].default({}).meta(omittable: true) }
+      subject(:type) { Dry::Types['hash'].default({}).meta(required: false) }
 
       it_behaves_like 'Dry::Types::Definition without primitive'
 
@@ -43,7 +43,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
 
     context 'default called last' do
-      subject(:type) { Dry::Types['hash'].meta(omittable: true).default({}) }
+      subject(:type) { Dry::Types['hash'].meta(required: false).default({}) }
 
       it_behaves_like 'Dry::Types::Definition without primitive'
 

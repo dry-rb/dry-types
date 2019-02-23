@@ -47,4 +47,16 @@ RSpec.describe Dry::Types::Hash::Schema do
       expect(schema.key(:missing) { :fallback }).to eql(:fallback)
     end
   end
+
+  describe 'omittable keys' do
+    subject(:schema) do
+      Dry::Types['strict.hash'].schema(
+        age: Dry::Types['strict.integer'].meta(omittable: true)
+      )
+    end
+
+    example 'keys can be set as not required via meta' do
+      expect(schema.({})).to eql({})
+    end
+  end
 end
