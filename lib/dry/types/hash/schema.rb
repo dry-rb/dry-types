@@ -15,6 +15,8 @@ module Dry
         NO_TRANSFORM = Dry::Types::FnContainer.register { |x| x }
         SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
 
+        include ::Enumerable
+
         # @return [Array[Dry::Types::Hash::Key]]
         attr_reader :keys
 
@@ -136,6 +138,21 @@ module Dry
         def schema(type_map)
           keys = merge_keys(self.keys, build_keys(type_map))
           Schema.new(primitive, **options, keys: keys, meta: meta)
+        end
+
+        # Iterate over each key type
+        #
+        # @return [Array<Dry::Types::Hash::Key>,Enumerator]
+        def each(&block)
+          keys.each(&block)
+        end
+
+        # Whether the schema has the given key
+        #
+        # @param [Symbol] name Key name
+        # @return [Boolean]
+        def key?(name)
+          name_key_map.key?(name)
         end
 
         private
