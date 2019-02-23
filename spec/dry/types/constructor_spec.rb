@@ -129,6 +129,11 @@ RSpec.describe Dry::Types::Constructor do
     it 'raises no-method error when it does not respond to a method' do
       expect { type.oh_noez }.to raise_error(NoMethodError)
     end
+
+    it "doesn't wrap not composable types" do
+      schema = type.schema(age: 'strict.integer').constructor { |input| input.transform_keys(&:to_sym) }
+      expect(schema.key(:age)).to be_a(Dry::Types::Hash::Key)
+    end
   end
 
   describe 'equality' do

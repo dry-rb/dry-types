@@ -193,7 +193,6 @@ module Dry
             if name_key_map.key?(k)
               result[k] = yield(name_key_map[k], value)
             elsif strict?
-
               raise UnknownKeysError.new(*unexpected_keys(hash.keys))
             end
           end

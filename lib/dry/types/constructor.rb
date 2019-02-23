@@ -131,14 +131,14 @@ module Dry
       end
 
       # Delegates missing methods to {#type}
-      # @param [Symbol] meth
+      # @param [Symbol] method
       # @param [Array] args
       # @param [#call, nil] block
-      def method_missing(meth, *args, &block)
-        if type.respond_to?(meth)
-          response = type.__send__(meth, *args, &block)
+      def method_missing(method, *args, &block)
+        if type.respond_to?(method)
+          response = type.__send__(method, *args, &block)
 
-          if response.kind_of?(Builder)
+          if composable?(method, response)
             self.class.new(response, options)
           else
             response
@@ -146,6 +146,11 @@ module Dry
         else
           super
         end
+      end
+
+      def composable?(method, value)
+        # This check isn't reliable, we may want to introduce Constructor::Schema later
+        value.kind_of?(Builder) && method != :key
       end
     end
   end
