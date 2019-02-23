@@ -40,6 +40,10 @@ module Dry
           end
         end
 
+        def omittable
+          required(false)
+        end
+
         def default(input = Undefined, &block)
           new(type.default(input, &block))
         end

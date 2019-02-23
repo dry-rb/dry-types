@@ -106,7 +106,8 @@ module Dry
         type_transform = Dry::Types::FnContainer[type_fn]
 
         type_map.map do |name, type|
-          Key.new(type_transform.(resolve_type(type), name), name)
+          key = Key.new(resolve_type(type), name)
+          type_transform.(key)
         end
       end
 
