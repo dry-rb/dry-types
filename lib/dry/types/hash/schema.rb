@@ -155,6 +155,26 @@ module Dry
           name_key_map.key?(name)
         end
 
+        # Fetch key type by a key name.
+        # Behaves as ::Hash#fetch
+        #
+        # @overload key(name, fallback = Undefined)
+        #   @param [Symbol] name Key name
+        #   @param [Object] fallback Optional fallback, returned if key is missing
+        #   @return [Dry::Types::Hash::Key,Object] key type or fallback if key is not in schema
+        #
+        # @overload key(name, &block)
+        #   @param [Symbol] name Key name
+        #   @param [Proc] block Fallback block, runs if key is missing
+        #   @return [Dry::Types::Hash::Key,Object] key type or block value if key is not in schema
+        def key(name, fallback = Undefined, &block)
+          if Undefined.equal?(fallback)
+            name_key_map.fetch(name, &block)
+          else
+            name_key_map.fetch(name, fallback)
+          end
+        end
+
         private
 
         def merge_keys(*keys)

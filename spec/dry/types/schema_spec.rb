@@ -29,4 +29,22 @@ RSpec.describe Dry::Types::Hash::Schema do
       expect(schema.key?(:missing)).to be false
     end
   end
+
+  describe '#key' do
+    it 'fetches a key type' do
+      expect(schema.key(:name)).to be(schema.name_key_map[:name])
+    end
+
+    it 'raises a key error if key is unknown' do
+      expect { schema.key(:missing) }.to raise_error(KeyError, "key not found: :missing")
+    end
+
+    it 'accepts a fallback' do
+      expect(schema.key(:missing, :fallback)).to eql(:fallback)
+    end
+
+    it 'accepts a fallback block' do
+      expect(schema.key(:missing) { :fallback }).to eql(:fallback)
+    end
+  end
 end
