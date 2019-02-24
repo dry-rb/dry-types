@@ -2,6 +2,10 @@ RSpec.describe Dry::Types::Hash::Key do
   let(:key) { described_class.new(Dry::Types['strict.integer'], :age) }
   subject { key }
 
+  it_behaves_like Dry::Types::Definition do
+    subject(:type) { key }
+  end
+
   describe '#required' do
     it 'is true by required' do
       expect(key.required).to be true
