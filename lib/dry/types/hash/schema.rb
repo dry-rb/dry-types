@@ -3,14 +3,18 @@ require 'dry/types/fn_container'
 module Dry
   module Types
     class Hash < Definition
-      # The built-in Hash type has constructors that you can use to define
-      # hashes with explicit schemas and coercible values using the built-in types.
+      # The built-in Hash type can be defined in terms of keys and associated types
+      # its values can contain. Such definitions are named {Schema}s and defined
+      # as lists of {Key} types.
       #
-      # Basic {Schema} evaluates default values for keys missing in input hash
-      # (see {Schema#resolve_missing_value})
+      # @see Dry::Types::Hash::Key
+      #
+      # {Schema} evaluates default values for keys missing in input hash
       #
       # @see Dry::Types::Default#evaluate
       # @see Dry::Types::Default::Callable#evaluate
+      #
+      # {Schema} implements Enumerable using its keys as collection.
       class Schema < Hash
         NO_TRANSFORM = Dry::Types::FnContainer.register { |x| x }
         SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
