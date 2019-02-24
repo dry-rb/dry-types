@@ -43,6 +43,7 @@ module Dry
         type.name
       end
 
+      # @return [Boolean]
       def default?
         type.default?
       end
@@ -72,8 +73,10 @@ module Dry
         left = new_fn || block
         right = fn
 
-        with(options.merge(fn: -> input { left[right[input]] }))
+        with(**options, fn: -> input { left[right[input]] })
       end
+      alias_method :append, :constructor
+      alias_method :>>, :constructor
 
       # @param [Object] value
       # @return [Boolean]
@@ -99,6 +102,20 @@ module Dry
                         register_fn(fn),
                         meta ? self.meta : EMPTY_HASH]]
       end
+
+      # @api public
+      #
+      # @param [#call, nil] new_fn
+      # @param [Hash] options
+      # @param [#call, nil] block
+      # @return [Constructor]
+      def prepend(new_fn = nil, **options, &block)
+        left = new_fn || block
+        right = fn
+
+        with(**options, fn: -> input { right[left[input]] })
+      end
+      alias_method :<<, :prepend
 
       private
 

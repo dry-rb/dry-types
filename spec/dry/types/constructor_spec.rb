@@ -168,4 +168,43 @@ RSpec.describe Dry::Types::Constructor do
       expect(type.try('foo')).to be_failure
     end
   end
+
+  describe '#prepend' do
+    subject(:type) { Dry::Types['coercible.integer'] }
+
+    it 'prepends the constructor' do
+      expect(type.prepend(-> s { s.ord })['foo']).to eql(102)
+    end
+
+    it 'accepts block' do
+      prepended = type.prepend(id: 'named') { |s| s.ord }
+
+      expect(prepended['foo']).to eql(102)
+      expect(prepended.options).to include(id: 'named')
+    end
+  end
+
+  describe '#append' do
+    subject(:type) { Dry::Types['coercible.integer'] }
+
+    it 'is an alias for #constructor' do
+      expect(type.method(:append)).to eql(type.method(:constructor))
+    end
+  end
+
+  describe '#<<' do
+    subject(:type) { Dry::Types['coercible.integer'] }
+
+    it 'is an alias for #prepend' do
+      expect(type.method(:<<)).to eql(type.method(:prepend))
+    end
+  end
+
+  describe '#>>' do
+    subject(:type) { Dry::Types['coercible.integer'] }
+
+    it 'is an alias for #append' do
+      expect(type.method(:>>)).to eql(type.method(:append))
+    end
+  end
 end
