@@ -5,19 +5,19 @@
 - [BREAKING] Internal representation of hash schemas was changed to be a simple list of key types (flash-gordon)
   `Dry::Types::Hash#with_type_transform` now yields a key type instead of type + name:
   ```ruby
-  Dry::Types['stirct.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
+  Dry::Types['strict.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
   ```
 
 ## Added
 
 - Optional keys for schemas can be provided with ?-ending symbols (flash-gordon)
   ```ruby
-  Dry::Types['stirct.hash'].schema(name: 'strict.string', age?: 'strict.integer')
+  Dry::Types['strict.hash'].schema(name: 'strict.string', age?: 'strict.integer')
   ```
-- Another way of making keys optional is setting `required: false` to meta. In fact, it is the preferrable
+- Another way of making keys optional is setting `required: false` to meta. In fact, it is the preferable
   way if you have to store this information in `meta`, otherwise use the Key's API (see below) (flash-gordon)
   ```ruby
-  Dry::Types['stirct.hash'].schema(
+  Dry::Types['strict.hash'].schema(
     name: Dry::Types['strict.string'],
     age: Dry::Types['strict.integer'].meta(required: false)
   )
@@ -25,9 +25,9 @@
 - Key types have API for making keys omittable and back (flash-gordon)
   ```ruby
   # defining a base schema with optional keys
-  lax_hash = Dry::Types['stirct.hash'].with_type_transform { |key| key.required(false) }
+  lax_hash = Dry::Types['strict.hash'].with_type_transform { |key| key.required(false) }
   # same as
-  lax_hash = Dry::Types['stirct.hash'].with_type_transform(&:omittable)
+  lax_hash = Dry::Types['strict.hash'].with_type_transform(&:omittable)
 
   # keys in user_schema are not required
   user_schema = lax_hash.schema(name: 'strict.string', age: 'strict.integer')
