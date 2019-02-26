@@ -8,6 +8,11 @@ module Dry
         Constrained
       end
 
+      # @return [Class]
+      def constructor_type
+        Constructor
+      end
+
       # @param [Type] other
       # @return [Sum, Sum::Constrained]
       def |(other)
@@ -63,7 +68,7 @@ module Dry
       # @param [#call,nil] block
       # @return [Constructor]
       def constructor(constructor = nil, **options, &block)
-        Constructor.new(with(options), fn: constructor || block)
+        constructor_type.new(with(options), fn: constructor || block)
       end
     end
   end

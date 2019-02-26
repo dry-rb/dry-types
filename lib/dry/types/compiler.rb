@@ -88,9 +88,9 @@ module Dry
         registry['params.array'].of(visit(member)).meta(meta)
       end
 
-      def visit_member(node)
-        name, type = node
-        { name => visit(type) }
+      def visit_key(node)
+        name, required, type = node
+        Hash::Key.new(visit(type), name, required: required)
       end
 
       def visit_enum(node)
@@ -104,16 +104,15 @@ module Dry
       end
 
       def merge_with(hash_id, constructor, schema)
-        registry[hash_id].schema(
-          schema.map { |key| visit(key) }.reduce({}, :update),
-          constructor
-        )
+        mapping = schema.each_with_object({}) do |(_, (name, required, type)), m|
+          m[name] = visit(type).meta(required: required)
+        end
+
+        registry[hash_id].schema(mapping, constructor)
       end
 
-      def merge_with_schema(hash_id, schema)
-        registry[hash_id].instantiate(
-          schema.map { |key| visit(key) }.reduce({}, :update)
-        )
+      def merge_with_schema(hash_id, keys)
+        registry[hash_id].instantiate(keys.map { |key| visit(key) })
       end
     end
   end

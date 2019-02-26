@@ -1,23 +1,26 @@
 require 'dry/types/hash/schema_builder'
+require 'dry/types/hash/key'
+require 'dry/types/hash/constructor'
 
 module Dry
   module Types
     class Hash < Definition
       SCHEMA_BUILDER = SchemaBuilder.new.freeze
+      NOT_REQUIRED = { required: false }.freeze
 
       # @param [{Symbol => Definition}] type_map
       # @param [Symbol] constructor
       # @return [Schema]
       def schema(type_map, constructor = nil)
-        member_types = transform_types(type_map)
+        keys = build_keys(type_map)
 
         if constructor.nil?
-          Schema.new(primitive, member_types: member_types, **options, meta: meta)
+          Schema.new(primitive, keys: keys, **options, meta: meta)
         else
           SCHEMA_BUILDER.(
             primitive,
             **options,
-            member_types: member_types,
+            keys: keys,
             meta: meta,
             hash_type: constructor
           )
@@ -70,10 +73,10 @@ module Dry
 
       # Build a schema from an AST
       # @api private
-      # @param [{Symbol => Definition}] member_types
+      # @param [Array[Dry::Types::Hash::Key]] keys
       # @return [Schema]
-      def instantiate(member_types)
-        SCHEMA_BUILDER.instantiate(primitive, **options, member_types: member_types)
+      def instantiate(keys)
+        SCHEMA_BUILDER.instantiate(primitive, **options, keys: keys)
       end
 
       # Injects a type transformation function for building schemas
@@ -91,19 +94,23 @@ module Dry
         meta(type_transform_fn: handle)
       end
 
+      # @api private
+      def constructor_type
+        ::Dry::Types::Hash::Constructor
+      end
+
       private
 
       # @api private
-      def transform_types(type_map)
+      def build_keys(type_map)
         type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
         type_transform = Dry::Types::FnContainer[type_fn]
 
-        type_map.each_with_object({}) { |(name, type), result|
-          result[name] = type_transform.(
-            resolve_type(type),
-            name
-          )
-        }
+        type_map.map do |map_key, type|
+          name, options = key_name(map_key)
+          key = Key.new(resolve_type(type), name, options)
+          type_transform.(key)
+        end
       end
 
       # @api private
@@ -111,6 +118,15 @@ module Dry
         case type
         when String, Class then Types[type]
         else type
+        end
+      end
+
+      # @api private
+      def key_name(key)
+        if key.to_s.end_with?('?')
+          [key.to_s.chop.to_sym, NOT_REQUIRED]
+        else
+          [key, EMPTY_HASH]
         end
       end
     end

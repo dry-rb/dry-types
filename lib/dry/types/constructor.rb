@@ -131,21 +131,25 @@ module Dry
       end
 
       # Delegates missing methods to {#type}
-      # @param [Symbol] meth
+      # @param [Symbol] method
       # @param [Array] args
       # @param [#call, nil] block
-      def method_missing(meth, *args, &block)
-        if type.respond_to?(meth)
-          response = type.__send__(meth, *args, &block)
+      def method_missing(method, *args, &block)
+        if type.respond_to?(method)
+          response = type.__send__(method, *args, &block)
 
-          if response.kind_of?(Builder)
-            self.class.new(response, options)
+          if composable?(response)
+            response.constructor_type.new(response, options)
           else
             response
           end
         else
           super
         end
+      end
+
+      def composable?(value)
+        value.kind_of?(Builder)
       end
     end
   end

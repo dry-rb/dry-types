@@ -19,7 +19,7 @@ module Dry
 
       # @param [Hash] new_options
       # @return [Type]
-      def with(new_options)
+      def with(**new_options)
         self.class.new(**options, meta: @meta, **new_options)
       end
     end.new

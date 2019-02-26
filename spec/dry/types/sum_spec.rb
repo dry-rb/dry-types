@@ -18,10 +18,10 @@ RSpec.describe Dry::Types::Sum do
       expect(type).to be_optional
     end
 
-    it 'return false if left is not nil' do
+    it 'return true if right side is nil' do
       type = Dry::Types['string'] | Dry::Types['nil']
 
-      expect(type).to_not be_optional
+      expect(type).to be_optional
     end
 
     it 'works when left is a Sum type' do
