@@ -7,6 +7,7 @@
   ```ruby
   Dry::Types['strict.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
   ```
+- [BREAKING] Support for Ruby < 2.4 was dropped
 
 ## Added
 
@@ -33,6 +34,17 @@
   user_schema = lax_hash.schema(name: 'strict.string', age: 'strict.integer')
   ```
 - `Type#optional?` now recognizes more cases where `nil` is an allowed value (flash-gordon)
+- `Constructor#{prepend,append}` with `<<` and `>>` as aliases. `Constructor#append` works the same way `Constructor#constrcutor` does. `Constuctor#prepend` chains functions in the reverse order, see examples (flash-gordon)
+  ```ruby
+  to_int = Types::Coercible::Integer
+  inc = to_int.append { |x| x + 2 }
+  inc.("1") # => "1" -> 1 -> 3
+
+  inc = to_int.prepend { |x| x + "2" }
+  inc.("1") # => "1" -> "12" -> 12
+  ```
+
+
 
 [Compare v0.14.0...master](https://github.com/dry-rb/dry-types/compare/v0.14.0...master)
 
