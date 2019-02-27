@@ -150,9 +150,13 @@ RSpec.describe Dry::Types::Definition do
   describe 'params.integer' do
     subject(:type) { Dry::Types['params.integer'] }
 
-    it 'coerces to a integer' do
+    it 'coerces to an integer' do
       expect(type['312']).to be(312)
       expect(type['0']).to eql(0)
+    end
+
+    it 'coerces string with leading zero to an integer using 10 as a default base' do
+      expect(type['010']).to be(10)
     end
 
     it 'coerces empty string to nil' do

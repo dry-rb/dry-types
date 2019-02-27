@@ -32,6 +32,8 @@ module Dry
         def self.to_int(input)
           if empty_str?(input)
             nil
+          elsif input.is_a? String
+            Integer(input, 10)
           else
             Integer(input)
           end
