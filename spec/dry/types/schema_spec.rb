@@ -76,10 +76,11 @@ RSpec.describe Dry::Types::Hash::Schema do
     end
 
     before do
-      Dry::Types.register(
-        "phone",
-        Dry::Types::Definition.new(phone_struct).constructor(-> args { phone_struct.new(*args) })
-      )
+      PhoneType = Dry::Types::Definition.new(phone_struct).constructor(-> args { phone_struct.new(*args) })
+    end
+
+    after do
+      Object.send(:remove_const, :PhoneType)
     end
 
     let(:hash_schema) do
@@ -87,7 +88,7 @@ RSpec.describe Dry::Types::Hash::Schema do
         name: "coercible.string",
         age: "strict.integer",
         active: "params.bool",
-        phone: Dry::Types['phone']
+        phone: PhoneType
       }
     end
 
@@ -99,7 +100,7 @@ RSpec.describe Dry::Types::Hash::Schema do
 
     let(:valid_input) { { name: 'John', age: 23, active: true, phone: phone_struct.new(1, 23) } }
 
-    let(:phone) { Dry::Types['phone'].primitive }
+    let(:phone) { PhoneType.primitive }
 
     it_behaves_like Dry::Types::Definition do
       let(:type) { Dry::Types['hash'].schema(hash_schema) }
@@ -287,7 +288,7 @@ RSpec.describe Dry::Types::Hash::Schema do
           name: "coercible.string",
           age: "strict.integer",
           active: "params.bool",
-          phone: Dry::Types['phone'].meta(required: false)
+          phone: PhoneType.meta(required: false)
         }
       end
 
