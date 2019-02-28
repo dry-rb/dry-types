@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Definition, '#default' do
   context 'with a definition' do
-    subject(:type) { Dry::Types['string'].default('foo') }
+    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
 
     it_behaves_like Dry::Types::Definition
 
@@ -33,7 +33,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
 
   context 'with meta attributes' do
     context 'default called first' do
-      subject(:type) { Dry::Types['hash'].default({}).meta(required: false) }
+      subject(:type) { Dry::Types['hash'].default({}.freeze).meta(required: false) }
 
       it_behaves_like 'Dry::Types::Definition without primitive'
 
@@ -43,7 +43,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
 
     context 'default called last' do
-      subject(:type) { Dry::Types['hash'].meta(required: false).default({}) }
+      subject(:type) { Dry::Types['hash'].meta(required: false).default({}.freeze) }
 
       it_behaves_like 'Dry::Types::Definition without primitive'
 
@@ -80,7 +80,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
   end
 
   context 'with a callable value' do
-     context 'with 0-arity block' do
+    context 'with 0-arity block' do
       subject(:type) { Dry::Types['time'].default { Time.now } }
 
       it_behaves_like Dry::Types::Definition
@@ -90,7 +90,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
       end
     end
 
-     context 'with 1-arg block' do
+    context 'with 1-arg block' do
       let(:floor_to_date) { -> t { Time.new(t.year, t.month, t.day) } }
 
       subject(:type) do
@@ -106,14 +106,14 @@ RSpec.describe Dry::Types::Definition, '#default' do
   end
 
   describe 'decorator' do
-    subject(:type) { Dry::Types['strict.string'].default('foo') }
+    subject(:type) { Dry::Types['strict.string'].default('foo'.freeze) }
 
     it 'raises no-method error when type does not respond to a method' do
       expect { type.oh_noez }.to raise_error(NoMethodError, /oh_noez/)
     end
   end
 
-  describe'#with' do
+  describe '#with' do
     subject(:type) { Dry::Types['time'].default { Time.now }.with(meta: { foo: :bar }) }
 
     it_behaves_like Dry::Types::Definition
@@ -135,8 +135,18 @@ RSpec.describe Dry::Types::Definition, '#default' do
     expect(type[]).to eql([])
   end
 
+  it "prints warning when default value isn't frozen" do
+    expect(Dry::Core::Deprecations).to receive(:warn)
+    Dry::Types['string'].default('foo')
+  end
+
+  it 'discards warning when `shared` keyword is passed' do
+    expect(Dry::Core::Deprecations).not_to receive(:warn)
+    Dry::Types['string'].default('foo', shared: true)
+  end
+
   describe '#valid?' do
-    subject(:type) { Dry::Types['string'].default('foo') }
+    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
 
     it 'returns true if value is valid' do
       expect(type.valid?('bar')).to eq true

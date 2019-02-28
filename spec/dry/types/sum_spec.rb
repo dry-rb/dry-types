@@ -166,7 +166,7 @@ RSpec.describe Dry::Types::Sum do
 
   describe '#default' do
     it 'returns a default value sum type' do
-      type = (Dry::Types['nil'] | Dry::Types['string']).default('foo')
+      type = (Dry::Types['nil'] | Dry::Types['string']).default('foo'.freeze)
 
       expect(type.call).to eql('foo')
     end
