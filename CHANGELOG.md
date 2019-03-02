@@ -46,6 +46,9 @@
   inc.("1") # => "1" -> "12" -> 12
   ```
 
+## Fixed
+
+* `Hash::Map` now behaves as a constrained type if its values are constrained (flash-gordon)
 
 [Compare v0.14.0...master](https://github.com/dry-rb/dry-types/compare/v0.14.0...master)
 
