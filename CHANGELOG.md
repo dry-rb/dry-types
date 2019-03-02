@@ -8,6 +8,7 @@
   Dry::Types['strict.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
   ```
 - [BREAKING] Support for Ruby < 2.4 was dropped
+- `params.integer` now always converts strings to decimal numbers, this means `09` will be coerced to `9` (threw an error before) (skryukov)
 
 ## Added
 
