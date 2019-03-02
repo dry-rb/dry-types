@@ -8,6 +8,7 @@
   Dry::Types['strict.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
   ```
 - [BREAKING] Support for Ruby < 2.4 was dropped
+- [BREAKING] Default values are not evaluated if the decorated type returns `nil`. They are triggered on `Undefined` instead (GustavoCaso + flash-gordon)
 - `params.integer` now always converts strings to decimal numbers, this means `09` will be coerced to `9` (threw an error before) (skryukov)
 
 ## Added
@@ -44,7 +45,6 @@
   inc = to_int.prepend { |x| x + "2" }
   inc.("1") # => "1" -> "12" -> 12
   ```
-
 
 
 [Compare v0.14.0...master](https://github.com/dry-rb/dry-types/compare/v0.14.0...master)
