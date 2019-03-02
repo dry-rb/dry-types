@@ -29,9 +29,9 @@ module Dry
         # @return [Object]
         # @raise [ConstraintError] if given +input+ not passing {#try}
         def call(input)
-          try(input) do |result|
+          try(input) { |result|
             raise ConstraintError.new(result, input)
-          end.input
+          }.input
         end
         alias_method :[], :call
       end
@@ -73,16 +73,14 @@ module Dry
       alias_method :[], :call
 
       def try(input, &block)
-        result = left.try(input) do
-          right.try(input)
-        end
-
-        return result if result.success?
-
-        if block
-          yield(result)
-        else
-          result
+        left.try(input) do
+          right.try(input) do |failure|
+            if block_given?
+              yield(failure)
+            else
+              failure
+            end
+          end
         end
       end
 

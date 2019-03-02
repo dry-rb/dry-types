@@ -175,9 +175,8 @@ RSpec.describe Dry::Types::Map do
         end
 
         it "yields Result::Failure" do
-          expect do |b|
-            map.try(input, &b)
-          end.to yield_with_args(Dry::Types::Result::Failure)
+          expect { |b| map.try(input, &b) }.
+            to yield_with_args(Dry::Types::Result::Failure)
         end
       end
 

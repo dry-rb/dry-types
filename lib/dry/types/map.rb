@@ -53,6 +53,11 @@ module Dry
           meta ? self.meta : EMPTY_HASH]]
       end
 
+      # @return [Boolean]
+      def constrained?
+        value_type.constrained?
+      end
+
       private
 
       def coerce(input)

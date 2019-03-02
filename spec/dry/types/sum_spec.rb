@@ -240,4 +240,16 @@ RSpec.describe Dry::Types::Sum do
       end
     end
   end
+
+  context 'with map type' do
+    let(:map_type) { Dry::Types['strict.hash'].map(Dry::Types['strict.symbol'], Dry::Types['strict.string']) }
+    let(:string_type) { Dry::Types['strict.string'] }
+
+    subject(:type) { map_type | string_type }
+
+    it 'rejects invalid input' do
+      expect(type.valid?(12345)).to be false
+      expect { type[12345] }.to raise_error(Dry::Types::ConstraintError)
+    end
+  end
 end
