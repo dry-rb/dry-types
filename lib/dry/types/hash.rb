@@ -1,30 +1,28 @@
-require 'dry/types/hash/schema_builder'
 require 'dry/types/hash/key'
 require 'dry/types/hash/constructor'
+require 'dry/types/hash/schema'
 
 module Dry
   module Types
     class Hash < Definition
-      SCHEMA_BUILDER = SchemaBuilder.new.freeze
       NOT_REQUIRED = { required: false }.freeze
 
-      # @param [{Symbol => Definition}] type_map
-      # @param [Symbol] constructor
-      # @return [Schema]
-      def schema(type_map, constructor = nil)
-        keys = build_keys(type_map)
-
-        if constructor.nil?
-          Schema.new(primitive, keys: keys, **options, meta: meta)
+      # @overload schmea(type_map, meta = EMPTY_HASH)
+      #   @param [{Symbol => Dry::Types::Definition}] type_map
+      #   @param [Hash] meta
+      #   @return [Dry::Types::Hash::Schema]
+      # @overload schema(keys)
+      #   @param [Array<Dry::Types::Hash::Key>] key List of schema keys
+      #   @param [Hash] meta
+      #   @return [Dry::Types::Hash::Schema]
+      def schema(keys_or_map, meta = EMPTY_HASH)
+        if keys_or_map.is_a?(::Array)
+          keys = keys_or_map
         else
-          SCHEMA_BUILDER.(
-            primitive,
-            **options,
-            keys: keys,
-            meta: meta,
-            hash_type: constructor
-          )
+          keys = build_keys(keys_or_map)
         end
+
+        Schema.new(primitive, keys: keys, **options, meta: self.meta.merge(meta))
       end
 
       # Build a map type
@@ -43,41 +41,14 @@ module Dry
 
       # @param [{Symbol => Definition}] type_map
       # @return [Schema]
-      def weak(type_map)
-        schema(type_map, :weak)
+      def weak(*)
+        raise "Support for old hash schemas was removed, please refer to the CHANGELOG "\
+              "on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/master/CHANGELOG.md"
       end
-
-      # @param [{Symbol => Definition}] type_map
-      # @return [Schema]
-      def permissive(type_map)
-        schema(type_map, :permissive)
-      end
-
-      # @param [{Symbol => Definition}] type_map
-      # @return [Schema]
-      def strict(type_map)
-        schema(type_map, :strict)
-      end
-
-      # @param [{Symbol => Definition}] type_map
-      # @return [Schema]
-      def strict_with_defaults(type_map)
-        schema(type_map, :strict_with_defaults)
-      end
-
-      # @param [{Symbol => Definition}] type_map
-      # @return [Schema]
-      def symbolized(type_map)
-        schema(type_map, :symbolized)
-      end
-
-      # Build a schema from an AST
-      # @api private
-      # @param [Array[Dry::Types::Hash::Key]] keys
-      # @return [Schema]
-      def instantiate(keys)
-        SCHEMA_BUILDER.instantiate(primitive, **options, keys: keys)
-      end
+      alias_method :permissive, :weak
+      alias_method :strict, :weak
+      alias_method :strict_with_defaults, :weak
+      alias_method :symbolized, :weak
 
       # Injects a type transformation function for building schemas
       # @param [#call,nil] proc

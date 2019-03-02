@@ -37,8 +37,8 @@ RSpec.describe Dry::Types do
 
   describe '.Hash' do
     it 'builds a hash schema' do
-      expect(mod.Hash(:symbolized, age: Dry::Types['strict.integer'])).
-        to eql(Dry::Types['hash'].symbolized(age: Dry::Types['strict.integer']))
+      expect(mod.Hash(age: Dry::Types['strict.integer'])).
+        to eql(Dry::Types['hash'].schema(age: Dry::Types['strict.integer']))
     end
   end
 

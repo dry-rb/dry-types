@@ -3,10 +3,10 @@ RSpec.describe Dry::Types::Hash, :maybe do
 
   context 'Symbolized constructor' do
     subject(:hash) do
-      Dry::Types['hash'].symbolized(
+      Dry::Types['hash'].schema(
         name: 'string',
         email: email
-      )
+      ).with_key_transform(&:to_sym)
     end
 
     describe '#[]' do
@@ -37,7 +37,7 @@ RSpec.describe Dry::Types::Hash, :maybe do
 
   context 'Strict with defaults' do
     subject(:hash) do
-      Dry::Types['hash'].strict_with_defaults(
+      Dry::Types['hash'].schema(
         name: 'string',
         email: email
       )

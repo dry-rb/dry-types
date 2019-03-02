@@ -27,11 +27,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe coercible hash' do
-    ast = Dry::Types['hash'].permissive(
+    ast = Dry::Types['hash'].schema(
       email: Dry::Types['string'],
       age: Dry::Types['params.integer'],
       admin: Dry::Types['params.bool'],
-      address: Dry::Types['hash'].permissive(
+      address: Dry::Types['hash'].schema(
         city: Dry::Types['string'],
         street: Dry::Types['string']
       )
@@ -59,9 +59,9 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a strict hash' do
-    ast = Dry::Types['hash'].strict(
+    ast = Dry::Types['hash'].schema(
       email: Dry::Types['string']
-    ).to_ast
+    ).strict.to_ast
 
     hash = compiler.(ast)
 
@@ -75,9 +75,9 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a coercible hash' do
-    ast = Dry::Types['hash'].weak(
+    ast = Dry::Types['hash'].schema(
       email: Dry::Types['string'],
-      age: Dry::Types['params.nil'] | Dry::Types['params.integer'],
+      age?: Dry::Types['params.nil'] | Dry::Types['params.integer'],
       admin: Dry::Types['params.bool']
     ).to_ast
 
@@ -99,11 +99,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a coercible hash with symbolized keys' do
-    ast = Dry::Types['hash'].symbolized(
-      email: Dry::Types['string'],
-      age: Dry::Types['params.integer'],
-      admin: Dry::Types['params.bool']
-    ).to_ast
+    ast = Dry::Types['hash'].schema(
+      email?: Dry::Types['string'],
+      age?: Dry::Types['params.integer'],
+      admin?: Dry::Types['params.bool']
+    ).with_key_transform(&:to_sym).to_ast
 
     hash = compiler.(ast)
 
@@ -128,11 +128,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
   it 'builds an array' do
     ast = Dry::Types['array'].of(
-      Dry::Types['hash'].symbolized(
-        email: Dry::Types['string'],
+      Dry::Types['hash'].schema(
+        email?: Dry::Types['string'],
         age: Dry::Types['params.integer'],
         admin: Dry::Types['params.bool']
-      )
+      ).with_key_transform(&:to_sym)
     ).to_ast
 
     arr = compiler.(ast)
@@ -172,11 +172,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params hash' do
-    ast = Dry::Types['params.hash'].symbolized(
-        email: Dry::Types['string'],
-        age: Dry::Types['params.integer'],
-        admin: Dry::Types['params.bool'],
-    ).to_ast
+    ast = Dry::Types['params.hash'].schema(
+      email: Dry::Types['string'],
+      age: Dry::Types['params.integer'],
+      admin: Dry::Types['params.bool'],
+    ).with_key_transform(&:to_sym).to_ast
 
     hash = compiler.(ast)
 
@@ -220,9 +220,9 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = [:json_hash, [[], {}]]
 
     type = compiler.(ast)
-    expected_result = Dry::Types['hash'].symbolized({}).safe
+    expected_result = Dry::Types['hash'].schema({}).safe
 
-    expect(type).to eq(expected_result)
+    expect(type).to eql(expected_result)
   end
 
   it 'builds a json array from a :json_array node' do

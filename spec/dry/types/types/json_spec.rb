@@ -77,7 +77,7 @@ RSpec.describe Dry::Types::Definition do
   end
 
   describe 'json.hash' do
-    subject(:type) { Dry::Types['json.hash'].weak(age: Dry::Types['integer']) }
+    subject(:type) { Dry::Types['json.hash'].schema(age: Dry::Types['integer']) }
 
     it 'returns original value when it is not an hash' do
       foo = 'foo'
