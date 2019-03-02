@@ -16,8 +16,8 @@ RSpec.describe Dry::Types::Definition, '#default' do
       expect(type['bar']).to eql('bar')
     end
 
-    it 'returns default value when nil is passed too' do
-      expect(type[nil]).to eql('foo')
+    it 'does not return default value when nil is passed' do
+      expect(type[nil]).to eql(nil)
     end
   end
 
@@ -147,11 +147,22 @@ RSpec.describe Dry::Types::Definition, '#default' do
     end
 
     it 'returns true if value is Undefined' do
-      expect(type.valid?(Dry::Core::Constants::Undefined)).to eq true
+      expect(type.valid?(Undefined)).to eq true
     end
 
     it 'returns true if no value is passed' do
       expect(type.valid?).to eq true
+    end
+  end
+
+  context 'with a constructor' do
+    describe 'returning Undefined' do
+      let(:non_empty_string) { Dry::Types['string'].constructor { |str| str.empty? ? Undefined : str } }
+      subject(:type) { non_empty_string.default("empty") }
+
+      it 'returns default value on empty input' do
+        expect(type[""]).to eql("empty")
+      end
     end
   end
 end
