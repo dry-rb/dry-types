@@ -67,7 +67,7 @@ module Dry
         if input.equal?(Undefined)
           evaluate
         else
-          type[input]
+          Undefined.default(type[input]) { evaluate }
         end
       end
       alias_method :[], :call
