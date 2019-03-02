@@ -59,9 +59,9 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a strict hash' do
-    ast = Dry::Types['hash'].strict(
+    ast = Dry::Types['hash'].schema(
       email: Dry::Types['string']
-    ).to_ast
+    ).strict.to_ast
 
     hash = compiler.(ast)
 
@@ -75,9 +75,9 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a coercible hash' do
-    ast = Dry::Types['hash'].weak(
+    ast = Dry::Types['hash'].schema(
       email: Dry::Types['string'],
-      age: Dry::Types['params.nil'] | Dry::Types['params.integer'],
+      age?: Dry::Types['params.nil'] | Dry::Types['params.integer'],
       admin: Dry::Types['params.bool']
     ).to_ast
 
@@ -99,11 +99,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a coercible hash with symbolized keys' do
-    ast = Dry::Types['hash'].symbolized(
-      email: Dry::Types['string'],
-      age: Dry::Types['params.integer'],
-      admin: Dry::Types['params.bool']
-    ).to_ast
+    ast = Dry::Types['hash'].schema(
+      email?: Dry::Types['string'],
+      age?: Dry::Types['params.integer'],
+      admin?: Dry::Types['params.bool']
+    ).with_key_transform(&:to_sym).to_ast
 
     hash = compiler.(ast)
 
@@ -128,11 +128,11 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
   it 'builds an array' do
     ast = Dry::Types['array'].of(
-      Dry::Types['hash'].symbolized(
-        email: Dry::Types['string'],
+      Dry::Types['hash'].schema(
+        email?: Dry::Types['string'],
         age: Dry::Types['params.integer'],
         admin: Dry::Types['params.bool']
-      )
+      ).with_key_transform(&:to_sym)
     ).to_ast
 
     arr = compiler.(ast)

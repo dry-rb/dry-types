@@ -94,7 +94,7 @@ module Dry
         # @return [Array] An AST representation
         def to_ast(meta: true)
           [
-            :hash_schema,
+            :hash,
             [
               keys.map { |key| key.to_ast(meta: meta) },
               meta ? self.meta : EMPTY_HASH
@@ -137,10 +137,23 @@ module Dry
           meta(key_transform_fn: handle)
         end
 
-        # @param [{Symbol => Definition}] type_map
-        # @return [Schema]
-        def schema(type_map)
-          keys = merge_keys(self.keys, build_keys(type_map))
+
+        # @overload schmea(type_map, meta = EMPTY_HASH)
+        #   @param [{Symbol => Dry::Types::Definition}] type_map
+        #   @param [Hash] meta
+        #   @return [Dry::Types::Hash::Schema]
+        # @overload schema(keys)
+        #   @param [Array<Dry::Types::Hash::Key>] key List of schema keys
+        #   @param [Hash] meta
+        #   @return [Dry::Types::Hash::Schema]
+        def schema(keys_or_map)
+          if keys_or_map.is_a?(::Array)
+            new_keys = keys_or_map
+          else
+            new_keys = build_keys(keys_or_map)
+          end
+
+          keys = merge_keys(self.keys, new_keys)
           Schema.new(primitive, **options, keys: keys, meta: meta)
         end
 
@@ -181,6 +194,9 @@ module Dry
 
         private
 
+        # @param [Array<Dry::Types::Hash::Keys>] keys
+        # @return [Dry::Types::Hash::Schema]
+        # @api private
         def merge_keys(*keys)
           keys.
             flatten(1).

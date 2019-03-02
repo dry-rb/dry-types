@@ -22,13 +22,12 @@ module Dry
 
       # Build a hash schema
       #
-      # @param [Symbol] schema Schema type
       # @param [Hash{Symbol => Dry::Types::Type}] type_map
       #
       # @return [Dry::Types::Array]
       # @api public
-      def Hash(schema, type_map)
-        self::Hash.public_send(schema, type_map)
+      def Hash(type_map)
+        self::Hash.schema(type_map)
       end
 
       # Build a type which values are instances of a given class

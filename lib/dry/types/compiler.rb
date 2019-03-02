@@ -59,18 +59,13 @@ module Dry
       end
 
       def visit_hash(node)
-        constructor, schema, meta = node
-        merge_with('hash', constructor, schema).meta(meta)
-      end
-
-      def visit_hash_schema(node)
-        schema, meta = node
-        merge_with_schema('hash', schema).meta(meta)
+        keys, meta = node
+        registry['hash'].schema(keys.map { |key| visit(key) }, meta)
       end
 
       def visit_json_hash(node)
-        schema, meta = node
-        merge_with('json.hash', :symbolized, schema).meta(meta)
+        keys, meta = node
+        registry['json.hash'].schema(keys.map { |key| visit(key) }, meta)
       end
 
       def visit_json_array(node)
@@ -79,8 +74,8 @@ module Dry
       end
 
       def visit_params_hash(node)
-        schema, meta = node
-        merge_with('params.hash', :symbolized, schema).meta(meta)
+        keys, meta = node
+        registry['params.hash'].schema(keys.map { |key| visit(key) }, meta)
       end
 
       def visit_params_array(node)
@@ -101,18 +96,6 @@ module Dry
       def visit_map(node)
         key_type, value_type, meta = node
         registry['hash'].map(visit(key_type), visit(value_type)).meta(meta)
-      end
-
-      def merge_with(hash_id, constructor, schema)
-        mapping = schema.each_with_object({}) do |(_, (name, required, type)), m|
-          m[name] = visit(type).meta(required: required)
-        end
-
-        registry[hash_id].schema(mapping, constructor)
-      end
-
-      def merge_with_schema(hash_id, keys)
-        registry[hash_id].instantiate(keys.map { |key| visit(key) })
       end
     end
   end
