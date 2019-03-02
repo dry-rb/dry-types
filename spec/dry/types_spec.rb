@@ -9,14 +9,11 @@ RSpec.describe Dry::Types do
         end
       end
 
-      Dry::Types.register(
-        'custom_array',
-        Dry::Types::Definition.new(Array).constructor(Test::FlatArray.method(:constructor))
-      )
+      custom_array = Dry::Types::Definition.new(Array).constructor(Test::FlatArray.method(:constructor))
 
       input = [[1], [2]]
 
-      expect(Dry::Types['custom_array'][input]).to eql([1, 2])
+      expect(custom_array[input]).to eql([1, 2])
     end
   end
 

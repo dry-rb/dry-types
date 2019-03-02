@@ -8,11 +8,11 @@ RSpec.describe Dry::Types::Hash do
       name: "coercible.string",
       age: "strict.integer",
       active: "params.bool",
-      phone: Dry::Types['phone']
+      phone: PhoneType
     }
   end
 
-  let(:phone) { Dry::Types['phone'].primitive }
+  let(:phone) { PhoneType.primitive }
 
   before do
     phone = Struct.new(:prefix, :number) do
@@ -21,10 +21,11 @@ RSpec.describe Dry::Types::Hash do
       end
     end
 
-    Dry::Types.register(
-      "phone",
-      Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
-    )
+    PhoneType = Dry::Types::Definition.new(phone).constructor(-> args { phone.new(*args) })
+  end
+
+  after do
+    Object.send(:remove_const, :PhoneType)
   end
 
   shared_examples 'hash schema behavior' do
@@ -143,7 +144,7 @@ RSpec.describe Dry::Types::Hash do
           name: "coercible.string",
           age: Dry::Types["strict.integer"].default(21),
           active: "params.bool",
-          phone: Dry::Types['phone']
+          phone: PhoneType
         }
       end
 
@@ -172,7 +173,7 @@ RSpec.describe Dry::Types::Hash do
           name: "coercible.string",
           age: Dry::Types["strict.integer"].default(21),
           active: "params.bool",
-          phone: Dry::Types['phone']
+          phone: PhoneType
         }
       end
 
@@ -190,7 +191,7 @@ RSpec.describe Dry::Types::Hash do
           name: "coercible.string",
           age: Dry::Types["strict.integer"].default(21),
           active: "params.bool",
-          phone: Dry::Types['phone']
+          phone: PhoneType
         }
       end
 
