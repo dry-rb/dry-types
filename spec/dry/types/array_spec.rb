@@ -98,11 +98,21 @@ RSpec.describe Dry::Types::Array do
     end
   end
 
+  context 'member' do
+    describe '#to_s' do
+      subject(:type) { Dry::Types['array'].of(Dry::Types['string']) }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Array<Definition<String>>]>')
+      end
+    end
+  end
+
   describe '#to_s' do
-    subject(:type) { Dry::Types['array'].of(Dry::Types['string']) }
+    subject(:type) { Dry::Types['array'] }
 
     it 'returns string representation of the type' do
-      expect(type.to_s).to eql('#<Dry::Types[Array<Definition<String>>]>')
+      expect(type.to_s).to eql('#<Dry::Types[Array]>')
     end
   end
 end

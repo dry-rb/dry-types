@@ -14,7 +14,8 @@ module Dry
         Hash::Schema => :visit_schema,
         Hash::Key => :visit_key,
         Map => :visit_map,
-        Array::Member => :visit_array,
+        Array => :visit_array,
+        Array::Member => :visit_array_member,
         Safe => :visit_safe,
         Enum => :visit_enum,
         Default => :visit_default,
@@ -40,6 +41,10 @@ module Dry
       end
 
       def visit_array(type, out)
+        out << "Array"
+      end
+
+      def visit_array_member(type, out)
         out << "Array<#{ visit(type.member, "".dup) }>"
       end
 
