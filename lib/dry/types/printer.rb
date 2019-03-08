@@ -33,7 +33,11 @@ module Dry
 
       def visit(type, &block)
         print_with = MAPPING.fetch(type.class) do
-          raise ArgumentError, "Do not know how to print #{ type.class }"
+          if type.is_a?(Type)
+            return yield type.inspect
+          else
+            raise ArgumentError, "Do not know how to print #{ type.class }"
+          end
         end
         send(print_with, type, &block)
       end

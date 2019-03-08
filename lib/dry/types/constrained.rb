@@ -6,9 +6,10 @@ module Dry
   module Types
     class Constrained
       include Type
-      include Dry::Equalizer(:type, :options, :rule, :meta, inspect: false)
       include Decorator
       include Builder
+      include Printable
+      include Dry::Equalizer(:type, :options, :rule, :meta, inspect: false)
 
       # @return [Dry::Logic::Rule]
       attr_reader :rule

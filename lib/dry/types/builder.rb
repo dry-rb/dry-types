@@ -78,13 +78,6 @@ module Dry
       def constructor(constructor = nil, **options, &block)
         constructor_type.new(with(options), fn: constructor || block)
       end
-
-      # @return [String]
-      # @api public
-      def to_s
-        PRINTER.(self)
-      end
-      alias_method :inspect, :to_s
     end
   end
 end

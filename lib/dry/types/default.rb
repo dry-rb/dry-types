@@ -4,9 +4,10 @@ module Dry
   module Types
     class Default
       include Type
-      include Dry::Equalizer(:type, :options, :value, inspect: false)
       include Decorator
       include Builder
+      include Printable
+      include Dry::Equalizer(:type, :options, :value, inspect: false)
 
       class Callable < Default
         include Dry::Equalizer(:type, :options, inspect: false)

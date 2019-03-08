@@ -4,9 +4,11 @@ module Dry
   module Types
     class Safe
       include Type
-      include Dry::Equalizer(:type, inspect: false)
       include Decorator
       include Builder
+      include Printable
+      include Dry::Equalizer(:type, inspect: false)
+
       private :options, :meta
 
       # @param [Object] input

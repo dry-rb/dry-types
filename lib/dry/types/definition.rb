@@ -8,6 +8,7 @@ module Dry
       include Type
       include Options
       include Builder
+      include Printable
       include Dry::Equalizer(:primitive, :options, :meta, inspect: false)
 
       # @return [Class]

@@ -4,9 +4,10 @@ module Dry
   module Types
     class Sum
       include Type
-      include Dry::Equalizer(:left, :right, :options, :meta, inspect: false)
       include Builder
       include Options
+      include Printable
+      include Dry::Equalizer(:left, :right, :options, :meta, inspect: false)
 
       # @return [Type]
       attr_reader :left
