@@ -63,10 +63,10 @@ module Dry
     class Printer
       MAPPING[Maybe] = :visit_maybe
 
-      def visit_maybe(type, out)
-        out << "Maybe<"
-        visit(type.type, out)
-        out << ">"
+      def visit_maybe(maybe)
+        visit(maybe.type) do |type|
+          yield "Maybe<#{ type }>"
+        end
       end
     end
 

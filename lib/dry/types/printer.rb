@@ -26,223 +26,273 @@ module Dry
       }
 
       def call(type)
-        "#<Dry::Types[#{ visit(type, "".dup) }]>"
+        output = "".dup
+        visit(type) { |str| output << str }
+        "#<Dry::Types[#{ output }]>"
       end
 
-      def visit(type, out)
+      def visit(type, &block)
         print_with = MAPPING.fetch(type.class) do
           raise ArgumentError, "Do not know how to print #{ type.class }"
         end
-        send(print_with, type, out)
+        send(print_with, type, &block)
       end
 
-      def visit_any(_type, out)
-        out << "Any"
+      def visit_any(_)
+        yield "Any"
       end
 
-      def visit_array(type, out)
-        out << "Array"
+      def visit_array(_)
+         yield "Array"
       end
 
-      def visit_array_member(type, out)
-        out << "Array<#{ visit(type.member, "".dup) }>"
+      def visit_array_member(array)
+        visit(array.member) do |type|
+          yield "Array<#{ type }>"
+        end
       end
 
-      def visit_constructor(type, out)
-        out << "Constructor<"
+      def visit_constructor(constructor)
+        visit(constructor.type) do |type|
+          visit_callable(constructor.fn) do |fn|
+            options = constructor.options.dup
+            options.delete(:fn)
 
-        visit(type.type, out)
-        visit_callable(type.fn, out << " fn=")
-
-        out << options(type, exclude: %i(fn)) << meta(type) << ">"
+            visit_options(options, constructor.meta) do |opts|
+              yield "Constructor<#{ type } fn=#{ fn }#{ opts }>"
+            end
+          end
+        end
       end
 
-      def visit_constrained(type, out)
-        out << "Constrained<"
-        visit(type.type, out)
+      def visit_constrained(constrained)
+        visit(constrained.type) do |type|
+          options = constrained.options.dup
+          rule = options.delete(:rule)
 
-        rule = type.rule.to_s
-
-        out << " rule=[#{ rule }]"
-        out << options(type, exclude: %i(rule)) << meta(type) << ">"
+          visit_options(options, constrained.meta) do |opts|
+            yield "Constrained<#{ type } rule=[#{ rule.to_s }]>"
+          end
+        end
       end
 
-      def visit_schema(type, out)
-        out << "Schema<keys={" << type.map { |key| visit(key, "".dup) }.join(", ") << "}"
+      def visit_schema(schema)
+        meta = schema.meta.dup
+        options = schema.options.dup
+        size = schema.count
+        key_fn_str = ""
+        type_fn_str = ""
+        strict_str = ""
 
-        out << " strict" if type.strict?
+        strict_str = "strict " if meta.delete(:strict)
 
-        if type.trasform_keys?
-          visit_callable(type.meta[:key_transform_fn], out << " key_fn=")
+        if key_fn = meta.delete(:key_transform_fn)
+          visit_callable(key_fn) do |fn|
+            key_fn_str = "key_fn=#{ fn } "
+          end
         end
 
-        if type.transform_types?
-          visit_callable(type.meta[:type_transform_fn], out << " type_fn=")
+        if type_fn = meta.delete(:type_transform_fn)
+          visit_callable(type_fn) do |fn|
+            type_fn_str = "type_fn=#{ fn } "
+          end
         end
 
-        out << options(type, exclude: %i(keys))
-        out << meta(type, exclude: %i(strict key_transform_fn type_transform_fn))
-        out << ">"
+        keys = options.delete(:keys)
+
+        visit_options(options, meta) do |opts|
+          schema_parameters = "#{ key_fn_str }#{ type_fn_str }#{ strict_str }#{ opts }"
+
+          header = "Schema<#{ schema_parameters }keys={"
+
+          if size.zero?
+            yield "#{ header}}>"
+          else
+            yield header
+            keys.each_with_index do |key, index|
+              visit(key) do |type|
+                if index == size - 1
+                  yield(type)
+                else
+                  yield "#{ type } "
+                end
+              end
+            end
+            yield "}>"
+          end
+        end
       end
 
-      def visit_map(type, out)
-        out << "Map<"
-        visit(type.key_type, out)
-        out << " => "
-        visit(type.value_type, out)
-        out << options(type, exclude: %i(key_type value_type)) << meta(type) << ">"
+      def visit_map(map)
+        visit(map.key_type) do |key|
+          visit(map.value_type) do |value|
+            options = map.options.dup
+            options.delete(:key_type)
+            options.delete(:value_type)
+
+            visit_options(options, map.meta) do |opts|
+              yield "Map<#{ key } => #{ value }>"
+            end
+          end
+        end
       end
 
-      def visit_key(type, out)
-        key_out = visit(type.type, "".dup).chomp!(">")
+      def visit_key(key)
+        visit(key.type) do |type|
+          if key.required?
+            yield "#{ key.name }: #{ type }"
+          else
+            yield "#{ key.name }?: #{ type }"
+          end
+        end
+      end
 
-        if type.required?
-          out << "#{ type.name }: #{ key_out }"
+      def visit_sum(sum)
+        visit_sum_constructors(sum) do |constructors|
+          visit_options(sum.options, sum.meta) do |opts|
+            yield "Sum<#{ constructors }#{ opts }>"
+          end
+        end
+      end
+
+      def visit_sum_constructors(sum)
+        case sum.left
+        when Sum
+          visit_sum_constructors(sum.left) do |left|
+            case sum.right
+            when Sum
+              visit_sum_constructors(sum.right) do |right|
+                yield "#{ left } | #{ right }"
+              end
+            else
+              visit(sum.right) do |right|
+                yield "#{ left } | #{ right }"
+              end
+            end
+          end
         else
-          out << "#{ type.name }?: #{ key_out }"
-        end
-        out << meta(type) << ">"
-      end
-
-      def visit_sum(type, out)
-        out << "Sum<"
-        visit_sum_constructors(type, out)
-        out << options(type) << meta(type) << ">"
-      end
-
-      def visit_sum_constructors(type, out)
-        case type.left
-        when Sum, Sum::Constrained
-          visit_sum_constructors(type.left, out)
-        else
-          visit(type.left, out)
-        end
-
-        out << " | "
-
-        case type.right
-        when Sum, Sum::Constrained
-          visit_sum_constructors(type.right, out)
-        else
-          visit(type.right, out)
+          visit(sum.left) do |left|
+            case sum.right
+            when Sum
+              visit_sum_constructors(sum.right) do |right|
+                yield "#{ left } | #{ right }"
+              end
+            else
+              visit(sum.right) do |right|
+                yield "#{ left } | #{ right }"
+              end
+            end
+          end
         end
       end
 
-      def visit_enum(type, out)
-        out << "Enum<"
-        visit(type.type, out)
+      def visit_enum(enum)
+        visit(enum.type) do |type|
+          options = enum.options.dup
+          mapping = options.delete(:mapping)
 
-        if type.mapping == type.inverted_mapping
-          out << " values={"
-          out << type.mapping.values.map(&:inspect).join(", ")
-          out << "}"
-        else
-          out << " mapping={"
-          out << type.mapping.map { |key, value|
-            "#{ key.inspect }=>#{ value.inspect }"
-          }.join(", ")
-          out << "}"
-        end
-        out << options(type, exclude: %i(mapping))
-        out << meta(type)
-        out << ">"
-      end
-
-      def visit_default(type, out)
-        out << "Default<"
-        visit(type.type, out)
-
-        if type.is_a?(Default::Callable)
-          visit_callable(type.value, out << " value_fn=")
-        else
-          out << " value=#{ type.value.inspect }"
-        end
-
-        out << options(type) << meta(type, exclude: %i(strict)) << ">"
-      end
-
-      def visit_definition(type, out)
-        out << "Definition<#{ type.primitive }"
-        out << options(type) << meta(type, exclude: %i(strict)) << ">"
-      end
-
-      def visit_safe(type, out)
-        out << "Safe<#{ visit(type.type, "".dup) }>"
-      end
-
-      def visit_hash(type, out)
-        hash_output = "".dup
-
-        if type.transform_types?
-          visit_callable(type.meta[:type_transform_fn], hash_output << " type_fn=")
-        end
-
-        hash_output << options(type, exclude: %i(keys))
-        hash_output << meta(type, exclude: %i(type_transform_fn))
-
-        if hash_output.empty?
-          out << "Hash"
-        else
-          out << "Hash<#{ hash_output }>"
+          visit_options(options, enum.meta) do |opts|
+            if mapping == enum.inverted_mapping
+              values = mapping.values.map(&:inspect).join(", ")
+              yield "Enum<#{ type } values={#{ values }}#{ opts }>"
+            else
+              mapping_str = mapping.map { |key, value|
+                "#{ key.inspect }=>#{ value.inspect }"
+              }.join(", ")
+              yield "Enum<#{ type } mapping={#{ mapping_str }}#{ opts }>"
+            end
+          end
         end
       end
 
-      def options(type, exclude: EMPTY_ARRAY)
-        options = type.options.dup
-        exclude.each { |key| options.delete(key) }
-
-        if options.empty?
-          EMPTY_STRING
-        else
-          " options=#{ options.inspect }"
+      def visit_default(default)
+        visit(default.type) do |type|
+          visit_options(default.options, default.meta) do |opts|
+            if default.is_a?(Default::Callable)
+              visit_callable(default.value) do |fn|
+                yield "Default<#{ type } value_fn=#{ fn }#{ opts }>"
+              end
+            else
+              yield "Default<#{ type } value=#{ default.value.inspect }#{ opts }>"
+            end
+          end
         end
       end
 
-      def visit_callable(callable, out)
+      def visit_definition(type)
+        visit_options(type.options, type.meta) do |opts|
+          yield "Definition<#{ type.primitive }#{ opts }>"
+        end
+      end
+
+      def visit_safe(safe)
+        visit(safe.type) do |type|
+          yield "Safe<#{ type }>"
+        end
+      end
+
+      def visit_hash(hash)
+        meta = hash.meta.dup
+        type_fn_str = ""
+
+        if type_fn = meta.delete(:type_transform_fn)
+          visit_callable(type_fn) do |fn|
+            type_fn_str = " type_fn=#{ fn }"
+          end
+        end
+
+        visit_options(hash.options, hash.meta) do |opts|
+          if opts.empty? && type_fn_str.empty?
+            yield "Hash"
+          else
+            yield "Hash<#{ type_fn_str }#{ opts }>"
+          end
+        end
+      end
+
+      def visit_callable(callable)
         fn = callable.is_a?(String) ? FnContainer[callable] : callable
 
         case fn
         when Method
-          out << "#{ fn.receiver }.#{ fn.name }"
+          yield "#{ fn.receiver }.#{ fn.name }"
         when Proc
           path, line = fn.source_location
 
           if path
-            out << "#{ path.sub(Dir.pwd + "/", EMPTY_STRING) }:#{ line }"
+            yield "#{ path.sub(Dir.pwd + "/", EMPTY_STRING) }:#{ line }"
           elsif fn.lambda?
-            out << "(lambda)"
+            yield "(lambda)"
           else
             match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(\w+)\)>\z/)
 
             if match
-              out << ".#{ match[1] }"
+              yield ".#{ match[1] }"
             else
-              out << "(proc)"
+              yield "(proc)"
             end
           end
         else
           call = fn.method(:call)
 
           if call.owner == fn.class
-            out << "#{ fn.class.to_s }#call"
+            yield "#{ fn.class.to_s }#call"
           else
-            out << "#{ fn.to_s }.call"
+            yield "#{ fn.to_s }.call"
           end
         end
       end
 
-      def meta(type, exclude: EMPTY_ARRAY)
-        if type.meta.empty?
-          EMPTY_STRING
+      def visit_options(options, meta)
+        if options.empty? && meta.empty?
+          yield ""
         else
-          meta = type.meta.reject { |k, _| exclude.include?(k) }
+          opts = options.empty? ? "" : " options=#{ options.inspect }"
 
           if meta.empty?
-            EMPTY_STRING
+            yield opts
           else
-            meta_str = " meta={".dup
-
-            values = type.meta.map do |key, value|
+            values = meta.map do |key, value|
               case key
               when Symbol
                 "#{ key }: #{ value.inspect }"
@@ -251,7 +301,7 @@ module Dry
               end
             end
 
-            meta_str << values.join(", ") << "}"
+            yield "#{ opts } meta={#{ values.join(", ") }}"
           end
         end
       end
