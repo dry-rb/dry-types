@@ -137,8 +137,14 @@ module Dry
           meta(key_transform_fn: handle)
         end
 
+        # Whether the schema transforms input keys
+        # @return [Bool]
+        # @api public
+        def trasform_keys?
+          !meta[:key_transform_fn].nil?
+        end
 
-        # @overload schmea(type_map, meta = EMPTY_HASH)
+        # @overload schema(type_map, meta = EMPTY_HASH)
         #   @param [{Symbol => Dry::Types::Definition}] type_map
         #   @param [Hash] meta
         #   @return [Dry::Types::Hash::Schema]

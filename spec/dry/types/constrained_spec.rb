@@ -51,6 +51,20 @@ RSpec.describe Dry::Types::Constrained do
     end
   end
 
+  describe '#to_s' do
+    subject(:type) do
+      Dry::Types['strict.string'].constrained(size: 3..12)
+    end
+
+    it 'returns string representation of the type' do
+      expect(type.to_s).
+        to eql(
+            "#<Dry::Types[Constrained<Definition<String> "\
+            "rule=[type?(String) AND size?(3..12)]>]>"
+          )
+    end
+  end
+
   context 'with a constructor type' do
     subject(:type) do
       Dry::Types['coercible.hash'].constrained(size: 1)

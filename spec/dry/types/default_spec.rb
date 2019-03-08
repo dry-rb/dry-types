@@ -165,4 +165,80 @@ RSpec.describe Dry::Types::Definition, '#default' do
       end
     end
   end
+
+  describe '#to_s' do
+    context 'static valute' do
+      subject(:type) { Dry::Types['string'].default('foo') }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Default<Definition<String> value="foo">]>')
+      end
+    end
+
+    context 'callable value' do
+      subject(:type) { Dry::Types['string'].default(value_constructor) }
+
+      context 'proc' do
+        let(:value_constructor) { proc { 'foo' } }
+
+        let(:line_no) { value_constructor.source_location[1] }
+
+        it 'returns string representation of the type' do
+          expect(type.to_s).
+            to eql(
+              "#<Dry::Types[Default<Definition<String> "\
+              "value_fn=spec/dry/types/default_spec.rb:#{ line_no }>]>"
+            )
+        end
+      end
+
+      context 'proc w/o source' do
+        let(:value_constructor) { method(:Integer).to_proc }
+
+        it 'returns string representation of the type' do
+          expect(type.to_s).
+            to eql(
+              "#<Dry::Types[Default<Definition<String> "\
+              "value_fn=(lambda)>]>"
+            )
+        end
+      end
+
+      context 'method' do
+        let(:value_constructor) { Kernel.method(:Integer) }
+
+        it 'returns string representation of the type' do
+          expect(type.to_s).
+            to eql(
+              "#<Dry::Types[Default<Definition<String> "\
+              "value_fn=Kernel.Integer>]>"
+            )
+        end
+      end
+
+      context 'callable object' do
+        let(:value_constructor) do
+          obj = Object.new
+
+          def obj.to_s
+            "callable"
+          end
+
+          def obj.call(*)
+            5
+          end
+
+          obj
+        end
+
+        it 'returns string representation of the type' do
+          expect(type.to_s).
+            to eql(
+              "#<Dry::Types[Default<Definition<String> "\
+              "value_fn=callable.call>]>"
+            )
+        end
+      end
+    end
+  end
 end

@@ -234,4 +234,13 @@ RSpec.describe Dry::Types::Constructor do
       expect(type.method(:>>)).to eql(type.method(:append))
     end
   end
+
+  describe '#to_s' do
+    subject(:type) { Dry::Types['coercible.integer'] }
+
+    it 'returns string representation of the type' do
+      expect(type.to_s).
+        to eql("#<Dry::Types[Constructor<Definition<Integer> fn=Kernel.Integer>]>")
+    end
+  end
 end

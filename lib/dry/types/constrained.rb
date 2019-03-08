@@ -6,7 +6,7 @@ module Dry
   module Types
     class Constrained
       include Type
-      include Dry::Equalizer(:type, :options, :rule, :meta)
+      include Dry::Equalizer(:type, :options, :rule, :meta, inspect: false)
       include Decorator
       include Builder
 

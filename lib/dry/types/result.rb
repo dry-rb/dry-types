@@ -3,7 +3,7 @@ require 'dry/equalizer'
 module Dry
   module Types
     class Result
-      include Dry::Equalizer(:input)
+      include Dry::Equalizer(:input, inspect: false)
 
       # @return [Object]
       attr_reader :input
@@ -26,7 +26,7 @@ module Dry
       end
 
       class Failure < Result
-        include Dry::Equalizer(:input, :error)
+        include Dry::Equalizer(:input, :error, inspect: false)
 
         # @return [#to_s]
         attr_reader :error

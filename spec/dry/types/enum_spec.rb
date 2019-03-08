@@ -143,4 +143,30 @@ RSpec.describe Dry::Types::Enum do
       expect(enum_with_meta.meta).to eql(foo: :bar)
     end
   end
+
+  describe '#to_s' do
+    context 'simple enumeration' do
+      subject(:type) { Dry::Types['integer'].enum(4, 5, 6) }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).
+          to eql("#<Dry::Types[Enum<Constrained<Definition<Integer> "\
+                 "rule=[included_in?([4, 5, 6])]> values={4, 5, 6}>]>")
+      end
+    end
+
+    context 'mapping' do
+      let(:mapping) { {0 => 'draft', 10 => 'published', 20 => 'archived'} }
+
+      subject(:type) { Dry::Types['integer'].enum(mapping) }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).
+          to eql('#<Dry::Types[Enum<Constrained<Definition<Integer> '\
+                 'rule=[included_in?([0, 10, 20])]> '\
+                 'mapping={0=>"draft", 10=>"published", 20=>"archived"}>]>'
+                 )
+      end
+    end
+  end
 end

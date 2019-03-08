@@ -5,7 +5,7 @@ module Dry
   module Types
     class Maybe
       include Type
-      include Dry::Equalizer(:type, :options)
+      include Dry::Equalizer(:type, :options, inspect: false)
       include Decorator
       include Builder
       include Dry::Monads::Maybe::Mixin
