@@ -241,6 +241,34 @@ RSpec.describe Dry::Types::Sum do
     end
   end
 
+  describe '#to_s' do
+    context 'shallow sum' do
+      let(:type) { Dry::Types['string'] | Dry::Types['integer'] }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Sum<Definition<String> | Definition<Integer>>]>')
+      end
+    end
+
+    context 'sum tree' do
+      let(:type) do
+        Dry::Types['string'] | Dry::Types['integer'] | (Dry::Types['date'] | Dry::Types['time'])
+      end
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).
+          to eql(
+              '#<Dry::Types[Sum<'\
+              'Definition<String> | '\
+              'Definition<Integer> | '\
+              'Definition<Date> | '\
+              'Definition<Time>'\
+              '>]>'
+            )
+      end
+    end
+  end
+
   context 'with map type' do
     let(:map_type) { Dry::Types['strict.hash'].map(Dry::Types['strict.symbol'], Dry::Types['strict.string']) }
     let(:string_type) { Dry::Types['strict.string'] }

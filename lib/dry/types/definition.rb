@@ -8,7 +8,7 @@ module Dry
       include Type
       include Options
       include Builder
-      include Dry::Equalizer(:primitive, :options, :meta)
+      include Dry::Equalizer(:primitive, :options, :meta, inspect: false)
 
       # @return [Class]
       attr_reader :primitive

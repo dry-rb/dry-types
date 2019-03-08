@@ -1,6 +1,10 @@
 module Dry
   module Types
     Any = Class.new(Definition) do
+      def self.name
+        'Any'
+      end
+
       def initialize(**options)
         super(::Object, options)
       end

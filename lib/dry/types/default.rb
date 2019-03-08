@@ -4,12 +4,12 @@ module Dry
   module Types
     class Default
       include Type
-      include Dry::Equalizer(:type, :options, :value)
+      include Dry::Equalizer(:type, :options, :value, inspect: false)
       include Decorator
       include Builder
 
       class Callable < Default
-        include Dry::Equalizer(:type, :options)
+        include Dry::Equalizer(:type, :options, inspect: false)
 
         # Evaluates given callable
         # @return [Object]

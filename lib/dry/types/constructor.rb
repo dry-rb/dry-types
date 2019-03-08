@@ -3,7 +3,7 @@ require 'dry/types/fn_container'
 module Dry
   module Types
     class Constructor < Definition
-      include Dry::Equalizer(:type, :options, :meta)
+      include Dry::Equalizer(:type, :options, :meta, inspect: false)
 
       # @return [#call]
       attr_reader :fn

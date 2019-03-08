@@ -188,4 +188,13 @@ RSpec.describe Dry::Types::Map do
       end
     end
   end
+
+  describe '#to_s' do
+    subject(:type) { Dry::Types['hash'].map('string', 'integer') }
+
+    it 'returns string representation of the type' do
+      expect(type.to_s).
+        to eql('#<Dry::Types[Map<Definition<String> => Definition<Integer>>]>')
+    end
+  end
 end

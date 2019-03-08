@@ -70,6 +70,13 @@ module Dry
         ::Dry::Types::Hash::Constructor
       end
 
+      # Whether the type transforms types of schemas created by {Dry::Types::Hash#schema}
+      # @return [Bool]
+      # @api public
+      def transform_types?
+        !meta[:type_transform_fn].nil?
+      end
+
       private
 
       # @api private

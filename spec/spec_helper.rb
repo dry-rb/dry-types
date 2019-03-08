@@ -19,7 +19,6 @@ require 'dry-types'
 
 begin
   require 'pry-byebug'
-  require 'mutant'
 
   module Mutant
     class Selector

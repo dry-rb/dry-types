@@ -38,6 +38,14 @@ RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
       expect(type.optional?).to be_boolean
     end
   end
+
+  describe '#to_s' do
+    it 'returns a custom string representation' do
+      if type.class.name.start_with?('Dry::Types')
+        expect(type.to_s).to start_with('#<Dry::Types')
+      end
+    end
+  end
 end
 
 RSpec.shared_examples_for 'Dry::Types::Definition#meta' do

@@ -4,7 +4,7 @@ module Dry
   module Types
     class Enum
       include Type
-      include Dry::Equalizer(:type, :options, :mapping)
+      include Dry::Equalizer(:type, :options, :mapping, inspect: false)
       include Decorator
 
       # @return [Array]
@@ -59,6 +59,13 @@ module Dry
                  mapping,
                  meta ? self.meta : EMPTY_HASH]]
       end
+
+      # @return [String]
+      # @api public
+      def to_s
+        PRINTER.(self)
+      end
+      alias_method :inspect, :to_s
 
       private
 

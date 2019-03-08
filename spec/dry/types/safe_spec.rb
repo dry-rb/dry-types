@@ -32,4 +32,13 @@ RSpec.describe Dry::Types::Definition, '#safe' do
       expect(type[age: 'wat', active: '1']).to eql(age: 'wat', active: true)
     end
   end
+
+  describe '#to_s' do
+    subject(:type) { Dry::Types['coercible.integer'].safe }
+
+    it 'returns string representation of the type' do
+      expect(type.to_s).
+        to eql("#<Dry::Types[Safe<Constructor<Definition<Integer> fn=Kernel.Integer>>]>")
+    end
+  end
 end

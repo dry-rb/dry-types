@@ -5,7 +5,7 @@ module Dry
   module Types
     class Maybe
       include Type
-      include Dry::Equalizer(:type, :options)
+      include Dry::Equalizer(:type, :options, inspect: false)
       include Decorator
       include Builder
       include Dry::Monads::Maybe::Mixin
@@ -57,6 +57,16 @@ module Dry
       # @return [Maybe]
       def maybe
         Maybe.new(Types['strict.nil'] | self)
+      end
+    end
+
+    class Printer
+      MAPPING[Maybe] = :visit_maybe
+
+      def visit_maybe(maybe)
+        visit(maybe.type) do |type|
+          yield "Maybe<#{ type }>"
+        end
       end
     end
 

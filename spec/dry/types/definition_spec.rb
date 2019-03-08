@@ -68,5 +68,13 @@ RSpec.describe Dry::Types::Definition do
         end
       end
     end
+
+    describe '#to_s' do
+      let(:type) { Dry::Types['string']  }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Definition<String>]>')
+      end
+    end
   end
 end

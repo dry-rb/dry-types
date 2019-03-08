@@ -151,3 +151,4 @@ end
 
 require 'dry/types/core' # load built-in types
 require 'dry/types/extensions'
+require 'dry/types/printer'

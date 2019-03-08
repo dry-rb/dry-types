@@ -7,10 +7,13 @@ module Types
   include Dry::Types.module
 end
 
+
 begin
   require 'pry-byebug'
-  Pry.start
+  binding.pry
 rescue LoadError
   require 'irb'
-  IRB.start
+  binding.irb
 end
+
+puts
