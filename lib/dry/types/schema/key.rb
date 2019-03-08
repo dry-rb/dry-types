@@ -2,12 +2,12 @@ require 'dry/equalizer'
 
 module Dry
   module Types
-    class Hash < Definition
+    class Schema < Hash
       # Proxy type for schema keys. Contains only key name and
       # whether it's required or not. All other calls deletaged
       # to the wrapped type.
       #
-      # @see Dry::Types::Hash::Schema
+      # @see Dry::Types::Schema
       class Key
         include Type
         include ::Dry::Equalizer(:name, :type, :options)
@@ -53,7 +53,7 @@ module Dry
         #   Change key's "requireness"
         #
         #   @param [Boolean] required New value
-        #   @return [Dry::Types::Hash::Key]
+        #   @return [Dry::Types::Schema::Key]
         def required(required = Undefined)
           if Undefined.equal?(required)
             options.fetch(:required)
@@ -64,7 +64,7 @@ module Dry
 
         # Make key not required
         #
-        # @return [Dry::Types::Hash::Key]
+        # @return [Dry::Types::Schema::Key]
         def omittable
           required(false)
         end
@@ -74,20 +74,20 @@ module Dry
         # input.
         #
         # @see Dry::Types::Default
-        # @return [Dry::Types::Hash::Key]
+        # @return [Dry::Types::Schema::Key]
         def default(input = Undefined, &block)
           new(type.default(input, &block))
         end
 
         # Replace the underlying type
         # @param [Dry::Types::Type] type
-        # @return [Dry::Types::Hash::Key]
+        # @return [Dry::Types::Schema::Key]
         def new(type)
           self.class.new(type, name, options)
         end
 
         # @see Dry::Types::Safe
-        # @return [Dry::Types::Hash::Key]
+        # @return [Dry::Types::Schema::Key]
         def safe
           new(type.safe)
         end

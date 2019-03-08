@@ -75,23 +75,40 @@ RSpec.describe Dry::Types, '#to_ast' do
   context 'Hash' do
     subject(:type) { Dry::Types['hash'] }
 
+    let(:type_transformation) { :itself.to_proc }
+    let(:type_fn) { Dry::Types::FnContainer.register_name(type_transformation) }
+
     specify do
       expect(type.to_ast).
-        to eql([:definition, [Hash, {}]])
+        to eql([:hash, [{}, {}]])
+    end
+
+    specify 'with type trasnformation' do
+      expect(type.with_type_transform(type_transformation).to_ast).
+        to eql([:hash, [{ type_transform_fn: type_fn }, {}]])
     end
 
     context 'schema' do
       subject(:type) { Dry::Types['hash'].schema(name: Dry::Types['string'], age: Dry::Types['integer']) }
       let(:keys_ast)  { type.keys.map(&:to_ast) }
 
+      let(:key_transformation) { :to_sym.to_proc }
+
+      let(:key_fn) { Dry::Types::FnContainer.register_name(key_transformation) }
+
       specify do
         expect(type.to_ast).
-          to eql([:hash, [keys_ast, {}]])
+          to eql([:schema, [keys_ast, {}, {}]])
       end
 
       specify 'with meta' do
         expect(type_with_meta.to_ast).
-          to eql([:hash, [keys_ast, key: :value]])
+          to eql([:schema, [keys_ast, {}, { key: :value }]])
+      end
+
+      specify 'with key transformation' do
+        expect(type_with_meta.with_key_transform(key_transformation).to_ast).
+          to eql([:schema, [keys_ast, { key_transform_fn: key_fn }, { key: :value }]])
       end
     end
   end

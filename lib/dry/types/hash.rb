@@ -1,6 +1,4 @@
-require 'dry/types/hash/key'
 require 'dry/types/hash/constructor'
-require 'dry/types/hash/schema'
 
 module Dry
   module Types
@@ -10,11 +8,11 @@ module Dry
       # @overload schmea(type_map, meta = EMPTY_HASH)
       #   @param [{Symbol => Dry::Types::Definition}] type_map
       #   @param [Hash] meta
-      #   @return [Dry::Types::Hash::Schema]
+      #   @return [Dry::Types::Schema]
       # @overload schema(keys)
-      #   @param [Array<Dry::Types::Hash::Key>] key List of schema keys
+      #   @param [Array<Dry::Types::Schema::Key>] key List of schema keys
       #   @param [Hash] meta
-      #   @return [Dry::Types::Hash::Schema]
+      #   @return [Dry::Types::Schema]
       def schema(keys_or_map, meta = EMPTY_HASH)
         if keys_or_map.is_a?(::Array)
           keys = keys_or_map
@@ -62,7 +60,7 @@ module Dry
         end
 
         handle = Dry::Types::FnContainer.register(fn)
-        meta(type_transform_fn: handle)
+        with(type_transform_fn: handle)
       end
 
       # @api private
@@ -74,19 +72,31 @@ module Dry
       # @return [Bool]
       # @api public
       def transform_types?
-        !meta[:type_transform_fn].nil?
+        !options[:type_transform_fn].nil?
+      end
+
+      # @param meta [Boolean] Whether to dump the meta to the AST
+      # @return [Array] An AST representation
+      def to_ast(meta: true)
+        if RUBY_VERSION >= "2.5"
+          opts = options.slice(:type_transform_fn)
+        else
+          opts = options.select { |k, _| k == :type_transform_fn }
+        end
+
+        [:hash, [opts, meta ? self.meta : EMPTY_HASH]]
       end
 
       private
 
       # @api private
       def build_keys(type_map)
-        type_fn = meta.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
+        type_fn = options.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
         type_transform = Dry::Types::FnContainer[type_fn]
 
         type_map.map do |map_key, type|
           name, options = key_name(map_key)
-          key = Key.new(resolve_type(type), name, options)
+          key = Schema::Key.new(resolve_type(type), name, options)
           type_transform.(key)
         end
       end
@@ -110,3 +120,6 @@ module Dry
     end
   end
 end
+
+require 'dry/types/schema/key'
+require 'dry/types/schema'
