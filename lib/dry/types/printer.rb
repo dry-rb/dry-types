@@ -2,18 +2,23 @@ module Dry
   module Types
     class Printer
       MAPPING = {
-        Dry::Types::Definition => :visit_definition,
-        Dry::Types::Constructor => :visit_constructor,
-        Dry::Types::Constrained => :visit_constrained,
-        Dry::Types::Hash::Schema => :visit_schema,
-        Dry::Types::Hash::Key => :visit_key,
-        Dry::Types::Map => :visit_map,
-        Dry::Types::Safe => :visit_safe,
-        Dry::Types::Enum => :visit_enum,
-        Dry::Types::Default => :visit_default,
-        Dry::Types::Default::Callable => :visit_default,
-        Dry::Types::Sum => :visit_sum,
-        Dry::Types::Sum::Constrained => :visit_sum,
+        Definition => :visit_definition,
+        Constructor => :visit_constructor,
+        Hash::Constructor => :visit_constructor,
+        Constrained => :visit_constrained,
+        Constrained::Coercible => :visit_constrained,
+        Hash => :visit_hash,
+        Hash::Schema => :visit_schema,
+        Hash::Key => :visit_key,
+        Map => :visit_map,
+        Array::Member => :visit_array,
+        Safe => :visit_safe,
+        Enum => :visit_enum,
+        Default => :visit_default,
+        Default::Callable => :visit_default,
+        Sum => :visit_sum,
+        Sum::Constrained => :visit_sum,
+        Any.class => :visit_any
       }
 
       def call(type)
@@ -23,7 +28,19 @@ module Dry
       end
 
       def visit(type, out)
-        send(MAPPING.fetch(type.class), type, out)
+        print_with = MAPPING.fetch(type.class) do
+          raise ArgumentError, "Do not know how to print #{ type.class }"
+        end
+        send(print_with, type, out)
+      end
+
+      def visit_any(_type, out)
+        out << "Any"
+      end
+
+      def visit_array(type, out)
+        out << "Array<"
+        visit(type.member, out)
         out << ">"
       end
 
@@ -35,6 +52,7 @@ module Dry
 
         out << options(type, exclude: %i(fn))
         out << meta(type)
+        out << ">"
       end
 
       def visit_constrained(type, out)
@@ -47,6 +65,7 @@ module Dry
 
         out << options(type, exclude: %i(rule))
         out << meta(type)
+        out << ">"
       end
 
       def visit_schema(type, out)
@@ -68,6 +87,7 @@ module Dry
 
         out << options(type, exclude: %i(keys))
         out << meta(type, exclude: %i(strict key_transform_fn type_transform_fn))
+        out << ">"
       end
 
       def visit_map(type, out)
@@ -77,6 +97,7 @@ module Dry
         visit(type.value_type, out)
         out << options(type, exclude: %i(key_type value_type))
         out << meta(type)
+        out << ">"
       end
 
       def visit_key(type, out)
@@ -90,6 +111,7 @@ module Dry
           out << "#{ type.name }?: #{ key_out }"
         end
         out << meta(type)
+        out << ">"
       end
 
       def visit_sum(type, out)
@@ -97,6 +119,7 @@ module Dry
         visit_sum_constructors(type, out)
         out << options(type)
         out << meta(type)
+        out << ">"
       end
 
       def visit_sum_constructors(type, out)
@@ -134,6 +157,7 @@ module Dry
         end
         out << options(type, exclude: %i(mapping))
         out << meta(type)
+        out << ">"
       end
 
       def visit_default(type, out)
@@ -148,17 +172,37 @@ module Dry
 
         out << options(type)
         out << meta(type, exclude: %i(strict))
+        out << ">"
       end
 
       def visit_definition(type, out)
         out << "Definition<#{ type.primitive }"
         out << options(type)
         out << meta(type, exclude: %i(strict))
+        out << ">"
       end
 
       def visit_safe(type, out)
         out << "Safe<"
         visit(type.type, out)
+        out << ">"
+      end
+
+      def visit_hash(type, out)
+        hash_output = ""
+
+        if type.transform_types?
+          visit_callable(type.meta[:type_transform_fn], hash_output << " type_fn=")
+        end
+
+        hash_output << options(type, exclude: %i(keys))
+        hash_output << meta(type, exclude: %i(type_transform_fn))
+
+        if hash_output.empty?
+          out
+        else
+          out << "Hash<#{ hash_output }>"
+        end
       end
 
       def options(type, exclude: EMPTY_ARRAY)

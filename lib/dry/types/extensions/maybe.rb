@@ -60,6 +60,16 @@ module Dry
       end
     end
 
+    class Printer
+      MAPPING[Maybe] = :visit_maybe
+
+      def visit_maybe(type, out)
+        out << "Maybe<"
+        visit(type.type, out)
+        out << ">"
+      end
+    end
+
     # Register non-coercible maybe types
     NON_NIL.each_key do |name|
       register("maybe.strict.#{name}", self["strict.#{name}"].maybe)
