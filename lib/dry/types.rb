@@ -17,7 +17,6 @@ require 'dry/types/type'
 require 'dry/types/definition'
 require 'dry/types/constructor'
 require 'dry/types/builder_methods'
-require 'dry/types/printer'
 
 require 'dry/types/errors'
 
@@ -34,8 +33,6 @@ module Dry
     namespace self
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
-
-    PRINTER = Printer.new.freeze
 
     # @return [Module]
     def self.module
@@ -154,3 +151,4 @@ end
 
 require 'dry/types/core' # load built-in types
 require 'dry/types/extensions'
+require 'dry/types/printer'
