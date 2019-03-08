@@ -336,26 +336,22 @@ RSpec.describe Dry::Types::Hash::Schema do
     context 'key transformation' do
       let(:key_transformation) { :to_sym.to_proc }
 
-      let(:transformation_name) { Dry::Types::FnContainer.register_name(key_transformation) }
-
       subject(:type) { Dry::Types['hash'].schema({}).with_key_transform(key_transformation) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql("#<Dry::Types[Schema<keys={} key_fn=#{ transformation_name }.call>]>")
+          to eql("#<Dry::Types[Schema<keys={} key_fn=.to_sym>]>")
       end
     end
 
     context 'type transformation' do
       let(:type_transformation) { :safe.to_proc }
 
-      let(:transformation_name) { Dry::Types::FnContainer.register_name(type_transformation) }
-
       subject(:type) { Dry::Types['hash'].with_type_transform(type_transformation).schema({}) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql("#<Dry::Types[Schema<keys={} type_fn=#{ transformation_name }.call>]>")
+          to eql("#<Dry::Types[Schema<keys={} type_fn=.safe>]>")
       end
     end
 

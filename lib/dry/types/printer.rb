@@ -193,7 +193,9 @@ module Dry
         end
       end
 
-      def visit_callable(fn, out)
+      def visit_callable(callable, out)
+        fn = callable.is_a?(String) ? FnContainer[callable] : callable
+
         case fn
         when Method
           out << "#{ fn.receiver }.#{ fn.name }"
@@ -205,10 +207,22 @@ module Dry
           elsif fn.lambda?
             out << "(lambda)"
           else
-            out << "(proc)"
+            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(\w+)\)>\z/)
+
+            if match
+              out << ".#{ match[1] }"
+            else
+              out << "(proc)"
+            end
           end
         else
-          out << "#{ fn.to_s }.call"
+          call = fn.method(:call)
+
+          if call.owner == fn.class
+            out << "#{ fn.class.to_s }#call"
+          else
+            out << "#{ fn.to_s }.call"
+          end
         end
       end
 
