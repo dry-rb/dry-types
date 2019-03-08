@@ -59,8 +59,13 @@ module Dry
       end
 
       def visit_hash(node)
-        keys, meta = node
-        registry['hash'].schema(keys.map { |key| visit(key) }, meta)
+        opts, meta = node
+        registry['hash'].with(opts.merge(meta: meta))
+      end
+
+      def visit_schema(node)
+        keys, options, meta = node
+        registry['hash'].schema(keys.map { |key| visit(key) }).with(options.merge(meta: meta))
       end
 
       def visit_json_hash(node)
@@ -85,7 +90,7 @@ module Dry
 
       def visit_key(node)
         name, required, type = node
-        Hash::Key.new(visit(type), name, required: required)
+        Schema::Key.new(visit(type), name, required: required)
       end
 
       def visit_enum(node)

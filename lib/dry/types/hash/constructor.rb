@@ -12,7 +12,7 @@ module Dry
         private
 
         def composable?(value)
-          super && !value.is_a?(Key)
+          super && !value.is_a?(Schema::Key)
         end
       end
     end
