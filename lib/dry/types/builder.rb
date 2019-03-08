@@ -32,10 +32,18 @@ module Dry
       end
 
       # @param [Object] input
+      # @param [Hash] options
       # @param [#call,nil] block
       # @raise [ConstraintError]
       # @return [Default]
-      def default(input = Undefined, &block)
+      def default(input = Undefined, options = EMPTY_HASH, &block)
+        unless input.frozen? || options[:shared]
+          Dry::Core::Deprecations.warn("#{input.inspect} is mutable."\
+            ' Be careful: types will return the same instance of the default'\
+            ' value every time. Call `.freeze` when setting the default'\
+            ' or pass `shared: true` to discard this warning.', tag: :'dry-types')
+        end
+
         value = input.equal?(Undefined) ? block : input
 
         if value.respond_to?(:call) || valid?(value)

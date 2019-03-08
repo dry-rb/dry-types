@@ -72,7 +72,7 @@ RSpec.describe Dry::Types::Enum do
     end
 
     it 'allows defining an enum from a default-value type' do
-      with_default = string.default('draft').enum(*values)
+      with_default = string.default('draft'.freeze).enum(*values)
 
       expect(with_default.call).to eql('draft')
     end
