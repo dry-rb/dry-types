@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Dry
   module Types
+    # @api private
     class Printer
       MAPPING = {
         Definition => :visit_definition,
@@ -22,9 +25,7 @@ module Dry
       }
 
       def call(type)
-        str = "#<Dry::Types["
-        visit(type, str)
-        str << "]>"
+        "#<Dry::Types[#{ visit(type, "".dup) }]>"
       end
 
       def visit(type, out)
@@ -39,9 +40,7 @@ module Dry
       end
 
       def visit_array(type, out)
-        out << "Array<"
-        visit(type.member, out)
-        out << ">"
+        out << "Array<#{ visit(type.member, "".dup) }>"
       end
 
       def visit_constructor(type, out)
@@ -50,9 +49,7 @@ module Dry
         visit(type.type, out)
         visit_callable(type.fn, out << " fn=")
 
-        out << options(type, exclude: %i(fn))
-        out << meta(type)
-        out << ">"
+        out << options(type, exclude: %i(fn)) << meta(type) << ">"
       end
 
       def visit_constrained(type, out)
@@ -62,18 +59,11 @@ module Dry
         rule = type.rule.to_s
 
         out << " rule=[#{ rule }]"
-
-        out << options(type, exclude: %i(rule))
-        out << meta(type)
-        out << ">"
+        out << options(type, exclude: %i(rule)) << meta(type) << ">"
       end
 
       def visit_schema(type, out)
-        out << "Schema<keys={" << type.map { |key, index|
-          key_out = ""
-          visit(key, key_out)
-          key_out
-        }.join(", ") << "}"
+        out << "Schema<keys={" << type.map { |key| visit(key, "".dup) }.join(", ") << "}"
 
         out << " strict" if type.strict?
 
@@ -95,31 +85,24 @@ module Dry
         visit(type.key_type, out)
         out << " => "
         visit(type.value_type, out)
-        out << options(type, exclude: %i(key_type value_type))
-        out << meta(type)
-        out << ">"
+        out << options(type, exclude: %i(key_type value_type)) << meta(type) << ">"
       end
 
       def visit_key(type, out)
-        key_out = ""
-        visit(type.type, key_out)
-        key_out.chomp!(">")
+        key_out = visit(type.type, "".dup).chomp!(">")
 
         if type.required?
           out << "#{ type.name }: #{ key_out }"
         else
           out << "#{ type.name }?: #{ key_out }"
         end
-        out << meta(type)
-        out << ">"
+        out << meta(type) << ">"
       end
 
       def visit_sum(type, out)
         out << "Sum<"
         visit_sum_constructors(type, out)
-        out << options(type)
-        out << meta(type)
-        out << ">"
+        out << options(type) << meta(type) << ">"
       end
 
       def visit_sum_constructors(type, out)
@@ -170,26 +153,20 @@ module Dry
           out << " value=#{ type.value.inspect }"
         end
 
-        out << options(type)
-        out << meta(type, exclude: %i(strict))
-        out << ">"
+        out << options(type) << meta(type, exclude: %i(strict)) << ">"
       end
 
       def visit_definition(type, out)
         out << "Definition<#{ type.primitive }"
-        out << options(type)
-        out << meta(type, exclude: %i(strict))
-        out << ">"
+        out << options(type) << meta(type, exclude: %i(strict)) << ">"
       end
 
       def visit_safe(type, out)
-        out << "Safe<"
-        visit(type.type, out)
-        out << ">"
+        out << "Safe<#{ visit(type.type, "".dup) }>"
       end
 
       def visit_hash(type, out)
-        hash_output = ""
+        hash_output = "".dup
 
         if type.transform_types?
           visit_callable(type.meta[:type_transform_fn], hash_output << " type_fn=")
@@ -244,7 +221,7 @@ module Dry
           if meta.empty?
             EMPTY_STRING
           else
-            meta_str = " meta={"
+            meta_str = " meta={".dup
 
             values = type.meta.map do |key, value|
               case key
