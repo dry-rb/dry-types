@@ -81,22 +81,21 @@ module Dry
       end
 
       def visit_schema(schema)
-        meta = schema.meta.dup
         options = schema.options.dup
         size = schema.count
         key_fn_str = ""
         type_fn_str = ""
         strict_str = ""
 
-        strict_str = "strict " if meta.delete(:strict)
+        strict_str = "strict " if options.delete(:strict)
 
-        if key_fn = meta.delete(:key_transform_fn)
+        if key_fn = options.delete(:key_transform_fn)
           visit_callable(key_fn) do |fn|
             key_fn_str = "key_fn=#{ fn } "
           end
         end
 
-        if type_fn = meta.delete(:type_transform_fn)
+        if type_fn = options.delete(:type_transform_fn)
           visit_callable(type_fn) do |fn|
             type_fn_str = "type_fn=#{ fn } "
           end
@@ -104,7 +103,7 @@ module Dry
 
         keys = options.delete(:keys)
 
-        visit_options(options, meta) do |opts|
+        visit_options(options, schema.meta) do |opts|
           schema_parameters = "#{ key_fn_str }#{ type_fn_str }#{ strict_str }#{ opts }"
 
           header = "Schema<#{ schema_parameters }keys={"
@@ -236,16 +235,16 @@ module Dry
       end
 
       def visit_hash(hash)
-        meta = hash.meta.dup
+        options = hash.options.dup
         type_fn_str = ""
 
-        if type_fn = meta.delete(:type_transform_fn)
+        if type_fn = options.delete(:type_transform_fn)
           visit_callable(type_fn) do |fn|
-            type_fn_str = " type_fn=#{ fn }"
+            type_fn_str = "type_fn=#{ fn }"
           end
         end
 
-        visit_options(hash.options, hash.meta) do |opts|
+        visit_options(options, hash.meta) do |opts|
           if opts.empty? && type_fn_str.empty?
             yield "Hash"
           else

@@ -41,8 +41,18 @@ RSpec.describe Dry::Types::Hash do
   end
 
   describe '#to_s' do
-    it 'returns string representation of the type' do
-      expect(type.to_s).to eql('#<Dry::Types[Hash]>')
+    context 'plain' do
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Hash]>')
+      end
+    end
+
+    context 'with type transformation' do
+      subject(:type) { Dry::Types['hash'].with_type_transform(:itself.to_proc) }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Hash<type_fn=.itself>]>')
+      end
     end
   end
 end
