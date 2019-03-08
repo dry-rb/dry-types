@@ -181,7 +181,7 @@ module Dry
         hash_output << meta(type, exclude: %i(type_transform_fn))
 
         if hash_output.empty?
-          out
+          out << "Hash"
         else
           out << "Hash<#{ hash_output }>"
         end

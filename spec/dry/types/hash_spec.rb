@@ -39,4 +39,10 @@ RSpec.describe Dry::Types::Hash do
       expect { map.('foo' => '2') }.to raise_error(Dry::Types::MapError)
     end
   end
+
+  describe '#to_s' do
+    it 'returns string representation of the type' do
+      expect(type.to_s).to eql('#<Dry::Types[Hash]>')
+    end
+  end
 end
