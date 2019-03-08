@@ -262,7 +262,9 @@ module Dry
         when Proc
           path, line = fn.source_location
 
-          if path
+          if line && line.zero?
+            yield ".#{ path }"
+          elsif path
             yield "#{ path.sub(Dir.pwd + "/", EMPTY_STRING) }:#{ line }"
           elsif fn.lambda?
             yield "(lambda)"
