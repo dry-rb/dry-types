@@ -69,7 +69,7 @@ module Dry
       end
 
       # Whether the type transforms types of schemas created by {Dry::Types::Hash#schema}
-      # @return [Bool]
+      # @return [Boolean]
       # @api public
       def transform_types?
         !options[:type_transform_fn].nil?
