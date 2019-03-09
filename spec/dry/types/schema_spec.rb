@@ -366,4 +366,20 @@ RSpec.describe Dry::Types::Schema do
       end
     end
   end
+
+  describe '#call' do
+    context 'partial application' do
+      subject(:type) do
+        Dry::Types['hash'].schema(
+          name: 'coercible.string',
+          age: 'coercible.integer',
+          city: Dry::Types['strict.string'].default('New York'.freeze)
+        )
+      end
+
+      it 'can be partially applied' do
+        expect(type.({ age: '18' }, skip_missing: true)).to eql(age: 18, city: 'New York')
+      end
+    end
+  end
 end

@@ -47,9 +47,10 @@ module Dry
       end
 
       # @param [Hash] hash
+      # @option options [Boolean] :skip_missing If true don't raise error if on missing keys
       # @return [Hash{Symbol => Object}]
-      def call(hash)
-        coerce(hash)
+      def call(hash, options = EMPTY_HASH)
+        coerce(hash, options)
       end
       alias_method :[], :call
 
@@ -145,7 +146,7 @@ module Dry
       end
 
       # Whether the schema transforms input keys
-      # @return [Bool]
+      # @return [Boolean]
       # @api public
       def trasform_keys?
         !options[:key_transform_fn].nil?
@@ -217,7 +218,7 @@ module Dry
           values
       end
 
-      def resolve(hash, &block)
+      def resolve(hash, options = EMPTY_HASH, &block)
         result = {}
 
         hash.each do |key, value|
@@ -231,19 +232,19 @@ module Dry
         end
 
         if result.size < keys.size
-          resolve_missing_keys(result, &block)
+          resolve_missing_keys(result, options, &block)
         end
 
         result
       end
 
-      def resolve_missing_keys(result)
+      def resolve_missing_keys(result, options)
         keys.each do |key|
           next if result.key?(key.name)
 
           if key.default?
             result[key.name] = yield(key, Undefined)
-          elsif key.required?
+          elsif key.required? && !options[:skip_missing]
             raise MissingKeyError, key.name
           end
         end
@@ -265,8 +266,8 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash{Symbol => Object}]
-      def coerce(hash)
-        resolve(hash) do |key, value|
+      def coerce(hash, options = EMPTY_HASH)
+        resolve(hash, options) do |key, value|
           begin
             key.(value)
           rescue ConstraintError => e
