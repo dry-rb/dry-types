@@ -367,8 +367,8 @@ RSpec.describe Dry::Types::Schema do
     end
   end
 
-  describe '#call' do
-    context 'partial application' do
+  describe '#apply' do
+    context 'ignoring missing keys' do
       subject(:type) do
         Dry::Types['hash'].schema(
           name: 'coercible.string',
@@ -378,7 +378,7 @@ RSpec.describe Dry::Types::Schema do
       end
 
       it 'can be partially applied' do
-        expect(type.({ age: '18' }, skip_missing: true)).to eql(age: 18, city: 'New York')
+        expect(type.apply({ age: '18' }, skip_missing: true)).to eql(age: 18, city: 'New York')
       end
     end
   end

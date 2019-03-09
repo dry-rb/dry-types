@@ -47,12 +47,18 @@ module Dry
       end
 
       # @param [Hash] hash
-      # @option options [Boolean] :skip_missing If true don't raise error if on missing keys
       # @return [Hash{Symbol => Object}]
-      def call(hash, options = EMPTY_HASH)
-        coerce(hash, options)
+      def call(hash)
+        coerce(hash)
       end
       alias_method :[], :call
+
+      # @param [Hash] hash
+      # @option options [Boolean] :skip_missing If true don't raise error if on missing keys
+      # @return [Hash{Symbol => Object}]
+      def apply(hash, options = EMPTY_HASH)
+        coerce(hash, options)
+      end
 
       # @param [Hash] hash
       # @yieldparam [Failure] failure
