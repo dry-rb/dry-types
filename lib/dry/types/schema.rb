@@ -55,6 +55,8 @@ module Dry
 
       # @param [Hash] hash
       # @option options [Boolean] :skip_missing If true don't raise error if on missing keys
+      # @option options [Boolean] :resolve_defaults If false default value
+      #                                             won't be evaluated for missing key
       # @return [Hash{Symbol => Object}]
       def apply(hash, options = EMPTY_HASH)
         coerce(hash, options)
@@ -245,12 +247,15 @@ module Dry
       end
 
       def resolve_missing_keys(result, options)
+        skip_missing = options.fetch(:skip_missing, false)
+        resolve_defaults = options.fetch(:resolve_defaults, true)
+
         keys.each do |key|
           next if result.key?(key.name)
 
-          if key.default?
+          if key.default? && resolve_defaults
             result[key.name] = yield(key, Undefined)
-          elsif key.required? && !options[:skip_missing]
+          elsif key.required? && !skip_missing
             raise MissingKeyError, key.name
           end
         end

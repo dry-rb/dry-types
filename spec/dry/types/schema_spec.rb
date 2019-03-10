@@ -380,6 +380,11 @@ RSpec.describe Dry::Types::Schema do
       it 'can be partially applied' do
         expect(type.apply({ age: '18' }, skip_missing: true)).to eql(age: 18, city: 'New York')
       end
+
+      it 'can skip resolving default values' do
+        expect(type.apply({ age: '18' }, skip_missing: true, resolve_defaults: false)).
+          to eql(age: 18)
+      end
     end
   end
 end
