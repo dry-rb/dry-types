@@ -102,6 +102,10 @@ module Dry
         key_type, value_type, meta = node
         registry['hash'].map(visit(key_type), visit(value_type)).meta(meta)
       end
+
+      def visit_any(meta)
+        registry['any'].meta(meta)
+      end
     end
   end
 end
