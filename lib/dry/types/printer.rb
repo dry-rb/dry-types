@@ -111,17 +111,9 @@ module Dry
           if size.zero?
             yield "#{ header}}>"
           else
-            yield header
-            keys.each_with_index do |key, index|
-              visit(key) do |type|
-                if index == size - 1
-                  yield(type)
-                else
-                  yield "#{ type } "
-                end
-              end
-            end
-            yield "}>"
+            yield header.dup << keys.map { |key|
+              visit(key) { |type| type }
+            }.join(" ") << "}>"
           end
         end
       end

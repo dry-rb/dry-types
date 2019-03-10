@@ -317,52 +317,62 @@ RSpec.describe Dry::Types::Schema do
   end
 
   describe '#to_s' do
-    context 'inline' do
-      context 'empty schema' do
-        subject(:type) { Dry::Types['hash'].schema({}) }
+    context 'empty schema' do
+      subject(:type) { Dry::Types['hash'].schema({}) }
 
-        it 'returns string representation of the type' do
-          expect(type.to_s).to eql('#<Dry::Types[Schema<keys={}>]>')
-        end
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Schema<keys={}>]>')
       end
+    end
 
-      context 'strict schema' do
-        subject(:type) { Dry::Types['hash'].schema({}).strict }
+    context 'strict schema' do
+      subject(:type) { Dry::Types['hash'].schema({}).strict }
 
-        it 'returns string representation of the type' do
-          expect(type.to_s).to eql('#<Dry::Types[Schema<strict keys={}>]>')
-        end
+      it 'returns string representation of the type' do
+        expect(type.to_s).to eql('#<Dry::Types[Schema<strict keys={}>]>')
       end
+    end
 
-      context 'key transformation' do
-        let(:key_transformation) { :to_sym.to_proc }
+    context 'key transformation' do
+      let(:key_transformation) { :to_sym.to_proc }
 
-        subject(:type) { Dry::Types['hash'].schema({}).with_key_transform(key_transformation) }
+      subject(:type) { Dry::Types['hash'].schema({}).with_key_transform(key_transformation) }
 
-        it 'returns string representation of the type' do
-          expect(type.to_s).
-            to eql("#<Dry::Types[Schema<key_fn=.to_sym keys={}>]>")
-        end
+      it 'returns string representation of the type' do
+        expect(type.to_s).
+          to eql("#<Dry::Types[Schema<key_fn=.to_sym keys={}>]>")
       end
+    end
 
-      context 'type transformation' do
-        let(:type_transformation) { :safe.to_proc }
+    context 'type transformation' do
+      let(:type_transformation) { :safe.to_proc }
 
-        subject(:type) { Dry::Types['hash'].with_type_transform(type_transformation).schema({}) }
+      subject(:type) { Dry::Types['hash'].with_type_transform(type_transformation).schema({}) }
 
-        it 'returns string representation of the type' do
-          expect(type.to_s).
-            to eql("#<Dry::Types[Schema<type_fn=.safe keys={}>]>")
-        end
+      it 'returns string representation of the type' do
+        expect(type.to_s).
+          to eql("#<Dry::Types[Schema<type_fn=.safe keys={}>]>")
       end
+    end
 
-      context 'schema with keys' do
-        subject(:type) { Dry::Types['hash'].schema(name: 'string', age?: 'integer') }
+    context 'schema with keys' do
+      subject(:type) { Dry::Types['hash'].schema(name: 'string', age?: 'integer') }
 
-        it 'returns string representation of the type' do
-          expect(type.to_s).
-            to eql("#<Dry::Types[Schema<keys={name: Definition<String> age?: Definition<Integer>}>]>")
-        end
+      it 'returns string representation of the type' do
+        expect(type.to_s).
+          to eql("#<Dry::Types[Schema<keys={name: Definition<String> age?: Definition<Integer>}>]>")
+      end
+    end
+
+    context 'strict schema with keys' do
+      subject(:type) { Dry::Types['strict.hash'].schema(age: 'strict.integer') }
+
+      it 'returns string representation of the type' do
+        expect(type.to_s).
+          to eql(
+            '#<Dry::Types[Constrained<Schema<'\
+            'keys={age: Constrained<Definition<Integer> rule=[type?(Integer)]>'\
+            '}> rule=[type?(Hash)]>]>')
       end
     end
   end
