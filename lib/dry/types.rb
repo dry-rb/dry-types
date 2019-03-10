@@ -27,12 +27,6 @@ module Dry
     extend Dry::Core::ClassAttributes
     include Dry::Core::Constants
 
-    # @!attribute [r] namespace
-    #   @return [Container{String => Definition}]
-    defines :namespace
-
-    namespace self
-
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
     # @return [Module]
@@ -41,15 +35,6 @@ module Dry
       define_constants(namespace, type_keys)
       namespace.extend(BuilderMethods)
       namespace
-    end
-
-    # @deprecated Include {Dry::Types.module} instead
-    def self.finalize
-      warn 'Dry::Types.finalize and configuring namespace is deprecated. Just'\
-       ' do `include Dry::Types.module` in places where you want to have access'\
-       ' to built-in types'
-
-      define_constants(self.namespace, type_keys)
     end
 
     # @return [Container{String => Definition}]
