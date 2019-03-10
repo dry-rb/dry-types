@@ -30,6 +30,22 @@ RSpec.describe Dry::Types::Schema do
     end
   end
 
+  describe '#constrained?' do
+    subject(:type) { Dry::Types['hash'].schema({}) }
+
+    it 'is a contrained type' do
+      expect(type).to be_constrained
+    end
+
+    context 'sum' do
+      subject(:sum) { type.strict | type.strict }
+
+      it 'produces a constrained sum' do
+        expect { sum.(foo: 1) }.to raise_error(Dry::Types::ConstraintError)
+      end
+    end
+  end
+
   describe '#key' do
     it 'fetches a key type' do
       expect(schema.key(:name)).to be(schema.name_key_map[:name])

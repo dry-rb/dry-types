@@ -214,6 +214,11 @@ module Dry
         end
       end
 
+      # @return [Boolean]
+      def constrained?
+        true
+      end
+
       private
 
       # @param [Array<Dry::Types::Schema::Keys>] keys
