@@ -307,7 +307,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.valid?(4)).to be(false)
   end
 
-  let(:any_ast){ [:definition, [Object, {}]] }
+  let(:any_ast){ [:any, {}] }
 
   it 'builds the empty map' do
     ast = Dry::Types['hash'].map('any', 'any').to_ast

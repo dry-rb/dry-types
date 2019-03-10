@@ -26,6 +26,11 @@ module Dry
       def with(**new_options)
         self.class.new(**options, meta: @meta, **new_options)
       end
+
+      # @return [Array]
+      def to_ast(meta: true)
+        [:any, meta ? self.meta : EMPTY_HASH]
+      end
     end.new
   end
 end

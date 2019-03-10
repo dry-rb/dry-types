@@ -61,7 +61,6 @@ module Dry
     register("strict.bool", self["strict.true"] | self["strict.false"])
 
     register("any", Any)
-    register("object", self['any'])
   end
 end
 

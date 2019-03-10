@@ -175,11 +175,10 @@ RSpec.describe Dry::Types::Definition do
 
   describe 'with Any' do
     let(:any) { Dry::Types['any'] }
-    let(:object) { Dry::Types['object'] }
     let(:constrained) { Dry::Types['any'].constrained(type: TrueClass) }
 
     it_behaves_like Dry::Types::Definition do
-      let(:type) { object }
+      let(:type) { any }
     end
 
     it 'passes through any object' do
@@ -200,10 +199,6 @@ RSpec.describe Dry::Types::Definition do
         expect(any[basic]).to be basic
         expect(any.valid?(basic)).to be true
       end
-    end
-
-    it 'has Object alias' do
-      expect(any).to be(object)
     end
 
     it 'has a special name' do
