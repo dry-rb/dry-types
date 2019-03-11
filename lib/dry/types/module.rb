@@ -36,12 +36,13 @@ module Dry
           registry_tree
         else
           tree = registry_tree(only_namespaces: true)
-          modules = namespaces.map { |n| Inflector.camelize(n).to_sym }
+          modules = (namespaces + aliases.keys).map { |n| Inflector.camelize(n).to_sym }
           default_ns = Inflector.camelize(default).to_sym unless Undefined.equal?(default)
 
           tree.flat_map { |key, value|
             if modules.include?(key)
-              [[key, value]]
+              name = aliases.fetch(Inflector.underscore(key).to_sym, key)
+              [[name, value]]
             elsif key == default_ns
               value.to_a
             else

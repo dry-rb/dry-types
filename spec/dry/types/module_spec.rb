@@ -143,5 +143,14 @@ RSpec.describe Dry::Types::Module do
         end
       end
     end
+
+    context 'aliases' do
+      subject(:mod) { Dry::Types.module(strict: :Strong) }
+
+      it 'uses custom names for modules' do
+        expect(mod.constants(false)).to eql([:Strong])
+        expect(mod::Strong::Integer).to be(Dry::Types['strict.integer'])
+      end
+    end
   end
 end
