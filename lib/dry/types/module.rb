@@ -32,28 +32,34 @@ module Dry
 
       # @api private
       def type_constants(*namespaces, default: Undefined, **aliases)
-        if namespaces.empty? && aliases.empty?
-          registry_tree
+        if namespaces.empty? && aliases.empty? && Undefined.equal?(default)
+          default_ns = :Nominal
+        elsif Undefined.equal?(default)
+          default_ns = Undefined
         else
-          tree = registry_tree(only_namespaces: true)
-          modules = (namespaces + aliases.keys).map { |n| Inflector.camelize(n).to_sym }
-          default_ns = Inflector.camelize(default).to_sym unless Undefined.equal?(default)
+          default_ns = Inflector.camelize(default).to_sym
+        end
 
-          tree.flat_map { |key, value|
-            if modules.include?(key)
-              name = aliases.fetch(Inflector.underscore(key).to_sym, key)
-              [[name, value]]
-            elsif key == default_ns
-              value.to_a
-            else
-              EMPTY_ARRAY
-            end
-          }.compact.to_h
+        tree = registry_tree
+
+        if namespaces.empty? && aliases.empty?
+          modules = tree.select { |_, v| v.is_a?(::Hash) }.map(&:first)
+        else
+          modules = (namespaces + aliases.keys).map { |n| Inflector.camelize(n).to_sym }
+        end
+
+        tree.each_with_object({}) do |(key, value), constants|
+          if modules.include?(key)
+            name = aliases.fetch(Inflector.underscore(key).to_sym, key)
+            constants[name] = value
+          end
+
+          constants.update(value) if key == default_ns
         end
       end
 
       # @api private
-      def registry_tree(only_namespaces: false)
+      def registry_tree
         @registry_tree ||= @registry.keys.each_with_object({}) do |key, tree|
           type = @registry[key]
           *modules, const_name = key.split('.').map { |part|
@@ -64,7 +70,7 @@ module Dry
             branch[name] ||= {}
           end
 
-          subtree[const_name] = type if !only_namespaces || !modules.empty?
+          subtree[const_name] = type unless modules.empty?
         end
       end
     end

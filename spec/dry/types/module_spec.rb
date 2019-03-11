@@ -124,7 +124,7 @@ RSpec.describe Dry::Types::Module do
     end
 
     context 'multiple namespaces' do
-      subject(:mod) { Dry::Types.module(:strict, :nominal) }
+      subject(:args) { [:strict, :nominal] }
 
       it 'adds only two constants' do
         constants = mod.constants(false)
@@ -134,12 +134,21 @@ RSpec.describe Dry::Types::Module do
 
     context 'default types' do
       context 'several namespaces with default' do
-        subject(:mod) { Dry::Types.module(:nominal, default: :strict) }
+        subject(:args) { [:nominal, default: :strict] }
 
         it 'adds strict types as default' do
           expect(mod::Integer).to be(Dry::Types['strict.integer'])
           expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
           expect { mod::Params }.to raise_error(NameError)
+        end
+      end
+
+      context 'without namespaces' do
+        subject(:args) { [default: :strict] }
+
+        it 'adds all namespaces wiht strict types as default' do
+          expect(mod::Integer).to be(Dry::Types['strict.integer'])
+          expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
         end
       end
     end
