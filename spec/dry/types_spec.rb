@@ -52,15 +52,6 @@ RSpec.describe Dry::Types do
     end
   end
 
-  describe '.define_constants' do
-    it 'defines types under constants in the provided namespace' do
-      constants = Dry::Types.define_constants(Test, ['coercible.string'])
-
-      expect(constants).to eql([Dry::Types['coercible.string']])
-      expect(Test::Coercible::String).to be(Dry::Types['coercible.string'])
-    end
-  end
-
   describe 'missing constant' do
     it 'raises a nice error when a constant like Coercible or Strict is missing' do
       expect {

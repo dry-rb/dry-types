@@ -51,10 +51,6 @@ RSpec.configure do |config|
   end
 
   config.after do
-    container = Dry::Types.container._container
-    (container.keys - @types).each { |key| container.delete(key) }
-    Dry::Types.instance_variable_set('@type_map', Concurrent::Map.new)
-
     Object.send(:remove_const, Test.remove_constants.name)
   end
 

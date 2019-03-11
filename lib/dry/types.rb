@@ -17,7 +17,7 @@ require 'dry/types/type'
 require 'dry/types/printable'
 require 'dry/types/definition'
 require 'dry/types/constructor'
-require 'dry/types/builder_methods'
+require 'dry/types/module'
 
 require 'dry/types/errors'
 
@@ -30,11 +30,8 @@ module Dry
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
     # @return [Module]
-    def self.module(*namespaces)
-      mod = Module.new
-      define_constants(mod, type_keys(namespaces))
-      mod.extend(BuilderMethods)
-      mod
+    def self.module(*args)
+      Module.new(container, *args)
     end
 
     # @return [Container{String => Definition}]
@@ -82,24 +79,6 @@ module Dry
       end
     end
 
-    # @param [Module] namespace
-    # @param [<String>] identifiers
-    # @return [<Definition>]
-    def self.define_constants(namespace, identifiers)
-      names = identifiers.map do |id|
-        parts = id.split('.')
-        [Inflector.camelize(parts.pop), parts.map(&Inflector.method(:camelize))]
-      end
-
-      names.map do |klass, parts|
-        mod = parts.reduce(namespace) do |a, e|
-          a.constants.include?(e.to_sym) ? a.const_get(e) : a.const_set(e, Module.new)
-        end
-
-        mod.const_set(klass, self[identifier((parts + [klass]).join('::'))])
-      end
-    end
-
     # @param [#to_s] klass
     # @return [String]
     def self.identifier(klass)
@@ -111,27 +90,13 @@ module Dry
       @type_map ||= Concurrent::Map.new
     end
 
-    # List of type keys defined in {Dry::Types.container}
-    # @return [<String>]
-    def self.type_keys(namespaces = EMPTY_ARRAY)
-      keys = container.keys
-
-      if namespaces.empty?
-        keys
-      else
-        keys.select do |key|
-          namespaces.any? { |ns| key.start_with?("#{ ns }.") }
-        end
-      end
-    end
-
     private
 
     # @api private
     def self.const_missing(const)
       underscored = Inflector.underscore(const)
 
-      if type_keys.any? { |key| key.split('.')[0] == underscored }
+      if container.keys.any? { |key| key.split('.')[0] == underscored }
         raise NameError,
               'dry-types does not define constants for default types. '\
               'You can access the predefined types with [], e.g. Dry::Types["strict.integer"] '\
