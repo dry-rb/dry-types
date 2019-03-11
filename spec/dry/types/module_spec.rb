@@ -93,4 +93,30 @@ RSpec.describe Dry::Types do
       expect(mod::JSON::Decimal).to be(Dry::Types['json.decimal'])
     end
   end
+
+  context 'parameters' do
+    %i(strict coercible params json nominal).each do |ns|
+      constant = Dry::Types::Inflector.camelize(ns.to_s).to_sym
+
+      context ns.to_s do
+        subject(:mod) { Dry::Types.module(ns) }
+
+        it "includes only #{ ns } types" do
+          constants = mod.constants(false)
+          expect(constants).to eql([constant])
+          expect(mod.const_get(constant)::Decimal).
+            to be(Dry::Types["#{ ns }.decimal"])
+        end
+      end
+    end
+
+    context 'multiple namespaces' do
+      subject(:mod) { Dry::Types.module(:strict, :nominal) }
+
+      it 'adds only two constants' do
+        constants = mod.constants(false)
+        expect(constants).to eql([:Nominal, :Strict])
+      end
+    end
+  end
 end

@@ -30,11 +30,11 @@ module Dry
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
     # @return [Module]
-    def self.module
-      namespace = Module.new
-      define_constants(namespace, type_keys)
-      namespace.extend(BuilderMethods)
-      namespace
+    def self.module(*namespaces)
+      mod = Module.new
+      define_constants(mod, type_keys(namespaces))
+      mod.extend(BuilderMethods)
+      mod
     end
 
     # @return [Container{String => Definition}]
@@ -91,7 +91,7 @@ module Dry
         [Inflector.camelize(parts.pop), parts.map(&Inflector.method(:camelize))]
       end
 
-      names.map do |(klass, parts)|
+      names.map do |klass, parts|
         mod = parts.reduce(namespace) do |a, e|
           a.constants.include?(e.to_sym) ? a.const_get(e) : a.const_set(e, Module.new)
         end
@@ -113,8 +113,16 @@ module Dry
 
     # List of type keys defined in {Dry::Types.container}
     # @return [<String>]
-    def self.type_keys
-      container.keys
+    def self.type_keys(namespaces = EMPTY_ARRAY)
+      keys = container.keys
+
+      if namespaces.empty?
+        keys
+      else
+        keys.select do |key|
+          namespaces.any? { |ns| key.start_with?("#{ ns }.") }
+        end
+      end
     end
 
     private
