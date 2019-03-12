@@ -167,6 +167,15 @@ RSpec.describe Dry::Types::Module do
         expect { described_class.new(registry, default: :something) }.
           to raise_error(ArgumentError, /:something/)
       end
+
+      context 'optional defaults' do
+        subject(:args) { [default: :optional] }
+
+        it 'adds optional types as defaults' do
+          expect(mod::Strict::Integer).to be_optional
+          expect(mod::Coercible::Integer).to be_optional
+        end
+      end
     end
 
     context 'aliases' do
