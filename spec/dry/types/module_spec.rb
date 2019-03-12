@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Dry::Types::Module do
+  let(:registry) { Dry::Types.container }
+
   context 'builder methods' do
     subject(:mod) { Dry::Types.module }
 
@@ -97,7 +99,7 @@ RSpec.describe Dry::Types::Module do
   end
 
   context 'parameters' do
-    subject(:mod) { Dry::Types::Module.new(Dry::Types.container, *args) }
+    subject(:mod) { Dry::Types::Module.new(registry, *args) }
 
     context 'no options' do
       let(:args) { [] }
@@ -159,6 +161,11 @@ RSpec.describe Dry::Types::Module do
           expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
           expect { mod::Integer }.to raise_error(NameError)
         end
+      end
+
+      it 'rejects invalid options' do
+        expect { described_class.new(registry, default: :something) }.
+          to raise_error(ArgumentError, /:something/)
       end
     end
 

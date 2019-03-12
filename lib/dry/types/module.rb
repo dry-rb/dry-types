@@ -5,29 +5,10 @@ module Dry
     class Module < ::Module
       def initialize(registry, *args)
         @registry = registry
+        check_parameters(*args)
         constants = type_constants(*args)
         define_constants(constants)
         extend(BuilderMethods)
-      end
-
-      # @param [Module] namespace
-      # @param [<String>] identifiers
-      # @return [<Definition>]
-      def define_constants(constants, mod = self)
-        constants.each do |name, value|
-          case value
-          when ::Hash
-            if mod.const_defined?(name, false)
-              define_constants(value, mod.const_get(name, false))
-            else
-              m = ::Module.new
-              mod.const_set(name, m)
-              define_constants(value, m)
-            end
-          else
-            mod.const_set(name, value)
-          end
-        end
       end
 
       # @api private
@@ -69,6 +50,44 @@ module Dry
 
           modules.reduce(tree) { |br, name| br[name] ||= {} }[const_name] = type
         }.freeze
+      end
+
+      private
+
+      # @api private
+      def check_parameters(*namespaces, default: Undefined, **aliases)
+        referenced = namespaces.dup
+        referenced << default unless false.equal?(Undefined.default(default, false))
+        referenced.concat(aliases.keys)
+
+        known = @registry.keys.map { |k|
+          ns, *path = k.split('.')
+          ns.to_sym unless path.empty?
+        }.compact.uniq
+
+        (referenced.uniq - known).each do |name|
+          raise ArgumentError,
+                "#{ name.inspect } is not a known type namespace. "\
+                "Supported options are #{ known.map(&:inspect).join(', ') }"
+        end
+      end
+
+      # @api private
+      def define_constants(constants, mod = self)
+        constants.each do |name, value|
+          case value
+          when ::Hash
+            if mod.const_defined?(name, false)
+              define_constants(value, mod.const_get(name, false))
+            else
+              m = ::Module.new
+              mod.const_set(name, m)
+              define_constants(value, m)
+            end
+          else
+            mod.const_set(name, value)
+          end
+        end
       end
     end
   end
