@@ -60,18 +60,15 @@ module Dry
 
       # @api private
       def registry_tree
-        @registry_tree ||= @registry.keys.each_with_object({}) do |key, tree|
+        @registry_tree ||= @registry.keys.each_with_object({}) { |key, tree|
           type = @registry[key]
           *modules, const_name = key.split('.').map { |part|
             Inflector.camelize(part).to_sym
           }
+          next if modules.empty?
 
-          subtree = modules.reduce(tree) do |branch, name|
-            branch[name] ||= {}
-          end
-
-          subtree[const_name] = type unless modules.empty?
-        end
+          modules.reduce(tree) { |br, name| br[name] ||= {} }[const_name] = type
+        }.freeze
       end
     end
   end
