@@ -151,6 +151,15 @@ RSpec.describe Dry::Types::Module do
           expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
         end
       end
+
+      context 'disabling defaults' do
+        subject(:args) { [default: false] }
+
+        it "doesn't add nominal types as a default" do
+          expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
+          expect { mod::Integer }.to raise_error(NameError)
+        end
+      end
     end
 
     context 'aliases' do
