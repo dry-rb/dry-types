@@ -2,6 +2,15 @@ require 'dry/types/builder_methods'
 
 module Dry
   module Types
+    # Export types registered in a container as module constants.
+    # @example
+    #   module Types
+    #     include Dry::Types.module(:strict, :coercible, :nominal, default: :strict)
+    #   end
+    #   # Types.constants
+    #   # => [:Class, :Strict, :Symbol, :Integer, :Float, :String, :Array, :Hash,
+    #   #     :Decimal, :Nil, :True, :False, :Bool, :Date, :Nominal, :DateTime, :Range,
+    #   #     :Coercible, :Time]
     class Module < ::Module
       def initialize(registry, *args)
         @registry = registry

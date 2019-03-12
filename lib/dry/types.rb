@@ -29,9 +29,53 @@ module Dry
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
-    # @return [Module]
-    def self.module(*args)
-      Module.new(container, *args)
+    # Export registered types as a module with constants
+    #
+    # @example no options
+    #
+    #   module Types
+    #     # exports all types as constants, uses modules for namespaces
+    #     include Dry::Types.module
+    #   end
+    #   # nominal types are exported by default
+    #   Types::Integer
+    #   # => #<Dry::Types[Definition<Integer>]>
+    #   Types::Strict::Integer
+    #   # => #<Dry::Types[Constrained<Definition<Integer> rule=[type?(Integer)]>]>
+    #
+    # @example changing default types
+    #
+    #   module Types
+    #     include Dry::Types(default: :strict)
+    #   end
+    #   Types::Integer
+    #   # => #<Dry::Types[Constrained<Definition<Integer> rule=[type?(Integer)]>]>
+    #
+    # @example cherry-picking namespaces
+    #
+    #   module Types
+    #     include Dry::Types.module(:strict, :coercible)
+    #   end
+    #   # cherry-picking discards default types,
+    #   # provide the :default option along with the list of
+    #   # namespaces if you want the to be exported
+    #   Types.constants # => [:Coercible, :Strict]
+    #
+    # @example custom names
+    #   module Types
+    #     include Dry::Types.module(coercible: :Kernel)
+    #   end
+    #   Types::Kernel::Integer
+    #   # => #<Dry::Types[Constructor<Definition<Integer> fn=Kernel.Integer>]>
+    #
+    # @param [Array<Symbol>] namespaces List of type namespaces to export
+    # @param [Symbol] default Default namespace to export
+    # @param [Hash{Symbol => Symbol}] aliases Optional renamings, like strict: :Draconian
+    # @return [Dry::Types::Module]
+    #
+    # @see Dry::types::Module
+    def self.module(*namespaces, default: Undefined, **aliases)
+      Module.new(container, *namespaces, default: default, **aliases)
     end
 
     # @return [Container{String => Definition}]
