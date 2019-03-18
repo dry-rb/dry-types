@@ -71,7 +71,7 @@ module Dry
 
       # Maps a value
       #
-      # @params [Object]
+      # @param [Object]
       # @return [Object]
       # @api private
       def map_value(input)

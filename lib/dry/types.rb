@@ -17,7 +17,7 @@ require 'dry/types/type'
 require 'dry/types/printable'
 require 'dry/types/definition'
 require 'dry/types/constructor'
-require 'dry/types/builder_methods'
+require 'dry/types/module'
 
 require 'dry/types/errors'
 
@@ -27,29 +27,11 @@ module Dry
     extend Dry::Core::ClassAttributes
     include Dry::Core::Constants
 
-    # @!attribute [r] namespace
-    #   @return [Container{String => Definition}]
-    defines :namespace
-
-    namespace self
-
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
-    # @return [Module]
-    def self.module
-      namespace = Module.new
-      define_constants(namespace, type_keys)
-      namespace.extend(BuilderMethods)
-      namespace
-    end
-
-    # @deprecated Include {Dry::Types.module} instead
-    def self.finalize
-      warn 'Dry::Types.finalize and configuring namespace is deprecated. Just'\
-       ' do `include Dry::Types.module` in places where you want to have access'\
-       ' to built-in types'
-
-      define_constants(self.namespace, type_keys)
+    # @see Dry.Types
+    def self.module(*namespaces, default: Undefined, **aliases)
+      Module.new(container, *namespaces, default: default, **aliases)
     end
 
     # @return [Container{String => Definition}]
@@ -97,24 +79,6 @@ module Dry
       end
     end
 
-    # @param [Module] namespace
-    # @param [<String>] identifiers
-    # @return [<Definition>]
-    def self.define_constants(namespace, identifiers)
-      names = identifiers.map do |id|
-        parts = id.split('.')
-        [Inflector.camelize(parts.pop), parts.map(&Inflector.method(:camelize))]
-      end
-
-      names.map do |(klass, parts)|
-        mod = parts.reduce(namespace) do |a, e|
-          a.constants.include?(e.to_sym) ? a.const_get(e) : a.const_set(e, Module.new)
-        end
-
-        mod.const_set(klass, self[identifier((parts + [klass]).join('::'))])
-      end
-    end
-
     # @param [#to_s] klass
     # @return [String]
     def self.identifier(klass)
@@ -126,19 +90,17 @@ module Dry
       @type_map ||= Concurrent::Map.new
     end
 
-    # List of type keys defined in {Dry::Types.container}
+   # List of type keys defined in {Dry::Types.container}
     # @return [<String>]
     def self.type_keys
       container.keys
     end
 
-    private
-
     # @api private
     def self.const_missing(const)
       underscored = Inflector.underscore(const)
 
-      if type_keys.any? { |key| key.split('.')[0] == underscored }
+      if container.keys.any? { |key| key.split('.')[0] == underscored }
         raise NameError,
               'dry-types does not define constants for default types. '\
               'You can access the predefined types with [], e.g. Dry::Types["strict.integer"] '\
@@ -147,6 +109,55 @@ module Dry
         super
       end
     end
+  end
+
+  # Export registered types as a module with constants
+  #
+  # @example no options
+  #
+  #   module Types
+  #     # exports all types as constants, uses modules for namespaces
+  #     include Dry::Types.module
+  #   end
+  #   # nominal types are exported by default
+  #   Types::Integer
+  #   # => #<Dry::Types[Definition<Integer>]>
+  #   Types::Strict::Integer
+  #   # => #<Dry::Types[Constrained<Definition<Integer> rule=[type?(Integer)]>]>
+  #
+  # @example changing default types
+  #
+  #   module Types
+  #     include Dry::Types(default: :strict)
+  #   end
+  #   Types::Integer
+  #   # => #<Dry::Types[Constrained<Definition<Integer> rule=[type?(Integer)]>]>
+  #
+  # @example cherry-picking namespaces
+  #
+  #   module Types
+  #     include Dry::Types.module(:strict, :coercible)
+  #   end
+  #   # cherry-picking discards default types,
+  #   # provide the :default option along with the list of
+  #   # namespaces if you want the to be exported
+  #   Types.constants # => [:Coercible, :Strict]
+  #
+  # @example custom names
+  #   module Types
+  #     include Dry::Types.module(coercible: :Kernel)
+  #   end
+  #   Types::Kernel::Integer
+  #   # => #<Dry::Types[Constructor<Definition<Integer> fn=Kernel.Integer>]>
+  #
+  # @param [Array<Symbol>] namespaces List of type namespaces to export
+  # @param [Symbol] default Default namespace to export
+  # @param [Hash{Symbol => Symbol}] aliases Optional renamings, like strict: :Draconian
+  # @return [Dry::Types::Module]
+  #
+  # @see Dry::types::Module
+  def self.Types(*namespaces, default: Undefined, **aliases)
+    Types::Module.new(Types.container, *namespaces, default: default, **aliases)
   end
 end
 
