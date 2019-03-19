@@ -60,6 +60,7 @@ module Dry
 
     # Register `:bool` since it's common and not a built-in Ruby type :(
     register("bool", self["true"] | self["false"])
+    register("nominal.bool", self["true"] | self["false"])
     register("strict.bool", self["strict.true"] | self["strict.false"])
 
     register("any", Any)

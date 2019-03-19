@@ -163,6 +163,16 @@ RSpec.describe Dry::Types::Module do
         end
       end
 
+      context 'bool' do
+        context 'no options' do
+          subject(:args) { [] }
+
+          it 'is available by default' do
+            expect(mod::Bool).to be(registry['nominal.bool'])
+          end
+        end
+      end
+
       context 'without namespaces' do
         subject(:args) { [default: :strict] }
 
