@@ -78,7 +78,7 @@ module Dry
       # @api private
       def check_parameters(*namespaces, default: Undefined, **aliases)
         referenced = namespaces.dup
-        referenced << default unless false.equal?(Undefined.default(default, false))
+        referenced << default unless false.equal?(default) || Undefined.equal?(default)
         referenced.concat(aliases.keys)
 
         known = @registry.keys.map { |k|

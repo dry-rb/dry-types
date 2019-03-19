@@ -116,7 +116,7 @@ module Dry
   # @example no options
   #
   #   module Types
-  #     # exports all types as constants, uses modules for namespaces
+  #     # imports all types as constants, uses modules for namespaces
   #     include Dry::Types.module
   #   end
   #   # nominal types are exported by default
