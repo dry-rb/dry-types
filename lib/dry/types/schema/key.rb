@@ -10,9 +10,10 @@ module Dry
       # @see Dry::Types::Schema
       class Key
         include Type
-        include ::Dry::Equalizer(:name, :type, :options)
+        include Dry::Equalizer(:name, :type, :options, inspect: false)
         include Decorator
         include Builder
+        include Printable
 
         # @return [Symbol]
         attr_reader :name
