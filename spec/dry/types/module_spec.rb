@@ -145,6 +145,24 @@ RSpec.describe Dry::Types::Module do
         end
       end
 
+      context 'any' do
+        context 'no options' do
+          subject(:args) { [] }
+
+          it 'is available by default' do
+            expect(mod::Any).to be(registry['any'])
+          end
+        end
+
+        context 'strict' do
+          subject(:args) { [default: :strict] }
+
+          it 'is available' do
+            expect(mod::Any).to be(registry['any'])
+          end
+        end
+      end
+
       context 'without namespaces' do
         subject(:args) { [default: :strict] }
 

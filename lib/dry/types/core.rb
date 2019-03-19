@@ -63,6 +63,8 @@ module Dry
     register("strict.bool", self["strict.true"] | self["strict.false"])
 
     register("any", Any)
+    register("nominal.any", Any)
+    register("strict.any", Any)
   end
 end
 
