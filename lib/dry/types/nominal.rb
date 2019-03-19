@@ -1,3 +1,4 @@
+require 'dry/core/deprecations'
 require 'dry/types/builder'
 require 'dry/types/result'
 require 'dry/types/options'
@@ -106,6 +107,10 @@ module Dry
         [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
     end
+
+    extend Dry::Core::Deprecations[:'dry-types']
+    Definition = Nominal
+    deprecate_constant(:Definition, message: "Nominal")
   end
 end
 

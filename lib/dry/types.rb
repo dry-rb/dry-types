@@ -156,7 +156,7 @@ module Dry
   # @return [Dry::Types::Module]
   #
   # @see Dry::types::Module
-  def self.Types(*namespaces, default: Undefined, **aliases)
+  def self.Types(*namespaces, default: Types::Undefined, **aliases)
     Types::Module.new(Types.container, *namespaces, default: default, **aliases)
   end
 end
