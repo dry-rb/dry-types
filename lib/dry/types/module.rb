@@ -1,3 +1,4 @@
+require 'dry/core/deprecations'
 require 'dry/types/builder_methods'
 
 module Dry
@@ -18,6 +19,17 @@ module Dry
         constants = type_constants(*args)
         define_constants(constants)
         extend(BuilderMethods)
+
+        if constants.key?(:Nominal)
+          singleton_class.send(:define_method, :included) do |base|
+            super(base)
+            base.instance_exec(const_get(:Nominal, false)) do |nominal|
+              extend Dry::Core::Deprecations[:'dry-types']
+              const_set(:Definition, nominal)
+              deprecate_constant(:Definition, message: "Nominal")
+            end
+          end
+        end
       end
 
       # @api private

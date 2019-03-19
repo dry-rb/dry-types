@@ -6,7 +6,7 @@ RSpec.describe Dry::Types::Array do
           expect(array[Set[1, 2, 3]]).to eql(%w(1 2 3))
         end
 
-        it_behaves_like Dry::Types::Definition do
+        it_behaves_like Dry::Types::Nominal do
           subject(:type) { array }
         end
       end
@@ -39,7 +39,7 @@ RSpec.describe Dry::Types::Array do
           )
         end
 
-        it_behaves_like Dry::Types::Definition do
+        it_behaves_like Dry::Types::Nominal do
           subject(:type) { array }
         end
       end
@@ -103,7 +103,7 @@ RSpec.describe Dry::Types::Array do
       subject(:type) { Dry::Types['array'].of(Dry::Types['string']) }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).to eql('#<Dry::Types[Array<Definition<String>>]>')
+        expect(type.to_s).to eql('#<Dry::Types[Array<Nominal<String>>]>')
       end
     end
   end

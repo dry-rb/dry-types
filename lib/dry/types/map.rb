@@ -1,6 +1,6 @@
 module Dry
   module Types
-    class Map < Definition
+    class Map < Nominal
       def initialize(_primitive, key_type: Types['any'], value_type: Types['any'], meta: EMPTY_HASH)
         super(_primitive, key_type: key_type, value_type: value_type, meta: meta)
         validate_options!

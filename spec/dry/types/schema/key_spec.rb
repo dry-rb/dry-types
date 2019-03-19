@@ -2,7 +2,7 @@ RSpec.describe Dry::Types::Schema::Key do
   let(:key) { described_class.new(Dry::Types['strict.integer'], :age) }
   subject { key }
 
-  it_behaves_like Dry::Types::Definition do
+  it_behaves_like Dry::Types::Nominal do
     subject(:type) { key }
   end
 

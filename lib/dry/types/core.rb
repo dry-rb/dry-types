@@ -33,7 +33,7 @@ module Dry
 
     # Register generic types for {ALL_PRIMITIVES}
     ALL_PRIMITIVES.each do |name, primitive|
-      type = Definition[primitive].new(primitive)
+      type = Nominal[primitive].new(primitive)
       register(name.to_s, type)
       register("nominal.#{name}", type)
     end

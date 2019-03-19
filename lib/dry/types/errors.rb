@@ -3,7 +3,7 @@ module Dry
     extend Dry::Core::ClassAttributes
 
     # @!attribute [r] namespace
-    #   @return [Container{String => Definition}]
+    #   @return [Container{String => Nominal}]
     defines :namespace
 
     namespace self

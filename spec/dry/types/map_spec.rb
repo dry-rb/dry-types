@@ -2,9 +2,9 @@ RSpec.describe Dry::Types::Map do
   context 'shared examples' do
     let(:type) { Dry::Types::Map.new(::Hash) }
 
-    it_behaves_like 'Dry::Types::Definition#meta'
+    it_behaves_like 'Dry::Types::Nominal#meta'
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
   end
 
   context 'options' do
@@ -87,12 +87,12 @@ RSpec.describe Dry::Types::Map do
           to eql(
                [:map, [
                   [:constrained, [
-                     [:definition, [Integer, {}]],
+                     [:nominal, [Integer, {}]],
                      [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]],
                      {}
                    ]],
                   [:constrained, [
-                     [:definition, [String, {}]],
+                     [:nominal, [String, {}]],
                      [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]],
                      {}
                    ]],
@@ -194,7 +194,7 @@ RSpec.describe Dry::Types::Map do
 
     it 'returns string representation of the type' do
       expect(type.to_s).
-        to eql('#<Dry::Types[Map<Definition<String> => Definition<Integer>>]>')
+        to eql('#<Dry::Types[Map<Nominal<String> => Nominal<Integer>>]>')
     end
   end
 end

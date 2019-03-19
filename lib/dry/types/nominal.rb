@@ -1,10 +1,11 @@
+require 'dry/core/deprecations'
 require 'dry/types/builder'
 require 'dry/types/result'
 require 'dry/types/options'
 
 module Dry
   module Types
-    class Definition
+    class Nominal
       include Type
       include Options
       include Builder
@@ -97,15 +98,19 @@ module Dry
       alias_method :valid?, :primitive?
       alias_method :===, :primitive?
 
-      # Return AST representation of a type definition
+      # Return AST representation of a type nominal
       #
       # @api public
       #
       # @return [Array]
       def to_ast(meta: true)
-        [:definition, [primitive, meta ? self.meta : EMPTY_HASH]]
+        [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
     end
+
+    extend Dry::Core::Deprecations[:'dry-types']
+    Definition = Nominal
+    deprecate_constant(:Definition, message: "Nominal")
   end
 end
 

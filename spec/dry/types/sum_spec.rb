@@ -1,10 +1,10 @@
 RSpec.describe Dry::Types::Sum do
-  describe 'common definition behavior' do
+  describe 'common nominal behavior' do
     subject(:type) { Dry::Types['bool'] }
 
-    it_behaves_like 'Dry::Types::Definition#meta'
+    it_behaves_like 'Dry::Types::Nominal#meta'
 
-    it_behaves_like 'Dry::Types::Definition without primitive'
+    it_behaves_like 'Dry::Types::Nominal without primitive'
 
     it 'is frozen' do
       expect(type).to be_frozen
@@ -246,7 +246,7 @@ RSpec.describe Dry::Types::Sum do
       let(:type) { Dry::Types['string'] | Dry::Types['integer'] }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).to eql('#<Dry::Types[Sum<Definition<String> | Definition<Integer>>]>')
+        expect(type.to_s).to eql('#<Dry::Types[Sum<Nominal<String> | Nominal<Integer>>]>')
       end
     end
 
@@ -259,10 +259,10 @@ RSpec.describe Dry::Types::Sum do
         expect(type.to_s).
           to eql(
               '#<Dry::Types[Sum<'\
-              'Definition<String> | '\
-              'Definition<Integer> | '\
-              'Definition<Date> | '\
-              'Definition<Time>'\
+              'Nominal<String> | '\
+              'Nominal<Integer> | '\
+              'Nominal<Date> | '\
+              'Nominal<Time>'\
               '>]>'
             )
       end

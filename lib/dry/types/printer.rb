@@ -5,7 +5,7 @@ module Dry
     # @api private
     class Printer
       MAPPING = {
-        Definition => :visit_definition,
+        Nominal => :visit_nominal,
         Constructor => :visit_constructor,
         Hash::Constructor => :visit_constructor,
         Constrained => :visit_constrained,
@@ -214,9 +214,9 @@ module Dry
         end
       end
 
-      def visit_definition(type)
+      def visit_nominal(type)
         visit_options(type.options, type.meta) do |opts|
-          yield "Definition<#{ type.primitive }#{ opts }>"
+          yield "Nominal<#{ type.primitive }#{ opts }>"
         end
       end
 

@@ -6,7 +6,7 @@ RSpec.describe Dry::Types::Enum do
     let(:values) { mapping.keys }
     let(:string) { Dry::Types['strict.string'] }
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'allows defining an enum from a specific type' do
       expect(type['draft']).to eql(mapping.key(0))
@@ -37,7 +37,7 @@ RSpec.describe Dry::Types::Enum do
     let(:values) { %w(draft published archived) }
     let(:string) { Dry::Types['strict.string'] }
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'allows defining an enum from a specific type' do
       expect(type['draft']).to eql(values[0])
@@ -93,7 +93,7 @@ RSpec.describe Dry::Types::Enum do
 
     let(:values) { [2, 3, 4] }
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'allows defining an enum from a specific type' do
       expect(type[2]).to be(2)
@@ -135,7 +135,7 @@ RSpec.describe Dry::Types::Enum do
   describe '#with' do
     subject(:enum_with_meta) { Dry::Types['integer'].enum(4, 5, 6).with(meta: { foo: :bar }) }
 
-    it_behaves_like Dry::Types::Definition do
+    it_behaves_like Dry::Types::Nominal do
       let(:type) { enum_with_meta }
     end
 
@@ -150,7 +150,7 @@ RSpec.describe Dry::Types::Enum do
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql("#<Dry::Types[Enum<Constrained<Definition<Integer> "\
+          to eql("#<Dry::Types[Enum<Constrained<Nominal<Integer> "\
                  "rule=[included_in?([4, 5, 6])]> values={4, 5, 6}>]>")
       end
     end
@@ -162,7 +162,7 @@ RSpec.describe Dry::Types::Enum do
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql('#<Dry::Types[Enum<Constrained<Definition<Integer> '\
+          to eql('#<Dry::Types[Enum<Constrained<Nominal<Integer> '\
                  'rule=[included_in?([0, 10, 20])]> '\
                  'mapping={0=>"draft", 10=>"published", 20=>"archived"}>]>'
                  )

@@ -2,7 +2,7 @@ require 'dry/types/fn_container'
 
 module Dry
   module Types
-    class Constructor < Definition
+    class Constructor < Nominal
       include Dry::Equalizer(:type, :options, :meta, inspect: false)
 
       # @return [#call]
@@ -17,7 +17,7 @@ module Dry
       # @param [Hash] options
       # @param [#call, nil] block
       def self.new(input, **options, &block)
-        type = input.is_a?(Builder) ? input : Definition.new(input)
+        type = input.is_a?(Builder) ? input : Nominal.new(input)
         super(type, **options, &block)
       end
 
@@ -96,7 +96,7 @@ module Dry
 
       # @api public
       #
-      # @see Definition#to_ast
+      # @see Nominal#to_ast
       def to_ast(meta: true)
         [:constructor, [type.to_ast(meta: meta),
                         register_fn(fn),

@@ -1,9 +1,9 @@
 RSpec.describe Dry::Types::Constrained do
-  describe 'common definition behavior' do
+  describe 'common nominal behavior' do
     subject(:type) { Dry::Types['strict.string'].constrained(size: 3..12) }
 
-    it_behaves_like Dry::Types::Definition
-    it_behaves_like 'Dry::Types::Definition#meta'
+    it_behaves_like Dry::Types::Nominal
+    it_behaves_like 'Dry::Types::Nominal#meta'
   end
 
   describe '#[]' do
@@ -59,7 +59,7 @@ RSpec.describe Dry::Types::Constrained do
     it 'returns string representation of the type' do
       expect(type.to_s).
         to eql(
-            "#<Dry::Types[Constrained<Definition<String> "\
+            "#<Dry::Types[Constrained<Nominal<String> "\
             "rule=[type?(String) AND size?(3..12)]>]>"
           )
     end
@@ -70,7 +70,7 @@ RSpec.describe Dry::Types::Constrained do
       Dry::Types['coercible.hash'].constrained(size: 1)
     end
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'passes when constraints are not violated by the coerced value' do
       expect(type[a: 1]).to eql(a: 1)
@@ -115,7 +115,7 @@ RSpec.describe Dry::Types::Constrained do
       Dry::Types['string'].constrained(size: 4).optional
     end
 
-    it_behaves_like 'Dry::Types::Definition without primitive'
+    it_behaves_like 'Dry::Types::Nominal without primitive'
 
     it 'passes when constraints are not violated' do
       expect(type[nil]).to be(nil)
@@ -132,7 +132,7 @@ RSpec.describe Dry::Types::Constrained do
       Dry::Types['strict.string'].constrained(size: 4)
     end
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'passes when constraints are not violated' do
       expect(type['hell']).to eql('hell')
@@ -151,7 +151,7 @@ RSpec.describe Dry::Types::Constrained do
         .of(Dry::Types['coercible.string'])
     end
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'passes when constraints are not violated' do
       expect(type[[:foo, :bar, :baz]]).to eql(%w(foo bar baz))
@@ -168,7 +168,7 @@ RSpec.describe Dry::Types::Constrained do
         .of(Dry::Types['coercible.string'].constrained(min_size: 3))
     end
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'raises when a given constraint is violated' do
       expect { type[%w(a b)] }.to raise_error(Dry::Types::ConstraintError)

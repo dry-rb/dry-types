@@ -4,7 +4,7 @@ module Dry
       # @return [Hash]
       attr_reader :options
 
-      # @see Definition#initialize
+      # @see Nominal#initialize
       def initialize(*args, meta: EMPTY_HASH, **options)
         @__args__ = args.freeze
         @options = options.freeze

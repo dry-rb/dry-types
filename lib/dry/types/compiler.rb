@@ -17,14 +17,14 @@ module Dry
       end
 
       def visit_constrained(node)
-        definition, rule, meta = node
-        Types::Constrained.new(visit(definition), rule: visit_rule(rule)).meta(meta)
+        nominal, rule, meta = node
+        Types::Constrained.new(visit(nominal), rule: visit_rule(rule)).meta(meta)
       end
 
       def visit_constructor(node)
-        definition, fn_register_name, meta = node
+        nominal, fn_register_name, meta = node
         fn = Dry::Types::FnContainer[fn_register_name]
-        primitive = visit(definition)
+        primitive = visit(nominal)
         Types::Constructor.new(primitive, meta: meta, fn: fn)
       end
 
@@ -33,13 +33,13 @@ module Dry
         Types::Safe.new(visit(ast), meta: meta)
       end
 
-      def visit_definition(node)
+      def visit_nominal(node)
         type, meta = node
 
         if registry.registered?(type)
           registry[type].meta(meta)
         else
-          Definition.new(type, meta: meta)
+          Nominal.new(type, meta: meta)
         end
       end
 

@@ -1,8 +1,8 @@
-RSpec.describe Dry::Types::Definition, '#default' do
-  context 'with a definition' do
+RSpec.describe Dry::Types::Nominal, '#default' do
+  context 'with a nominal' do
     subject(:type) { Dry::Types['string'].default('foo'.freeze) }
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'returns default value when no value is passed' do
       expect(type[]).to eql('foo')
@@ -35,7 +35,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
     context 'default called first' do
       subject(:type) { Dry::Types['hash'].default({}.freeze).meta(required: false) }
 
-      it_behaves_like 'Dry::Types::Definition without primitive'
+      it_behaves_like 'Dry::Types::Nominal without primitive'
 
       it 'allows nil' do
         expect(type[]).to eq({})
@@ -45,7 +45,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
     context 'default called last' do
       subject(:type) { Dry::Types['hash'].meta(required: false).default({}.freeze) }
 
-      it_behaves_like 'Dry::Types::Definition without primitive'
+      it_behaves_like 'Dry::Types::Nominal without primitive'
 
       it 'allows nil' do
         expect(type[]).to eq({})
@@ -56,7 +56,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
   context 'with an optional type' do
     subject(:type) { Dry::Types['strict.integer'].optional.default(nil) }
 
-    it_behaves_like 'Dry::Types::Definition without primitive'
+    it_behaves_like 'Dry::Types::Nominal without primitive'
 
     it 'allows nil' do
       expect(type[nil]).to be(nil)
@@ -66,7 +66,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
   context 'with a strict bool' do
     subject(:type) { Dry::Types['strict.bool'] }
 
-    it_behaves_like 'Dry::Types::Definition without primitive' do
+    it_behaves_like 'Dry::Types::Nominal without primitive' do
       let(:type) { Dry::Types['strict.bool'].default(false) }
     end
 
@@ -83,7 +83,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
     context 'with 0-arity block' do
       subject(:type) { Dry::Types['time'].default { Time.now } }
 
-      it_behaves_like Dry::Types::Definition
+      it_behaves_like Dry::Types::Nominal
 
       it 'calls the value' do
         expect(type.call).to be_instance_of(Time)
@@ -97,7 +97,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
         Dry::Types['time'].constructor(&floor_to_date).default { |type| type[Time.now] }
       end
 
-      it_behaves_like Dry::Types::Definition
+      it_behaves_like Dry::Types::Nominal
 
       it 'can call the next type in the chain' do
         expect(type.call).to eql(floor_to_date[Time.now])
@@ -116,7 +116,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
   describe '#with' do
     subject(:type) { Dry::Types['time'].default { Time.now }.with(meta: { foo: :bar }) }
 
-    it_behaves_like Dry::Types::Definition
+    it_behaves_like Dry::Types::Nominal
 
     it 'creates a new type with provided options' do
       expect(type.options).to eql({})
@@ -181,7 +181,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
       subject(:type) { Dry::Types['string'].default('foo') }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).to eql('#<Dry::Types[Default<Definition<String> value="foo">]>')
+        expect(type.to_s).to eql('#<Dry::Types[Default<Nominal<String> value="foo">]>')
       end
     end
 
@@ -196,7 +196,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
         it 'returns string representation of the type' do
           expect(type.to_s).
             to eql(
-              "#<Dry::Types[Default<Definition<String> "\
+              "#<Dry::Types[Default<Nominal<String> "\
               "value_fn=spec/dry/types/default_spec.rb:#{ line_no }>]>"
             )
         end
@@ -208,7 +208,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
         it 'returns string representation of the type' do
           expect(type.to_s).
             to eql(
-              "#<Dry::Types[Default<Definition<String> "\
+              "#<Dry::Types[Default<Nominal<String> "\
               "value_fn=(lambda)>]>"
             )
         end
@@ -220,7 +220,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
         it 'returns string representation of the type' do
           expect(type.to_s).
             to eql(
-              "#<Dry::Types[Default<Definition<String> "\
+              "#<Dry::Types[Default<Nominal<String> "\
               "value_fn=Kernel.Integer>]>"
             )
         end
@@ -244,7 +244,7 @@ RSpec.describe Dry::Types::Definition, '#default' do
         it 'returns string representation of the type' do
           expect(type.to_s).
             to eql(
-              "#<Dry::Types[Default<Definition<String> "\
+              "#<Dry::Types[Default<Nominal<String> "\
               "value_fn=callable.call>]>"
             )
         end

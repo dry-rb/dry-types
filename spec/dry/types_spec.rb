@@ -9,7 +9,7 @@ RSpec.describe Dry::Types do
         end
       end
 
-      custom_array = Dry::Types::Definition.new(Array).constructor(Test::FlatArray.method(:constructor))
+      custom_array = Dry::Types::Nominal.new(Array).constructor(Test::FlatArray.method(:constructor))
 
       input = [[1], [2]]
 
@@ -20,7 +20,7 @@ RSpec.describe Dry::Types do
   describe '.[]' do
     before do
       module Test
-        class Foo < Dry::Types::Definition
+        class Foo < Dry::Types::Nominal
           def self.[](value)
             value
           end
@@ -31,7 +31,7 @@ RSpec.describe Dry::Types do
     let(:unregistered_type) { Test::Foo }
 
     it 'returns registered type for "string"' do
-      expect(Dry::Types['string']).to be_a(Dry::Types::Definition)
+      expect(Dry::Types['string']).to be_a(Dry::Types::Nominal)
       expect(Dry::Types['string'].name).to eql('String')
     end
 

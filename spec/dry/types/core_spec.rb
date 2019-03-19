@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition do
+RSpec.describe Dry::Types::Nominal do
   let(:string) { Dry::Types["coercible.string"] }
   let(:hash) { Dry::Types["coercible.hash"] }
 
@@ -30,7 +30,7 @@ RSpec.describe Dry::Types::Definition do
   describe 'with Bool' do
     let(:bool) { Dry::Types["strict.bool"] }
 
-    it_behaves_like 'Dry::Types::Definition without primitive' do
+    it_behaves_like 'Dry::Types::Nominal without primitive' do
       let(:type) { bool }
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Dry::Types::Definition do
   describe 'with Date' do
     let(:date) { Dry::Types["strict.date"] }
 
-    it_behaves_like Dry::Types::Definition do
+    it_behaves_like Dry::Types::Nominal do
       let(:type) { date }
     end
 
@@ -64,7 +64,7 @@ RSpec.describe Dry::Types::Definition do
   describe 'with DateTime' do
     let(:datetime) { Dry::Types["strict.date_time"] }
 
-    it_behaves_like Dry::Types::Definition do
+    it_behaves_like Dry::Types::Nominal do
       let(:type) { datetime }
     end
 
@@ -78,7 +78,7 @@ RSpec.describe Dry::Types::Definition do
   describe 'with Time' do
     let(:time) { Dry::Types["strict.time"] }
 
-    it_behaves_like Dry::Types::Definition do
+    it_behaves_like Dry::Types::Nominal do
       let(:type) { time }
     end
 
@@ -92,7 +92,7 @@ RSpec.describe Dry::Types::Definition do
   describe 'with Range' do
     let(:range) { Dry::Types["strict.range"] }
 
-    it_behaves_like Dry::Types::Definition do
+    it_behaves_like Dry::Types::Nominal do
       let(:type) { range }
     end
 
@@ -107,7 +107,7 @@ RSpec.describe Dry::Types::Definition do
     context 'with strict string' do
       let(:string) { Dry::Types["optional.strict.string"] }
 
-      it_behaves_like 'Dry::Types::Definition without primitive' do
+      it_behaves_like 'Dry::Types::Nominal without primitive' do
         let(:type) { string }
       end
 
@@ -123,7 +123,7 @@ RSpec.describe Dry::Types::Definition do
     context 'with coercible string' do
       let(:string) { Dry::Types["optional.coercible.string"] }
 
-      it_behaves_like 'Dry::Types::Definition without primitive' do
+      it_behaves_like 'Dry::Types::Nominal without primitive' do
         let(:type) { string }
       end
 
@@ -140,7 +140,7 @@ RSpec.describe Dry::Types::Definition do
   describe 'defining coercible Optional String' do
     let(:optional_string) { Dry::Types["coercible.string"].optional }
 
-    it_behaves_like 'Dry::Types::Definition without primitive' do
+    it_behaves_like 'Dry::Types::Nominal without primitive' do
       let(:type) { optional_string }
     end
 
@@ -156,7 +156,7 @@ RSpec.describe Dry::Types::Definition do
   describe 'defining Optional String' do
     let(:optional_string) { Dry::Types["strict.string"].optional }
 
-    it_behaves_like 'Dry::Types::Definition without primitive' do
+    it_behaves_like 'Dry::Types::Nominal without primitive' do
       let(:type) { optional_string }
     end
 
@@ -177,7 +177,7 @@ RSpec.describe Dry::Types::Definition do
     let(:any) { Dry::Types['any'] }
     let(:constrained) { Dry::Types['any'].constrained(type: TrueClass) }
 
-    it_behaves_like Dry::Types::Definition do
+    it_behaves_like Dry::Types::Nominal do
       let(:type) { any }
     end
 

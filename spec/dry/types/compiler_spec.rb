@@ -3,25 +3,25 @@ require 'dry/types/compiler'
 RSpec.describe Dry::Types::Compiler, '#call' do
   subject(:compiler) { Dry::Types::Compiler.new(Dry::Types) }
 
-  it 'returns existing definition' do
-    ast = [:definition, [Hash, {}]]
+  it 'returns existing nominal' do
+    ast = [:nominal, [Hash, {}]]
     type = compiler.(ast)
 
     expect(type).to be(Dry::Types['hash'])
   end
 
-  it 'builds a plain definition' do
-    ast = [:definition, [Set, {}]]
+  it 'builds a plain nominal' do
+    ast = [:nominal, [Set, {}]]
     type = compiler.(ast)
-    expected = Dry::Types::Definition.new(Set)
+    expected = Dry::Types::Nominal.new(Set)
 
     expect(type).to eql(expected)
   end
 
-  it 'builds a definition with meta' do
-    ast = [:definition, [Set, key: :value]]
+  it 'builds a nominal with meta' do
+    ast = [:nominal, [Set, key: :value]]
     type = compiler.(ast)
-    expected = Dry::Types::Definition.new(Set, meta: { key: :value })
+    expected = Dry::Types::Nominal.new(Set, meta: { key: :value })
 
     expect(type).to eql(expected)
   end
@@ -209,7 +209,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a params array from a :params_array node' do
-    ast = [:params_array, [[:definition, [String, {}]], {}]]
+    ast = [:params_array, [[:nominal, [String, {}]], {}]]
 
     array = compiler.(ast)
 
@@ -226,7 +226,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a json array from a :json_array node' do
-    ast = [:json_array, [[:definition, [String, {}]], {}]]
+    ast = [:json_array, [[:nominal, [String, {}]], {}]]
 
     array = compiler.(ast)
 
@@ -266,7 +266,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
   it 'build or constrained' do
     ast = [
-      :constrained, [[:definition, [Integer, {}]],
+      :constrained, [[:nominal, [Integer, {}]],
       [:or,
         [
           [:predicate, [:lt?, [[:num, 5], [:input, Undefined]]]],
@@ -329,8 +329,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(ast).
       to eql([
                :map, [
-                 [:definition, [String, {}]],
-                 [:definition, [Integer, {}]],
+                 [:nominal, [String, {}]],
+                 [:nominal, [Integer, {}]],
                  abc: 123, foo: 'bar'
                ]
              ])

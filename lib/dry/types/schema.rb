@@ -161,7 +161,7 @@ module Dry
       end
 
       # @overload schema(type_map, meta = EMPTY_HASH)
-      #   @param [{Symbol => Dry::Types::Definition}] type_map
+      #   @param [{Symbol => Dry::Types::Nominal}] type_map
       #   @param [Hash] meta
       #   @return [Dry::Types::Schema]
       # @overload schema(keys)
