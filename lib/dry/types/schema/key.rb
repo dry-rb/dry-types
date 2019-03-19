@@ -27,12 +27,12 @@ module Dry
           @name = name
         end
 
-        # @see Dry::Types::Definition#call
+        # @see Dry::Types::Nominal#call
         def call(input, &block)
           type.(input, &block)
         end
 
-        # @see Dry::Types::Definition#try
+        # @see Dry::Types::Nominal#try
         def try(input, &block)
           type.try(input, &block)
         end

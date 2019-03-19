@@ -92,7 +92,7 @@ RSpec.describe Dry::Types::Schema do
     end
 
     before do
-      PhoneType = Dry::Types::Definition.new(phone_struct).constructor(-> args { phone_struct.new(*args) })
+      PhoneType = Dry::Types::Nominal.new(phone_struct).constructor(-> args { phone_struct.new(*args) })
     end
 
     after do
@@ -118,11 +118,11 @@ RSpec.describe Dry::Types::Schema do
 
     let(:phone) { PhoneType.primitive }
 
-    it_behaves_like Dry::Types::Definition do
+    it_behaves_like Dry::Types::Nominal do
       let(:type) { Dry::Types['hash'].schema(hash_schema) }
     end
 
-    it_behaves_like 'Dry::Types::Definition#meta' do
+    it_behaves_like 'Dry::Types::Nominal#meta' do
       let(:type) { Dry::Types['hash'].schema(hash_schema) }
     end
 
@@ -376,7 +376,7 @@ RSpec.describe Dry::Types::Schema do
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql("#<Dry::Types[Schema<keys={name: Definition<String> age?: Definition<Integer>}>]>")
+          to eql("#<Dry::Types[Schema<keys={name: Nominal<String> age?: Nominal<Integer>}>]>")
       end
     end
 
@@ -387,7 +387,7 @@ RSpec.describe Dry::Types::Schema do
         expect(type.to_s).
           to eql(
             '#<Dry::Types[Constrained<Schema<'\
-            'keys={age: Constrained<Definition<Integer> rule=[type?(Integer)]>'\
+            'keys={age: Constrained<Nominal<Integer> rule=[type?(Integer)]>'\
             '}> rule=[type?(Hash)]>]>')
       end
     end

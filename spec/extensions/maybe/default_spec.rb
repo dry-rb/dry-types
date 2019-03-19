@@ -1,8 +1,8 @@
-RSpec.describe Dry::Types::Definition, '#default', :maybe do
+RSpec.describe Dry::Types::Nominal, '#default', :maybe do
   context 'with a maybe' do
     subject(:type) { Dry::Types['strict.integer'].maybe }
 
-    it_behaves_like 'Dry::Types::Definition without primitive' do
+    it_behaves_like 'Dry::Types::Nominal without primitive' do
       let(:type) { Dry::Types['strict.integer'].maybe.default(0) }
     end
 

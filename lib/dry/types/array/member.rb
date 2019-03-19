@@ -1,6 +1,6 @@
 module Dry
   module Types
-    class Array < Definition
+    class Array < Nominal
       class Member < Array
         # @return [Type]
         attr_reader :member
@@ -51,7 +51,7 @@ module Dry
 
         # @api public
         #
-        # @see Definition#to_ast
+        # @see Nominal#to_ast
         def to_ast(meta: true)
           if member.respond_to?(:to_ast)
             [:array, [member.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]

@@ -14,27 +14,27 @@ RSpec.describe Dry::Types::Module do
     end
 
     describe '.Instance' do
-      it 'builds a definition of a class instance' do
+      it 'builds a nominal of a class instance' do
         foo_type = Class.new
 
         expect(mod.Instance(foo_type)).
-          to eql(Dry::Types::Definition.new(foo_type).constrained(type: foo_type))
+          to eql(Dry::Types::Nominal.new(foo_type).constrained(type: foo_type))
       end
     end
 
     describe '.Value' do
-      it 'builds a definition of a single value' do
+      it 'builds a nominal of a single value' do
         expect(mod.Value({})).
-          to eql(Dry::Types::Definition.new(Hash).constrained(eql: {}))
+          to eql(Dry::Types::Nominal.new(Hash).constrained(eql: {}))
       end
     end
 
     describe '.Constant' do
-      it 'builds a definition of a constant' do
+      it 'builds a nominal of a constant' do
         obj = Object.new
 
         expect(mod.Constant(obj)).
-          to eql(Dry::Types::Definition.new(Object).constrained(is: obj))
+          to eql(Dry::Types::Nominal.new(Object).constrained(is: obj))
       end
     end
 
@@ -57,10 +57,10 @@ RSpec.describe Dry::Types::Module do
         to_s = :to_s.to_proc
 
         expect(mod.Constructor(String, &to_s)).
-          to eql(Dry::Types::Definition.new(String).constructor(to_s))
+          to eql(Dry::Types::Nominal.new(String).constructor(to_s))
 
         expect(mod.Constructor(String, to_s)).
-          to eql(Dry::Types::Definition.new(String).constructor(to_s))
+          to eql(Dry::Types::Nominal.new(String).constructor(to_s))
       end
 
       it 'uses .new method by default' do
@@ -71,15 +71,15 @@ RSpec.describe Dry::Types::Module do
       end
     end
 
-    describe '.Definition' do
-      it 'builds a definition type' do
-        expect(mod.Definition(String)).to eql(Dry::Types::Definition.new(String))
+    describe '.Nominal' do
+      it 'builds a nominal type' do
+        expect(mod.Nominal(String)).to eql(Dry::Types::Nominal.new(String))
       end
     end
 
     it 'defines methods when included' do
-      expect(Module.new.tap { |m| m.include mod }.Definition(String)).
-        to eql(mod.Definition(String))
+      expect(Module.new.tap { |m| m.include mod }.Nominal(String)).
+        to eql(mod.Nominal(String))
     end
 
     describe '.Strict' do

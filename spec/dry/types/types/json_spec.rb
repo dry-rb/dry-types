@@ -1,4 +1,4 @@
-RSpec.describe Dry::Types::Definition do
+RSpec.describe Dry::Types::Nominal do
   describe 'json.nil' do
     subject(:type) { Dry::Types['json.nil'] }
 

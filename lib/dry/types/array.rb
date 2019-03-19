@@ -3,7 +3,7 @@ require 'dry/core/deprecations'
 
 module Dry
   module Types
-    class Array < Definition
+    class Array < Nominal
       extend Dry::Core::Deprecations[:'dry-types']
 
       # @param [Type] type

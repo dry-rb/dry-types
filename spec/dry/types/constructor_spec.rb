@@ -3,10 +3,10 @@ RSpec.describe Dry::Types::Constructor do
     Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
   end
 
-  it_behaves_like Dry::Types::Definition
+  it_behaves_like Dry::Types::Nominal
 
   describe '.new' do
-    it 'wraps primitive in a definition' do
+    it 'wraps primitive in a nominal' do
       type = Dry::Types::Constructor.new(String, fn: Kernel.method(:String))
 
       expect(type.primitive).to be(String)
@@ -98,7 +98,7 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe '#primitive' do
-    it 'delegates to its definition' do
+    it 'delegates to its nominal' do
       expect(type.primitive).to be(String)
     end
   end
@@ -138,7 +138,7 @@ RSpec.describe Dry::Types::Constructor do
       expect(type).to respond_to(:schema)
     end
 
-    it 'returns response when it is not a type definition' do
+    it 'returns response when it is not a type nominal' do
       expect(type.constrained(type: Hash).rule).to be_kind_of(Dry::Logic::Rule)
     end
 
@@ -241,7 +241,7 @@ RSpec.describe Dry::Types::Constructor do
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql("#<Dry::Types[Constructor<Definition<Integer> fn=Kernel.Integer>]>")
+          to eql("#<Dry::Types[Constructor<Nominal<Integer> fn=Kernel.Integer>]>")
       end
     end
 
@@ -258,7 +258,7 @@ RSpec.describe Dry::Types::Constructor do
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql("#<Dry::Types[Constructor<Definition<Integer> fn=Test::IntegerConstructor#call>]>")
+          to eql("#<Dry::Types[Constructor<Nominal<Integer> fn=Test::IntegerConstructor#call>]>")
       end
     end
   end

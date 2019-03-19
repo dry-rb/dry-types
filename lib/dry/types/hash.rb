@@ -2,11 +2,11 @@ require 'dry/types/hash/constructor'
 
 module Dry
   module Types
-    class Hash < Definition
+    class Hash < Nominal
       NOT_REQUIRED = { required: false }.freeze
 
       # @overload schmea(type_map, meta = EMPTY_HASH)
-      #   @param [{Symbol => Dry::Types::Definition}] type_map
+      #   @param [{Symbol => Dry::Types::Nominal}] type_map
       #   @param [Hash] meta
       #   @return [Dry::Types::Schema]
       # @overload schema(keys)
@@ -37,7 +37,7 @@ module Dry
         )
       end
 
-      # @param [{Symbol => Definition}] type_map
+      # @param [{Symbol => Nominal}] type_map
       # @return [Schema]
       def weak(*)
         raise "Support for old hash schemas was removed, please refer to the CHANGELOG "\

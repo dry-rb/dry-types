@@ -4,7 +4,7 @@ require 'dry/types/options'
 
 module Dry
   module Types
-    class Definition
+    class Nominal
       include Type
       include Options
       include Builder
@@ -97,13 +97,13 @@ module Dry
       alias_method :valid?, :primitive?
       alias_method :===, :primitive?
 
-      # Return AST representation of a type definition
+      # Return AST representation of a type nominal
       #
       # @api public
       #
       # @return [Array]
       def to_ast(meta: true)
-        [:definition, [primitive, meta ? self.meta : EMPTY_HASH]]
+        [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
     end
   end

@@ -4,7 +4,7 @@ RSpec.describe Dry::Types::Constrained, :maybe do
       Dry::Types['string'].constrained(size: 4).maybe
     end
 
-    it_behaves_like 'Dry::Types::Definition without primitive'
+    it_behaves_like 'Dry::Types::Nominal without primitive'
 
     it 'passes when constraints are not violated' do
       expect(type[nil].value).to be(nil)

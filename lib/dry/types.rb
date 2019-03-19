@@ -15,7 +15,7 @@ require 'dry/types/container'
 require 'dry/types/inflector'
 require 'dry/types/type'
 require 'dry/types/printable'
-require 'dry/types/definition'
+require 'dry/types/nominal'
 require 'dry/types/constructor'
 require 'dry/types/module'
 
@@ -34,7 +34,7 @@ module Dry
       Module.new(container, *namespaces, default: default, **aliases)
     end
 
-    # @return [Container{String => Definition}]
+    # @return [Container{String => Nominal}]
     def self.container
       @container ||= Container.new
     end
@@ -47,7 +47,7 @@ module Dry
     # @param [String] name
     # @param [Type] type
     # @param [#call,nil] block
-    # @return [Container{String => Definition}]
+    # @return [Container{String => Nominal}]
     # @api private
     def self.register(name, type = nil, &block)
       container.register(name, type || block.call)
@@ -121,9 +121,9 @@ module Dry
   #   end
   #   # nominal types are exported by default
   #   Types::Integer
-  #   # => #<Dry::Types[Definition<Integer>]>
+  #   # => #<Dry::Types[Nominal<Integer>]>
   #   Types::Strict::Integer
-  #   # => #<Dry::Types[Constrained<Definition<Integer> rule=[type?(Integer)]>]>
+  #   # => #<Dry::Types[Constrained<Nominal<Integer> rule=[type?(Integer)]>]>
   #
   # @example changing default types
   #
@@ -131,7 +131,7 @@ module Dry
   #     include Dry::Types(default: :strict)
   #   end
   #   Types::Integer
-  #   # => #<Dry::Types[Constrained<Definition<Integer> rule=[type?(Integer)]>]>
+  #   # => #<Dry::Types[Constrained<Nominal<Integer> rule=[type?(Integer)]>]>
   #
   # @example cherry-picking namespaces
   #
@@ -148,7 +148,7 @@ module Dry
   #     include Dry::Types.module(coercible: :Kernel)
   #   end
   #   Types::Kernel::Integer
-  #   # => #<Dry::Types[Constructor<Definition<Integer> fn=Kernel.Integer>]>
+  #   # => #<Dry::Types[Constructor<Nominal<Integer> fn=Kernel.Integer>]>
   #
   # @param [Array<Symbol>] namespaces List of type namespaces to export
   # @param [Symbol] default Default namespace to export

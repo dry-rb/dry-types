@@ -1,6 +1,6 @@
 module Dry
   module Types
-    Any = Class.new(Definition) do
+    Any = Class.new(Nominal) do
       def self.name
         'Any'
       end

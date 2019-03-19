@@ -1,8 +1,8 @@
 RSpec.describe Dry::Types::Hash do
   subject(:type) { Dry::Types['hash'] }
 
-  it_behaves_like Dry::Types::Definition
-  it_behaves_like 'Dry::Types::Definition#meta'
+  it_behaves_like Dry::Types::Nominal
+  it_behaves_like 'Dry::Types::Nominal#meta'
 
   describe '#call' do
     it 'accepts any hash input' do

@@ -1,4 +1,4 @@
-RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
+RSpec.shared_examples_for 'Dry::Types::Nominal without primitive' do
   def be_boolean
     satisfy { |x| x == true || x == false  }
   end
@@ -48,7 +48,7 @@ RSpec.shared_examples_for 'Dry::Types::Definition without primitive' do
   end
 end
 
-RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
+RSpec.shared_examples_for 'Dry::Types::Nominal#meta' do
   describe '#meta' do
     it 'allows setting meta information' do
       with_meta = type.meta(foo: :bar).meta(baz: '1')
@@ -83,8 +83,8 @@ RSpec.shared_examples_for 'Dry::Types::Definition#meta' do
   end
 end
 
-RSpec.shared_examples_for Dry::Types::Definition do
-  it_behaves_like 'Dry::Types::Definition without primitive'
+RSpec.shared_examples_for Dry::Types::Nominal do
+  it_behaves_like 'Dry::Types::Nominal without primitive'
 
   describe '#primitive' do
     it 'returns a class' do

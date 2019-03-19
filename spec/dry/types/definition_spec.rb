@@ -1,7 +1,7 @@
-RSpec.describe Dry::Types::Definition do
-  subject(:type) { Dry::Types::Definition.new(String) }
+RSpec.describe Dry::Types::Nominal do
+  subject(:type) { Dry::Types::Nominal.new(String) }
 
-  it_behaves_like 'Dry::Types::Definition#meta'
+  it_behaves_like 'Dry::Types::Nominal#meta'
 
   it 'is frozen' do
     expect(type).to be_frozen
@@ -73,7 +73,7 @@ RSpec.describe Dry::Types::Definition do
       let(:type) { Dry::Types['string']  }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).to eql('#<Dry::Types[Definition<String>]>')
+        expect(type.to_s).to eql('#<Dry::Types[Nominal<String>]>')
       end
     end
   end

@@ -2,7 +2,7 @@ require 'dry/types/constructor'
 
 module Dry
   module Types
-    class Hash < Definition
+    class Hash < Nominal
       class Constructor < ::Dry::Types::Constructor
         # @api private
         def constructor_type

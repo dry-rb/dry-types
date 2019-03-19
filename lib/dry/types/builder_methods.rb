@@ -43,7 +43,7 @@ module Dry
       # @return [Dry::Types::Type]
       # @api public
       def Instance(klass)
-        Definition.new(klass).constrained(type: klass)
+        Nominal.new(klass).constrained(type: klass)
       end
       alias_method :Strict, :Instance
 
@@ -55,7 +55,7 @@ module Dry
       # @return [Dry::Types::Type]
       # @api public
       def Value(value)
-        Definition.new(value.class).constrained(eql: value)
+        Nominal.new(value.class).constrained(eql: value)
       end
 
       # Build a type with a single value
@@ -66,7 +66,7 @@ module Dry
       # @return [Dry::Types::Type]
       # @api public
       def Constant(object)
-        Definition.new(object.class).constrained(is: object)
+        Nominal.new(object.class).constrained(is: object)
       end
 
       # Build a constructor type
@@ -79,17 +79,17 @@ module Dry
       # @return [Dry::Types::Type]
       # @api public
       def Constructor(klass, cons = nil, &block)
-        Definition.new(klass).constructor(cons || block || klass.method(:new))
+        Nominal.new(klass).constructor(cons || block || klass.method(:new))
       end
 
-      # Build a definition type
+      # Build a nominal type
       #
       # @param [Class] klass
       #
       # @return [Dry::Types::Type]
       # @api public
-      def Definition(klass)
-        Definition.new(klass)
+      def Nominal(klass)
+        Nominal.new(klass)
       end
 
       # Build a map type

@@ -76,7 +76,7 @@ module Dry
 
       # @api public
       #
-      # @see Definition#to_ast
+      # @see Nominal#to_ast
       def to_ast(meta: true)
         [:constrained, [type.to_ast(meta: meta),
                         rule.to_ast,
