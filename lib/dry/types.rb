@@ -34,6 +34,11 @@ module Dry
       Module.new(container, *namespaces, default: default, **aliases)
     end
 
+    # @api private
+    def self.included(*)
+      raise RuntimeError, "Import Dry.Types, not Dry::Types"
+    end
+
     # @return [Container{String => Nominal}]
     def self.container
       @container ||= Container.new

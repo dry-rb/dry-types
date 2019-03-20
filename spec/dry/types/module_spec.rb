@@ -215,4 +215,8 @@ RSpec.describe Dry::Types::Module do
       end
     end
   end
+
+  it 'prevents accidental import of wrong module' do
+    expect { Module.new { include Dry::Types } }.to raise_error(RuntimeError)
+  end
 end
