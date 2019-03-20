@@ -104,7 +104,7 @@ module Dry
       # @return [Dry::Types::Map]
       # @api public
       def Map(key_type, value_type)
-        Types['hash'].map(key_type, value_type)
+        Types['nominal.hash'].map(key_type, value_type)
       end
     end
   end

@@ -25,7 +25,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'with a sum' do
-    subject(:type) { Dry::Types['string'] | Dry::Types['integer'] }
+    subject(:type) { Dry::Types['nominal.string'] | Dry::Types['nominal.integer'] }
 
     specify do
       expect(type.to_ast).
@@ -43,7 +43,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify 'without meta' do
       type_with_meta = (
-        Dry::Types['string'].meta(type: :str) | Dry::Types['integer'].meta(type: :int)
+        Dry::Types['nominal.string'].meta(type: :str) | Dry::Types['nominal.integer'].meta(type: :int)
       ).meta(type: :sum)
 
       expect(type_with_meta.to_ast(meta: false)).to eql(type.to_ast)
@@ -73,7 +73,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'Hash' do
-    subject(:type) { Dry::Types['hash'] }
+    subject(:type) { Dry::Types['nominal.hash'] }
 
     let(:type_transformation) { :itself.to_proc }
     let(:type_fn) { Dry::Types::FnContainer.register_name(type_transformation) }
@@ -89,7 +89,7 @@ RSpec.describe Dry::Types, '#to_ast' do
     end
 
     context 'schema' do
-      subject(:type) { Dry::Types['hash'].schema(name: Dry::Types['string'], age: Dry::Types['integer']) }
+      subject(:type) { Dry::Types['nominal.hash'].schema(name: Dry::Types['nominal.string'], age: Dry::Types['nominal.integer']) }
       let(:keys_ast)  { type.keys.map(&:to_ast) }
 
       let(:key_transformation) { :to_sym.to_proc }
@@ -150,7 +150,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'Safe' do
-    subject(:type) { Dry::Types['string'].constrained(min_size: 5).safe.meta(key: :value) }
+    subject(:type) { Dry::Types['nominal.string'].constrained(min_size: 5).safe.meta(key: :value) }
 
     specify do
       expect(type.to_ast).
@@ -173,7 +173,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
   context 'Constructor' do
     subject(:type) do
-      Dry::Types::Constructor.new(Dry::Types['string'], fn: fn).meta(key: :value)
+      Dry::Types::Constructor.new(Dry::Types['nominal.string'], fn: fn).meta(key: :value)
     end
 
     specify do
@@ -183,7 +183,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'Array' do
-    subject(:type) { Dry::Types['array'] }
+    subject(:type) { Dry::Types['nominal.array'] }
 
     specify do
       expect(type.to_ast).
@@ -197,7 +197,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     context 'Member' do
       subject(:type) do
-        Dry::Types['array'].of(Dry::Types['string'])
+        Dry::Types['nominal.array'].of(Dry::Types['nominal.string'])
       end
 
       specify do
@@ -217,7 +217,7 @@ RSpec.describe Dry::Types, '#to_ast' do
       end
 
       subject(:type) do
-        Dry::Types['array'].of(struct)
+        Dry::Types['nominal.array'].of(struct)
       end
 
       specify do

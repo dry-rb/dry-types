@@ -70,7 +70,7 @@ RSpec.describe Dry::Types::Nominal do
     end
 
     describe '#to_s' do
-      let(:type) { Dry::Types['string']  }
+      let(:type) { Dry::Types['nominal.string']  }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Nominal<String>]>')

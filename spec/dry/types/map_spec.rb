@@ -190,7 +190,7 @@ RSpec.describe Dry::Types::Map do
   end
 
   describe '#to_s' do
-    subject(:type) { Dry::Types['hash'].map('string', 'integer') }
+    subject(:type) { Dry::Types['nominal.hash'].map('nominal.string', 'nominal.integer') }
 
     it 'returns string representation of the type' do
       expect(type.to_s).

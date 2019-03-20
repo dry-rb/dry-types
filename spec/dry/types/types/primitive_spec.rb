@@ -20,7 +20,7 @@ RSpec.describe Dry::Types, '.[]' do
   end
 
   context 'with "class"' do
-    let(:type) { Dry::Types['class'] }
+    let(:type) { Dry::Types['nominal.class'] }
 
     it 'passes through a class' do
       expect(type[String]).to be(String)

@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Constructor do
   subject(:type) do
-    Dry::Types::Constructor.new(Dry::Types['string'], fn: Kernel.method(:String))
+    Dry::Types::Constructor.new(Dry::Types['nominal.string'], fn: Kernel.method(:String))
   end
 
   it_behaves_like Dry::Types::Nominal
@@ -120,7 +120,7 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe '#constrained?' do
-    subject(:type) { Dry::Types['string'] }
+    subject(:type) { Dry::Types['nominal.string'] }
 
     it 'returns true when its type is constrained' do
       expect(type.constrained(type: String).constructor(&:to_s)).to be_constrained
@@ -159,7 +159,7 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe 'equality' do
-    subject(:type) { Dry::Types['string'] }
+    subject(:type) { Dry::Types['nominal.string'] }
 
     it 'counts .fn' do
       to_i = :to_i.to_proc
@@ -181,7 +181,7 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe '#name' do
-    subject(:type) { Dry::Types['string'].optional.constructor(-> v { v.nil? ? nil : v.to_s }) }
+    subject(:type) { Dry::Types['nominal.string'].optional.constructor(-> v { v.nil? ? nil : v.to_s }) }
 
     it 'works with sum types' do
       expect(type.name).to eql('NilClass | String')
@@ -254,7 +254,7 @@ RSpec.describe Dry::Types::Constructor do
         end
       end
 
-      subject(:type) { Dry::Types['integer'].constructor(Test::IntegerConstructor.new) }
+      subject(:type) { Dry::Types['nominal.integer'].constructor(Test::IntegerConstructor.new) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).

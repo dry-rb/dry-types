@@ -9,7 +9,7 @@ RSpec.describe Dry::Types::Module do
     describe '.Array' do
       it 'builds an array type' do
         expect(mod.Array(mod::Strict::Integer)).
-          to eql(Dry::Types['array<strict.integer>'])
+          to eql(Dry::Types['strict.array<strict.integer>'])
       end
     end
 
@@ -41,13 +41,13 @@ RSpec.describe Dry::Types::Module do
     describe '.Hash' do
       it 'builds a hash schema' do
         expect(mod.Hash(age: Dry::Types['strict.integer'])).
-          to eql(Dry::Types['hash'].schema(age: Dry::Types['strict.integer']))
+          to eql(Dry::Types['strict.hash'].schema(age: Dry::Types['strict.integer']))
       end
     end
 
     describe '.Map' do
       it 'builds a map type' do
-        expected = Dry::Types::Map.new(::Hash, key_type: Dry::Types['integer'])
+        expected = Dry::Types::Map.new(::Hash, key_type: Dry::Types['strict.integer'])
         expect(mod.Map(mod::Integer, 'any')).to eql(expected)
       end
     end
@@ -140,7 +140,7 @@ RSpec.describe Dry::Types::Module do
 
         it 'adds strict types as default' do
           expect(mod::Integer).to be(Dry::Types['strict.integer'])
-          expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
+          expect(mod::Nominal::Integer).to be(Dry::Types['nominal.integer'])
           expect { mod::Params }.to raise_error(NameError)
         end
       end
@@ -168,7 +168,7 @@ RSpec.describe Dry::Types::Module do
           subject(:args) { [] }
 
           it 'is available by default' do
-            expect(mod::Bool).to be(registry['nominal.bool'])
+            expect(mod::Bool).to be(registry['strict.bool'])
           end
         end
       end
@@ -178,7 +178,7 @@ RSpec.describe Dry::Types::Module do
 
         it 'adds all namespaces wiht strict types as default' do
           expect(mod::Integer).to be(Dry::Types['strict.integer'])
-          expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
+          expect(mod::Nominal::Integer).to be(Dry::Types['nominal.integer'])
         end
       end
 
@@ -186,7 +186,7 @@ RSpec.describe Dry::Types::Module do
         subject(:args) { [default: false] }
 
         it "doesn't add nominal types as a default" do
-          expect(mod::Nominal::Integer).to be(Dry::Types['integer'])
+          expect(mod::Nominal::Integer).to be(Dry::Types['nominal.integer'])
           expect { mod::Integer }.to raise_error(NameError)
         end
       end

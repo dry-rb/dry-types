@@ -89,7 +89,7 @@ RSpec.describe Dry::Types::Enum do
   end
 
   context 'with int type' do
-    subject(:type) { Dry::Types['integer'].enum(*values) }
+    subject(:type) { Dry::Types['nominal.integer'].enum(*values) }
 
     let(:values) { [2, 3, 4] }
 
@@ -105,7 +105,7 @@ RSpec.describe Dry::Types::Enum do
   end
 
   describe '#include?' do
-    subject(:enum) { Dry::Types['integer'].enum(4, 5, 6) }
+    subject(:enum) { Dry::Types['nominal.integer'].enum(4, 5, 6) }
 
     it 'returns true for input that is included in the values' do
       expect(enum.include?(5)).to be true
@@ -117,7 +117,7 @@ RSpec.describe Dry::Types::Enum do
   end
 
   describe '#try' do
-    subject(:enum) { Dry::Types['integer'].enum(4, 5, 6) }
+    subject(:enum) { Dry::Types['nominal.integer'].enum(4, 5, 6) }
 
     it 'returns a success result for valid input' do
       expect(enum.try(5)).to be_success
@@ -133,7 +133,7 @@ RSpec.describe Dry::Types::Enum do
   end
 
   describe '#with' do
-    subject(:enum_with_meta) { Dry::Types['integer'].enum(4, 5, 6).with(meta: { foo: :bar }) }
+    subject(:enum_with_meta) { Dry::Types['nominal.integer'].enum(4, 5, 6).with(meta: { foo: :bar }) }
 
     it_behaves_like Dry::Types::Nominal do
       let(:type) { enum_with_meta }
@@ -146,7 +146,7 @@ RSpec.describe Dry::Types::Enum do
 
   describe '#to_s' do
     context 'simple enumeration' do
-      subject(:type) { Dry::Types['integer'].enum(4, 5, 6) }
+      subject(:type) { Dry::Types['nominal.integer'].enum(4, 5, 6) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).
@@ -158,7 +158,7 @@ RSpec.describe Dry::Types::Enum do
     context 'mapping' do
       let(:mapping) { {0 => 'draft', 10 => 'published', 20 => 'archived'} }
 
-      subject(:type) { Dry::Types['integer'].enum(mapping) }
+      subject(:type) { Dry::Types['nominal.integer'].enum(mapping) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).

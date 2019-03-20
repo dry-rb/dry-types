@@ -31,8 +31,8 @@ RSpec.describe Dry::Types do
     let(:unregistered_type) { Test::Foo }
 
     it 'returns registered type for "string"' do
-      expect(Dry::Types['string']).to be_a(Dry::Types::Nominal)
-      expect(Dry::Types['string'].name).to eql('String')
+      expect(Dry::Types['nominal.string']).to be_a(Dry::Types::Nominal)
+      expect(Dry::Types['nominal.string'].name).to eql('String')
     end
 
     it 'caches dynamically built types' do

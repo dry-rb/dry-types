@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Sum do
   describe 'common nominal behavior' do
-    subject(:type) { Dry::Types['bool'] }
+    subject(:type) { Dry::Types['nominal.bool'] }
 
     it_behaves_like 'Dry::Types::Nominal#meta'
 
@@ -13,13 +13,13 @@ RSpec.describe Dry::Types::Sum do
 
   describe '#optional?' do
     it 'return true if left side is nil' do
-      type = Dry::Types['strict.nil'] | Dry::Types['string']
+      type = Dry::Types['strict.nil'] | Dry::Types['nominal.string']
 
       expect(type).to be_optional
     end
 
     it 'return true if right side is nil' do
-      type = Dry::Types['string'] | Dry::Types['nil']
+      type = Dry::Types['nominal.string'] | Dry::Types['nominal.nil']
 
       expect(type).to be_optional
     end
@@ -33,7 +33,7 @@ RSpec.describe Dry::Types::Sum do
 
   describe '#[]' do
     it 'works with two pass-through types' do
-      type = Dry::Types['integer'] | Dry::Types['string']
+      type = Dry::Types['nominal.integer'] | Dry::Types['nominal.string']
 
       expect(type[312]).to be(312)
       expect(type['312']).to eql('312')
@@ -59,7 +59,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'is aliased as #call' do
-      type = Dry::Types['integer'] | Dry::Types['string']
+      type = Dry::Types['nominal.integer'] | Dry::Types['nominal.string']
       expect(type.call(312)).to be(312)
       expect(type.call('312')).to eql('312')
     end
@@ -135,7 +135,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#failure' do
-    subject(:type) { Dry::Types['integer'] | Dry::Types['string'] }
+    subject(:type) { Dry::Types['nominal.integer'] | Dry::Types['nominal.string'] }
 
     it 'returns failure when invalid value is passed' do
       expect(type.failure(true)).to be_failure
@@ -143,7 +143,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#===' do
-    subject(:type) { Dry::Types['integer'] | Dry::Types['string']  }
+    subject(:type) { Dry::Types['nominal.integer'] | Dry::Types['nominal.string']  }
 
     it 'returns boolean' do
       expect(type.===('hello')).to eql(true)
@@ -166,7 +166,7 @@ RSpec.describe Dry::Types::Sum do
 
   describe '#default' do
     it 'returns a default value sum type' do
-      type = (Dry::Types['nil'] | Dry::Types['string']).default('foo'.freeze)
+      type = (Dry::Types['nominal.nil'] | Dry::Types['nominal.string']).default('foo'.freeze)
 
       expect(type.call).to eql('foo')
     end
@@ -186,7 +186,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#constructor' do
-    let(:type) {  (Dry::Types['string'] |  Dry::Types['nil']).constructor { |input| input ? input.to_s + ' world' : input } }
+    let(:type) {  (Dry::Types['nominal.string'] |  Dry::Types['nominal.nil']).constructor { |input| input ? input.to_s + ' world' : input } }
 
     it 'returns the correct value' do
       expect(type.call('hello')).to eql('hello world')
@@ -243,7 +243,7 @@ RSpec.describe Dry::Types::Sum do
 
   describe '#to_s' do
     context 'shallow sum' do
-      let(:type) { Dry::Types['string'] | Dry::Types['integer'] }
+      let(:type) { Dry::Types['nominal.string'] | Dry::Types['nominal.integer'] }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Sum<Nominal<String> | Nominal<Integer>>]>')
@@ -252,7 +252,8 @@ RSpec.describe Dry::Types::Sum do
 
     context 'sum tree' do
       let(:type) do
-        Dry::Types['string'] | Dry::Types['integer'] | (Dry::Types['date'] | Dry::Types['time'])
+        Dry::Types['nominal.string'] | Dry::Types['nominal.integer'] |
+        (Dry::Types['nominal.date'] | Dry::Types['nominal.time'])
       end
 
       it 'returns string representation of the type' do

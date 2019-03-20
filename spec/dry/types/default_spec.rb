@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Nominal, '#default' do
   context 'with a nominal' do
-    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
+    subject(:type) { Dry::Types['nominal.string'].default('foo'.freeze) }
 
     it_behaves_like Dry::Types::Nominal
 
@@ -33,7 +33,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
 
   context 'with meta attributes' do
     context 'default called first' do
-      subject(:type) { Dry::Types['hash'].default({}.freeze).meta(required: false) }
+      subject(:type) { Dry::Types['nominal.hash'].default({}.freeze).meta(required: false) }
 
       it_behaves_like 'Dry::Types::Nominal without primitive'
 
@@ -43,7 +43,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
     end
 
     context 'default called last' do
-      subject(:type) { Dry::Types['hash'].meta(required: false).default({}.freeze) }
+      subject(:type) { Dry::Types['nominal.hash'].meta(required: false).default({}.freeze) }
 
       it_behaves_like 'Dry::Types::Nominal without primitive'
 
@@ -81,7 +81,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
 
   context 'with a callable value' do
     context 'with 0-arity block' do
-      subject(:type) { Dry::Types['time'].default { Time.now } }
+      subject(:type) { Dry::Types['nominal.time'].default { Time.now } }
 
       it_behaves_like Dry::Types::Nominal
 
@@ -94,7 +94,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
       let(:floor_to_date) { -> t { Time.new(t.year, t.month, t.day) } }
 
       subject(:type) do
-        Dry::Types['time'].constructor(&floor_to_date).default { |type| type[Time.now] }
+        Dry::Types['nominal.time'].constructor(&floor_to_date).default { |type| type[Time.now] }
       end
 
       it_behaves_like Dry::Types::Nominal
@@ -114,7 +114,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
   end
 
   describe '#with' do
-    subject(:type) { Dry::Types['time'].default { Time.now }.with(meta: { foo: :bar }) }
+    subject(:type) { Dry::Types['nominal.time'].default { Time.now }.with(meta: { foo: :bar }) }
 
     it_behaves_like Dry::Types::Nominal
 
@@ -130,23 +130,23 @@ RSpec.describe Dry::Types::Nominal, '#default' do
 
   it 'works with coercible.array' do
     base = Dry::Types['coercible.array'].default([].freeze)
-    type = base.of(Dry::Types['string'])
+    type = base.of(Dry::Types['nominal.string'])
 
     expect(type[]).to eql([])
   end
 
   it "prints warning when default value isn't frozen" do
     expect(Dry::Core::Deprecations).to receive(:warn)
-    Dry::Types['string'].default('foo')
+    Dry::Types['nominal.string'].default('foo')
   end
 
   it 'discards warning when `shared` keyword is passed' do
     expect(Dry::Core::Deprecations).not_to receive(:warn)
-    Dry::Types['string'].default('foo', shared: true)
+    Dry::Types['nominal.string'].default('foo', shared: true)
   end
 
   describe '#valid?' do
-    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
+    subject(:type) { Dry::Types['nominal.string'].default('foo'.freeze) }
 
     it 'returns true if value is valid' do
       expect(type.valid?('bar')).to eq true
@@ -167,7 +167,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
 
   context 'with a constructor' do
     describe 'returning Undefined' do
-      let(:non_empty_string) { Dry::Types['string'].constructor { |str| str.empty? ? Undefined : str } }
+      let(:non_empty_string) { Dry::Types['nominal.string'].constructor { |str| str.empty? ? Undefined : str } }
       subject(:type) { non_empty_string.default("empty") }
 
       it 'returns default value on empty input' do
@@ -178,7 +178,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
 
   describe '#to_s' do
     context 'static valute' do
-      subject(:type) { Dry::Types['string'].default('foo') }
+      subject(:type) { Dry::Types['nominal.string'].default('foo') }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Default<Nominal<String> value="foo">]>')
@@ -186,7 +186,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
     end
 
     context 'callable value' do
-      subject(:type) { Dry::Types['string'].default(value_constructor) }
+      subject(:type) { Dry::Types['nominal.string'].default(value_constructor) }
 
       context 'proc' do
         let(:value_constructor) { proc { 'foo' } }

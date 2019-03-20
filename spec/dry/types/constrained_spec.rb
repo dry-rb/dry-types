@@ -112,7 +112,7 @@ RSpec.describe Dry::Types::Constrained do
 
   context 'with an optional sum type' do
     subject(:type) do
-      Dry::Types['string'].constrained(size: 4).optional
+      Dry::Types['nominal.string'].constrained(size: 4).optional
     end
 
     it_behaves_like 'Dry::Types::Nominal without primitive'
