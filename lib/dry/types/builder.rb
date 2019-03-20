@@ -38,10 +38,15 @@ module Dry
       # @return [Default]
       def default(input = Undefined, options = EMPTY_HASH, &block)
         unless input.frozen? || options[:shared]
-          Dry::Core::Deprecations.warn("#{input.inspect} is mutable."\
+          where = Dry::Core::Deprecations::STACK.()
+          Dry::Core::Deprecations.warn(
+            "#{input.inspect} is mutable."\
             ' Be careful: types will return the same instance of the default'\
             ' value every time. Call `.freeze` when setting the default'\
-            ' or pass `shared: true` to discard this warning.', tag: :'dry-types')
+            ' or pass `shared: true` to discard this warning.'\
+            "\n#{ where }",
+            tag: :'dry-types'
+          )
         end
 
         value = input.equal?(Undefined) ? block : input
