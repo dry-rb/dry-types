@@ -4,7 +4,7 @@ RSpec.describe Dry::Types::Module do
   let(:registry) { Dry::Types.container }
 
   context 'builder methods' do
-    subject(:mod) { Dry::Types.module }
+    subject(:mod) { Dry::Types() }
 
     describe '.Array' do
       it 'builds an array type' do
@@ -207,7 +207,7 @@ RSpec.describe Dry::Types::Module do
     end
 
     context 'aliases' do
-      subject(:mod) { Dry::Types.module(strict: :Strong) }
+      subject(:mod) { Dry::Types(strict: :Strong) }
 
       it 'uses custom names for modules' do
         expect(mod.constants(false)).to eql([:Strong])
