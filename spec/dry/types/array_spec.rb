@@ -25,7 +25,7 @@ RSpec.describe Dry::Types::Array do
 
       context 'using a constrained type' do
         subject(:array) do
-          Dry::Types['array'].of(Dry::Types['coercible.integer'].constrained(gt: 2))
+          Dry::Types['nominal.array'].of(Dry::Types['coercible.integer'].constrained(gt: 2))
         end
 
         it 'passes values through member type' do
@@ -100,7 +100,7 @@ RSpec.describe Dry::Types::Array do
 
   context 'member' do
     describe '#to_s' do
-      subject(:type) { Dry::Types['array'].of(Dry::Types['string']) }
+      subject(:type) { Dry::Types['nominal.array'].of(Dry::Types['nominal.string']) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Array<Nominal<String>>]>')
@@ -109,7 +109,7 @@ RSpec.describe Dry::Types::Array do
   end
 
   describe '#to_s' do
-    subject(:type) { Dry::Types['array'] }
+    subject(:type) { Dry::Types['nominal.array'] }
 
     it 'returns string representation of the type' do
       expect(type.to_s).to eql('#<Dry::Types[Array]>')

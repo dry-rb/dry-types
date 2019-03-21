@@ -5,13 +5,13 @@ require 'dry-types'
 
 module SchemaBench
   def self.hash_schema(type)
-    Dry::Types['hash'].public_send(type,
-      email:   Dry::Types['string'],
+    Dry::Types['nominal.hash'].public_send(type,
+      email:   Dry::Types['nominal.string'],
       age:     Dry::Types['params.integer'],
       admin:   Dry::Types['params.bool'],
-      address: Dry::Types['hash'].public_send(type,
-        city: Dry::Types['string'],
-        street: Dry::Types['string']
+      address: Dry::Types['nominal.hash'].public_send(type,
+        city: Dry::Types['nominal.string'],
+        street: Dry::Types['nominal.string']
       )
     )
   end

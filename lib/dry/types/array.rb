@@ -1,11 +1,8 @@
 require 'dry/types/array/member'
-require 'dry/core/deprecations'
 
 module Dry
   module Types
     class Array < Nominal
-      extend Dry::Core::Deprecations[:'dry-types']
-
       # @param [Type] type
       # @return [Array::Member]
       def of(type)

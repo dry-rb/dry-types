@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Nominal, '#maybe', :maybe do
   context 'with a nominal' do
-    subject(:type) { Dry::Types['string'].maybe }
+    subject(:type) { Dry::Types['nominal.string'].maybe }
 
     it_behaves_like 'Dry::Types::Nominal without primitive'
 
@@ -44,7 +44,7 @@ RSpec.describe Dry::Types::Nominal, '#maybe', :maybe do
   end
 
   context 'with a sum' do
-    subject(:type) { Dry::Types['bool'].maybe }
+    subject(:type) { Dry::Types['nominal.bool'].maybe }
 
     it_behaves_like 'Dry::Types::Nominal without primitive'
 

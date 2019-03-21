@@ -35,7 +35,7 @@ module Dry
       # @api private
       def type_constants(*namespaces, default: Undefined, **aliases)
         if namespaces.empty? && aliases.empty? && Undefined.equal?(default)
-          default_ns = :Nominal
+          default_ns = :Strict
         elsif Undefined.equal?(default)
           default_ns = Undefined
         else

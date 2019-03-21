@@ -68,7 +68,7 @@ RSpec.describe Dry::Types::Nominal do
   end
 
   describe 'json.array' do
-    subject(:type) { Dry::Types['json.array'].of(Dry::Types['integer']) }
+    subject(:type) { Dry::Types['json.array'].of(Dry::Types['nominal.integer']) }
 
     it 'returns original value when it is not an array' do
       foo = 'foo'
@@ -77,7 +77,7 @@ RSpec.describe Dry::Types::Nominal do
   end
 
   describe 'json.hash' do
-    subject(:type) { Dry::Types['json.hash'].schema(age: Dry::Types['integer']) }
+    subject(:type) { Dry::Types['json.hash'].schema(age: Dry::Types['nominal.integer']) }
 
     it 'returns original value when it is not an hash' do
       foo = 'foo'

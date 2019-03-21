@@ -1,5 +1,5 @@
 RSpec.describe Dry::Types::Hash do
-  subject(:type) { Dry::Types['hash'] }
+  subject(:type) { Dry::Types['nominal.hash'] }
 
   it_behaves_like Dry::Types::Nominal
   it_behaves_like 'Dry::Types::Nominal#meta'
@@ -48,7 +48,7 @@ RSpec.describe Dry::Types::Hash do
     end
 
     context 'with type transformation' do
-      subject(:type) { Dry::Types['hash'].with_type_transform(:itself.to_proc) }
+      subject(:type) { Dry::Types['nominal.hash'].with_type_transform(:itself.to_proc) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Hash<type_fn=.itself>]>')

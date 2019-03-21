@@ -25,14 +25,18 @@ module Dry
   module Types
     extend Dry::Core::Extensions
     extend Dry::Core::ClassAttributes
+    extend Dry::Core::Deprecations[:'dry-types']
     include Dry::Core::Constants
 
     TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
 
     # @see Dry.Types
-    def self.module(*namespaces, default: Undefined, **aliases)
+    def self.module(*namespaces, default: :nominal, **aliases)
       Module.new(container, *namespaces, default: default, **aliases)
     end
+    deprecate_class_method :module, message: <<~DEPRECATION
+      Use Dry.Types() instead. Beware, it exports strict types by default, for old behavior use Dry.Types(default: :nominal). See more options in the changelog
+    DEPRECATION
 
     # @api private
     def self.included(*)

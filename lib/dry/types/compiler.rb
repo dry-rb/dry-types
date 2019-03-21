@@ -35,9 +35,10 @@ module Dry
 
       def visit_nominal(node)
         type, meta = node
+        nominal_name = "nominal.#{ Types.identifier(type) }"
 
-        if registry.registered?(type)
-          registry[type].meta(meta)
+        if registry.registered?(nominal_name)
+          registry[nominal_name].meta(meta)
         else
           Nominal.new(type, meta: meta)
         end
@@ -55,17 +56,17 @@ module Dry
       def visit_array(node)
         member, meta = node
         member = member.is_a?(Class) ? member : visit(member)
-        registry['array'].of(member).meta(meta)
+        registry['nominal.array'].of(member).meta(meta)
       end
 
       def visit_hash(node)
         opts, meta = node
-        registry['hash'].with(opts.merge(meta: meta))
+        registry['nominal.hash'].with(opts.merge(meta: meta))
       end
 
       def visit_schema(node)
         keys, options, meta = node
-        registry['hash'].schema(keys.map { |key| visit(key) }).with(options.merge(meta: meta))
+        registry['nominal.hash'].schema(keys.map { |key| visit(key) }).with(options.merge(meta: meta))
       end
 
       def visit_json_hash(node)
@@ -100,7 +101,7 @@ module Dry
 
       def visit_map(node)
         key_type, value_type, meta = node
-        registry['hash'].map(visit(key_type), visit(value_type)).meta(meta)
+        registry['nominal.hash'].map(visit(key_type), visit(value_type)).meta(meta)
       end
 
       def visit_any(meta)

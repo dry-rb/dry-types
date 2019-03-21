@@ -1,7 +1,7 @@
 RSpec.describe Dry::Types::Constrained, :maybe do
   context 'with a maybe type' do
     subject(:type) do
-      Dry::Types['string'].constrained(size: 4).maybe
+      Dry::Types['nominal.string'].constrained(size: 4).maybe
     end
 
     it_behaves_like 'Dry::Types::Nominal without primitive'

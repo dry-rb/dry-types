@@ -1,3 +1,5 @@
+require 'dry/core/deprecations'
+
 module Dry
   module Types
     module Builder

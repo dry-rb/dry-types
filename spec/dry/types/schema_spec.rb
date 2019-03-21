@@ -31,7 +31,7 @@ RSpec.describe Dry::Types::Schema do
   end
 
   describe '#constrained?' do
-    subject(:type) { Dry::Types['hash'].schema({}) }
+    subject(:type) { Dry::Types['nominal.hash'].schema({}) }
 
     it 'is a contrained type' do
       expect(type).to be_constrained
@@ -77,7 +77,7 @@ RSpec.describe Dry::Types::Schema do
   end
 
   describe 'hash schema' do
-    subject(:type) { Dry::Types['hash'] }
+    subject(:type) { Dry::Types['nominal.hash'] }
 
     let(:phone_struct) do
       Struct.new(:prefix, :number) do
@@ -119,11 +119,11 @@ RSpec.describe Dry::Types::Schema do
     let(:phone) { PhoneType.primitive }
 
     it_behaves_like Dry::Types::Nominal do
-      let(:type) { Dry::Types['hash'].schema(hash_schema) }
+      let(:type) { Dry::Types['nominal.hash'].schema(hash_schema) }
     end
 
     it_behaves_like 'Dry::Types::Nominal#meta' do
-      let(:type) { Dry::Types['hash'].schema(hash_schema) }
+      let(:type) { Dry::Types['nominal.hash'].schema(hash_schema) }
     end
 
     context 'members with default values' do
@@ -334,7 +334,7 @@ RSpec.describe Dry::Types::Schema do
 
   describe '#to_s' do
     context 'empty schema' do
-      subject(:type) { Dry::Types['hash'].schema({}) }
+      subject(:type) { Dry::Types['nominal.hash'].schema({}) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Schema<keys={}>]>')
@@ -342,7 +342,7 @@ RSpec.describe Dry::Types::Schema do
     end
 
     context 'strict schema' do
-      subject(:type) { Dry::Types['hash'].schema({}).strict }
+      subject(:type) { Dry::Types['nominal.hash'].schema({}).strict }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Schema<strict keys={}>]>')
@@ -352,7 +352,7 @@ RSpec.describe Dry::Types::Schema do
     context 'key transformation' do
       let(:key_transformation) { :to_sym.to_proc }
 
-      subject(:type) { Dry::Types['hash'].schema({}).with_key_transform(key_transformation) }
+      subject(:type) { Dry::Types['nominal.hash'].schema({}).with_key_transform(key_transformation) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).
@@ -363,7 +363,7 @@ RSpec.describe Dry::Types::Schema do
     context 'type transformation' do
       let(:type_transformation) { :safe.to_proc }
 
-      subject(:type) { Dry::Types['hash'].with_type_transform(type_transformation).schema({}) }
+      subject(:type) { Dry::Types['nominal.hash'].with_type_transform(type_transformation).schema({}) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).
@@ -372,7 +372,12 @@ RSpec.describe Dry::Types::Schema do
     end
 
     context 'schema with keys' do
-      subject(:type) { Dry::Types['hash'].schema(name: 'string', age?: 'integer') }
+      subject(:type) do
+        Dry::Types['nominal.hash'].schema(
+          name: 'nominal.string',
+          age?: 'nominal.integer'
+        )
+      end
 
       it 'returns string representation of the type' do
         expect(type.to_s).
@@ -396,7 +401,7 @@ RSpec.describe Dry::Types::Schema do
   describe '#apply' do
     context 'ignoring missing keys' do
       subject(:type) do
-        Dry::Types['hash'].schema(
+        Dry::Types['nominal.hash'].schema(
           name: 'coercible.string',
           age: 'coercible.integer',
           city: Dry::Types['strict.string'].default('New York'.freeze)
