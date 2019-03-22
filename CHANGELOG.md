@@ -20,7 +20,6 @@
   Dry::Types['nominal.integer']
   # => #<Dry::Types[Nominal<Integer>]>
   ```
-- [BREAKING] Support for Ruby < 2.4 was dropped
 - [BREAKING] Default values are not evaluated if the decorated type returns `nil`. They are triggered on `Undefined` instead (GustavoCaso + flash-gordon)
 - [BREAKING] Support for old hash schemas was fully removed. This makes dry-types not compatible with dry-validation < 1.0 (flash-gordon)
 - `Dry::Types.module` is deprecated in favor of `Dry.Types` (flash-gordon)
@@ -32,6 +31,7 @@
   ```
   `Types::Integer` is a strict type. If you want it to be nominal, use `include Dry.Types(default: :nominal)`. See other options below.
 - `params.integer` now always converts strings to decimal numbers, this means `09` will be coerced to `9` (threw an error before) (skryukov)
+- Ruby 2.3 is EOL and not officially supported. It may work but we don't test it.
 
 ## Added
 
