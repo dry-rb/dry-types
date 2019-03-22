@@ -1,4 +1,4 @@
-# to-be-released
+# 0.15.0 2019-03-22
 
 ## Changed
 
@@ -7,33 +7,88 @@
   ```ruby
   Dry::Types['strict.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
   ```
+- [BREAKING] Definition types were renamed to nominal (flash-gordon)
+- [BREAKING] Top-level types returned by `Dry::Types.[]` are now strict (flash-gordon)
+  ```ruby
+  # before
+  Dry::Types['integer']
+  # => #<Dry::Types[Nominal<Integer>]>
+  # now
+  Dry::Types['integer']
+  # => <Dry::Types[Constrained<Nominal<Integer> rule=[type?(Integer)]>]>
+  # you can still access nominal types using namespace
+  Dry::Types['nominal.integer']
+  # => #<Dry::Types[Nominal<Integer>]>
+  ```
 - [BREAKING] Support for Ruby < 2.4 was dropped
 - [BREAKING] Default values are not evaluated if the decorated type returns `nil`. They are triggered on `Undefined` instead (GustavoCaso + flash-gordon)
+- [BREAKING] Support for old hash schemas was fully removed. This makes dry-types not compatible with dry-validation < 1.0 (flash-gordon)
+- `Dry::Types.module` is deprecated in favor of `Dry.Types` (flash-gordon)
+  Keep in mind `Dry.Types` uses strict types for top-level names, that is after
+  ```ruby
+  module Types
+    include Dry.Types
+  end
+  ```
+  `Types::Integer` is a strict type. If you want it to be nominal, use `include Dry.Types(default: :nominal)`. See other options below.
 - `params.integer` now always converts strings to decimal numbers, this means `09` will be coerced to `9` (threw an error before) (skryukov)
 
 ## Added
 
+- Improved string representation of types (flash-gordon)
+  ```ruby
+  Dry::Types['nominal.integer']
+  # => #<Dry::Types[Nominal<Integer>]>
+  Dry::Types['params.integer']
+  # => #<Dry::Types[Constructor<Nominal<Integer> fn=Dry::Types::Coercions::Params.to_int>]>
+  Dry::Types['hash'].schema(age?: 'integer')
+  # => #<Dry::Types[Constrained<Schema<keys={age?: Constrained<Nominal<Integer> rule=[type?(Integer)]>}> rule=[type?(Hash)]>]>
+  Dry::Types['array<integer>']
+  # => #<Dry::Types[Constrained<Array<Constrained<Nominal<Integer> rule=[type?(Integer)]>> rule=[type?(Array)]>]>
+  ```
+- Options for the list of types you want to import with `Dry.Types` (flash-gordon)
+  Cherry-pick only certain types:
+  ```ruby
+  module Types
+    include Dry.Types(:strict, :nominal, :coercible)
+  end
+  Types.constants
+  # => [:Strict, :Nominal, :Coercible]
+  ```
+  Change default top-level types:
+  ```ruby
+  module Types
+    include Dry.Types(default: :coercible)
+  end
+  # => #<Dry::Types[Constructor<Nominal<Integer> fn=Kernel.Integer>]>
+  ```
+  Rename type namespaces:
+  ```ruby
+  module Types
+    include Dry.Types(strict: :Strong, coercible: :Kernel)
+  end
+  ```
 - Optional keys for schemas can be provided with ?-ending symbols (flash-gordon)
   ```ruby
-  Dry::Types['strict.hash'].schema(name: 'strict.string', age?: 'strict.integer')
+  Dry::Types['hash'].schema(name: 'string', age?: 'integer')
   ```
 - Another way of making keys optional is setting `required: false` to meta. In fact, it is the preferable
   way if you have to store this information in `meta`, otherwise use the Key's API (see below) (flash-gordon)
   ```ruby
-  Dry::Types['strict.hash'].schema(
-    name: Dry::Types['strict.string'],
-    age: Dry::Types['strict.integer'].meta(required: false)
+  Dry::Types['hash'].schema(
+    name: Dry::Types['string'],
+    age: Dry::Types['integer'].meta(required: false)
   )
   ```
 - Key types have API for making keys omittable and back (flash-gordon)
   ```ruby
   # defining a base schema with optional keys
-  lax_hash = Dry::Types['strict.hash'].with_type_transform { |key| key.required(false) }
+  lax_hash = Dry::Types['hash'].with_type_transform { |key| key.required(false) }
   # same as
-  lax_hash = Dry::Types['strict.hash'].with_type_transform(&:omittable)
+  lax_hash = Dry::Types['hash'].with_type_transform(&:omittable)
 
   # keys in user_schema are not required
-  user_schema = lax_hash.schema(name: 'strict.string', age: 'strict.integer')
+  user_schema = lax_hash.schema(name: 'string', age: 'integer')
   ```
 - `Type#optional?` now recognizes more cases where `nil` is an allowed value (flash-gordon)
 - `Constructor#{prepend,append}` with `<<` and `>>` as aliases. `Constructor#append` works the same way `Constructor#constrcutor` does. `Constuctor#prepend` chains functions in the reverse order, see examples (flash-gordon)
@@ -45,14 +100,23 @@
   inc = to_int.prepend { |x| x + "2" }
   inc.("1") # => "1" -> "12" -> 12
   ```
+- Partial schema application for cases when you want to validate only a subset of keys (flash-gordon)
+  This is useful when you want to update a key or two in an already-validated hash. A perfect example is `Dry::Struct#new` where this feature is now used.
+  ```ruby
+  schema = Dry::Types['hash'].schema(name: 'string', age: 'integer')
+  value = schema.(name: 'John', age: 20)
+  update = schema.apply({ age: 21 }, skip_missing: true)
+  value.merge(update)
+  ```
 
 ## Fixed
 
 * `Hash::Map` now behaves as a constrained type if its values are constrained (flash-gordon)
+* `coercible.integer` now doesn't blow up on invalid strings (exterm)
 
-[Compare v0.14.0...master](https://github.com/dry-rb/dry-types/compare/v0.14.0...master)
+[Compare v0.14.0...v0.15.0](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.15.0)
 
-# 0.14.0
+# 0.14.0 2019-01-29
 
 ## Changed
 
