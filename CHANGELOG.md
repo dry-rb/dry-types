@@ -116,7 +116,7 @@
 
 [Compare v0.14.0...v0.15.0](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.15.0)
 
-# 0.14.0 2019-01-29
+# v0.14.0 2019-01-29
 
 ## Changed
 
