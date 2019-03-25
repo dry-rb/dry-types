@@ -1,4 +1,11 @@
-# 0.14.0
+# v0.14.1 2019-03-25
+
+## Fixed
+- `coercible.integer` now doesn't blow up on invalid strings (exterm)
+
+[Compare v0.14.0...v0.14.1](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.14.1)
+
+# v0.14.0 2019-01-29
 
 ## Changed
 
