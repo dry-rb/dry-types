@@ -9,6 +9,28 @@ module Dry
     namespace self
 
     class CoercionError < StandardError
+      def self.[](error)
+        case error
+        when self
+          error
+        when ::String
+          new(error)
+        when ::Exception
+          new(error.message, error.backtrace)
+        when Result::Failure
+          self[error.error]
+        when ::Array
+          new(error.join(', '))
+        when ::Hash
+          errors = error.
+                     select { |_, v| v.failure? }.
+                     map { |k, v| "#{ k.inspect } => #{ v.error.message }" }
+          new("{#{ errors.join(', ') }}")
+        else
+          raise ArgumentError, "unsupported type #{ error.inspect }"
+        end
+      end
+
       def initialize(message, backtrace = nil)
         super(message)
         set_backtrace(backtrace) if backtrace

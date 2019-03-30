@@ -25,7 +25,7 @@ RSpec.describe Dry::Types::Array do
 
       context 'using a constrained type' do
         subject(:array) do
-          Dry::Types['nominal.array'].of(Dry::Types['coercible.integer'].constrained(gt: 2))
+          Dry::Types['array'].of(Dry::Types['coercible.integer'].constrained(gt: 2))
         end
 
         it 'passes values through member type' do

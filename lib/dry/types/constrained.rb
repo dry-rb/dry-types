@@ -26,7 +26,7 @@ module Dry
       # @raise [ConstraintError]
       def call(input)
         try(input) { |result|
-          raise ConstraintError.new(result, input)
+          raise result.error
         }.input
       end
       alias_method :[], :call
@@ -43,7 +43,7 @@ module Dry
         if result.success?
           type.try(input, &block)
         else
-          failure = failure(input, result)
+          failure = failure(input, ConstraintError.new(result, input))
           block ? yield(failure) : failure
         end
       end

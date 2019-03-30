@@ -74,13 +74,25 @@ module Dry
         # @param [Array, String, Object] input
         # @return [Array, Object]
         def self.to_ary(input)
-          empty_str?(input) ? [] : input
+          if empty_str?(input)
+            []
+          elsif input.is_a?(::Array)
+            input
+          else
+            raise CoercionError.new("#{ input.inspect } must be an instance of Array")
+          end
         end
 
         # @param [Hash, String, Object] input
         # @return [Hash, Object]
         def self.to_hash(input)
-          empty_str?(input) ? {} : input
+          if empty_str?(input)
+            {}
+          elsif input.is_a?(::Hash)
+            input
+          else
+            raise CoercionError.new("#{ input.inspect } must be an instance of Hash")
+          end
         end
       end
     end

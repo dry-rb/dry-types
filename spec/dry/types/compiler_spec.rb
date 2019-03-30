@@ -153,7 +153,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params array' do
-    ast = Dry::Types['params.array'].to_ast
+    ast = Dry::Types['params.array'].safe.to_ast
 
     arr = compiler.(ast)
 

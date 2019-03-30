@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Constrained do
   describe 'common nominal behavior' do
-    subject(:type) { Dry::Types['strict.string'].constrained(size: 3..12) }
+    subject(:type) { Dry::Types['string'].constrained(size: 3..12) }
 
     it_behaves_like Dry::Types::Nominal
     it_behaves_like 'Dry::Types::Nominal#meta'
@@ -29,7 +29,7 @@ RSpec.describe Dry::Types::Constrained do
 
   describe '#===' do
     subject(:type) do
-      Dry::Types['strict.string'].constrained(size: 3..12)
+      Dry::Types['string'].constrained(size: 3..12)
     end
 
     it 'return boolean' do
@@ -53,7 +53,7 @@ RSpec.describe Dry::Types::Constrained do
 
   describe '#to_s' do
     subject(:type) do
-      Dry::Types['strict.string'].constrained(size: 3..12)
+      Dry::Types['string'].constrained(size: 3..12)
     end
 
     it 'returns string representation of the type' do
@@ -84,7 +84,9 @@ RSpec.describe Dry::Types::Constrained do
     end
 
     it 'fails when coercion fails' do
-      expect { type['foo'] }.to raise_error(Dry::Types::ConstraintError, /foo/)
+      expect { type['foo'] }.to raise_error(
+        Dry::Types::CoercionError, /can't convert String into Hash/
+      )
     end
 
     context 'constructor fn changes validity' do

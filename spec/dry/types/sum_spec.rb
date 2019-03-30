@@ -143,7 +143,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#===' do
-    subject(:type) { Dry::Types['nominal.integer'] | Dry::Types['nominal.string']  }
+    subject(:type) { Dry::Types['integer'] | Dry::Types['string']  }
 
     it 'returns boolean' do
       expect(type.===('hello')).to eql(true)

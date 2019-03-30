@@ -17,11 +17,7 @@ module Dry
         # @param [Symbol] meth
         # @return [Array]
         def call(input, meth = :call)
-          if input.is_a?(::Array)
-            input.map { |el| member.__send__(meth, el) }
-          else
-            raise CoercionError.new("#{ input } is not an array")
-          end
+          super(input).map { |el| member.__send__(meth, el) }
         end
         alias_method :[], :call
 
@@ -44,7 +40,8 @@ module Dry
             if result.all?(&:success?)
               success(output)
             else
-              failure = failure(output, result.select(&:failure?))
+              error = result.find(&:failure?).error
+              failure = failure(output, error)
               block ? yield(failure) : failure
             end
           else

@@ -16,7 +16,7 @@ module Dry
             if validation.success?
               result
             else
-              failure = failure(result.input, validation)
+              failure = failure(result.input, ConstraintError.new(validation, input))
               block ? yield(failure) : failure
             end
           else

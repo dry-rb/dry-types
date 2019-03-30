@@ -146,7 +146,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
   end
 
   describe '#valid?' do
-    subject(:type) { Dry::Types['nominal.string'].default('foo'.freeze) }
+    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
 
     it 'returns true if value is valid' do
       expect(type.valid?('bar')).to eq true

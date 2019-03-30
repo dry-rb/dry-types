@@ -86,7 +86,7 @@ module Dry
         else
           success = false
           output = hash
-          result = "#{hash} must be a hash"
+          result = CoercionError["#{hash} must be a hash"]
         end
 
         if success

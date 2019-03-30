@@ -155,11 +155,13 @@ RSpec.describe Dry::Types::Map do
     context 'with an invalid input' do
       let(:input) { { opt_sym: false, ' opt_foo ' => 'bar', "other" => true } }
 
-      let(:failures) {[
-        "input key :opt_sym is invalid: type?(String, :opt_sym)",
-        "input value \"bar\" for key \" opt_foo \" is invalid: type?(FalseClass, \"bar\")",
-        "input key \"other\" is invalid: format?(/\\Aopt_/, \"other\")"
-      ]}
+      let(:failures) do
+          [
+          ":opt_sym violates constraints (type?(String, :opt_sym) failed)",
+          "\"bar\" violates constraints (type?(FalseClass, \"bar\") failed)",
+          "\"other\" violates constraints (format?(/\\Aopt_/, \"other\") failed)"
+        ]
+      end
 
       describe '#valid?' do
         it "is false" do
@@ -171,7 +173,7 @@ RSpec.describe Dry::Types::Map do
         it "returns Result::Failure" do
           result = map.try(input)
           expect(result).to be_a Dry::Types::Result::Failure
-          expect(result.error).to eql failures
+          expect(result.error.message).to eql failures.join(", ")
         end
 
         it "yields Result::Failure" do
@@ -183,7 +185,7 @@ RSpec.describe Dry::Types::Map do
       describe '#call' do
         it "raises MapError" do
           expect{ map.call(input) }.to raise_error(
-            Dry::Types::MapError, failures.join("\n"))
+            Dry::Types::MapError, failures.join(", "))
         end
       end
     end
