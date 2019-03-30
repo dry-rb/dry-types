@@ -60,16 +60,30 @@ module Dry
     private_constant(:SchemaKeyError)
 
     class MissingKeyError < SchemaKeyError
+      attr_reader :key
+
       # @param [String,Symbol] key
       def initialize(key)
-        super(":#{key} is missing in Hash input")
+        @key = key
+        super(nil)
+      end
+
+      def message
+        ":#{ key.inspect } is missing in Hash input"
       end
     end
 
     class UnknownKeysError < SchemaKeyError
+      attr_reader :keys
+
       # @param [<String, Symbol>] keys
-      def initialize(*keys)
-        super("unexpected keys #{keys.inspect} in Hash input")
+      def initialize(keys)
+        @keys = keys
+        super(nil)
+      end
+
+      def message
+        "unexpected keys #{keys.inspect} in Hash input"
       end
     end
 

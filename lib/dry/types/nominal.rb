@@ -96,9 +96,11 @@ module Dry
       end
       alias_method :===, :valid?
 
-      def coerce(input)
+      def coerce(input, &block)
         if primitive?(input)
           input
+        elsif block_given?
+          yield
         else
           raise ConstraintError.new(
             "#{input.inspect} must be an instance of #{primitive}"

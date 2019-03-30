@@ -1,10 +1,14 @@
 RSpec.describe Dry::Types::Schema do
   subject(:schema) do
-    Dry::Types['strict.hash'].schema(
+    Dry::Types['hash'].schema(
       name: "coercible.string",
-      age: "strict.integer",
+      age: "integer",
       active: "params.bool"
     )
+  end
+
+  it_behaves_like 'a constrained type' do
+    let(:type) { schema }
   end
 
   describe '#each' do
@@ -61,6 +65,14 @@ RSpec.describe Dry::Types::Schema do
 
     it 'accepts a fallback block' do
       expect(schema.key(:missing) { :fallback }).to eql(:fallback)
+    end
+  end
+
+  describe '#call' do
+    let(:type) { Dry::Types['nominal.hash'].schema({}).strict }
+
+    it 'takes a block for fallback case' do
+      expect(type.(extra_key: :invalid) { 'fallback' }).to eql('fallback')
     end
   end
 

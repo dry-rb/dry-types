@@ -48,8 +48,8 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash{Symbol => Object}]
-      def call(hash)
-        coerce(hash)
+      def call(hash, &block)
+        coerce(hash, &block)
       end
       alias_method :[], :call
 
@@ -67,26 +67,26 @@ module Dry
       # @yieldreturn [Result]
       # @return [Logic::Result]
       # @return [Object] if coercion fails and a block is given
-      def try(hash)
-        if hash.is_a?(::Hash)
+      def try(input)
+        if primitive?(input)
           success = true
           output  = {}
 
-          begin
-            result = try_coerce(hash) do |key, key_result|
+          result = catch(:schema_error) do
+            resolve(input) do |key, value|
+              key_result = key.try(value)
               success &&= key_result.success?
               output[key.name] = key_result.input
 
               key_result
             end
-          rescue CoercionError => error
-            success = false
-            result = error
           end
+
+          success &&= primitive?(result)
         else
           success = false
-          output = hash
-          result = CoercionError["#{hash} must be a hash"]
+          output = input
+          result = CoercionError["#{ input } must be a hash"]
         end
 
         if success
@@ -232,10 +232,6 @@ module Dry
       end
 
       def resolve(hash, options = EMPTY_HASH, &block)
-        unless hash.is_a?(::Hash)
-          raise CoercionError.new("#{ hash.inspect } is not a Hash")
-        end
-
         result = {}
 
         hash.each do |key, value|
@@ -244,7 +240,7 @@ module Dry
           if name_key_map.key?(k)
             result[k] = yield(name_key_map[k], value)
           elsif strict?
-            raise UnknownKeysError.new(*unexpected_keys(hash.keys))
+            throw(:schema_error, unexpected_keys(hash.keys))
           end
         end
 
@@ -265,37 +261,50 @@ module Dry
           if key.default? && resolve_defaults
             result[key.name] = yield(key, Undefined)
           elsif key.required? && !skip_missing
-            raise MissingKeyError, key.name
+            throw(:schema_error, missing_key(key.name))
           end
-        end
-      end
-
-      # @param keys [Array<Symbol>]
-      # @return [Array<Symbol>]
-      def unexpected_keys(keys)
-        keys.map(&transform_key) - name_key_map.keys
-      end
-
-      # @param [Hash] hash
-      # @return [Hash{Symbol => Object}]
-      def try_coerce(hash)
-        resolve(hash) do |key, value|
-          yield(key, key.try(value))
         end
       end
 
       # @param [Hash] hash
       # @return [Hash{Symbol => Object}]
-      def coerce(hash, options = EMPTY_HASH)
-        resolve(hash, options) do |key, value|
-          begin
-            key.(value)
-          rescue ConstraintError => error
-            raise SchemaError.new(key.name, value, error.result)
-          rescue CoercionError => error
-            raise SchemaError.new(key.name, value, error.message)
+      def coerce(hash, options = EMPTY_HASH, &block)
+        if block_given?
+          input = super(hash) { return yield }
+
+          catch(:schema_error) do
+            return resolve(input, options) do |key, value|
+              key.(value) { return yield }
+            end
           end
+
+          yield
+        else
+          error = catch(:schema_error) do
+            return resolve(super(hash), options) do |key, value|
+              begin
+                key.(value)
+              rescue ConstraintError => error
+                raise SchemaError.new(key.name, value, error.result)
+              rescue CoercionError => error
+                raise SchemaError.new(key.name, value, error.message)
+              end
+            end
+          end
+
+          raise error
         end
+      end
+
+      # @param hash_keys [Array<Symbol>]
+      # @return [UnknownKeysError]
+      def unexpected_keys(hash_keys)
+        extra_keys = hash_keys.map(&transform_key) - name_key_map.keys
+        UnknownKeysError.new(extra_keys)
+      end
+
+      def missing_key(key)
+        MissingKeyError.new(key)
       end
     end
   end
