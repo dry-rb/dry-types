@@ -8,7 +8,14 @@ module Dry
 
     namespace self
 
-    class SchemaError < TypeError
+    class CoercionError < StandardError
+      def initialize(message, backtrace = nil)
+        super(message)
+        set_backtrace(backtrace) if backtrace
+      end
+    end
+
+    class SchemaError < CoercionError
       # @param [String,Symbol] key
       # @param [Object] value
       # @param [String, #to_s] result
@@ -17,9 +24,9 @@ module Dry
       end
     end
 
-    MapError = Class.new(TypeError)
+    MapError = Class.new(CoercionError)
 
-    SchemaKeyError = Class.new(KeyError)
+    SchemaKeyError = Class.new(CoercionError)
     private_constant(:SchemaKeyError)
 
     class MissingKeyError < SchemaKeyError
@@ -36,7 +43,7 @@ module Dry
       end
     end
 
-    class ConstraintError < TypeError
+    class ConstraintError < CoercionError
       # @return [String, #to_s]
       attr_reader :result
       # @return [Object]

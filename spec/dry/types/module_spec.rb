@@ -67,7 +67,7 @@ RSpec.describe Dry::Types::Module do
         type = mod.Constructor(String)
 
         expect(type['foo']).to eql('foo')
-        expect { type[1] }.to raise_error(TypeError)
+        expect { type[1] }.to raise_error(Dry::Types::CoercionError)
       end
     end
 

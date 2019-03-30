@@ -14,7 +14,7 @@ RSpec.describe Dry::Types::Nominal do
     end
 
     it 'raises type-error when coercion fails' do
-      expect { hash['foo'] }.to raise_error(TypeError)
+      expect { hash['foo'] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it 'raises type-error when non-coercible type is used and input does not match' do

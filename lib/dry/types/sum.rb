@@ -69,11 +69,13 @@ module Dry
       # @param [Object] input
       # @return [Object]
       def call(input)
-        try(input).input
+        try(input) { |failure|
+          raise failure.error
+        }.input
       end
       alias_method :[], :call
 
-      def try(input, &block)
+      def try(input)
         left.try(input) do
           right.try(input) do |failure|
             if block_given?

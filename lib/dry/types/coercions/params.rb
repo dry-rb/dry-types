@@ -7,7 +7,9 @@ module Dry
       module Params
         TRUE_VALUES = %w[1 on On ON t true True TRUE T y yes Yes YES Y].freeze
         FALSE_VALUES = %w[0 off Off OFF f false False FALSE F n no No NO N].freeze
-        BOOLEAN_MAP = ::Hash[TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])].freeze
+        BOOLEAN_MAP = ::Hash[
+          TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])
+        ].freeze
 
         extend Coercions
 
@@ -16,7 +18,9 @@ module Dry
         # @see TRUE_VALUES
         # @see FALSE_VALUES
         def self.to_true(input)
-          BOOLEAN_MAP.fetch(input.to_s, input)
+          BOOLEAN_MAP.fetch(input.to_s) do
+            raise CoercionError.new("#{ input } cannot be coerced to true")
+          end
         end
 
         # @param [String, Object] input
@@ -24,7 +28,9 @@ module Dry
         # @see TRUE_VALUES
         # @see FALSE_VALUES
         def self.to_false(input)
-          BOOLEAN_MAP.fetch(input.to_s, input)
+          BOOLEAN_MAP.fetch(input.to_s) do
+            raise CoercionError.new("#{ input } cannot be coerced to false")
+          end
         end
 
         # @param [#to_int, #to_i, Object] input
@@ -37,8 +43,8 @@ module Dry
           else
             Integer(input)
           end
-        rescue ArgumentError, TypeError
-          input
+        rescue ArgumentError, TypeError => error
+          raise CoercionError.new(error.message, error.backtrace)
         end
 
         # @param [#to_f, Object] input
@@ -49,8 +55,8 @@ module Dry
           else
             Float(input)
           end
-        rescue ArgumentError, TypeError
-          input
+        rescue ArgumentError, TypeError => error
+          raise CoercionError.new(error.message, error.backtrace)
         end
 
         # @param [#to_d, Object] input

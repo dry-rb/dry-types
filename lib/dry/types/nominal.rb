@@ -69,12 +69,13 @@ module Dry
       # @return [Result,Logic::Result] when a block is not provided
       # @return [nil] otherwise
       def try(input, &block)
-        if valid?(input)
-          success(input)
-        else
-          failure = failure(input, "#{input.inspect} must be an instance of #{primitive}")
-          block ? yield(failure) : failure
-        end
+        success(input)
+        # if valid?(input)
+        #   success(input)
+        # else
+        #   failure = failure(input, "#{input.inspect} must be an instance of #{primitive}")
+        #   block ? yield(failure) : failure
+        # end
       end
 
       # @param (see Dry::Types::Success#initialize)

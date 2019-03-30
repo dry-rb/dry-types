@@ -6,13 +6,12 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['']).to be(nil)
     end
 
-    it 'returns original value when it is not an empty string' do
-      expect(type[['foo']]).to eql(['foo'])
+    it 'raises a coercion error it is not an empty string' do
+      expect { type[['foo']] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -39,14 +38,13 @@ RSpec.describe Dry::Types::Nominal do
       ]).to all(eql(Date.new(2015, 11, 26)))
     end
 
-    it 'returns original value when it was unparsable' do
-      expect(type['not-a-date']).to eql('not-a-date')
-      expect(type['12345678912/04/2017']).to eql ('12345678912/04/2017')
+    it 'raises a coercion error when it is unparsable' do
+      expect { type['not-a-date'] }.to raise_error(Dry::Types::CoercionError)
+      expect { type['12345678912/04/2017'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -57,13 +55,12 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['2015-11-26 12:00:00']).to eql(DateTime.new(2015, 11, 26, 12))
     end
 
-    it 'returns original value when it was unparsable' do
-      expect(type['not-a-date-time']).to eql('not-a-date-time')
+    it 'raises a coercion error when it is unparsable' do
+      expect { type['not-a-date-time'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -74,13 +71,12 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['2015-11-26 12:00:00']).to eql(Time.new(2015, 11, 26, 12))
     end
 
-    it 'returns original value when it was unparsable' do
-      expect(type['not-a-time']).to eql('not-a-time')
+    it 'raises a coercion error when it is unparsable' do
+      expect { type['not-a-time'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -99,13 +95,12 @@ RSpec.describe Dry::Types::Nominal do
       end
     end
 
-    it 'returns original value when it is not supported' do
-      expect(type['huh?']).to eql('huh?')
+    it 'raises a coercion error when it is not supported' do
+      expect { type['huh?'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -118,13 +113,12 @@ RSpec.describe Dry::Types::Nominal do
       end
     end
 
-    it 'returns original value when it is not supported' do
-      expect(type['huh?']).to eql('huh?')
+    it 'raises a coercion error when it is not supported' do
+      expect { type['huh?'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -137,13 +131,12 @@ RSpec.describe Dry::Types::Nominal do
       end
     end
 
-    it 'returns original value when it is not supported' do
-      expect(type['huh?']).to eql('huh?')
+    it 'raises an error when it is not supported' do
+      expect { type['huh?'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises an error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -163,15 +156,14 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['']).to be(nil)
     end
 
-    it 'returns original value when it cannot be coerced' do
-      expect(type['foo']).to eql('foo')
-      expect(type['23asd']).to eql('23asd')
-      expect(type[{}]).to eql({})
+    it 'raises a coercion error when it cannot be coerced' do
+      expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
+      expect { type['23asd'] }.to raise_error(Dry::Types::CoercionError)
+      expect { type[{}] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -191,15 +183,14 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['']).to be(nil)
     end
 
-    it 'returns original value when it cannot be coerced' do
-      expect(type['foo']).to eql('foo')
-      expect(type['23asd']).to eql('23asd')
-      expect(type[{}]).to eql({})
+    it 'raises a coercion error when it cannot be coerced' do
+      expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
+      expect { type['23asd'] }.to raise_error(Dry::Types::CoercionError)
+      expect { type[{}] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -215,9 +206,9 @@ RSpec.describe Dry::Types::Nominal do
     end
 
     it 'returns original value when it cannot be coerced' do
-      expect(type['foo']).to eql('foo')
-      expect(type['23asd']).to eql('23asd')
-      expect(type[{}]).to eql({})
+      expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
+      expect { type['23asd'] }.to raise_error(Dry::Types::CoercionError)
+      expect { type[{}] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it 'does not lose precision of the original value' do
@@ -228,9 +219,8 @@ RSpec.describe Dry::Types::Nominal do
       expect(type[3.12]).to eql(BigDecimal('3.12'))
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -247,14 +237,12 @@ RSpec.describe Dry::Types::Nominal do
       expect(type[input]).to eql([])
     end
 
-    it 'returns original value when it is not an array' do
-      foo = 'foo'
-      expect(type[foo]).to be(foo)
+    it 'raises a coercion error when it is not an array' do
+      expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -267,18 +255,21 @@ RSpec.describe Dry::Types::Nominal do
     end
 
     it 'coerces an empty string into an empty hash' do
+      type = Dry::Types['params.hash']
       input = ''
+
+      expect(type[input]).to eql({})
+
+      type = Dry::Types['params.hash'].schema({})
       expect(type[input]).to eql({})
     end
 
-    it 'returns original value when it is not an hash' do
-      foo = 'foo'
-      expect(type[foo]).to be(foo)
+    it 'raises a coercion error when it is not an hash' do
+      expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
     end
 
-    it 'returns original value when it is not a string' do
-      object = Object.new
-      expect(type[object]).to eql(object)
+    it 'raises a coercion error when it is not a string' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 end

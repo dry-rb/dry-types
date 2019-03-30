@@ -19,7 +19,7 @@ RSpec.describe Dry::Types::Nominal, '#safe' do
 
   context 'with a params hash' do
     subject(:type) do
-      Dry::Types['params.hash'].schema(age: 'coercible.integer', active: 'params.bool')
+      Dry::Types['params.hash'].schema(age: 'coercible.integer', active: 'params.bool').safe
     end
 
     it_behaves_like Dry::Types::Nominal

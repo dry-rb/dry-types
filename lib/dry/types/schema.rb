@@ -79,9 +79,9 @@ module Dry
 
               key_result
             end
-          rescue ConstraintError, UnknownKeysError, SchemaError, MissingKeyError => e
+          rescue CoercionError => error
             success = false
-            result = e
+            result = error
           end
         else
           success = false
@@ -232,6 +232,10 @@ module Dry
       end
 
       def resolve(hash, options = EMPTY_HASH, &block)
+        unless hash.is_a?(::Hash)
+          raise CoercionError.new("#{ hash.inspect } is not a Hash")
+        end
+
         result = {}
 
         hash.each do |key, value|
@@ -286,10 +290,10 @@ module Dry
         resolve(hash, options) do |key, value|
           begin
             key.(value)
-          rescue ConstraintError => e
-            raise SchemaError.new(key.name, value, e.result)
-          rescue TypeError, ArgumentError => e
-            raise SchemaError.new(key.name, value, e.message)
+          rescue ConstraintError => error
+            raise SchemaError.new(key.name, value, error.result)
+          rescue CoercionError => error
+            raise SchemaError.new(key.name, value, error.message)
           end
         end
       end

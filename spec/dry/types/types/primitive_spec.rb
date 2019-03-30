@@ -14,8 +14,8 @@ RSpec.describe Dry::Types, '.[]' do
       expect(type[:hello]).to be(:hello)
     end
 
-    it 'raises when input is not a symbol' do
-      expect { type['hello'] }.to raise_error(TypeError, /hello/)
+    it 'raises a coercion error when it is not a symbol' do
+      expect { type[Object.new] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.describe Dry::Types, '.[]' do
     end
 
     it 'raises when input is not a class' do
-      expect { type['String'] }.to raise_error(TypeError, /String/)
+      expect { type['String'] }.to raise_error(Dry::Types::CoercionError, /String/)
     end
   end
 end

@@ -163,7 +163,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params array with member' do
-    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).to_ast
+    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).safe.to_ast
 
     arr = compiler.(ast)
 
@@ -176,7 +176,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
       email: Dry::Types['nominal.string'],
       age: Dry::Types['params.integer'],
       admin: Dry::Types['params.bool'],
-    ).with_key_transform(&:to_sym).to_ast
+    ).safe.with_key_transform(&:to_sym).to_ast
 
     hash = compiler.(ast)
 
@@ -196,7 +196,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     type = compiler.(ast)
 
-    expect(type[nil]).to eql(nil)
+    expect { type[nil] }.to raise_error(Dry::Types::CoercionError)
     expect(type[{}]).to eql({})
   end
 
@@ -317,23 +317,29 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a complex map' do
-    map = Dry::Types['nominal.hash'].
+    map = Dry::Types['hash'].
             map('any', 'any').
             meta(abc: 123).
             meta(foo: 'bar').
-            with(key_type: Dry::Types['nominal.string']).
-            with(value_type: Dry::Types['nominal.integer'])
+            with(key_type: Dry::Types['string']).
+            with(value_type: Dry::Types['integer'])
 
     ast = map.to_ast
 
     expect(ast).
       to eql([
                :map, [
-                 [:nominal, [String, {}]],
-                 [:nominal, [Integer, {}]],
-                 abc: 123, foo: 'bar'
-               ]
-             ])
+                  [:constrained,
+                   [[:nominal, [String, {}]],
+                    [:predicate, [:type?, [[:type, String], [:input, Undefined]]]],
+                    {}]],
+                  [:constrained,
+                   [[:nominal, [Integer, {}]],
+                    [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]],
+                    {}]],
+                  abc: 123, foo: 'bar'
+                ]
+              ])
 
     type = compiler.(ast)
 

@@ -17,7 +17,11 @@ module Dry
         # @param [Symbol] meth
         # @return [Array]
         def call(input, meth = :call)
-          input.map { |el| member.__send__(meth, el) }
+          if input.is_a?(::Array)
+            input.map { |el| member.__send__(meth, el) }
+          else
+            raise CoercionError.new("#{ input } is not an array")
+          end
         end
         alias_method :[], :call
 

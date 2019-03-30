@@ -31,8 +31,8 @@ module Dry
       # @return [Result,Logic::Result]
       def try(input, &block)
         type.try(input, &block)
-      rescue TypeError, ArgumentError => e
-        result = failure(input, e.message)
+      rescue CoercionError => error
+        result = failure(input, error.message)
         block ? yield(result) : result
       end
 

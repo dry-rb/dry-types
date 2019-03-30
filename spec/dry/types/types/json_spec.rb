@@ -6,8 +6,8 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['']).to be(nil)
     end
 
-    it 'returns original value when it is not an empty string' do
-      expect(type[['foo']]).to eql(['foo'])
+    it 'raises a coercion error when it is not an empty string' do
+      expect { type[['foo']] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -18,8 +18,8 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['2015-11-26']).to eql(Date.new(2015, 11, 26))
     end
 
-    it 'returns original value when it was unparsable' do
-      expect(type['not-a-date']).to eql('not-a-date')
+    it 'raises a coercion error when it is unparsable' do
+      expect { type['not-a-date'] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -30,8 +30,8 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['2015-11-26 12:00:00']).to eql(DateTime.new(2015, 11, 26, 12))
     end
 
-    it 'returns original value when it was unparsable' do
-      expect(type['not-a-date-time']).to eql('not-a-date-time')
+    it 'raises a coercion error when it is unparsable' do
+      expect { type['not-a-date-time'] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 
@@ -42,8 +42,8 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['2015-11-26 12:00:00']).to eql(Time.new(2015, 11, 26, 12))
     end
 
-    it 'returns original value when it was unparsable' do
-      expect(type['not-a-time']).to eql('not-a-time')
+    it 'raises a coercion error when it is unparsable' do
+      expect { type['not-a-time'] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 

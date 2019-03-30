@@ -51,7 +51,7 @@ module Dry
       # @param [Object] input
       # @return [Object]
       def call(input)
-        type[fn[input]]
+        type[apply(input)]
       end
       alias_method :[], :call
 
@@ -60,9 +60,12 @@ module Dry
       # @return [Logic::Result, Types::Result]
       # @return [Object] if block given and try fails
       def try(input, &block)
-        type.try(fn[input], &block)
-      rescue TypeError, ArgumentError => e
-        failure(input, e.message)
+        value = apply(input)
+      rescue CoercionError => error
+        failure = failure(input, error)
+        block_given? ? yield(failure) : failure
+      else
+        type.try(value, &block)
       end
 
       # @param [#call, nil] new_fn
@@ -81,8 +84,8 @@ module Dry
       # @param [Object] value
       # @return [Boolean]
       def valid?(value)
-        constructed_value = fn[value]
-      rescue NoMethodError, TypeError, ArgumentError
+        constructed_value = apply(value)
+      rescue CoercionError
         false
       else
         type.valid?(constructed_value)
@@ -118,6 +121,12 @@ module Dry
       alias_method :<<, :prepend
 
       private
+
+      def apply(input)
+        fn[input]
+      rescue NoMethodError, TypeError, ArgumentError => error
+        raise CoercionError.new(error.message, error.backtrace)
+      end
 
       def register_fn(fn)
         Dry::Types::FnContainer.register(fn)

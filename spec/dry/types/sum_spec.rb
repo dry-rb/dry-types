@@ -46,7 +46,7 @@ RSpec.describe Dry::Types::Sum do
       expect(type[312]).to be(312)
       expect(type['312']).to eql('312')
 
-      expect { type[{}] }.to raise_error(TypeError)
+      expect { type[{}] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it 'works with nil and strict types' do
@@ -55,7 +55,7 @@ RSpec.describe Dry::Types::Sum do
       expect(type[nil]).to be(nil)
       expect(type['312']).to eql('312')
 
-      expect { type[{}] }.to raise_error(TypeError)
+      expect { type[{}] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it 'is aliased as #call' do
@@ -135,7 +135,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#failure' do
-    subject(:type) { Dry::Types['nominal.integer'] | Dry::Types['nominal.string'] }
+    subject(:type) { Dry::Types['integer'] | Dry::Types['string'] }
 
     it 'returns failure when invalid value is passed' do
       expect(type.failure(true)).to be_failure
