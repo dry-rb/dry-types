@@ -29,8 +29,8 @@ module Dry
 
       # @param [Object] input
       # @return [Object]
-      def call(input = Undefined)
-        type[map_value(input)]
+      def call(input = Undefined, &block)
+        type.(map_value(input), &block)
       end
       alias_method :[], :call
 

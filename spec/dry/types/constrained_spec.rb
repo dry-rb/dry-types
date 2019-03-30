@@ -4,11 +4,12 @@ RSpec.describe Dry::Types::Constrained do
 
     it_behaves_like Dry::Types::Nominal
     it_behaves_like 'Dry::Types::Nominal#meta'
+    it_behaves_like 'a constrained type'
   end
 
   describe '#[]' do
     subject(:type) do
-      Dry::Types['strict.string'].constrained(size: 3..12)
+      Dry::Types['string'].constrained(size: 3..12)
     end
 
     it 'passes when constraints are not violated' do
@@ -85,7 +86,7 @@ RSpec.describe Dry::Types::Constrained do
 
     it 'fails when coercion fails' do
       expect { type['foo'] }.to raise_error(
-        Dry::Types::CoercionError, /can't convert String into Hash/
+        Dry::Types::ConstraintError, /foo/
       )
     end
 

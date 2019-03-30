@@ -17,9 +17,9 @@ module Dry
         # @return [Boolean,Object]
         # @see TRUE_VALUES
         # @see FALSE_VALUES
-        def self.to_true(input)
+        def self.to_true(input, &block)
           BOOLEAN_MAP.fetch(input.to_s) do
-            raise CoercionError.new("#{ input } cannot be coerced to true")
+            CoercionError.handle("#{ input } cannot be coerced to true", &block)
           end
         end
 
@@ -27,71 +27,63 @@ module Dry
         # @return [Boolean,Object]
         # @see TRUE_VALUES
         # @see FALSE_VALUES
-        def self.to_false(input)
+        def self.to_false(input, &block)
           BOOLEAN_MAP.fetch(input.to_s) do
-            raise CoercionError.new("#{ input } cannot be coerced to false")
+            CoercionError.handle("#{ input } cannot be coerced to false", &block)
           end
         end
 
         # @param [#to_int, #to_i, Object] input
         # @return [Integer, nil, Object]
-        def self.to_int(input)
-          if empty_str?(input)
-            nil
-          elsif input.is_a? String
+        def self.to_int(input, &block)
+          if input.is_a? String
             Integer(input, 10)
           else
             Integer(input)
           end
         rescue ArgumentError, TypeError => error
-          raise CoercionError.new(error.message, error.backtrace)
+          CoercionError.handle(error, &block)
         end
 
         # @param [#to_f, Object] input
         # @return [Float, nil, Object]
-        def self.to_float(input)
-          if empty_str?(input)
-            nil
-          else
-            Float(input)
-          end
+        def self.to_float(input, &block)
+          Float(input)
         rescue ArgumentError, TypeError => error
-          raise CoercionError.new(error.message, error.backtrace)
+          CoercionError.handle(error, &block)
         end
 
         # @param [#to_d, Object] input
         # @return [BigDecimal, nil, Object]
-        def self.to_decimal(input)
-          result = to_float(input)
-
-          if result.instance_of?(Float)
-            input.to_d
-          else
-            result
+        def self.to_decimal(input, &block)
+          result = to_float(input) do
+            CoercionError.handle("#{ input } cannot be coerced to decimal", &block)
           end
+
+          input.to_d
         end
 
         # @param [Array, String, Object] input
         # @return [Array, Object]
-        def self.to_ary(input)
+        def self.to_ary(input, &block)
           if empty_str?(input)
             []
           elsif input.is_a?(::Array)
             input
           else
-            raise CoercionError.new("#{ input.inspect } must be an instance of Array")
+            CoercionError.handle("#{ input.inspect } cannot be coerced to array", &block)
           end
         end
 
         # @param [Hash, String, Object] input
         # @return [Hash, Object]
-        def self.to_hash(input)
+        def self.to_hash(input, &block)
           if empty_str?(input)
             {}
           elsif input.is_a?(::Hash)
             input
           else
-            raise CoercionError.new("#{ input.inspect } must be an instance of Hash")
+            CoercionError.handle("#{ input.inspect } cannot be coerced to array", &block)
           end
         end
       end

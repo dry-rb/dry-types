@@ -9,6 +9,14 @@ module Dry
     namespace self
 
     class CoercionError < StandardError
+      def self.handle(error, &block)
+        if block_given?
+          yield
+        else
+          raise self[error]
+        end
+      end
+
       def self.[](error)
         case error
         when self

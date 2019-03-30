@@ -30,6 +30,10 @@ module Dry
 
         raise ArgumentError, 'Missing constructor block' if fn.nil?
 
+        parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
+        *, (last_arg, _) = parameters
+        @fn_yields = last_arg.equal?(:block)
+
         super(type, **options, fn: fn)
       end
 
@@ -50,8 +54,12 @@ module Dry
 
       # @param [Object] input
       # @return [Object]
-      def call(input)
-        type[apply(input)]
+      def call(input, &block)
+        if block_given?
+          type.(apply(input) { return yield }, &block)
+        else
+          type.(apply(input))
+        end
       end
       alias_method :[], :call
 
@@ -120,13 +128,23 @@ module Dry
       end
       alias_method :<<, :prepend
 
-      private
-
-      def apply(input)
-        fn[input]
-      rescue NoMethodError, TypeError, ArgumentError => error
-        raise CoercionError.new(error.message, error.backtrace)
+      def apply(input, &block)
+        if fn_yields? && block_given?
+          fn.(input, &block)
+        else
+          begin
+            fn.(input)
+          rescue NoMethodError, TypeError, ArgumentError => error
+            CoercionError.handle(error, &block)
+          end
+        end
       end
+
+      def fn_yields?
+        @fn_yields
+      end
+
+      private
 
       def register_fn(fn)
         Dry::Types::FnContainer.register(fn)

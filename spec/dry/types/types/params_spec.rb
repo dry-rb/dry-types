@@ -152,10 +152,6 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['010']).to be(10)
     end
 
-    it 'coerces empty string to nil' do
-      expect(type['']).to be(nil)
-    end
-
     it 'raises a coercion error when it cannot be coerced' do
       expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
       expect { type['23asd'] }.to raise_error(Dry::Types::CoercionError)
@@ -179,10 +175,6 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['0']).to eql(0.0)
     end
 
-    it 'coerces empty string to nil' do
-      expect(type['']).to be(nil)
-    end
-
     it 'raises a coercion error when it cannot be coerced' do
       expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
       expect { type['23asd'] }.to raise_error(Dry::Types::CoercionError)
@@ -199,10 +191,6 @@ RSpec.describe Dry::Types::Nominal do
 
     it 'coerces to a decimal' do
       expect(type['3.12']).to eql(BigDecimal('3.12'))
-    end
-
-    it 'coerces empty string to nil' do
-      expect(type['']).to be(nil)
     end
 
     it 'returns original value when it cannot be coerced' do

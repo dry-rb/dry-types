@@ -25,16 +25,6 @@ module Dry
         def constrained?
           true
         end
-
-        # @param [Object] input
-        # @return [Object]
-        # @raise [ConstraintError] if given +input+ not passing {#try}
-        def call(input)
-          try(input) { |result|
-            raise ConstraintError.new(result, input)
-          }.input
-        end
-        alias_method :[], :call
       end
 
       # @param [Type] left
@@ -68,10 +58,8 @@ module Dry
 
       # @param [Object] input
       # @return [Object]
-      def call(input)
-        try(input) { |failure|
-          raise failure.error
-        }.input
+      def call(input, &block)
+        left.(input) { right.(input, &block) }
       end
       alias_method :[], :call
 

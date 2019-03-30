@@ -17,7 +17,12 @@ module Dry
         # @param [Symbol] meth
         # @return [Array]
         def call(input, meth = :call)
-          super(input).map { |el| member.__send__(meth, el) }
+          if block_given? && meth.equal?(:call)
+            arr = super(input) { return yield }
+            arr.map { |el| member.(el) { return yield } }
+          else
+            super(input).map { |el| member.__send__(meth, el) }
+          end
         end
         alias_method :[], :call
 

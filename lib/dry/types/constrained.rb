@@ -24,10 +24,16 @@ module Dry
       # @param [Object] input
       # @return [Object]
       # @raise [ConstraintError]
-      def call(input)
-        try(input) { |result|
-          raise result.error
-        }.input
+      def call(input, &block)
+        result = rule.(input)
+
+        if result.success?
+          type.(input, &block)
+        elsif block_given?
+          yield
+        else
+          raise ConstraintError.new(result, input)
+        end
       end
       alias_method :[], :call
 

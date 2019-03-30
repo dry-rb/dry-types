@@ -23,10 +23,14 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash]
-      def call(hash)
-        try(hash) do |failure|
-          raise MapError, failure.error
-        end.input
+      def call(hash, &block)
+        try(hash) { |failure|
+          if block_given?
+            return yield
+          else
+            raise MapError, failure.error
+          end
+        }.input
       end
       alias_method :[], :call
 

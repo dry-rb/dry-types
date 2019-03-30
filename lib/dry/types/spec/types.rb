@@ -100,3 +100,15 @@ RSpec.shared_examples_for Dry::Types::Nominal do
     end
   end
 end
+
+RSpec.shared_examples_for 'a constrained type' do
+  let(:input) { Object.new }
+  let(:fallback) { Object.new }
+
+  describe '#call' do
+    it 'yields a block on failure' do
+      expect(type.(input) { fallback }).to be(fallback)
+    end
+  end
+end
+

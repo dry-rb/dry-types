@@ -41,7 +41,7 @@ RSpec.describe Dry::Types::Schema do
       subject(:sum) { type.strict | type.strict }
 
       it 'produces a constrained sum' do
-        expect { sum.(foo: 1) }.to raise_error(Dry::Types::ConstraintError)
+        expect { sum.(foo: 1) }.to raise_error(Dry::Types::UnknownKeysError)
       end
     end
   end

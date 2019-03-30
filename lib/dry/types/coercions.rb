@@ -6,9 +6,11 @@ module Dry
       # @param [String, Object] input
       # @return [nil] if the input is an empty string
       # @return [Object] otherwise the input object is returned
-      def to_nil(input)
+      def to_nil(input, &block)
         if input.nil? || empty_str?(input)
           nil
+        elsif block_given?
+          yield
         else
           raise CoercionError.new("#{ input.inspect } is not nil")
         end
@@ -17,37 +19,40 @@ module Dry
       # @param [#to_str, Object] input
       # @return [Date, Object]
       # @see Date.parse
-      def to_date(input)
-        unless input.respond_to?(:to_str)
-          raise CoercionError("#{ input.inspect } is not a string")
+      def to_date(input, &block)
+        if input.respond_to?(:to_str)
+          ::Date.parse(input)
+        else
+          CoercionError.handle("#{ input.inspect } is not a string", &block)
         end
-        Date.parse(input)
       rescue ArgumentError, RangeError => error
-        raise CoercionError.new(error.message, error.backtrace)
+        CoercionError.handle(error, &block)
       end
 
       # @param [#to_str, Object] input
       # @return [DateTime, Object]
       # @see DateTime.parse
-      def to_date_time(input)
-        unless input.respond_to?(:to_str)
-          raise CoercionError("#{ input.inspect } is not a string")
+      def to_date_time(input, &block)
+        if input.respond_to?(:to_str)
+          ::DateTime.parse(input)
+        else
+          CoercionError.handle("#{ input.inspect } is not a string", &block)
         end
-        DateTime.parse(input)
       rescue ArgumentError => error
-        raise CoercionError.new(error.message, error.backtrace)
+        CoercionError.handle(error, &block)
       end
 
       # @param [#to_str, Object] input
       # @return [Time, Object]
       # @see Time.parse
-      def to_time(input)
-        unless input.respond_to?(:to_str)
-          raise CoercionError("#{ input.inspect } is not a string")
+      def to_time(input, &block)
+        if input.respond_to?(:to_str)
+          ::Time.parse(input)
+        else
+          CoercionError.handle("#{ input.inspect } is not a string", &block)
         end
-        Time.parse(input)
       rescue ArgumentError => error
-        raise CoercionError.new(error.message, error.backtrace)
+        CoercionError.handle(error, &block)
       end
 
       private

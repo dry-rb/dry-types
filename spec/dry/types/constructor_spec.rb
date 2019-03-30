@@ -4,6 +4,9 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   it_behaves_like Dry::Types::Nominal
+  it_behaves_like 'a constrained type' do
+    let(:type) { Dry::Types['string'].constructor { |x| x } }
+  end
 
   describe '.new' do
     it 'wraps primitive in a nominal' do
@@ -94,6 +97,15 @@ RSpec.describe Dry::Types::Constructor do
   describe '#call' do
     it 'uses constructor function to process input' do
       expect(type[:foo]).to eql('foo')
+    end
+
+    describe 'not safe constructor' do
+      let(:type) { Dry::Types['nominal.integer'].constructor { |x| Integer(x) } }
+      let(:fallback) { Object.new }
+
+      it 'accepts block which is used as a fallback value' do
+        expect(type.(:foo) { fallback }).to be(fallback)
+      end
     end
   end
 

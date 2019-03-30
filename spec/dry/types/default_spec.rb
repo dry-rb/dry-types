@@ -1,5 +1,5 @@
-RSpec.describe Dry::Types::Nominal, '#default' do
-  context 'with a nominal' do
+RSpec.describe Dry::Types::Builder, '#default' do
+  context 'with a nominal type' do
     subject(:type) { Dry::Types['nominal.string'].default('foo'.freeze) }
 
     it_behaves_like Dry::Types::Nominal
@@ -22,9 +22,15 @@ RSpec.describe Dry::Types::Nominal, '#default' do
   end
 
   context 'with a constrained type' do
+    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
+
+    it_behaves_like 'a constrained type'
+  end
+
+  context 'with a constrained type' do
     it 'does not allow a value that is not valid' do
       expect {
-        Dry::Types['strict.string'].default(123)
+        Dry::Types['string'].default(123)
       }.to raise_error(
         Dry::Types::ConstraintError, /123/
       )
@@ -54,7 +60,7 @@ RSpec.describe Dry::Types::Nominal, '#default' do
   end
 
   context 'with an optional type' do
-    subject(:type) { Dry::Types['strict.integer'].optional.default(nil) }
+    subject(:type) { Dry::Types['integer'].optional.default(nil) }
 
     it_behaves_like 'Dry::Types::Nominal without primitive'
 
@@ -63,11 +69,11 @@ RSpec.describe Dry::Types::Nominal, '#default' do
     end
   end
 
-  context 'with a strict bool' do
-    subject(:type) { Dry::Types['strict.bool'] }
+  context 'with strict bool' do
+    subject(:type) { Dry::Types['bool'] }
 
     it_behaves_like 'Dry::Types::Nominal without primitive' do
-      let(:type) { Dry::Types['strict.bool'].default(false) }
+      let(:type) { Dry::Types['bool'].default(false) }
     end
 
     it 'allows setting false' do
