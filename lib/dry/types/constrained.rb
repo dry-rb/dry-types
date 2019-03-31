@@ -25,14 +25,17 @@ module Dry
       # @return [Object]
       # @raise [ConstraintError]
       def call(input, &block)
-        result = rule.(input)
-
-        if result.success?
+        if block_given?
+          result = rule.(input) { return yield }
           type.(input, &block)
-        elsif block_given?
-          yield
         else
-          raise ConstraintError.new(result, input)
+          result = rule.(input)
+
+          if result.success?
+            type.(input, &block)
+          else
+            raise ConstraintError.new(result, input)
+          end
         end
       end
       alias_method :[], :call
