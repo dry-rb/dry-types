@@ -99,10 +99,10 @@ module Dry
       def coerce(input, &block)
         if primitive?(input)
           input
+        elsif block_given?
+          yield
         else
-          CoercionError.handle(
-            "#{input.inspect} must be an instance of #{primitive}", &block
-          )
+          raise CoercionError.new("#{ input.inspect } must be an instance of #{ primitive }")
         end
       end
 

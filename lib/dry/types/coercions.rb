@@ -21,12 +21,16 @@ module Dry
       # @see Date.parse
       def to_date(input, &block)
         if input.respond_to?(:to_str)
-          ::Date.parse(input)
+          begin
+            ::Date.parse(input)
+          rescue ArgumentError, RangeError => error
+            CoercionError.handle(error, &block)
+          end
+        elsif block_given?
+          yield
         else
-          CoercionError.handle("#{ input.inspect } is not a string", &block)
+          raise CoercionError.new("#{ input.inspect } is not a string")
         end
-      rescue ArgumentError, RangeError => error
-        CoercionError.handle(error, &block)
       end
 
       # @param [#to_str, Object] input
@@ -34,12 +38,16 @@ module Dry
       # @see DateTime.parse
       def to_date_time(input, &block)
         if input.respond_to?(:to_str)
-          ::DateTime.parse(input)
+          begin
+            ::DateTime.parse(input)
+          rescue ArgumentError => error
+            CoercionError.handle(error, &block)
+          end
+        elsif block_given?
+          yield
         else
-          CoercionError.handle("#{ input.inspect } is not a string", &block)
+          raise CoercionError.new("#{ input.inspect } is not a string")
         end
-      rescue ArgumentError => error
-        CoercionError.handle(error, &block)
       end
 
       # @param [#to_str, Object] input
@@ -47,12 +55,16 @@ module Dry
       # @see Time.parse
       def to_time(input, &block)
         if input.respond_to?(:to_str)
-          ::Time.parse(input)
+          begin
+            ::Time.parse(input)
+          rescue ArgumentError => error
+            CoercionError.handle(error, &block)
+          end
+        elsif block_given?
+          yield
         else
-          CoercionError.handle("#{ input.inspect } is not a string", &block)
+          raise CoercionError.new("#{ input.inspect } is not a string")
         end
-      rescue ArgumentError => error
-        CoercionError.handle(error, &block)
       end
 
       private

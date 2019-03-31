@@ -19,7 +19,11 @@ module Dry
         # @see FALSE_VALUES
         def self.to_true(input, &block)
           BOOLEAN_MAP.fetch(input.to_s) do
-            CoercionError.handle("#{ input } cannot be coerced to true", &block)
+            if block_given?
+              yield
+            else
+              raise CoercionError.new("#{ input } cannot be coerced to true")
+            end
           end
         end
 
@@ -29,7 +33,11 @@ module Dry
         # @see FALSE_VALUES
         def self.to_false(input, &block)
           BOOLEAN_MAP.fetch(input.to_s) do
-            CoercionError.handle("#{ input } cannot be coerced to false", &block)
+            if block_given?
+              yield
+            else
+              raise CoercionError.new("#{ input } cannot be coerced to false")
+            end
           end
         end
 
@@ -57,7 +65,11 @@ module Dry
         # @return [BigDecimal, nil, Object]
         def self.to_decimal(input, &block)
           result = to_float(input) do
-            CoercionError.handle("#{ input } cannot be coerced to decimal", &block)
+            if block_given?
+              return yield
+            else
+              raise CoercionError.new("#{ input.inspect } cannot be coerced to decimal")
+            end
           end
 
           input.to_d
@@ -70,8 +82,10 @@ module Dry
             []
           elsif input.is_a?(::Array)
             input
+          elsif block_given?
+            yield
           else
-            CoercionError.handle("#{ input.inspect } cannot be coerced to array", &block)
+            raise CoercionError.new("#{ input.inspect } cannot be coerced to array")
           end
         end
 
@@ -82,8 +96,10 @@ module Dry
             {}
           elsif input.is_a?(::Hash)
             input
+          elsif block_given?
+            yield
           else
-            CoercionError.handle("#{ input.inspect } cannot be coerced to hash", &block)
+            raise CoercionError.new("#{ input.inspect } cannot be coerced to hash")
           end
         end
       end
