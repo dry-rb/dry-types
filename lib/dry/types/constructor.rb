@@ -32,7 +32,18 @@ module Dry
 
         parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
         *, (last_arg, _) = parameters
-        @fn_yields = last_arg.equal?(:block)
+
+        if last_arg.equal?(:block)
+          @apply = @fn
+        else
+          @apply = lambda do |input, &block|
+            begin
+              @fn.(input)
+            rescue NoMethodError, TypeError, ArgumentError => error
+              CoercionError.handle(error, &block)
+            end
+          end
+        end
 
         super(type, **options, fn: fn)
       end
@@ -130,19 +141,11 @@ module Dry
       alias_method :<<, :prepend
 
       def apply(input, &block)
-        if fn_yields? && block_given?
-          fn.(input, &block)
+        if block_given?
+          @apply.(input, &block)
         else
-          begin
-            fn.(input)
-          rescue NoMethodError, TypeError, ArgumentError => error
-            CoercionError.handle(error, &block)
-          end
+          @apply.(input)
         end
-      end
-
-      def fn_yields?
-        @fn_yields
       end
 
       private
