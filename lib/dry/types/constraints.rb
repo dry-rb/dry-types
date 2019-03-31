@@ -8,7 +8,11 @@ module Dry
     # @return [Dry::Logic::Rule]
     def self.Rule(options)
       rule_compiler.(
-        options.map { |key, val| Logic::Rule::Predicate.new(Logic::Predicates[:"#{key}?"]).curry(val).to_ast }
+        options.map { |key, val|
+          Logic::Rule::Predicate.build(
+            Logic::Predicates[:"#{key}?"]
+          ).curry(val).to_ast
+        }
       ).reduce(:and)
     end
 
