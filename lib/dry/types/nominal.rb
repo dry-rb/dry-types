@@ -99,11 +99,9 @@ module Dry
       def coerce(input, &block)
         if primitive?(input)
           input
-        elsif block_given?
-          yield
         else
-          raise ConstraintError.new(
-            "#{input.inspect} must be an instance of #{primitive}"
+          CoercionError.handle(
+            "#{input.inspect} must be an instance of #{primitive}", &block
           )
         end
       end
@@ -115,6 +113,10 @@ module Dry
       # @return [Array]
       def to_ast(meta: true)
         [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
+      end
+
+      def safe
+        self
       end
     end
 

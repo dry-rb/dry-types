@@ -80,6 +80,10 @@ module Dry
         valid?(value)
       end
 
+      def safe
+        Safe.new(Constrained.new(type.safe, options))
+      end
+
       # @api public
       #
       # @see Nominal#to_ast

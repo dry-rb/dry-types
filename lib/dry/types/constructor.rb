@@ -148,6 +148,10 @@ module Dry
         end
       end
 
+      def safe
+        Safe.new(Constructor.new(type.safe, options))
+      end
+
       private
 
       def register_fn(fn)

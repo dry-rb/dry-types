@@ -64,6 +64,10 @@ module Dry
           end
         end
 
+        def safe
+          Safe.new(Member.new(primitive, { **options, member: member.safe}))
+        end
+
         # @api public
         #
         # @see Nominal#to_ast

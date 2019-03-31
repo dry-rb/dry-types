@@ -79,9 +79,8 @@ RSpec.describe Dry::Types::Nominal do
   describe 'json.hash' do
     subject(:type) { Dry::Types['json.hash'].schema(age: Dry::Types['nominal.integer']) }
 
-    it 'returns original value when it is not an hash' do
-      foo = 'foo'
-      expect(type[foo]).to be(foo)
+    it 'raises a coercion error when it is not an hash' do
+      expect { type['foo'] }.to raise_error(Dry::Types::CoercionError)
     end
   end
 end

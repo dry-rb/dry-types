@@ -14,7 +14,7 @@ module Dry
       # @param [Object] input
       # @return [Object]
       def call(input)
-        type.(input) { |output = input| input }
+        type.(input) { |output = input| output }
       end
       alias_method :[], :call
 

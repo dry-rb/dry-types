@@ -35,6 +35,16 @@ RSpec.describe Dry::Types::Nominal, '#safe' do
     end
   end
 
+  context 'with an array' do
+    subject(:type) do
+      Dry::Types['array'].of(Dry::Types['coercible.integer']).safe
+    end
+
+    it 'rescues from type-errors and returns input' do
+      expect(type[['1', :a, 30]]).to eql([1, :a, 30])
+    end
+  end
+
   describe '#to_s' do
     subject(:type) { Dry::Types['coercible.integer'].safe }
 

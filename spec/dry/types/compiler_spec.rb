@@ -224,7 +224,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = [:json_hash, [[], {}]]
 
     type = compiler.(ast)
-    expected_result = Dry::Types['nominal.hash'].schema({}).safe
+    expected_result = Dry::Types['nominal.hash'].schema({})
 
     expect(type).to eql(expected_result)
   end
@@ -234,7 +234,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     array = compiler.(ast)
 
-    expect(array.type.member.primitive).to be(String)
+    expect(array.member.primitive).to be(String)
   end
 
   it 'builds a constructor' do
