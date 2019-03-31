@@ -172,13 +172,17 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params hash' do
-    ast = Dry::Types['params.hash'].schema(
+    type = Dry::Types['params.hash'].schema(
       email: Dry::Types['nominal.string'],
       age: Dry::Types['params.integer'],
       admin: Dry::Types['params.bool'],
-    ).safe.with_key_transform(&:to_sym).to_ast
+    ).with_key_transform(&:to_sym).safe
+
+    ast = type.to_ast
 
     hash = compiler.(ast)
+
+    expect(type).to eql(hash)
 
     expect(hash['oops']).to eql('oops')
 

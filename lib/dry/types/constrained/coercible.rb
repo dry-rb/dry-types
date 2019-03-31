@@ -9,7 +9,7 @@ module Dry
           if result.success?
             coerced
           elsif block_given?
-            yield
+            yield(coerced)
           else
             raise ConstraintError.new(result, input)
           end

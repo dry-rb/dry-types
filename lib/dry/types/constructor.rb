@@ -56,7 +56,8 @@ module Dry
       # @return [Object]
       def call(input, &block)
         if block_given?
-          type.(apply(input) { return yield }, &block)
+          coerced = apply(input) { return yield }
+          type.(coerced) { |output = coerced| yield(output) }
         else
           type.(apply(input))
         end

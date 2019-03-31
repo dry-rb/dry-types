@@ -83,7 +83,7 @@ module Dry
           elsif input.is_a?(::Hash)
             input
           else
-            CoercionError.handle("#{ input.inspect } cannot be coerced to array", &block)
+            CoercionError.handle("#{ input.inspect } cannot be coerced to hash", &block)
           end
         end
       end

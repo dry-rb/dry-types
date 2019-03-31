@@ -14,14 +14,18 @@ module Dry
         end
 
         # @param [Object] input
-        # @param [Symbol] meth
         # @return [Array]
-        def call(input, meth = :call)
-          if block_given? && meth.equal?(:call)
-            arr = super(input) { return yield }
-            arr.map { |el| member.(el) { return yield } }
+        def call(input, &block)
+          if primitive?(input)
+            if block_given?
+              input.map { |el| member.(el) { return yield } }
+            else
+              input.map { |el| member.(el) }
+            end
+          elsif block_given?
+            yield
           else
-            super(input).map { |el| member.__send__(meth, el) }
+            super
           end
         end
         alias_method :[], :call
@@ -38,9 +42,14 @@ module Dry
         # @yieldreturn [Result]
         # @return [Result,Logic::Result]
         def try(input, &block)
-          if input.is_a?(::Array)
-            result = call(input, :try).reject { |r| r.input.equal?(Undefined) }
-            output = result.map(&:input)
+          if primitive?(input)
+            result = []
+            output = []
+
+            result = input.map { |el| member.try(el) }
+            result.each do |r|
+              output << r.input unless Undefined.equal?(r.input)
+            end
 
             if result.all?(&:success?)
               success(output)

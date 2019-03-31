@@ -219,6 +219,10 @@ module Dry
         true
       end
 
+      def safe
+        Safe.new(schema(keys.map(&:safe)))
+      end
+
       private
 
       # @param [Array<Dry::Types::Schema::Keys>] keys

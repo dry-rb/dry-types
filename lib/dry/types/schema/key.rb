@@ -90,7 +90,7 @@ module Dry
         # @see Dry::Types::Safe
         # @return [Dry::Types::Schema::Key]
         def safe
-          new(type.safe)
+          new(type.safe).required(false)
         end
 
         # Dump to internal AST representation
