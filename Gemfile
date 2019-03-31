@@ -4,6 +4,8 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gemspec
 
+gem 'dry-logic', github: 'dry-rb/dry-logic', branch: 'specialize-rule-application'
+
 group :test do
   platform :mri do
     gem 'simplecov', require: false
