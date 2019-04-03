@@ -84,7 +84,7 @@ module Dry
       end
 
       def safe
-        Safe.new(Constrained.new(type.safe, options))
+        type.safe
       end
 
       # @api public

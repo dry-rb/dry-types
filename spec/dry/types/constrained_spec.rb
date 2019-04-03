@@ -184,13 +184,19 @@ RSpec.describe Dry::Types::Constrained do
 
   context 'defined on optional' do
     subject(:type) do
-      Dry::Types['strict.string'].optional.constrained(min_size: 3)
+      Dry::Types['string'].optional.constrained(min_size: 3)
     end
 
     it 'gets applied to the underlying type' do
       expect(type['foo']).to eql('foo')
       expect { type['fo'] }.to raise_error(Dry::Types::ConstraintError)
       expect(type[nil]).to be_nil
+    end
+  end
+
+  describe '.safe' do
+    it 'removes constraints' do
+      expect(Dry::Types['string'].safe).to eql(Dry::Types['nominal.string'])
     end
   end
 end
