@@ -102,7 +102,21 @@ module Dry
         elsif block_given?
           yield
         else
-          raise CoercionError.new("#{ input.inspect } must be an instance of #{ primitive }")
+          raise CoercionError.new("#{input.inspect} must be an instance of #{ primitive }")
+        end
+      end
+
+      def try_coerce(input, &block)
+        result = success(input)
+
+        coerce(input) do
+          result = failure(input, "#{input.inspect} must be an instance of #{ primitive }")
+        end
+
+        if block_given?
+          yield(result)
+        else
+          result
         end
       end
 
