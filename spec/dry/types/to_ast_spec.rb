@@ -114,7 +114,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'Enum' do
-    subject(:type) { Dry::Types['strict.string'].enum('draft', 'published', 'archived').meta(key: :value) }
+    subject(:type) { Dry::Types['string'].enum('draft', 'published', 'archived').meta(key: :value) }
 
     specify do
       expect(type.to_ast).

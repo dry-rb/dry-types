@@ -107,6 +107,20 @@ RSpec.describe Dry::Types::Constructor do
         expect(type.(:foo) { fallback }).to be(fallback)
       end
     end
+
+    describe 'on constrained types' do
+      let(:type) { Dry::Types['nominal.integer'].constrained(gt: 17).constructor(&:to_i) }
+
+      it "passes coerced value if it doesn't meet constraints" do
+        called = false
+        type.('15') do |coerced|
+          called = true
+          expect(coerced).to be(15)
+        end
+
+        expect(called).to be(true)
+      end
+    end
   end
 
   describe '#primitive' do

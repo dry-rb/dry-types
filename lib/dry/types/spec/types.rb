@@ -101,14 +101,32 @@ RSpec.shared_examples_for Dry::Types::Nominal do
   end
 end
 
-RSpec.shared_examples_for 'a constrained type' do
-  let(:input) { Object.new }
+RSpec.shared_examples_for 'a constrained type' do |inputs: Object.new|
   let(:fallback) { Object.new }
 
   describe '#call' do
     it 'yields a block on failure' do
-      expect(type.(input) { fallback }).to be(fallback)
+      Array(inputs).each do |input|
+        expect(type.(input) { fallback }).to be(fallback)
+      end
+    end
+
+    it 'throws an error on invalid input' do
+      Array(inputs).each do |input|
+        expect { type.(input) }.to raise_error(Dry::Types::CoercionError)
+      end
     end
   end
+end
+
+RSpec.shared_examples_for 'a nominal type' do |inputs: Object.new|
+  describe '#call' do
+    it 'always returns the input back' do
+      Array(inputs).each do |input|
+        expect(type.(input) { fail }).to be(input)
+        expect(type.(input)).to be(input)
+      end
+    end
+   end
 end
 

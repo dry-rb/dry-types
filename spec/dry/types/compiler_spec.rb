@@ -224,7 +224,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = [:json_hash, [[], {}]]
 
     type = compiler.(ast)
-    expected_result = Dry::Types['nominal.hash'].schema({})
+    expected_result = Dry::Types['hash'].schema({})
 
     expect(type).to eql(expected_result)
   end

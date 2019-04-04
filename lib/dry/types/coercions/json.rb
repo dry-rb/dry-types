@@ -11,9 +11,18 @@ module Dry
 
         # @param [#to_d, Object] input
         # @return [BigDecimal,nil]
-        def self.to_decimal(input)
-          return if input.nil?
-          input.to_d unless empty_str?(input)
+        def self.to_decimal(input, &block)
+          if input.is_a?(::Float)
+            input.to_d
+          else
+            BigDecimal(input)
+          end
+        rescue ArgumentError, TypeError => error
+          if block_given?
+            yield
+          else
+            raise CoercionError.new("#{input} cannot be coerced to decimal")
+          end
         end
       end
     end

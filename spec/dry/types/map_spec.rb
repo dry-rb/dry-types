@@ -5,6 +5,7 @@ RSpec.describe Dry::Types::Map do
     it_behaves_like 'Dry::Types::Nominal#meta'
 
     it_behaves_like Dry::Types::Nominal
+    it_behaves_like 'a constrained type'
   end
 
   context 'options' do
