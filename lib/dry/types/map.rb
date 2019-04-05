@@ -23,7 +23,7 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash]
-      def call(hash, &block)
+      def call(hash, &_block)
         try(hash) { |failure|
           if block_given?
             return yield
@@ -77,7 +77,7 @@ module Dry
           if res_k.failure?
             failures << res_k.error.message
           elsif output.key?(res_k.input)
-            failures << "duplicate coerced hash key #{ res_k.input.inspect }"
+            failures << "duplicate coerced hash key #{res_k.input.inspect}"
           elsif res_v.failure?
             failures << res_v.error.message
           else

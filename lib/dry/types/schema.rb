@@ -86,7 +86,7 @@ module Dry
         else
           success = false
           output = input
-          result = CoercionError["#{ input } must be a hash"]
+          result = CoercionError["#{input} must be a hash"]
         end
 
         if success
@@ -272,7 +272,7 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash{Symbol => Object}]
-      def coerce(hash, options = EMPTY_HASH, &block)
+      def coerce(hash, options = EMPTY_HASH, &_block)
         if block_given?
           input = super(hash) { return yield }
 

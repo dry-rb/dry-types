@@ -6,13 +6,13 @@ module Dry
       # @param [String, Object] input
       # @return [nil] if the input is an empty string
       # @return [Object] otherwise the input object is returned
-      def to_nil(input, &block)
+      def to_nil(input, &_block)
         if input.nil? || empty_str?(input)
           nil
         elsif block_given?
           yield
         else
-          raise CoercionError.new("#{ input.inspect } is not nil")
+          raise CoercionError, "#{input.inspect} is not nil"
         end
       end
 
@@ -29,7 +29,7 @@ module Dry
         elsif block_given?
           yield
         else
-          raise CoercionError.new("#{ input.inspect } is not a string")
+          raise CoercionError, "#{input.inspect} is not a string"
         end
       end
 
@@ -46,7 +46,7 @@ module Dry
         elsif block_given?
           yield
         else
-          raise CoercionError.new("#{ input.inspect } is not a string")
+          raise CoercionError, "#{input.inspect} is not a string"
         end
       end
 
@@ -63,7 +63,7 @@ module Dry
         elsif block_given?
           yield
         else
-          raise CoercionError.new("#{ input.inspect } is not a string")
+          raise CoercionError, "#{input.inspect} is not a string"
         end
       end
 

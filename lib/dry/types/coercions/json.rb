@@ -17,11 +17,11 @@ module Dry
           else
             BigDecimal(input)
           end
-        rescue ArgumentError, TypeError => error
+        rescue ArgumentError, TypeError
           if block_given?
             yield
           else
-            raise CoercionError.new("#{input} cannot be coerced to decimal")
+            raise CoercionError, "#{input} cannot be coerced to decimal"
           end
         end
       end

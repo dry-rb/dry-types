@@ -9,7 +9,7 @@ module Dry
     namespace self
 
     class CoercionError < StandardError
-      def self.handle(error, &block)
+      def self.handle(error)
         if block_given?
           yield
         else
@@ -30,12 +30,12 @@ module Dry
         when ::Array
           new(error.join(', '))
         when ::Hash
-          errors = error.
-                     select { |_, v| v.failure? }.
-                     map { |k, v| "#{ k.inspect } => #{ v.error.message }" }
-          new("{#{ errors.join(', ') }}")
+          errors = error
+                     .select { |_, v| v.failure? }
+                     .map { |k, v| "#{k.inspect} => #{v.error.message}" }
+          new("{#{errors.join(', ')}}")
         else
-          raise ArgumentError, "unsupported type #{ error.inspect }"
+          raise ArgumentError, "unsupported type #{error.inspect}"
         end
       end
 
@@ -69,7 +69,7 @@ module Dry
       end
 
       def message
-        ":#{ key.inspect } is missing in Hash input"
+        ":#{key.inspect} is missing in Hash input"
       end
     end
 

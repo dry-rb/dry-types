@@ -31,16 +31,16 @@ module Dry
         raise ArgumentError, 'Missing constructor block' if fn.nil?
 
         parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
-        *, (last_arg, _) = parameters
+        *, (last_arg,) = parameters
 
         if last_arg.equal?(:block)
           @apply = @fn
         else
-          @apply = lambda do |input, &block|
+          @apply = lambda do |input, &fallback|
             begin
               @fn.(input)
             rescue NoMethodError, TypeError, ArgumentError => error
-              CoercionError.handle(error, &block)
+              CoercionError.handle(error, &fallback)
             end
           end
         end

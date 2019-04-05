@@ -48,7 +48,6 @@ module Dry
         # @return [Result,Logic::Result]
         def try(input, &block)
           if primitive?(input)
-            result = []
             output = []
 
             result = input.map { |el| member.try(el) }

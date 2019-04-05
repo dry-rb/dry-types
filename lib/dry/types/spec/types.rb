@@ -127,6 +127,6 @@ RSpec.shared_examples_for 'a nominal type' do |inputs: Object.new|
         expect(type.(input)).to be(input)
       end
     end
-   end
+  end
 end
 

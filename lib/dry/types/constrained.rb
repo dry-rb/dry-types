@@ -56,7 +56,7 @@ module Dry
           type.try(input, &block)
         else
           failure = failure(input, ConstraintError.new(result, input))
-          block ? yield(failure) : failure
+          block_given? ? yield(failure) : failure
         end
       end
 

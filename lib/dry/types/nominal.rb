@@ -68,7 +68,7 @@ module Dry
       # @yieldreturn [Result]
       # @return [Result,Logic::Result] when a block is not provided
       # @return [nil] otherwise
-      def try(input, &block)
+      def try(input)
         success(input)
       end
 
@@ -96,21 +96,21 @@ module Dry
       end
       alias_method :===, :valid?
 
-      def coerce(input, &block)
+      def coerce(input, &_block)
         if primitive?(input)
           input
         elsif block_given?
           yield
         else
-          raise CoercionError.new("#{input.inspect} must be an instance of #{ primitive }")
+          raise CoercionError, "#{input.inspect} must be an instance of #{primitive}"
         end
       end
 
-      def try_coerce(input, &block)
+      def try_coerce(input)
         result = success(input)
 
         coerce(input) do
-          result = failure(input, "#{input.inspect} must be an instance of #{ primitive }")
+          result = failure(input, "#{input.inspect} must be an instance of #{primitive}")
         end
 
         if block_given?

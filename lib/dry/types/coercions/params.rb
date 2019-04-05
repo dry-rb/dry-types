@@ -17,12 +17,12 @@ module Dry
         # @return [Boolean,Object]
         # @see TRUE_VALUES
         # @see FALSE_VALUES
-        def self.to_true(input, &block)
+        def self.to_true(input, &_block)
           BOOLEAN_MAP.fetch(input.to_s) do
             if block_given?
               yield
             else
-              raise CoercionError.new("#{ input } cannot be coerced to true")
+              raise CoercionError, "#{input} cannot be coerced to true"
             end
           end
         end
@@ -31,12 +31,12 @@ module Dry
         # @return [Boolean,Object]
         # @see TRUE_VALUES
         # @see FALSE_VALUES
-        def self.to_false(input, &block)
+        def self.to_false(input, &_block)
           BOOLEAN_MAP.fetch(input.to_s) do
             if block_given?
               yield
             else
-              raise CoercionError.new("#{ input } cannot be coerced to false")
+              raise CoercionError, "#{input} cannot be coerced to false"
             end
           end
         end
@@ -68,7 +68,7 @@ module Dry
             if block_given?
               return yield
             else
-              raise CoercionError.new("#{ input.inspect } cannot be coerced to decimal")
+              raise CoercionError, "#{input.inspect} cannot be coerced to decimal"
             end
           end
 
@@ -77,7 +77,7 @@ module Dry
 
         # @param [Array, String, Object] input
         # @return [Array, Object]
-        def self.to_ary(input, &block)
+        def self.to_ary(input, &_block)
           if empty_str?(input)
             []
           elsif input.is_a?(::Array)
@@ -85,13 +85,13 @@ module Dry
           elsif block_given?
             yield
           else
-            raise CoercionError.new("#{ input.inspect } cannot be coerced to array")
+            raise CoercionError, "#{input.inspect} cannot be coerced to array"
           end
         end
 
         # @param [Hash, String, Object] input
         # @return [Hash, Object]
-        def self.to_hash(input, &block)
+        def self.to_hash(input, &_block)
           if empty_str?(input)
             {}
           elsif input.is_a?(::Hash)
@@ -99,7 +99,7 @@ module Dry
           elsif block_given?
             yield
           else
-            raise CoercionError.new("#{ input.inspect } cannot be coerced to hash")
+            raise CoercionError, "#{input.inspect} cannot be coerced to hash"
           end
         end
       end
