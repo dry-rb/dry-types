@@ -2,7 +2,7 @@ require_relative 'setup'
 
 schema = Dry::Types['params.hash'].schema(
   email?: 'string',
-  age?: 'coercible.integer'
+  age?: 'params.integer'
 ).safe
 
 params = { email: 'jane@doe.org', age: '19' }
