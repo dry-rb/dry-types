@@ -3,8 +3,9 @@
 [codeclimate]: https://codeclimate.com/github/dry-rb/dry-types
 [coveralls]: https://coveralls.io/r/dry-rb/dry-types
 [inchpages]: http://inch-ci.org/github/dry-rb/dry-types
+[chat]: https://dry-rb.zulipchat.com
 
-# dry-types [![Join the chat at https://gitter.im/dry-rb/chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dry-rb/chat)
+# dry-types [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)][chat]
 
 [![Gem Version](https://badge.fury.io/rb/dry-types.svg)][gem]
 [![Build Status](https://travis-ci.org/dry-rb/dry-types.svg?branch=master)][travis]
