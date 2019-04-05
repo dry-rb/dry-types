@@ -26,8 +26,11 @@ module Dry
       # @raise [ConstraintError]
       def call(input, &block)
         if block_given?
-          result = rule.(input) { return yield }
-          type.(input, &block)
+          if rule[input]
+            type.(input, &block)
+          else
+            yield
+          end
         else
           result = rule.(input)
 
