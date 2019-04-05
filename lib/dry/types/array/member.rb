@@ -17,10 +17,15 @@ module Dry
         # @return [Array]
         def call(input, &block)
           if primitive?(input)
-            if block_given?
-              input.map { |el| member.(el) { return yield } }
-            else
-              input.map { |el| member.(el) }
+            input.each_with_object([]) do |el, output|
+              coerced =
+                if block_given?
+                  member.(el) { return yield }
+                else
+                  member.(el)
+                end
+
+              output << coerced unless Undefined.equal?(coerced)
             end
           elsif block_given?
             yield
