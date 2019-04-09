@@ -7,6 +7,7 @@ RSpec.describe Dry::Types::Enum do
     let(:string) { Dry::Types['strict.string'] }
 
     it_behaves_like Dry::Types::Nominal
+    it_behaves_like 'a constrained type'
 
     it 'allows defining an enum from a specific type' do
       expect(type['draft']).to eql(mapping.key(0))

@@ -114,7 +114,7 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'Enum' do
-    subject(:type) { Dry::Types['strict.string'].enum('draft', 'published', 'archived').meta(key: :value) }
+    subject(:type) { Dry::Types['string'].enum('draft', 'published', 'archived').meta(key: :value) }
 
     specify do
       expect(type.to_ast).
@@ -150,24 +150,10 @@ RSpec.describe Dry::Types, '#to_ast' do
   end
 
   context 'Safe' do
-    subject(:type) { Dry::Types['nominal.string'].constrained(min_size: 5).safe.meta(key: :value) }
+    subject(:type) { Dry::Types['string'].constrained(min_size: 5).safe.meta(key: :value) }
 
     specify do
-      expect(type.to_ast).
-        to eql([
-                 :safe,
-                 [
-                   [
-                     :constrained,
-                     [
-                       [:nominal, [String, {}]],
-                       [:predicate, [:min_size?, [[:num, 5], [:input, Undefined]]]],
-                       key: :value
-                     ]
-                   ],
-                   {}
-                 ]
-               ])
+      expect(type.to_ast).to eql([:nominal, [String, key: :value]])
     end
   end
 

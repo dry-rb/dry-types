@@ -9,6 +9,10 @@ module Dry
           ::Dry::Types::Hash::Constructor
         end
 
+        def safe
+          type.safe.constructor(fn, meta: meta)
+        end
+
         private
 
         def composable?(value)

@@ -24,10 +24,22 @@ module Dry
       # @param [Object] input
       # @return [Object]
       # @raise [ConstraintError]
-      def call(input)
-        try(input) { |result|
-          raise ConstraintError.new(result, input)
-        }.input
+      def call(input, &block)
+        if block_given?
+          if rule[input]
+            type.(input, &block)
+          else
+            yield
+          end
+        else
+          result = rule.(input)
+
+          if result.success?
+            type.(input, &block)
+          else
+            raise ConstraintError.new(result, input)
+          end
+        end
       end
       alias_method :[], :call
 
@@ -43,8 +55,8 @@ module Dry
         if result.success?
           type.try(input, &block)
         else
-          failure = failure(input, result)
-          block ? yield(failure) : failure
+          failure = failure(input, ConstraintError.new(result, input))
+          block_given? ? yield(failure) : failure
         end
       end
 
@@ -72,6 +84,10 @@ module Dry
       # @return [Boolean]
       def ===(value)
         valid?(value)
+      end
+
+      def safe
+        type.safe
       end
 
       # @api public

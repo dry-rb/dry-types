@@ -1,6 +1,6 @@
 RSpec.describe Dry::Types::Sum do
   describe 'common nominal behavior' do
-    subject(:type) { Dry::Types['nominal.bool'] }
+    subject(:type) { Dry::Types['bool'] }
 
     it_behaves_like 'Dry::Types::Nominal#meta'
 
@@ -9,6 +9,10 @@ RSpec.describe Dry::Types::Sum do
     it 'is frozen' do
       expect(type).to be_frozen
     end
+  end
+
+  it_behaves_like 'a constrained type' do
+    let(:type) { Dry::Types['integer'] | Dry::Types['string'] }
   end
 
   describe '#optional?' do
@@ -41,12 +45,12 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'works with two strict types' do
-      type = Dry::Types['strict.integer'] | Dry::Types['strict.string']
+      type = Dry::Types['integer'] | Dry::Types['string']
 
       expect(type[312]).to be(312)
       expect(type['312']).to eql('312')
 
-      expect { type[{}] }.to raise_error(TypeError)
+      expect { type[{}] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it 'works with nil and strict types' do
@@ -55,7 +59,7 @@ RSpec.describe Dry::Types::Sum do
       expect(type[nil]).to be(nil)
       expect(type['312']).to eql('312')
 
-      expect { type[{}] }.to raise_error(TypeError)
+      expect { type[{}] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it 'is aliased as #call' do
@@ -65,8 +69,8 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'works with two constructor & constrained types' do
-      left = Dry::Types['strict.array<strict.string>']
-      right = Dry::Types['strict.array<strict.hash>']
+      left = Dry::Types['array<string>']
+      right = Dry::Types['array<hash>']
 
       type = left | right
 
@@ -78,15 +82,15 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'works with two complex types with constraints' do
-      pair = Dry::Types['strict.array']
+      pair = Dry::Types['array']
         .of(Dry::Types['coercible.string'])
         .constrained(size: 2)
 
-      string_list = Dry::Types['strict.array']
-        .of(Dry::Types['strict.string'])
+      string_list = Dry::Types['array']
+        .of(Dry::Types['string'])
         .constrained(min_size: 1)
 
-      string_pairs = Dry::Types['strict.array']
+      string_pairs = Dry::Types['array']
         .of(pair)
         .constrained(min_size: 1)
 
@@ -135,7 +139,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#failure' do
-    subject(:type) { Dry::Types['nominal.integer'] | Dry::Types['nominal.string'] }
+    subject(:type) { Dry::Types['integer'] | Dry::Types['string'] }
 
     it 'returns failure when invalid value is passed' do
       expect(type.failure(true)).to be_failure
@@ -143,7 +147,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#===' do
-    subject(:type) { Dry::Types['nominal.integer'] | Dry::Types['nominal.string']  }
+    subject(:type) { Dry::Types['integer'] | Dry::Types['string']  }
 
     it 'returns boolean' do
       expect(type.===('hello')).to eql(true)
@@ -271,8 +275,11 @@ RSpec.describe Dry::Types::Sum do
   end
 
   context 'with map type' do
-    let(:map_type) { Dry::Types['strict.hash'].map(Dry::Types['strict.symbol'], Dry::Types['strict.string']) }
-    let(:string_type) { Dry::Types['strict.string'] }
+    let(:map_type) do
+      Dry::Types['hash'].map(Dry::Types['symbol'], Dry::Types['string'])
+    end
+
+    let(:string_type) { Dry::Types['string'] }
 
     subject(:type) { map_type | string_type }
 

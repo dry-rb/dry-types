@@ -22,12 +22,8 @@ module Dry
       self['nominal.decimal'].constructor(Coercions::JSON.method(:to_decimal))
     end
 
-    register('json.array') do
-      self['nominal.array'].safe
-    end
+    register('json.array') { self['array'] }
 
-    register('json.hash') do
-      self['nominal.hash'].safe
-    end
+    register('json.hash') { self['hash'] }
   end
 end

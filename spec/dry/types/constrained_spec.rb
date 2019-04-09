@@ -1,14 +1,15 @@
 RSpec.describe Dry::Types::Constrained do
   describe 'common nominal behavior' do
-    subject(:type) { Dry::Types['strict.string'].constrained(size: 3..12) }
+    subject(:type) { Dry::Types['string'].constrained(size: 3..12) }
 
     it_behaves_like Dry::Types::Nominal
     it_behaves_like 'Dry::Types::Nominal#meta'
+    it_behaves_like 'a constrained type'
   end
 
   describe '#[]' do
     subject(:type) do
-      Dry::Types['strict.string'].constrained(size: 3..12)
+      Dry::Types['string'].constrained(size: 3..12)
     end
 
     it 'passes when constraints are not violated' do
@@ -29,7 +30,7 @@ RSpec.describe Dry::Types::Constrained do
 
   describe '#===' do
     subject(:type) do
-      Dry::Types['strict.string'].constrained(size: 3..12)
+      Dry::Types['string'].constrained(size: 3..12)
     end
 
     it 'return boolean' do
@@ -53,7 +54,7 @@ RSpec.describe Dry::Types::Constrained do
 
   describe '#to_s' do
     subject(:type) do
-      Dry::Types['strict.string'].constrained(size: 3..12)
+      Dry::Types['string'].constrained(size: 3..12)
     end
 
     it 'returns string representation of the type' do
@@ -84,7 +85,9 @@ RSpec.describe Dry::Types::Constrained do
     end
 
     it 'fails when coercion fails' do
-      expect { type['foo'] }.to raise_error(Dry::Types::ConstraintError, /foo/)
+      expect { type['foo'] }.to raise_error(
+        Dry::Types::ConstraintError, /foo/
+      )
     end
 
     context 'constructor fn changes validity' do
@@ -181,13 +184,19 @@ RSpec.describe Dry::Types::Constrained do
 
   context 'defined on optional' do
     subject(:type) do
-      Dry::Types['strict.string'].optional.constrained(min_size: 3)
+      Dry::Types['string'].optional.constrained(min_size: 3)
     end
 
     it 'gets applied to the underlying type' do
       expect(type['foo']).to eql('foo')
       expect { type['fo'] }.to raise_error(Dry::Types::ConstraintError)
       expect(type[nil]).to be_nil
+    end
+  end
+
+  describe '.safe' do
+    it 'removes constraints' do
+      expect(Dry::Types['string'].safe).to eql(Dry::Types['nominal.string'])
     end
   end
 end

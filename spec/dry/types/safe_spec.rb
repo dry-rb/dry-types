@@ -19,7 +19,9 @@ RSpec.describe Dry::Types::Nominal, '#safe' do
 
   context 'with a params hash' do
     subject(:type) do
-      Dry::Types['params.hash'].schema(age: 'coercible.integer', active: 'params.bool')
+      Dry::Types['params.hash'].schema(
+        age: 'coercible.integer', active: 'params.bool'
+      ).safe
     end
 
     it_behaves_like Dry::Types::Nominal
@@ -30,6 +32,16 @@ RSpec.describe Dry::Types::Nominal, '#safe' do
 
     it 'rescues from type-errors and returns input' do
       expect(type[age: 'wat', active: '1']).to eql(age: 'wat', active: true)
+    end
+  end
+
+  context 'with an array' do
+    subject(:type) do
+      Dry::Types['array'].of(Dry::Types['coercible.integer']).safe
+    end
+
+    it 'rescues from type-errors and returns input' do
+      expect(type[['1', :a, 30]]).to eql([1, :a, 30])
     end
   end
 

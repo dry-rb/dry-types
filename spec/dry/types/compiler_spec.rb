@@ -153,7 +153,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params array' do
-    ast = Dry::Types['params.array'].to_ast
+    ast = Dry::Types['params.array'].safe.to_ast
 
     arr = compiler.(ast)
 
@@ -163,7 +163,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params array with member' do
-    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).to_ast
+    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).safe.to_ast
 
     arr = compiler.(ast)
 
@@ -172,13 +172,17 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a safe params hash' do
-    ast = Dry::Types['params.hash'].schema(
+    type = Dry::Types['params.hash'].schema(
       email: Dry::Types['nominal.string'],
       age: Dry::Types['params.integer'],
       admin: Dry::Types['params.bool'],
-    ).with_key_transform(&:to_sym).to_ast
+    ).with_key_transform(&:to_sym).safe
+
+    ast = type.to_ast
 
     hash = compiler.(ast)
+
+    expect(type).to eql(hash)
 
     expect(hash['oops']).to eql('oops')
 
@@ -196,7 +200,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     type = compiler.(ast)
 
-    expect(type[nil]).to eql(nil)
+    expect { type[nil] }.to raise_error(Dry::Types::CoercionError)
     expect(type[{}]).to eql({})
   end
 
@@ -220,7 +224,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ast = [:json_hash, [[], {}]]
 
     type = compiler.(ast)
-    expected_result = Dry::Types['nominal.hash'].schema({}).safe
+    expected_result = Dry::Types['hash'].schema({})
 
     expect(type).to eql(expected_result)
   end
@@ -230,7 +234,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     array = compiler.(ast)
 
-    expect(array.type.member.primitive).to be(String)
+    expect(array.member.primitive).to be(String)
   end
 
   it 'builds a constructor' do
@@ -317,23 +321,29 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a complex map' do
-    map = Dry::Types['nominal.hash'].
+    map = Dry::Types['hash'].
             map('any', 'any').
             meta(abc: 123).
             meta(foo: 'bar').
-            with(key_type: Dry::Types['nominal.string']).
-            with(value_type: Dry::Types['nominal.integer'])
+            with(key_type: Dry::Types['string']).
+            with(value_type: Dry::Types['integer'])
 
     ast = map.to_ast
 
     expect(ast).
       to eql([
                :map, [
-                 [:nominal, [String, {}]],
-                 [:nominal, [Integer, {}]],
-                 abc: 123, foo: 'bar'
-               ]
-             ])
+                  [:constrained,
+                   [[:nominal, [String, {}]],
+                    [:predicate, [:type?, [[:type, String], [:input, Undefined]]]],
+                    {}]],
+                  [:constrained,
+                   [[:nominal, [Integer, {}]],
+                    [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]],
+                    {}]],
+                  abc: 123, foo: 'bar'
+                ]
+              ])
 
     type = compiler.(ast)
 

@@ -68,13 +68,8 @@ module Dry
       # @yieldreturn [Result]
       # @return [Result,Logic::Result] when a block is not provided
       # @return [nil] otherwise
-      def try(input, &block)
-        if valid?(input)
-          success(input)
-        else
-          failure = failure(input, "#{input.inspect} must be an instance of #{primitive}")
-          block ? yield(failure) : failure
-        end
+      def try(input)
+        success(input)
       end
 
       # @param (see Dry::Types::Success#initialize)
@@ -86,7 +81,7 @@ module Dry
       # @param (see Failure#initialize)
       # @return [Result::Failure]
       def failure(input, error)
-        Result::Failure.new(input, error)
+        Result::Failure.new(input, CoercionError[error])
       end
 
       # Checks whether value is of a #primitive class
@@ -95,8 +90,35 @@ module Dry
       def primitive?(value)
         value.is_a?(primitive)
       end
-      alias_method :valid?, :primitive?
-      alias_method :===, :primitive?
+
+      def valid?(_)
+        true
+      end
+      alias_method :===, :valid?
+
+      def coerce(input, &_block)
+        if primitive?(input)
+          input
+        elsif block_given?
+          yield
+        else
+          raise CoercionError, "#{input.inspect} must be an instance of #{primitive}"
+        end
+      end
+
+      def try_coerce(input)
+        result = success(input)
+
+        coerce(input) do
+          result = failure(input, "#{input.inspect} must be an instance of #{primitive}")
+        end
+
+        if block_given?
+          yield(result)
+        else
+          result
+        end
+      end
 
       # Return AST representation of a type nominal
       #
@@ -105,6 +127,10 @@ module Dry
       # @return [Array]
       def to_ast(meta: true)
         [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
+      end
+
+      def safe
+        self
       end
     end
 

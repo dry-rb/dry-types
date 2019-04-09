@@ -18,14 +18,15 @@ module Dry
 
       def visit_constrained(node)
         nominal, rule, meta = node
-        Types::Constrained.new(visit(nominal), rule: visit_rule(rule)).meta(meta)
+        type = visit(nominal)
+        type.constrained_type.new(type, rule: visit_rule(rule)).meta(meta)
       end
 
       def visit_constructor(node)
         nominal, fn_register_name, meta = node
         fn = Dry::Types::FnContainer[fn_register_name]
         primitive = visit(nominal)
-        Types::Constructor.new(primitive, meta: meta, fn: fn)
+        primitive.constructor(fn).meta(meta)
       end
 
       def visit_safe(node)

@@ -8,7 +8,44 @@ module Dry
 
     namespace self
 
-    class SchemaError < TypeError
+    class CoercionError < StandardError
+      def self.handle(error)
+        if block_given?
+          yield
+        else
+          raise self[error]
+        end
+      end
+
+      def self.[](error)
+        case error
+        when self
+          error
+        when ::String
+          new(error)
+        when ::Exception
+          new(error.message, error.backtrace)
+        when Result::Failure
+          self[error.error]
+        when ::Array
+          new(error.join(', '))
+        when ::Hash
+          errors = error
+                     .select { |_, v| v.failure? }
+                     .map { |k, v| "#{k.inspect} => #{v.error.message}" }
+          new("{#{errors.join(', ')}}")
+        else
+          raise ArgumentError, "unsupported type #{error.inspect}"
+        end
+      end
+
+      def initialize(message, backtrace = nil)
+        super(message)
+        set_backtrace(backtrace) if backtrace
+      end
+    end
+
+    class SchemaError < CoercionError
       # @param [String,Symbol] key
       # @param [Object] value
       # @param [String, #to_s] result
@@ -17,26 +54,40 @@ module Dry
       end
     end
 
-    MapError = Class.new(TypeError)
+    MapError = Class.new(CoercionError)
 
-    SchemaKeyError = Class.new(KeyError)
+    SchemaKeyError = Class.new(CoercionError)
     private_constant(:SchemaKeyError)
 
     class MissingKeyError < SchemaKeyError
+      attr_reader :key
+
       # @param [String,Symbol] key
       def initialize(key)
-        super(":#{key} is missing in Hash input")
+        @key = key
+        super(nil)
+      end
+
+      def message
+        ":#{key.inspect} is missing in Hash input"
       end
     end
 
     class UnknownKeysError < SchemaKeyError
+      attr_reader :keys
+
       # @param [<String, Symbol>] keys
-      def initialize(*keys)
-        super("unexpected keys #{keys.inspect} in Hash input")
+      def initialize(keys)
+        @keys = keys
+        super(nil)
+      end
+
+      def message
+        "unexpected keys #{keys.inspect} in Hash input"
       end
     end
 
-    class ConstraintError < TypeError
+    class ConstraintError < CoercionError
       # @return [String, #to_s]
       attr_reader :result
       # @return [Object]

@@ -23,10 +23,14 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash]
-      def call(hash)
-        try(hash) do |failure|
-          raise MapError, failure.error.join("\n")
-        end.input
+      def call(hash, &_block)
+        try(hash) { |failure|
+          if block_given?
+            return yield
+          else
+            raise MapError, failure.error
+          end
+        }.input
       end
       alias_method :[], :call
 
@@ -68,14 +72,14 @@ module Dry
         output, failures = {}, []
 
         input.each do |k,v|
-          res_k = options[:key_type].try(k)
-          res_v = options[:value_type].try(v)
+          res_k = key_type.try(k)
+          res_v = value_type.try(v)
           if res_k.failure?
-            failures << "input key #{k.inspect} is invalid: #{res_k.error}"
+            failures << res_k.error.message
           elsif output.key?(res_k.input)
             failures << "duplicate coerced hash key #{res_k.input.inspect}"
           elsif res_v.failure?
-            failures << "input value #{v.inspect} for key #{k.inspect} is invalid: #{res_v.error}"
+            failures << res_v.error.message
           else
             output[res_k.input] = res_v.input
           end

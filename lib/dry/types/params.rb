@@ -27,7 +27,7 @@ module Dry
     end
 
     register('params.bool') do
-      (self['params.true'] | self['params.false']).safe
+      self['params.true'] | self['params.false']
     end
 
     register('params.integer') do
@@ -43,11 +43,11 @@ module Dry
     end
 
     register('params.array') do
-      self['nominal.array'].constructor(Coercions::Params.method(:to_ary)).safe
+      self['nominal.array'].constructor(Coercions::Params.method(:to_ary))
     end
 
     register('params.hash') do
-      self['nominal.hash'].constructor(Coercions::Params.method(:to_hash)).safe
+      self['nominal.hash'].constructor(Coercions::Params.method(:to_hash))
     end
   end
 end

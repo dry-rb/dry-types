@@ -16,7 +16,14 @@ RSpec.describe Dry::Types::Nominal do
   end
 
   describe '#try' do
-    let(:result) { type.try(value) }
+    it 'always returns success, even for other types' do
+      expect(type.try('string')).to be_success
+      expect(type.try(Object.new)).to be_success
+    end
+  end
+
+  describe '#try_coerce' do
+    let(:result) { type.try_coerce(value) }
 
     context 'when given valid input' do
       let(:value) { 'foo' }
@@ -42,11 +49,11 @@ RSpec.describe Dry::Types::Nominal do
       end
 
       it "provides an error message" do
-        expect(result.error).to eql(':foo must be an instance of String')
+        expect(result.error.message).to eql(':foo must be an instance of String')
       end
 
       it "yields failure when given a block" do
-        expect { |probe| type.try(value, &probe) }.to yield_with_args(result)
+        expect { |probe| type.try_coerce(value, &probe) }.to yield_with_args(result)
       end
     end
 

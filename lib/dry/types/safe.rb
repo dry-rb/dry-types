@@ -9,18 +9,12 @@ module Dry
       include Printable
       include Dry::Equalizer(:type, inspect: false)
 
-      private :options, :meta
+      private :options, :meta, :constructor
 
       # @param [Object] input
       # @return [Object]
       def call(input)
-        result = try(input)
-
-        if result.respond_to?(:input)
-          result.input
-        else
-          input
-        end
+        type.(input) { |output = input| output }
       end
       alias_method :[], :call
 
@@ -31,8 +25,8 @@ module Dry
       # @return [Result,Logic::Result]
       def try(input, &block)
         type.try(input, &block)
-      rescue TypeError, ArgumentError => e
-        result = failure(input, e.message)
+      rescue CoercionError => error
+        result = failure(input, error.message)
         block ? yield(result) : result
       end
 
@@ -54,7 +48,7 @@ module Dry
       # @param [Object, Dry::Types::Constructor] response
       # @return [Boolean]
       def decorate?(response)
-        super || response.kind_of?(Constructor)
+        super || response.kind_of?(constructor_type)
       end
     end
   end

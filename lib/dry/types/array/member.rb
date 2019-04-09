@@ -14,10 +14,24 @@ module Dry
         end
 
         # @param [Object] input
-        # @param [Symbol] meth
         # @return [Array]
-        def call(input, meth = :call)
-          input.map { |el| member.__send__(meth, el) }
+        def call(input, &block)
+          if primitive?(input)
+            input.each_with_object([]) do |el, output|
+              coerced =
+                if block_given?
+                  member.(el) { return yield }
+                else
+                  member.(el)
+                end
+
+              output << coerced unless Undefined.equal?(coerced)
+            end
+          elsif block_given?
+            yield
+          else
+            super
+          end
         end
         alias_method :[], :call
 
@@ -33,20 +47,29 @@ module Dry
         # @yieldreturn [Result]
         # @return [Result,Logic::Result]
         def try(input, &block)
-          if input.is_a?(::Array)
-            result = call(input, :try).reject { |r| r.input.equal?(Undefined) }
-            output = result.map(&:input)
+          if primitive?(input)
+            output = []
+
+            result = input.map { |el| member.try(el) }
+            result.each do |r|
+              output << r.input unless Undefined.equal?(r.input)
+            end
 
             if result.all?(&:success?)
               success(output)
             else
-              failure = failure(output, result.select(&:failure?))
+              error = result.find(&:failure?).error
+              failure = failure(output, error)
               block ? yield(failure) : failure
             end
           else
             failure = failure(input, "#{input} is not an array")
             block ? yield(failure) : failure
           end
+        end
+
+        def safe
+          Safe.new(Member.new(primitive, { **options, member: member.safe}))
         end
 
         # @api public

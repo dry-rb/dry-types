@@ -30,6 +30,21 @@ module Dry
 
         raise ArgumentError, 'Missing constructor block' if fn.nil?
 
+        parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
+        *, (last_arg,) = parameters
+
+        if last_arg.equal?(:block)
+          @apply = @fn
+        else
+          @apply = lambda do |input, &fallback|
+            begin
+              @fn.(input)
+            rescue NoMethodError, TypeError, ArgumentError => error
+              CoercionError.handle(error, &fallback)
+            end
+          end
+        end
+
         super(type, **options, fn: fn)
       end
 
@@ -50,8 +65,13 @@ module Dry
 
       # @param [Object] input
       # @return [Object]
-      def call(input)
-        type[fn[input]]
+      def call(input, &block)
+        if block_given?
+          coerced = apply(input) { return yield }
+          type.(coerced) { |output = coerced| yield(output) }
+        else
+          type.(apply(input))
+        end
       end
       alias_method :[], :call
 
@@ -60,9 +80,12 @@ module Dry
       # @return [Logic::Result, Types::Result]
       # @return [Object] if block given and try fails
       def try(input, &block)
-        type.try(fn[input], &block)
-      rescue TypeError, ArgumentError => e
-        failure(input, e.message)
+        value = apply(input)
+      rescue CoercionError => error
+        failure = failure(input, error)
+        block_given? ? yield(failure) : failure
+      else
+        type.try(value, &block)
       end
 
       # @param [#call, nil] new_fn
@@ -81,8 +104,8 @@ module Dry
       # @param [Object] value
       # @return [Boolean]
       def valid?(value)
-        constructed_value = fn[value]
-      rescue NoMethodError, TypeError, ArgumentError
+        constructed_value = apply(value)
+      rescue CoercionError
         false
       else
         type.valid?(constructed_value)
@@ -116,6 +139,18 @@ module Dry
         with(**options, fn: -> input { right[left[input]] })
       end
       alias_method :<<, :prepend
+
+      def apply(input, &block)
+        if block_given?
+          @apply.(input, &block)
+        else
+          @apply.(input)
+        end
+      end
+
+      def safe
+        Safe.new(Constructor.new(type.safe, options))
+      end
 
       private
 

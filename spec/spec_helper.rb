@@ -54,6 +54,10 @@ RSpec.configure do |config|
     Object.send(:remove_const, Test.remove_constants.name)
   end
 
+  config.define_derived_metadata do |meta|
+    meta[:aggregate_failures] = true
+  end
+
   config.order = 'random'
 end
 

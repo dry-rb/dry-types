@@ -1,10 +1,14 @@
 RSpec.describe Dry::Types::Schema do
   subject(:schema) do
-    Dry::Types['strict.hash'].schema(
+    Dry::Types['hash'].schema(
       name: "coercible.string",
-      age: "strict.integer",
+      age: "integer",
       active: "params.bool"
     )
+  end
+
+  it_behaves_like 'a constrained type' do
+    let(:type) { schema }
   end
 
   describe '#each' do
@@ -41,7 +45,7 @@ RSpec.describe Dry::Types::Schema do
       subject(:sum) { type.strict | type.strict }
 
       it 'produces a constrained sum' do
-        expect { sum.(foo: 1) }.to raise_error(Dry::Types::ConstraintError)
+        expect { sum.(foo: 1) }.to raise_error(Dry::Types::UnknownKeysError)
       end
     end
   end
@@ -61,6 +65,14 @@ RSpec.describe Dry::Types::Schema do
 
     it 'accepts a fallback block' do
       expect(schema.key(:missing) { :fallback }).to eql(:fallback)
+    end
+  end
+
+  describe '#call' do
+    let(:type) { Dry::Types['nominal.hash'].schema({}).strict }
+
+    it 'takes a block for fallback case' do
+      expect(type.(extra_key: :invalid) { 'fallback' }).to eql('fallback')
     end
   end
 
@@ -189,6 +201,7 @@ RSpec.describe Dry::Types::Schema do
       expect { |rspec_probe| hash.try(input, &rspec_probe) }
         .to yield_with_args(instance_of(Dry::Types::Result::Failure))
 
+      pending
       # assert that the failure result provides context for the failing input
       hash.try(input) do |failure|
         expect(failure.error[:age].success?).to be(false)
