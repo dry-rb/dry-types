@@ -104,7 +104,7 @@ module Dry
       # @param [Object] response
       # @return [Boolean]
       def decorate?(response)
-        super || response.kind_of?(Constructor)
+        super || response.is_a?(Constructor)
       end
     end
   end

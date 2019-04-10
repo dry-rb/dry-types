@@ -56,7 +56,7 @@ module Dry
       # @param [Object] response
       # @return [Boolean]
       def decorate?(response)
-        response.kind_of?(type.class)
+        response.is_a?(type.class)
       end
 
       # Delegates missing methods to {#type}

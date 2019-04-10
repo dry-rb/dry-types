@@ -184,7 +184,7 @@ module Dry
       end
 
       def composable?(value)
-        value.kind_of?(Builder)
+        value.is_a?(Builder)
       end
     end
   end

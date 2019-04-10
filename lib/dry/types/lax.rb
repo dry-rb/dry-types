@@ -50,7 +50,7 @@ module Dry
       # @param [Object, Dry::Types::Constructor] response
       # @return [Boolean]
       def decorate?(response)
-        super || response.kind_of?(constructor_type)
+        super || response.is_a?(constructor_type)
       end
     end
 
