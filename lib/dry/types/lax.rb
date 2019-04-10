@@ -2,7 +2,7 @@ require 'dry/types/decorator'
 
 module Dry
   module Types
-    class Safe
+    class Lax
       include Type
       include Decorator
       include Builder
@@ -34,12 +34,12 @@ module Dry
       #
       # @see Nominal#to_ast
       def to_ast(meta: true)
-        [:safe, [type.to_ast(meta: meta), EMPTY_HASH]]
+        [:lax, [type.to_ast(meta: meta), EMPTY_HASH]]
       end
 
       # @api public
-      # @return [Safe]
-      def safe
+      # @return [Lax]
+      def lax
         self
       end
 

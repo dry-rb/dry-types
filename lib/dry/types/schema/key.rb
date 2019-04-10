@@ -87,10 +87,10 @@ module Dry
           self.class.new(type, name, options)
         end
 
-        # @see Dry::Types::Safe
+        # @see Dry::Types::Lax
         # @return [Dry::Types::Schema::Key]
-        def safe
-          new(type.safe).required(false)
+        def lax
+          new(type.lax).required(false)
         end
 
         # Dump to internal AST representation

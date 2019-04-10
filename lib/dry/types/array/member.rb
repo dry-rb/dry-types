@@ -68,8 +68,8 @@ module Dry
           end
         end
 
-        def safe
-          Safe.new(Member.new(primitive, { **options, member: member.safe}))
+        def lax
+          Lax.new(Member.new(primitive, { **options, member: member.lax}))
         end
 
         # @api public

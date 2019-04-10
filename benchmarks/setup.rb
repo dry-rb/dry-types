@@ -8,7 +8,7 @@ PersonSchema = Dry::Types['hash'].schema(
   name: 'string',
   age: 'integer',
   email: 'string'
-).safe
+).lax
 
 def profile(&block)
   Hotch(filter: 'Dry', &block)

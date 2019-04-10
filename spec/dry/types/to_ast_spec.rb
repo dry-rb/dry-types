@@ -149,8 +149,8 @@ RSpec.describe Dry::Types, '#to_ast' do
     end
   end
 
-  context 'Safe' do
-    subject(:type) { Dry::Types['string'].constrained(min_size: 5).safe.meta(key: :value) }
+  context 'Lax' do
+    subject(:type) { Dry::Types['string'].constrained(min_size: 5).lax.meta(key: :value) }
 
     specify do
       expect(type.to_ast).to eql([:nominal, [String, key: :value]])

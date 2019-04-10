@@ -86,8 +86,8 @@ module Dry
         valid?(value)
       end
 
-      def safe
-        type.safe
+      def lax
+        type.lax
       end
 
       # @api public

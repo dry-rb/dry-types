@@ -26,7 +26,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type).to eql(expected)
   end
 
-  it 'builds a safe coercible hash' do
+  it 'builds a coercible hash' do
     ast = Dry::Types['nominal.hash'].schema(
       email: Dry::Types['nominal.string'],
       age: Dry::Types['params.integer'],
@@ -152,8 +152,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ])
   end
 
-  it 'builds a safe params array' do
-    ast = Dry::Types['params.array'].safe.to_ast
+  it 'builds a lax params array' do
+    ast = Dry::Types['params.array'].lax.to_ast
 
     arr = compiler.(ast)
 
@@ -162,8 +162,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(arr[%w(a b c)]).to eql(%w(a b c))
   end
 
-  it 'builds a safe params array with member' do
-    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).safe.to_ast
+  it 'builds a lax params array with member' do
+    ast = Dry::Types['params.array'].of(Dry::Types['coercible.integer']).lax.to_ast
 
     arr = compiler.(ast)
 
@@ -176,7 +176,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
       email: Dry::Types['nominal.string'],
       age: Dry::Types['params.integer'],
       admin: Dry::Types['params.bool'],
-    ).with_key_transform(&:to_sym).safe
+    ).with_key_transform(&:to_sym).lax
 
     ast = type.to_ast
 

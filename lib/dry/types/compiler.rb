@@ -29,9 +29,9 @@ module Dry
         primitive.constructor(fn).meta(meta)
       end
 
-      def visit_safe(node)
+      def visit_lax(node)
         ast, meta = node
-        Types::Safe.new(visit(ast), meta: meta)
+        Types::Lax.new(visit(ast), meta: meta)
       end
 
       def visit_nominal(node)

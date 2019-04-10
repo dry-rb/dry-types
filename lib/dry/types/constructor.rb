@@ -148,8 +148,8 @@ module Dry
         end
       end
 
-      def safe
-        Safe.new(Constructor.new(type.safe, options))
+      def lax
+        Lax.new(Constructor.new(type.lax, options))
       end
 
       private

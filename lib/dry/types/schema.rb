@@ -219,8 +219,8 @@ module Dry
         true
       end
 
-      def safe
-        Safe.new(schema(keys.map(&:safe)))
+      def lax
+        Lax.new(schema(keys.map(&:lax)))
       end
 
       private

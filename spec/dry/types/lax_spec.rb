@@ -1,6 +1,6 @@
-RSpec.describe Dry::Types::Nominal, '#safe' do
+RSpec.describe Dry::Types::Nominal, '#lax' do
   context 'with a coercible string' do
-    subject(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).safe }
+    subject(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).lax }
 
     it_behaves_like Dry::Types::Nominal
 
@@ -21,7 +21,7 @@ RSpec.describe Dry::Types::Nominal, '#safe' do
     subject(:type) do
       Dry::Types['params.hash'].schema(
         age: 'coercible.integer', active: 'params.bool'
-      ).safe
+      ).lax
     end
 
     it_behaves_like Dry::Types::Nominal
@@ -37,7 +37,7 @@ RSpec.describe Dry::Types::Nominal, '#safe' do
 
   context 'with an array' do
     subject(:type) do
-      Dry::Types['array'].of(Dry::Types['coercible.integer']).safe
+      Dry::Types['array'].of(Dry::Types['coercible.integer']).lax
     end
 
     it 'rescues from type-errors and returns input' do
@@ -46,11 +46,11 @@ RSpec.describe Dry::Types::Nominal, '#safe' do
   end
 
   describe '#to_s' do
-    subject(:type) { Dry::Types['coercible.integer'].safe }
+    subject(:type) { Dry::Types['coercible.integer'].lax }
 
     it 'returns string representation of the type' do
       expect(type.to_s).
-        to eql("#<Dry::Types[Safe<Constructor<Nominal<Integer> fn=Kernel.Integer>>]>")
+        to eql("#<Dry::Types[Lax<Constructor<Nominal<Integer> fn=Kernel.Integer>>]>")
     end
   end
 end

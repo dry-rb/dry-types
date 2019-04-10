@@ -73,9 +73,9 @@ module Dry
         Enum.new(constrained(included_in: mapping.keys), mapping: mapping)
       end
 
-      # @return [Safe]
-      def safe
-        Safe.new(self)
+      # @return [Lax]
+      def lax
+        Lax.new(self)
       end
 
       # @param [#call,nil] constructor
@@ -92,5 +92,5 @@ end
 require 'dry/types/default'
 require 'dry/types/constrained'
 require 'dry/types/enum'
-require 'dry/types/safe'
+require 'dry/types/lax'
 require 'dry/types/sum'

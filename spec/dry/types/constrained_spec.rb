@@ -194,9 +194,9 @@ RSpec.describe Dry::Types::Constrained do
     end
   end
 
-  describe '.safe' do
+  describe '.lax' do
     it 'removes constraints' do
-      expect(Dry::Types['string'].safe).to eql(Dry::Types['nominal.string'])
+      expect(Dry::Types['string'].lax).to eql(Dry::Types['nominal.string'])
     end
   end
 end

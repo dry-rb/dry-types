@@ -129,7 +129,7 @@ module Dry
         [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
 
-      def safe
+      def lax
         self
       end
     end
