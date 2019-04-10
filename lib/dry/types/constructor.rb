@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/types/fn_container'
 
 module Dry

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Enum do
   context 'with mapping' do
     subject(:type) { string.enum(mapping) }

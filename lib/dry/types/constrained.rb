@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/types/decorator'
 require 'dry/types/constraints'
 require 'dry/types/constrained/coercible'

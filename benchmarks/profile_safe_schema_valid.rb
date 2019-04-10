@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'setup'
 
 Schema = Dry::Types['params.hash'].schema(

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Builder, '#default' do
   context 'with a nominal type' do
     subject(:type) { Dry::Types['nominal.string'].default('foo'.freeze) }
@@ -143,7 +145,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
 
   it "prints warning when default value isn't frozen" do
     expect(Dry::Core::Deprecations).to receive(:warn)
-    Dry::Types['nominal.string'].default('foo')
+    Dry::Types['nominal.string'].default('foo'.dup)
   end
 
   it 'discards warning when `shared` keyword is passed' do

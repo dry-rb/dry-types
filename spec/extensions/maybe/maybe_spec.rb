@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Nominal, '#maybe', :maybe do
   context 'with a nominal' do
     subject(:type) { Dry::Types['nominal.string'].maybe }

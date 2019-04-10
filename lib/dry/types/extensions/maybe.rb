@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/monads/maybe'
 require 'dry/types/decorator'
 

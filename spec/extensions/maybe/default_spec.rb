@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Nominal, '#default', :maybe do
   context 'with a maybe' do
     subject(:type) { Dry::Types['strict.integer'].maybe }

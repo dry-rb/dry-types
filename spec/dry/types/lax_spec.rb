@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Nominal, '#lax' do
   context 'with a coercible string' do
     subject(:type) { Dry::Types['coercible.string'].constrained(min_size: 5).lax }

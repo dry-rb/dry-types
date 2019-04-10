@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/types/compiler'
 
 RSpec.describe Dry::Types::Compiler, '#call' do

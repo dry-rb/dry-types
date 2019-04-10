@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Dry
   module Types
     extend Dry::Core::ClassAttributes

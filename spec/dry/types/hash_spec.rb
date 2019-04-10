@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Hash do
   subject(:type) { Dry::Types['nominal.hash'] }
 

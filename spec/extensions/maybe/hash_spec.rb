@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Hash, :maybe do
   let(:email) { Dry::Types['maybe.strict.string'] }
 

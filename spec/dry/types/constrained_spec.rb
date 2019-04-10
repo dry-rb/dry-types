@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Constrained do
   describe 'common nominal behavior' do
     subject(:type) { Dry::Types['string'].constrained(size: 3..12) }

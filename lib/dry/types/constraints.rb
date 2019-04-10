@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/logic/rule_compiler'
 require 'dry/logic/predicates'
 require 'dry/logic/rule/predicate'

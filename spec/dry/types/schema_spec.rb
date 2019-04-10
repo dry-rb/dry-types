@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Schema do
   subject(:schema) do
     Dry::Types['hash'].schema(
