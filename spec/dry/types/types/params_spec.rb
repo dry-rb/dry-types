@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Nominal do
   describe 'params.nil' do
     subject(:type) { Dry::Types['params.nil'] }

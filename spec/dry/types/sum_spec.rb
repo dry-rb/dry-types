@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Sum do
   describe 'common nominal behavior' do
     subject(:type) { Dry::Types['bool'] }

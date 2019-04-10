@@ -16,7 +16,7 @@ module Dry
         Map => :visit_map,
         Array => :visit_array,
         Array::Member => :visit_array_member,
-        Safe => :visit_safe,
+        Lax => :visit_lax,
         Enum => :visit_enum,
         Default => :visit_default,
         Default::Callable => :visit_default,
@@ -220,9 +220,9 @@ module Dry
         end
       end
 
-      def visit_safe(safe)
-        visit(safe.type) do |type|
-          yield "Safe<#{ type }>"
+      def visit_lax(lax)
+        visit(lax.type) do |type|
+          yield "Lax<#{ type }>"
         end
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Array do
   describe '#of' do
     context 'primitive' do

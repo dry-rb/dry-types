@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/core/deprecations'
 require 'dry/types/builder'
 require 'dry/types/result'
@@ -129,7 +131,7 @@ module Dry
         [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
 
-      def safe
+      def lax
         self
       end
     end

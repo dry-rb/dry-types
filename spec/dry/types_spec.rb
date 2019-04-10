@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types do
   describe '.register' do
     it 'registers a new type constructor' do

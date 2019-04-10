@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'benchmark/ips'
 require 'hotch'
 ENV['HOTCH_VIEWER'] ||= 'open'
@@ -8,7 +10,7 @@ PersonSchema = Dry::Types['hash'].schema(
   name: 'string',
   age: 'integer',
   email: 'string'
-).safe
+).lax
 
 def profile(&block)
   Hotch(filter: 'Dry', &block)

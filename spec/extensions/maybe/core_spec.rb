@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Nominal, :maybe do
   describe 'with opt-in maybe types' do
     context 'with strict string' do

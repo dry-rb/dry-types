@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require_relative 'setup'
 
 Schema = Dry::Types['params.hash'].schema(
   email?: 'string',
   age?: 'coercible.integer'
-).safe
+).lax
 
 ValidInput = { email: 'jane@doe.org', age: '19' }
 

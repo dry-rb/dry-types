@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/types/fn_container'
 
 module Dry
@@ -148,8 +150,8 @@ module Dry
         end
       end
 
-      def safe
-        Safe.new(Constructor.new(type.safe, options))
+      def lax
+        Lax.new(Constructor.new(type.lax, options))
       end
 
       private
@@ -184,7 +186,7 @@ module Dry
       end
 
       def composable?(value)
-        value.kind_of?(Builder)
+        value.is_a?(Builder)
       end
     end
   end

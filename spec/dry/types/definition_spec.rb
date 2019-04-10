@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Nominal do
   subject(:type) { Dry::Types::Nominal.new(String) }
 

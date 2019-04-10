@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Map do
   context 'shared examples' do
     let(:type) { Dry::Types::Map.new(::Hash) }

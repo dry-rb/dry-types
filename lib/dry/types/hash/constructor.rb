@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/types/constructor'
 
 module Dry
@@ -9,8 +11,8 @@ module Dry
           ::Dry::Types::Hash::Constructor
         end
 
-        def safe
-          type.safe.constructor(fn, meta: meta)
+        def lax
+          type.lax.constructor(fn, meta: meta)
         end
 
         private

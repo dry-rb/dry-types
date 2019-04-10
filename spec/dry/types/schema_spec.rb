@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Schema do
   subject(:schema) do
     Dry::Types['hash'].schema(
@@ -374,13 +376,13 @@ RSpec.describe Dry::Types::Schema do
     end
 
     context 'type transformation' do
-      let(:type_transformation) { :safe.to_proc }
+      let(:type_transformation) { :lax.to_proc }
 
       subject(:type) { Dry::Types['nominal.hash'].with_type_transform(type_transformation).schema({}) }
 
       it 'returns string representation of the type' do
         expect(type.to_s).
-          to eql("#<Dry::Types[Schema<type_fn=.safe keys={}>]>")
+          to eql("#<Dry::Types[Schema<type_fn=.lax keys={}>]>")
       end
     end
 

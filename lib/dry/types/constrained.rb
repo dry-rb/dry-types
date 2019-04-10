@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/types/decorator'
 require 'dry/types/constraints'
 require 'dry/types/constrained/coercible'
@@ -86,8 +88,8 @@ module Dry
         valid?(value)
       end
 
-      def safe
-        type.safe
+      def lax
+        type.lax
       end
 
       # @api public
@@ -104,7 +106,7 @@ module Dry
       # @param [Object] response
       # @return [Boolean]
       def decorate?(response)
-        super || response.kind_of?(Constructor)
+        super || response.is_a?(Constructor)
       end
     end
   end

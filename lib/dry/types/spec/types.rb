@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples_for 'Dry::Types::Nominal without primitive' do
   def be_boolean
     satisfy { |x| x == true || x == false  }

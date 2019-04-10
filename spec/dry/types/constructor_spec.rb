@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Constructor do
   subject(:type) do
     Dry::Types::Constructor.new(Dry::Types['nominal.string'], fn: Kernel.method(:String))

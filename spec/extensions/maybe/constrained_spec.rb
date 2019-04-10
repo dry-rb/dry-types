@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Constrained, :maybe do
   context 'with a maybe type' do
     subject(:type) do

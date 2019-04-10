@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Nominal do
   let(:string) { Dry::Types["coercible.string"] }
   let(:hash) { Dry::Types["coercible.hash"] }

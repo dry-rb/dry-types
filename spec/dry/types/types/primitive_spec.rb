@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types, '.[]' do
   context 'with "symbol"' do
     let(:type) { Dry::Types['symbol'] }
