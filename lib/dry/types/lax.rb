@@ -1,3 +1,5 @@
+
+require 'dry/core/deprecations'
 require 'dry/types/decorator'
 
 module Dry
@@ -51,5 +53,9 @@ module Dry
         super || response.kind_of?(constructor_type)
       end
     end
+
+    extend ::Dry::Core::Deprecations[:'dry-types']
+    Safe = Lax
+    deprecate_constant(:Safe)
   end
 end

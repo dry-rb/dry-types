@@ -1,6 +1,10 @@
+require 'dry/core/deprecations'
+
 module Dry
   module Types
     class Compiler
+      extend ::Dry::Core::Deprecations[:'dry-types']
+
       attr_reader :registry
 
       def initialize(registry)
@@ -33,6 +37,7 @@ module Dry
         ast, meta = node
         Types::Lax.new(visit(ast), meta: meta)
       end
+      deprecate(:visit_safe, :visit_lax)
 
       def visit_nominal(node)
         type, meta = node
