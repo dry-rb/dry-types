@@ -203,10 +203,9 @@ RSpec.describe Dry::Types::Schema do
       expect { |rspec_probe| hash.try(input, &rspec_probe) }
         .to yield_with_args(instance_of(Dry::Types::Result::Failure))
 
-      pending
       # assert that the failure result provides context for the failing input
       hash.try(input) do |failure|
-        expect(failure.error[:age].success?).to be(false)
+        expect(failure.error.meta[:age].success?).to be(false)
       end
     end
 
