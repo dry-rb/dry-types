@@ -1,3 +1,6 @@
+
+# frozen_string_literal: true
+
 require 'concurrent/map'
 
 module Dry
@@ -59,24 +62,24 @@ module Dry
           end
         end
 
-        def self.[](fn, options = EMPTY_HASH)
+        def self.[](fn)
           raise ArgumentError, 'Missing constructor block' if fn.nil?
 
           if fn.is_a?(Function)
             fn
+          elsif fn.is_a?(::Method)
+            MethodCall[fn, yields_fallback?(fn)]
+          elsif yields_fallback?(fn)
+            new(fn)
           else
-            parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
-            *, (last_arg,) = parameters
-            safe = last_arg.equal?(:block)
-
-            if fn.is_a?(::Method)
-              MethodCall[fn, safe]
-            elsif safe
-              new(fn)
-            else
-              Safe.new(fn)
-            end
+            Safe.new(fn)
           end
+        end
+
+        def self.yields_fallback?(fn)
+          parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
+          *, (last_arg,) = parameters
+          last_arg.equal?(:block)
         end
 
         include Dry::Equalizer(:fn)
