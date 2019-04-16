@@ -8,6 +8,12 @@ module Dry
       extend ::Dry::Core::Deprecations[:'dry-types']
 
       deprecate(:safe, :lax)
+
+      def valid?(input = Undefined)
+        self.(input) { return false }
+        true
+      end
+      alias_method :===, :valid?
     end
   end
 end

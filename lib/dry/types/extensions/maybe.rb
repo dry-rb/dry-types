@@ -14,14 +14,14 @@ module Dry
 
       # @param [Dry::Monads::Maybe, Object] input
       # @return [Dry::Monads::Maybe]
-      def call(input = Undefined)
+      def call(input = Undefined, &block)
         case input
         when Dry::Monads::Maybe
           input
         when Undefined
           None()
         else
-          Maybe(type[input])
+          Maybe(type.(input, &block))
         end
       end
       alias_method :[], :call

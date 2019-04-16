@@ -96,11 +96,6 @@ module Dry
         value.is_a?(primitive)
       end
 
-      def valid?(_)
-        true
-      end
-      alias_method :===, :valid?
-
       def coerce(input, &_block)
         if primitive?(input)
           input
