@@ -11,39 +11,44 @@ module Dry
     namespace self
 
     class CoercionError < StandardError
-      def self.handle(error)
+      def self.handle(exception, meta: Undefined)
         if block_given?
           yield
         else
-          raise self[error]
+          raise new(
+            exception.message,
+            meta: meta,
+            backtrace: exception.backtrace
+          )
         end
       end
 
-      def self.[](error)
-        case error
-        when self
-          error
-        when ::String
-          new(error)
-        when ::Exception
-          new(error.message, error.backtrace)
-        when Result::Failure
-          self[error.error]
-        when ::Array
-          new(error.join(', '))
-        when ::Hash
-          errors = error
-                     .select { |_, v| v.failure? }
-                     .map { |k, v| "#{k.inspect} => #{v.error.message}" }
-          new("{#{errors.join(', ')}}")
-        else
-          raise ArgumentError, "unsupported type #{error.inspect}"
-        end
-      end
+      attr_reader :meta
 
-      def initialize(message, backtrace = nil)
+      def initialize(message, meta: Undefined, backtrace: Undefined)
+        unless message.is_a?(::String)
+          raise ArgumentError, "message must be a string, #{message.class} given"
+        end
+
         super(message)
-        set_backtrace(backtrace) if backtrace
+        @meta = Undefined.default(meta, nil)
+        set_backtrace(backtrace) unless Undefined.equal?(backtrace)
+      end
+    end
+
+    class MultipleError < CoercionError
+      attr_reader :errors
+
+      def initialize(errors)
+        @errors = errors
+      end
+
+      def message
+        errors.map(&:message).join(', ')
+      end
+
+      def meta
+        errors.map(&:meta)
       end
     end
 
@@ -67,11 +72,7 @@ module Dry
       # @param [String,Symbol] key
       def initialize(key)
         @key = key
-        super(nil)
-      end
-
-      def message
-        ":#{key.inspect} is missing in Hash input"
+        super(":#{key.inspect} is missing in Hash input")
       end
     end
 
@@ -81,11 +82,7 @@ module Dry
       # @param [<String, Symbol>] keys
       def initialize(keys)
         @keys = keys
-        super(nil)
-      end
-
-      def message
-        "unexpected keys #{keys.inspect} in Hash input"
+        super("unexpected keys #{keys.inspect} in Hash input")
       end
     end
 
@@ -109,7 +106,7 @@ module Dry
       end
 
       # @return [String]
-      def to_s
+      def message
         "#{input.inspect} violates constraints (#{result} failed)"
       end
     end

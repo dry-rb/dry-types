@@ -30,7 +30,7 @@ module Dry
           if block_given?
             return yield
           else
-            raise MapError, failure.error
+            raise MapError, failure.error.message
           end
         }.input
       end
@@ -68,20 +68,21 @@ module Dry
 
       def coerce(input)
         return failure(
-          input, "#{input.inspect} must be an instance of #{primitive}"
+          input, CoercionError.new("#{input.inspect} must be an instance of #{primitive}")
         ) unless primitive?(input)
 
         output, failures = {}, []
 
-        input.each do |k,v|
+        input.each do |k, v|
           res_k = key_type.try(k)
           res_v = value_type.try(v)
+
           if res_k.failure?
-            failures << res_k.error.message
+            failures << res_k.error
           elsif output.key?(res_k.input)
-            failures << "duplicate coerced hash key #{res_k.input.inspect}"
+            failures << CoercionError.new("duplicate coerced hash key #{res_k.input.inspect}")
           elsif res_v.failure?
-            failures << res_v.error.message
+            failures << res_v.error
           else
             output[res_k.input] = res_v.input
           end
@@ -89,7 +90,7 @@ module Dry
 
         return success(output) if failures.empty?
 
-        failure(input, failures)
+        failure(input, MultipleError.new(failures))
       end
 
       def validate_options!

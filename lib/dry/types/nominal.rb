@@ -83,7 +83,10 @@ module Dry
       # @param (see Failure#initialize)
       # @return [Result::Failure]
       def failure(input, error)
-        Result::Failure.new(input, CoercionError[error])
+        unless error.is_a?(CoercionError)
+          raise ArgumentError, "error must be a CoercionError"
+        end
+        Result::Failure.new(input, error)
       end
 
       # Checks whether value is of a #primitive class
@@ -112,7 +115,10 @@ module Dry
         result = success(input)
 
         coerce(input) do
-          result = failure(input, "#{input.inspect} must be an instance of #{primitive}")
+          result = failure(
+            input,
+            CoercionError.new("#{input.inspect} must be an instance of #{primitive}")
+          )
         end
 
         if block_given?

@@ -85,17 +85,23 @@ module Dry
           end
 
           success &&= primitive?(result)
+
+          if success
+            failure = nil
+          else
+            error = CoercionError.new("#{input} doesn't conform schema", meta: result)
+            failure = failure(output, error)
+          end
         else
-          success = false
-          output = input
-          result = CoercionError["#{input} must be a hash"]
+          failure = failure(input, CoercionError.new("#{input} must be a hash"))
         end
 
-        if success
+        if failure.nil?
           success(output)
+        elsif block_given?
+          yield(failure)
         else
-          failure = failure(output, result)
-          block_given? ? yield(failure) : failure
+          failure
         end
       end
 
