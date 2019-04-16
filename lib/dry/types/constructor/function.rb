@@ -1,8 +1,10 @@
+require 'concurrent/map'
+
 module Dry
   module Types
     class Constructor < Nominal
       class Function
-        class Safe < Function
+        module SafeCall
           def call(input, &fallback)
             super
           rescue NoMethodError, TypeError, ArgumentError => error
@@ -14,6 +16,49 @@ module Dry
           end
         end
 
+        Safe = ::Class.new(Function) { include SafeCall }
+
+        class MethodCall < Function
+          @interfaces = ::Concurrent::Map.new
+          @cache = ::Concurrent::Map.new
+
+          def self.call_interface(method)
+            @interfaces.fetch_or_store(method) do
+              ::Module.new do
+                module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
+                  def call(input = Undefined, &block)
+                    @target.#{method}(input, &block)
+                  end
+                RUBY
+              end
+            end
+          end
+
+          def self.call_class(method, safe)
+            @cache.fetch_or_store([method, safe]) do
+              interface = MethodCall.call_interface(method)
+
+              ::Class.new(MethodCall) do
+                if safe
+                  include interface
+                else
+                  include SafeCall, interface
+                end
+              end
+            end
+          end
+
+          def self.[](fn, safe)
+            MethodCall.call_class(fn.name, safe).new(fn)
+          end
+
+          def initialize(fn)
+            super
+            @target = fn.receiver
+            @method = fn.name
+          end
+        end
+
         def self.[](fn, options = EMPTY_HASH)
           raise ArgumentError, 'Missing constructor block' if fn.nil?
 
@@ -22,8 +67,11 @@ module Dry
           else
             parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
             *, (last_arg,) = parameters
+            safe = last_arg.equal?(:block)
 
-            if last_arg.equal?(:block)
+            if fn.is_a?(::Method)
+              MethodCall[fn, safe]
+            elsif safe
               new(fn)
             else
               Safe.new(fn)
