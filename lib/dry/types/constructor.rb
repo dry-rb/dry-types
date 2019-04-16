@@ -29,7 +29,6 @@ module Dry
       # @param [#call, nil] block
       def initialize(type, fn: nil, **options)
         @type = type
-        @apply = fn
         @fn = fn
 
         super(type, **options, fn: fn)
@@ -54,10 +53,10 @@ module Dry
       # @return [Object]
       def call(input, &block)
         if block_given?
-          coerced = apply(input) { return yield }
+          coerced = fn.(input) { return yield }
           type.(coerced) { |output = coerced| yield(output) }
         else
-          type.(apply(input))
+          type.(fn.(input))
         end
       end
       alias_method :[], :call
@@ -67,7 +66,7 @@ module Dry
       # @return [Logic::Result, Types::Result]
       # @return [Object] if block given and try fails
       def try(input, &block)
-        value = apply(input)
+        value = fn.(input)
       rescue CoercionError => error
         failure = failure(input, error)
         block_given? ? yield(failure) : failure
@@ -115,14 +114,6 @@ module Dry
         with(**options, fn: -> input { right[left[input]] })
       end
       alias_method :<<, :prepend
-
-      def apply(input, &block)
-        if block_given?
-          @apply.(input, &block)
-        else
-          @apply.(input)
-        end
-      end
 
       def lax
         Lax.new(Constructor.new(type.lax, options))
