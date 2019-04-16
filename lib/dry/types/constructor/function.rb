@@ -22,37 +22,55 @@ module Dry
         Safe = ::Class.new(Function) { include SafeCall }
 
         class MethodCall < Function
-          @interfaces = ::Concurrent::Map.new
           @cache = ::Concurrent::Map.new
 
-          def self.call_interface(method)
-            @interfaces.fetch_or_store(method) do
-              ::Module.new do
-                module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
-                  def call(input = Undefined, &block)
-                    @target.#{method}(input, &block)
+          def self.call_class(method, public, safe)
+            @cache.fetch_or_store([method, public, safe]) do
+              if public
+                interface = PublicCall.call_interface(method)
+
+                ::Class.new(PublicCall) do
+                  if safe
+                    include interface
+                  else
+                    include SafeCall, interface
                   end
-                RUBY
+                end
+              elsif safe
+                PrivateCall
+              else
+                PrivateSafeCall
               end
             end
           end
 
-          def self.call_class(method, safe)
-            @cache.fetch_or_store([method, safe]) do
-              interface = MethodCall.call_interface(method)
+          class PublicCall < MethodCall
+            @interfaces = ::Concurrent::Map.new
 
-              ::Class.new(MethodCall) do
-                if safe
-                  include interface
-                else
-                  include SafeCall, interface
+            def self.call_interface(method)
+              @interfaces.fetch_or_store(method) do
+                ::Module.new do
+                  module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
+                    def call(input = Undefined, &block)
+                      @target.#{method}(input, &block)
+                    end
+                  RUBY
                 end
               end
             end
           end
 
+          class PrivateCall < MethodCall
+            def call(input = Undefined, &block)
+              @target.send(@method, input, &block)
+            end
+          end
+
+          PrivateSafeCall = Class.new(PrivateCall) { include SafeCall }
+
           def self.[](fn, safe)
-            MethodCall.call_class(fn.name, safe).new(fn)
+            public = fn.receiver.respond_to?(fn.name)
+            MethodCall.call_class(fn.name, public, safe).new(fn)
           end
 
           attr_reader :target, :method

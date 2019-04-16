@@ -38,6 +38,14 @@ RSpec.describe Dry::Types::Constructor::Function do
       end
     end
 
+    context 'private method' do
+      include_examples 'well-behaving coercion function' do
+        subject(:fun) { described_class[1.method(:Integer)] }
+
+        specify { expect(fun).to be_wrapped }
+      end
+    end
+
     context 'method with fallback' do
       include_examples 'well-behaving coercion function' do
         subject(:fun) do
