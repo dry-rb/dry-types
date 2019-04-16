@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/types/fn_container'
-require 'dry/types/constructor/call'
+require 'dry/types/constructor/function'
 
 module Dry
   module Types
@@ -21,7 +21,7 @@ module Dry
       # @param [#call, nil] block
       def self.new(input, **options, &block)
         type = input.is_a?(Builder) ? input : Nominal.new(input)
-        super(type, **options, fn: Call[options.fetch(:fn, block)])
+        super(type, **options, fn: Function[options.fetch(:fn, block)])
       end
 
       # @param [Type] type

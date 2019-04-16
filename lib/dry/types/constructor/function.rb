@@ -1,19 +1,23 @@
 module Dry
   module Types
     class Constructor < Nominal
-      class Call
-        class Safe < Call
+      class Function
+        class Safe < Function
           def call(input, &fallback)
             super
           rescue NoMethodError, TypeError, ArgumentError => error
             CoercionError.handle(error, &fallback)
+          end
+
+          def wrapped?
+            true
           end
         end
 
         def self.[](fn, options = EMPTY_HASH)
           raise ArgumentError, 'Missing constructor block' if fn.nil?
 
-          if fn.is_a?(Call)
+          if fn.is_a?(Function)
             fn
           else
             parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
@@ -42,6 +46,10 @@ module Dry
 
         def to_ast
           Dry::Types::FnContainer.register(fn)
+        end
+
+        def wrapped?
+          false
         end
       end
     end
