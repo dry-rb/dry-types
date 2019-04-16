@@ -166,7 +166,7 @@ RSpec.describe Dry::Types, '#to_ast' do
 
     specify do
       expect(type.to_ast).
-        to eql([:constructor, [[:nominal, [String, {}]], "fn_#{fn.object_id}", key: :value]])
+        to eql([:constructor, [[:nominal, [String, {}]], [:method, Kernel, :String], key: :value]])
     end
   end
 

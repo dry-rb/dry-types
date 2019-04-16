@@ -55,10 +55,16 @@ module Dry
             MethodCall.call_class(fn.name, safe).new(fn)
           end
 
+          attr_reader :target, :method
+
           def initialize(fn)
             super
             @target = fn.receiver
             @method = fn.name
+          end
+
+          def to_ast
+            [:method, target, method]
           end
         end
 
@@ -77,8 +83,13 @@ module Dry
         end
 
         def self.yields_fallback?(fn)
-          parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
-          *, (last_arg,) = parameters
+          *, (last_arg,) =
+            if fn.respond_to?(:parameters)
+              fn.parameters
+            else
+              fn.method(:call).parameters
+            end
+
           last_arg.equal?(:block)
         end
 
@@ -96,7 +107,11 @@ module Dry
         alias_method :[], :call
 
         def to_ast
-          Dry::Types::FnContainer.register(fn)
+          if fn.is_a?(::Proc)
+            [:id, Dry::Types::FnContainer.register(fn)]
+          else
+            [:callable, fn]
+          end
         end
 
         def wrapped?
