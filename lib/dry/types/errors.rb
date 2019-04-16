@@ -72,7 +72,7 @@ module Dry
       # @param [String,Symbol] key
       def initialize(key)
         @key = key
-        super(":#{key.inspect} is missing in Hash input")
+        super("#{key.inspect} is missing in Hash input")
       end
     end
 
