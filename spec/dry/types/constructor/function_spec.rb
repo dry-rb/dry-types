@@ -90,4 +90,46 @@ RSpec.describe Dry::Types::Constructor::Function do
       end
     end
   end
+
+  describe '#to_ast' do
+    subject(:function) { described_class[fn] }
+
+    context 'proc' do
+      let(:fn) { proc { |value| Integer(value) } }
+
+      specify do
+        expect(function.to_ast).to eql([:id, Dry::Types::FnContainer.register_name(fn)])
+      end
+    end
+
+    context 'method call' do
+      let(:fn) { 'foo'.method(:Integer) }
+
+      specify do
+        expect(function.to_ast).to eql([:method, 'foo', :Integer])
+      end
+    end
+
+    context 'callable' do
+      let(:fn) do
+        Class.new {
+          def call(input)
+            Integer(input)
+          end
+        }.new
+      end
+
+      specify do
+        expect(function.to_ast).to eql([:callable, fn])
+      end
+    end
+
+    context 'globally accessible receiver' do
+      let(:fn) { Kernel.method(:Integer) }
+
+      specify do
+        expect(function.to_ast).to eql([:method, Kernel, :Integer])
+      end
+    end
+  end
 end

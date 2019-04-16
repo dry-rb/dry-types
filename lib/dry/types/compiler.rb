@@ -29,10 +29,9 @@ module Dry
       end
 
       def visit_constructor(node)
-        nominal, fn_register_name, meta = node
-        fn = Dry::Types::FnContainer[fn_register_name]
+        nominal, fn, meta = node
         primitive = visit(nominal)
-        primitive.constructor(fn).meta(meta)
+        primitive.constructor(compile_fn(fn)).meta(meta)
       end
 
       def visit_lax(node)
@@ -114,6 +113,22 @@ module Dry
 
       def visit_any(meta)
         registry['any'].meta(meta)
+      end
+
+      def compile_fn(fn)
+        type, *node = fn
+
+        case type
+        when :id
+          Dry::Types::FnContainer[node.fetch(0)]
+        when :callable
+          node.fetch(0)
+        when :method
+          target, method = node
+          target.method(method)
+        else
+          raise ArgumentError, "Cannot build callable from #{fn.inspect}"
+        end
       end
     end
   end

@@ -239,19 +239,6 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(array.member.primitive).to be(String)
   end
 
-  it 'builds a constructor' do
-    fn = -> v { v.to_s }
-
-    ast = Dry::Types::Constructor.new(String, &fn).to_ast
-
-    type = compiler.(ast)
-
-    expect(type[:foo]).to eql('foo')
-
-    expect(type.fn.fn).to be(fn)
-    expect(type.primitive).to be(String)
-  end
-
   it 'builds a strict type' do
     ast = Dry::Types['strict.string'].to_ast
 
@@ -353,5 +340,30 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.meta).to eql(foo: 'bar', abc: 123)
     expect(type.valid?({ 'x' => 5 })).to eql(true)
     expect(type.valid?({ 5 => 'x' })).to eql(false)
+  end
+
+  context 'constructors' do
+    example 'simple constructor' do
+      fn = -> v { v.to_s }
+
+      ast = Dry::Types::Constructor.new(String, &fn).to_ast
+
+      type = compiler.(ast)
+
+      expect(type[:foo]).to eql('foo')
+
+      expect(type.fn.fn).to be(fn)
+      expect(type.primitive).to be(String)
+    end
+
+    example 'built-in constructor type' do
+      source = Dry::Types['params.integer']
+      ast = source.to_ast
+
+      type = compiler.(ast)
+
+      expect(type).to eql(source)
+      expect(type.('1')).to eql(1)
+    end
   end
 end
