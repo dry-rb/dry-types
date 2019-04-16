@@ -62,12 +62,6 @@ module Dry
         end
       end
 
-      # @param [Object] value
-      # @return [Boolean]
-      def valid?(value)
-        rule.(value).success? && type.valid?(value)
-      end
-
       # @param [Hash] options
       #   The options hash provided to {Types.Rule} and combined
       #   using {&} with previous {#rule}

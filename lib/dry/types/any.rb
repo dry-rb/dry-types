@@ -16,13 +16,6 @@ module Dry
         'Any'
       end
 
-      # @param [Object] any input is valid
-      # @return [true]
-      def valid?(_)
-        true
-      end
-      alias_method :===, :valid?
-
       # @param [Hash] new_options
       # @return [Type]
       def with(**new_options)

@@ -37,12 +37,6 @@ module Dry
         end
         alias_method :[], :call
 
-        # @param [Array, #all?, Object] value
-        # @return [Boolean]
-        def valid?(value)
-          super && value.all? { |el| member.valid?(el) }
-        end
-
         # @param [Array, Object] input
         # @param [#call,nil] block
         # @yieldparam [Failure] failure

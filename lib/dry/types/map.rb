@@ -37,13 +37,6 @@ module Dry
       alias_method :[], :call
 
       # @param [Hash] hash
-      # @return [Boolean]
-      def valid?(hash)
-        coerce(hash).success?
-      end
-      alias_method :===, :valid?
-
-      # @param [Hash] hash
       # @return [Result]
       def try(hash)
         result = coerce(hash)

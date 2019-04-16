@@ -24,13 +24,6 @@ module Dry
         type.try(input, &block)
       end
 
-      # @param [Object] value
-      # @return [Boolean]
-      def valid?(value)
-        type.valid?(value)
-      end
-      alias_method :===, :valid?
-
       # @return [Boolean]
       def default?
         type.default?

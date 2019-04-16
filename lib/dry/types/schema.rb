@@ -126,14 +126,6 @@ module Dry
         ]
       end
 
-      # @param [Hash] hash
-      # @return [Boolean]
-      def valid?(hash)
-        result = try(hash)
-        result.success?
-      end
-      alias_method :===, :valid?
-
       # Whether the schema rejects unknown keys
       # @return [Boolean]
       def strict?

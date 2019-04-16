@@ -101,13 +101,6 @@ module Dry
         left.primitive?(value) || right.primitive?(value)
       end
 
-      # @param [Object] value
-      # @return [Boolean]
-      def valid?(value)
-        left.valid?(value) || right.valid?(value)
-      end
-      alias_method :===, :valid?
-
       # @api public
       #
       # @see Nominal#to_ast

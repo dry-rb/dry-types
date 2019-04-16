@@ -103,17 +103,6 @@ module Dry
       alias_method :append, :constructor
       alias_method :>>, :constructor
 
-      # @param [Object] value
-      # @return [Boolean]
-      def valid?(value)
-        constructed_value = apply(value)
-      rescue CoercionError
-        false
-      else
-        type.valid?(constructed_value)
-      end
-      alias_method :===, :valid?
-
       # @return [Class]
       def constrained_type
         Constrained::Coercible
