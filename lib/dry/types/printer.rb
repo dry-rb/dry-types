@@ -58,12 +58,12 @@ module Dry
 
       def visit_constructor(constructor)
         visit(constructor.type) do |type|
-          visit_callable(constructor.fn) do |fn|
+          visit_callable(constructor.fn.fn) do |fn|
             options = constructor.options.dup
             options.delete(:fn)
 
             visit_options(options, constructor.meta) do |opts|
-              yield "Constructor<#{ type } fn=#{ fn }#{ opts }>"
+              yield "Constructor<#{type} fn=#{fn}#{opts}>"
             end
           end
         end
@@ -75,7 +75,7 @@ module Dry
           rule = options.delete(:rule)
 
           visit_options(options, constrained.meta) do |opts|
-            yield "Constrained<#{ type } rule=[#{ rule.to_s }]>"
+            yield "Constrained<#{type} rule=[#{rule}]>"
           end
         end
       end
@@ -91,22 +91,22 @@ module Dry
 
         if key_fn = options.delete(:key_transform_fn)
           visit_callable(key_fn) do |fn|
-            key_fn_str = "key_fn=#{ fn } "
+            key_fn_str = "key_fn=#{fn} "
           end
         end
 
         if type_fn = options.delete(:type_transform_fn)
           visit_callable(type_fn) do |fn|
-            type_fn_str = "type_fn=#{ fn } "
+            type_fn_str = "type_fn=#{fn} "
           end
         end
 
         keys = options.delete(:keys)
 
         visit_options(options, schema.meta) do |opts|
-          schema_parameters = "#{ key_fn_str }#{ type_fn_str }#{ strict_str }#{ opts }"
+          schema_parameters = "#{key_fn_str}#{type_fn_str}#{strict_str}#{opts}"
 
-          header = "Schema<#{ schema_parameters }keys={"
+          header = "Schema<#{schema_parameters}keys={"
 
           if size.zero?
             yield "#{ header}}>"

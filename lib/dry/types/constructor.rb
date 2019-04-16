@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/types/fn_container'
+require 'dry/types/constructor/call'
 
 module Dry
   module Types
@@ -20,32 +21,16 @@ module Dry
       # @param [#call, nil] block
       def self.new(input, **options, &block)
         type = input.is_a?(Builder) ? input : Nominal.new(input)
-        super(type, **options, &block)
+        super(type, **options, fn: Call[options.fetch(:fn, block)])
       end
 
       # @param [Type] type
       # @param [Hash] options
       # @param [#call, nil] block
-      def initialize(type, **options, &block)
+      def initialize(type, fn: nil, **options)
         @type = type
-        @fn = options.fetch(:fn, block)
-
-        raise ArgumentError, 'Missing constructor block' if fn.nil?
-
-        parameters = fn.respond_to?(:parameters) ? fn.parameters : fn.method(:call).parameters
-        *, (last_arg,) = parameters
-
-        if last_arg.equal?(:block)
-          @apply = @fn
-        else
-          @apply = lambda do |input, &fallback|
-            begin
-              @fn.(input)
-            rescue NoMethodError, TypeError, ArgumentError => error
-              CoercionError.handle(error, &fallback)
-            end
-          end
-        end
+        @apply = fn
+        @fn = fn
 
         super(type, **options, fn: fn)
       end
@@ -113,7 +98,7 @@ module Dry
       # @see Nominal#to_ast
       def to_ast(meta: true)
         [:constructor, [type.to_ast(meta: meta),
-                        register_fn(fn),
+                        fn.to_ast,
                         meta ? self.meta : EMPTY_HASH]]
       end
 
@@ -144,10 +129,6 @@ module Dry
       end
 
       private
-
-      def register_fn(fn)
-        Dry::Types::FnContainer.register(fn)
-      end
 
       # @param [Symbol] meth
       # @param [Boolean] include_private

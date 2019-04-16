@@ -248,7 +248,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     expect(type[:foo]).to eql('foo')
 
-    expect(type.fn).to be(fn)
+    expect(type.fn.fn).to be(fn)
     expect(type.primitive).to be(String)
   end
 
@@ -296,7 +296,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     expect(type[:foo]).to eql('foo')
 
-    expect(type.fn).to be(fn)
+    expect(type.fn.fn).to be(fn)
     expect(type.primitive).to be(String)
     expect(type.meta).to eql(foo: :bar)
   end
