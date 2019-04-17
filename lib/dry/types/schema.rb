@@ -51,33 +51,11 @@ module Dry
       # @param [Hash] hash
       # @return [Hash{Symbol => Object}]
       def call_safe(hash, options = EMPTY_HASH)
-        input = coerce(hash) { return yield }
-
-        catch(:schema_error) do
-          return resolve(input, options) do |key, value|
-            key.call_safe(value) { return yield }
-          end
-        end
-
-        yield
+        resolve_safe(coerce(hash) { return yield }, options) { return yield }
       end
 
       def call_unsafe(hash, options = EMPTY_HASH)
-        input = coerce(hash)
-
-        error = catch(:schema_error) do
-          return resolve(input, options) do |key, value|
-            begin
-              key.call_unsafe(value)
-            rescue ConstraintError => error
-              raise SchemaError.new(key.name, value, error.result)
-            rescue CoercionError => error
-              raise SchemaError.new(key.name, value, error.message)
-            end
-          end
-        end
-
-        raise error
+        resolve_unsafe(coerce(hash), options)
       end
 
       # @param [Hash] hash
@@ -97,19 +75,30 @@ module Dry
       def try(input)
         if primitive?(input)
           success = true
-          output  = {}
+          output = {}
+          result = {}
 
-          result = catch(:schema_error) do
-            resolve(input) do |key, value|
-              key_result = key.try(value)
+          input.each do |key, value|
+            k = @transform_key.(key)
+            type = @name_key_map[k]
+
+            if type
+              key_result = type.try(value)
+              result[k] = key_result
+              output[k] = key_result.input
               success &&= key_result.success?
-              output[key.name] = key_result.input
-
-              key_result
+            elsif strict?
+              success = false
             end
           end
 
-          success &&= primitive?(result)
+          if output.size < keys.size
+            resolve_missing_keys(output, options) do
+              success = false
+            end
+          end
+
+          success &&= primitive?(output)
 
           if success
             failure = nil
@@ -260,16 +249,44 @@ module Dry
           values
       end
 
-      def resolve(hash, options = EMPTY_HASH, &block)
+      def resolve_unsafe(hash, options = EMPTY_HASH)
         result = {}
 
         hash.each do |key, value|
-          k = transform_key.(key)
+          k = @transform_key.(key)
+          type = @name_key_map[k]
 
-          if name_key_map.key?(k)
-            result[k] = yield(name_key_map[k], value)
+          if type
+            begin
+              result[k] = type.call_unsafe(value)
+            rescue ConstraintError => error
+              raise SchemaError.new(type.name, value, error.result)
+            rescue CoercionError => error
+              raise SchemaError.new(type.name, value, error.message)
+            end
           elsif strict?
-            throw(:schema_error, unexpected_keys(hash.keys))
+            raise unexpected_keys(hash.keys)
+          end
+        end
+
+        if result.size < keys.size
+          resolve_missing_keys(result, options)
+        end
+
+        result
+      end
+
+      def resolve_safe(hash, options = EMPTY_HASH, &block)
+        result = {}
+
+        hash.each do |key, value|
+          k = @transform_key.(key)
+          type = @name_key_map[k]
+
+          if type
+            result[k] = type.call_safe(value, &block)
+          elsif strict?
+            yield
           end
         end
 
@@ -288,9 +305,13 @@ module Dry
           next if result.key?(key.name)
 
           if key.default? && resolve_defaults
-            result[key.name] = yield(key, Undefined)
+            result[key.name] = key.call_unsafe(Undefined)
           elsif key.required? && !skip_missing
-            throw(:schema_error, missing_key(key.name))
+            if block_given?
+              return yield
+            else
+              raise missing_key(key.name)
+            end
           end
         end
       end
