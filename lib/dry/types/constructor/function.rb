@@ -62,7 +62,7 @@ module Dry
 
           class PrivateCall < MethodCall
             def call(input = Undefined, &block)
-              @target.send(@method, input, &block)
+              @target.send(@name, input, &block)
             end
           end
 
@@ -73,16 +73,16 @@ module Dry
             MethodCall.call_class(fn.name, public, safe).new(fn)
           end
 
-          attr_reader :target, :method
+          attr_reader :target, :name
 
           def initialize(fn)
             super
             @target = fn.receiver
-            @method = fn.name
+            @name = fn.name
           end
 
           def to_ast
-            [:method, target, method]
+            [:method, target, name]
           end
         end
 
