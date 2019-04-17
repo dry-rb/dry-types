@@ -49,17 +49,14 @@ module Dry
         type.default?
       end
 
-      # @param [Object] input
-      # @return [Object]
-      def call(input, &block)
-        if block_given?
-          coerced = fn.(input) { return yield }
-          type.(coerced) { |output = coerced| yield(output) }
-        else
-          type.(fn.(input))
-        end
+      def call_safe(input)
+        coerced = fn.(input) { return yield }
+        type.call_safe(coerced) { |output = coerced| yield(output) }
       end
-      alias_method :[], :call
+
+      def call_unsafe(input)
+        type.call_unsafe(fn.(input))
+      end
 
       # @param [Object] input
       # @param [#call,nil] block

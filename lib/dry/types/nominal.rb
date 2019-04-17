@@ -59,10 +59,15 @@ module Dry
 
       # @param [BasicObject] input
       # @return [BasicObject]
-      def call(input)
+      def call_unsafe(input)
         input
       end
-      alias_method :[], :call
+
+      # @param [BasicObject] input
+      # @return [BasicObject]
+      def call_safe(input)
+        input
+      end
 
       # @param [Object] input
       # @param [#call,nil] block

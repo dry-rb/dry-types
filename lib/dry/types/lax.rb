@@ -20,6 +20,8 @@ module Dry
         type.(input) { |output = input| output }
       end
       alias_method :[], :call
+      alias_method :call_safe, :call
+      alias_method :call_unsafe, :call
 
       # @param [Object] input
       # @param [#call,nil] block

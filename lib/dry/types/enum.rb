@@ -29,12 +29,13 @@ module Dry
         freeze
       end
 
-      # @param [Object] input
-      # @return [Object]
-      def call(input = Undefined, &block)
-        type.(map_value(input), &block)
+      def call_safe(input, &block)
+        type.call_safe(map_value(input), &block)
       end
-      alias_method :[], :call
+
+      def call_unsafe(input)
+        type.call_unsafe(map_value(input))
+      end
 
       # @param [Object] input
       # @yieldparam [Failure] failure

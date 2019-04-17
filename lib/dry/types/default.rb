@@ -64,16 +64,23 @@ module Dry
         value.equal?(Undefined) || super
       end
 
-      # @param [Object] input
-      # @return [Object] value passed through {#type} or {#default} value
-      def call(input = Undefined, &block)
+      def call_unsafe(input = Undefined)
         if input.equal?(Undefined)
           evaluate
         else
-          Undefined.default(type.(input, &block)) { evaluate }
+          Undefined.default(type.call_unsafe(input)) { evaluate }
         end
       end
-      alias_method :[], :call
+
+      # @param [Object] input
+      # @return [Object] value passed through {#type} or {#default} value
+      def call_safe(input = Undefined, &block)
+        if input.equal?(Undefined)
+          evaluate
+        else
+          Undefined.default(type.call_safe(input, &block)) { evaluate }
+        end
+      end
 
       private
 

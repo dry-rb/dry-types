@@ -7,19 +7,13 @@ module Dry
   module Types
     class Constructor < Nominal
       class Function
-        module SafeCall
-          def call(input, &fallback)
-            super
+        class Safe < Function
+          def call(input, &block)
+            @fn.(input, &block)
           rescue NoMethodError, TypeError, ArgumentError => error
-            CoercionError.handle(error, &fallback)
-          end
-
-          def wrapped?
-            true
+            CoercionError.handle(error, &block)
           end
         end
-
-        Safe = ::Class.new(Function) { include SafeCall }
 
         class MethodCall < Function
           @cache = ::Concurrent::Map.new
@@ -27,14 +21,8 @@ module Dry
           def self.call_class(method, public, safe)
             @cache.fetch_or_store([method, public, safe]) do
               if public
-                interface = PublicCall.call_interface(method)
-
                 ::Class.new(PublicCall) do
-                  if safe
-                    include interface
-                  else
-                    include SafeCall, interface
-                  end
+                  include PublicCall.call_interface(method, safe)
                 end
               elsif safe
                 PrivateCall
@@ -47,26 +35,42 @@ module Dry
           class PublicCall < MethodCall
             @interfaces = ::Concurrent::Map.new
 
-            def self.call_interface(method)
-              @interfaces.fetch_or_store(method) do
+            def self.call_interface(method, safe)
+              @interfaces.fetch_or_store([method, safe].hash) do
                 ::Module.new do
-                  module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
-                    def call(input = Undefined, &block)
-                      @target.#{method}(input, &block)
-                    end
-                  RUBY
+                  if safe
+                    module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
+                      def call(input, &block)
+                        @target.#{method}(input, &block)
+                      end
+                    RUBY
+                  else
+                    module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
+                      def call(input, &block)
+                        @target.#{method}(input)
+                      rescue NoMethodError, TypeError, ArgumentError => error
+                        CoercionError.handle(error, &block)
+                      end
+                    RUBY
+                  end
                 end
               end
             end
           end
 
           class PrivateCall < MethodCall
-            def call(input = Undefined, &block)
+            def call(input, &block)
               @target.send(@name, input, &block)
             end
           end
 
-          PrivateSafeCall = Class.new(PrivateCall) { include SafeCall }
+          class PrivateSafeCall < PrivateCall
+            def call(input, &block)
+              @target.send(@name, input)
+            rescue NoMethodError, TypeError, ArgumentError => error
+              CoercionError.handle(error, &block)
+            end
+          end
 
           def self.[](fn, safe)
             public = fn.receiver.respond_to?(fn.name)
@@ -92,15 +96,15 @@ module Dry
           if fn.is_a?(Function)
             fn
           elsif fn.is_a?(::Method)
-            MethodCall[fn, yields_fallback?(fn)]
-          elsif yields_fallback?(fn)
+            MethodCall[fn, yields_block?(fn)]
+          elsif yields_block?(fn)
             new(fn)
           else
             Safe.new(fn)
           end
         end
 
-        def self.yields_fallback?(fn)
+        def self.yields_block?(fn)
           *, (last_arg,) =
             if fn.respond_to?(:parameters)
               fn.parameters

@@ -17,25 +17,32 @@ module Dry
 
         # @param [Object] input
         # @return [Array]
-        def call(input, &block)
+        def call_unsafe(input)
           if primitive?(input)
             input.each_with_object([]) do |el, output|
-              coerced =
-                if block_given?
-                  member.(el) { return yield }
-                else
-                  member.(el)
-                end
+              coerced = member.call_unsafe(el)
 
               output << coerced unless Undefined.equal?(coerced)
             end
-          elsif block_given?
-            yield
           else
             super
           end
         end
-        alias_method :[], :call
+
+        # @param [Object] input
+        # @return [Array]
+        # @api private
+        def call_safe(input)
+          if primitive?(input)
+            input.each_with_object([]) do |el, output|
+              coerced = member.call_safe(el) { return yield }
+
+              output << coerced unless Undefined.equal?(coerced)
+            end
+          else
+            yield
+          end
+        end
 
         # @param [Array, Object] input
         # @param [#call,nil] block

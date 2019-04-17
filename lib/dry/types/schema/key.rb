@@ -30,9 +30,12 @@ module Dry
           @name = name
         end
 
-        # @see Dry::Types::Nominal#call
-        def call(input, &block)
-          type.(input, &block)
+        def call_safe(input, &block)
+          type.call_safe(input, &block)
+        end
+
+        def call_unsafe(input)
+          type.call_unsafe(input)
         end
 
         # @see Dry::Types::Nominal#try
