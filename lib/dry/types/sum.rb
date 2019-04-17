@@ -108,6 +108,16 @@ module Dry
         left.primitive?(value) || right.primitive?(value)
       end
 
+      def meta(data = nil)
+        if data.nil?
+          optional? ? right.meta : super
+        elsif optional?
+          self.class.new(left, right.meta(data), options)
+        else
+          super
+        end
+      end
+
       # @api public
       #
       # @see Nominal#to_ast
