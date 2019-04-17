@@ -60,7 +60,7 @@ module Dry
 
       # @param [Object] input
       # @return [Object]
-      def call_unsafe(input, &block)
+      def call_unsafe(input)
         left.call_safe(input) { right.call_unsafe(input) }
       end
 

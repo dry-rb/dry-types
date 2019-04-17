@@ -34,7 +34,7 @@ module Dry
       # @param [Hash] hash
       # @return [Hash]
       def call_safe(hash)
-        try(hash) { |failure| return yield }.input
+        try(hash) { return yield }.input
       end
 
       # @param [Hash] hash

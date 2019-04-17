@@ -10,7 +10,7 @@ module Dry
       deprecate(:safe, :lax)
 
       def valid?(input = Undefined)
-        self.call_safe(input) { return false }
+        call_safe(input) { return false }
         true
       end
       alias_method :===, :valid?
