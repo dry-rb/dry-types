@@ -66,7 +66,7 @@ module Dry
         # @param [#to_d, Object] input
         # @return [BigDecimal, nil, Object]
         def self.to_decimal(input, &block)
-          result = to_float(input) do
+          to_float(input) do
             if block_given?
               return yield
             else
