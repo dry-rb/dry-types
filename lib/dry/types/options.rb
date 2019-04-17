@@ -7,38 +7,15 @@ module Dry
       attr_reader :options
 
       # @see Nominal#initialize
-      def initialize(*args, meta: EMPTY_HASH, **options)
+      def initialize(*args, **options)
         @__args__ = args.freeze
         @options = options.freeze
-        @meta = meta.freeze
       end
 
       # @param [Hash] new_options
       # @return [Type]
       def with(**new_options)
-        self.class.new(*@__args__, **options, meta: @meta, **new_options)
-      end
-
-      # @overload meta
-      #   @return [Hash] metadata associated with type
-      #
-      # @overload meta(data)
-      #   @param [Hash] new metadata to merge into existing metadata
-      #   @return [Type] new type with added metadata
-      def meta(data = nil)
-        if !data
-          @meta
-        elsif data.empty?
-          self
-        else
-          with(meta: @meta.merge(data))
-        end
-      end
-
-      # Resets meta
-      # @return [Dry::Types::Type]
-      def pristine
-        with(meta: EMPTY_HASH)
+        self.class.new(*@__args__, **options, **new_options)
       end
     end
   end

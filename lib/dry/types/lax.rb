@@ -12,7 +12,7 @@ module Dry
       include Printable
       include Dry::Equalizer(:type, inspect: false)
 
-      private :options, :meta, :constructor
+      private :options, :constructor
 
       # @param [Object] input
       # @return [Object]
@@ -39,7 +39,7 @@ module Dry
       #
       # @see Nominal#to_ast
       def to_ast(meta: true)
-        [:lax, [type.to_ast(meta: meta), EMPTY_HASH]]
+        [:lax, type.to_ast(meta: meta)]
       end
 
       # @api public

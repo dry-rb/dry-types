@@ -19,30 +19,29 @@ module Dry
 
       def visit(node)
         type, body = node
-        send(:"visit_#{ type }", body)
+        send(:"visit_#{type}", body)
       end
 
       def visit_constrained(node)
-        nominal, rule, meta = node
+        nominal, rule = node
         type = visit(nominal)
-        type.constrained_type.new(type, rule: visit_rule(rule)).meta(meta)
+        type.constrained_type.new(type, rule: visit_rule(rule))
       end
 
       def visit_constructor(node)
-        nominal, fn, meta = node
+        nominal, fn = node
         primitive = visit(nominal)
-        primitive.constructor(compile_fn(fn)).meta(meta)
+        primitive.constructor(compile_fn(fn))
       end
 
       def visit_lax(node)
-        ast, meta = node
-        Types::Lax.new(visit(ast), meta: meta)
+        Types::Lax.new(visit(node))
       end
       deprecate(:visit_safe, :visit_lax)
 
       def visit_nominal(node)
         type, meta = node
-        nominal_name = "nominal.#{ Types.identifier(type) }"
+        nominal_name = "nominal.#{Types.identifier(type)}"
 
         if registry.registered?(nominal_name)
           registry[nominal_name].meta(meta)
@@ -102,13 +101,13 @@ module Dry
       end
 
       def visit_enum(node)
-        type, mapping, meta = node
-        Enum.new(visit(type), mapping: mapping, meta: meta)
+        type, mapping = node
+        Enum.new(visit(type), mapping: mapping)
       end
 
       def visit_map(node)
-        key_type, value_type, meta = node
-        registry['nominal.hash'].map(visit(key_type), visit(value_type)).meta(meta)
+        key_type, value_type = node
+        registry['nominal.hash'].map(visit(key_type), visit(value_type))
       end
 
       def visit_any(meta)

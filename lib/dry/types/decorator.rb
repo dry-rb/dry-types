@@ -46,6 +46,13 @@ module Dry
         super || type.respond_to?(meth)
       end
 
+      # Replace the underlying type
+      # @param [Dry::Types::Type] type
+      # @return [Dry::Types::Schema::Key]
+      def new(type)
+        self.class.new(type, *@__args__[1..-1], **@options)
+      end
+
       private
 
       # @param [Object] response

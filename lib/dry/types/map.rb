@@ -49,8 +49,7 @@ module Dry
       # @return [Array] An AST representation
       def to_ast(meta: true)
         [:map,
-         [key_type.to_ast(meta: true), value_type.to_ast(meta: true),
-          meta ? self.meta : EMPTY_HASH]]
+         [key_type.to_ast(meta: true), value_type.to_ast(meta: true)]]
       end
 
       # @return [Boolean]

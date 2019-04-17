@@ -136,7 +136,7 @@ RSpec.describe Dry::Types::Enum do
   end
 
   describe '#with' do
-    subject(:enum_with_meta) { Dry::Types['nominal.integer'].enum(4, 5, 6).with(meta: { foo: :bar }) }
+    subject(:enum_with_meta) { Dry::Types['nominal.integer'].enum(4, 5, 6).meta(foo: :bar) }
 
     it_behaves_like Dry::Types::Nominal do
       let(:type) { enum_with_meta }

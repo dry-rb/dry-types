@@ -62,7 +62,7 @@ module Dry
             options = constructor.options.dup
             options.delete(:fn)
 
-            visit_options(options, constructor.meta) do |opts|
+            visit_options(options) do |opts|
               yield "Constructor<#{type} fn=#{fn}#{opts}>"
             end
           end
@@ -74,7 +74,7 @@ module Dry
           options = constrained.options.dup
           rule = options.delete(:rule)
 
-          visit_options(options, constrained.meta) do |opts|
+          visit_options(options) do |opts|
             yield "Constrained<#{type} rule=[#{rule}]>"
           end
         end
@@ -125,7 +125,7 @@ module Dry
             options.delete(:key_type)
             options.delete(:value_type)
 
-            visit_options(options, map.meta) do |opts|
+            visit_options(options) do |opts|
               yield "Map<#{ key } => #{ value }>"
             end
           end
@@ -186,7 +186,7 @@ module Dry
           options = enum.options.dup
           mapping = options.delete(:mapping)
 
-          visit_options(options, enum.meta) do |opts|
+          visit_options(options) do |opts|
             if mapping == enum.inverted_mapping
               values = mapping.values.map(&:inspect).join(", ")
               yield "Enum<#{ type } values={#{ values }}#{ opts }>"
@@ -202,7 +202,7 @@ module Dry
 
       def visit_default(default)
         visit(default.type) do |type|
-          visit_options(default.options, default.meta) do |opts|
+          visit_options(default.options) do |opts|
             if default.is_a?(Default::Callable)
               visit_callable(default.value) do |fn|
                 yield "Default<#{ type } value_fn=#{ fn }#{ opts }>"
@@ -280,7 +280,7 @@ module Dry
         end
       end
 
-      def visit_options(options, meta)
+      def visit_options(options, meta = EMPTY_HASH)
         if options.empty? && meta.empty?
           yield ""
         else

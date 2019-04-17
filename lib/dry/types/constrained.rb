@@ -11,7 +11,7 @@ module Dry
       include Decorator
       include Builder
       include Printable
-      include Dry::Equalizer(:type, :options, :rule, :meta, inspect: false)
+      include Dry::Equalizer(:type, :rule, inspect: false)
 
       # @return [Dry::Logic::Rule]
       attr_reader :rule
@@ -86,9 +86,7 @@ module Dry
       #
       # @see Nominal#to_ast
       def to_ast(meta: true)
-        [:constrained, [type.to_ast(meta: meta),
-                        rule.to_ast,
-                        meta ? self.meta : EMPTY_HASH]]
+        [:constrained, [type.to_ast(meta: meta), rule.to_ast]]
       end
 
       private

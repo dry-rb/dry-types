@@ -4,12 +4,14 @@ require 'dry/core/deprecations'
 require 'dry/types/builder'
 require 'dry/types/result'
 require 'dry/types/options'
+require 'dry/types/meta'
 
 module Dry
   module Types
     class Nominal
       include Type
       include Options
+      include Meta
       include Builder
       include Printable
       include Dry::Equalizer(:primitive, :options, :meta, inspect: false)

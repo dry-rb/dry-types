@@ -19,8 +19,7 @@ RSpec.describe Dry::Types::Map do
       Dry::Types::Map.new(
         ::Hash,
         key_type:   Dry::Types['strict.integer'],
-        value_type: Dry::Types['strict.string'],
-        meta:   { a: 1, b: 2, c: 3 }
+        value_type: Dry::Types['strict.string']
       )
     end
 
@@ -77,29 +76,25 @@ RSpec.describe Dry::Types::Map do
         expect(empty_map.with(key_type: Dry::Types['strict.integer'])).to eql keyed_map
         expect(empty_map.with(value_type: Dry::Types['strict.string'])).to eql value_map
         partial = value_map.with(key_type: Dry::Types['strict.integer'])
-        expect(partial).not_to eql complex_map
-        expect(partial.with(meta: {a:1, b:2, c:3})).to eql complex_map
+        expect(partial).to eql complex_map
       end
     end
 
     describe '#to_ast' do
       let(:any_ast) { Dry::Types::Any.to_ast }
       it 'decomposes the map into an ast array' do
-        expect(empty_map.to_ast).to eql [:map, [any_ast, any_ast, {}]]
+        expect(empty_map.to_ast).to eql [:map, [any_ast, any_ast]]
         expect(complex_map.to_ast).
           to eql(
                [:map, [
                   [:constrained, [
                      [:nominal, [Integer, {}]],
-                     [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]],
-                     {}
+                     [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]]
                    ]],
                   [:constrained, [
                      [:nominal, [String, {}]],
-                     [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]],
-                     {}
-                   ]],
-                  { a:1, b:2, c:3 }
+                     [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]]
+                   ]]
                 ]
                ]
              )
