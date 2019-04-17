@@ -50,10 +50,35 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash{Symbol => Object}]
-      def call(hash, &block)
-        coerce(hash, &block)
+      def call_safe(hash, options = EMPTY_HASH)
+        input = coerce(hash) { return yield }
+
+        catch(:schema_error) do
+          return resolve(input, options) do |key, value|
+            key.call_safe(value) { return yield }
+          end
+        end
+
+        yield
       end
-      alias_method :[], :call
+
+      def call_unsafe(hash, options = EMPTY_HASH)
+        input = coerce(hash)
+
+        error = catch(:schema_error) do
+          return resolve(input, options) do |key, value|
+            begin
+              key.call_unsafe(value)
+            rescue ConstraintError => error
+              raise SchemaError.new(key.name, value, error.result)
+            rescue CoercionError => error
+              raise SchemaError.new(key.name, value, error.message)
+            end
+          end
+        end
+
+        raise error
+      end
 
       # @param [Hash] hash
       # @option options [Boolean] :skip_missing If true don't raise error if on missing keys
@@ -61,7 +86,7 @@ module Dry
       #                                             won't be evaluated for missing key
       # @return [Hash{Symbol => Object}]
       def apply(hash, options = EMPTY_HASH)
-        coerce(hash, options)
+        call_unsafe(hash, options)
       end
 
       # @param [Hash] hash
@@ -267,36 +292,6 @@ module Dry
           elsif key.required? && !skip_missing
             throw(:schema_error, missing_key(key.name))
           end
-        end
-      end
-
-      # @param [Hash] hash
-      # @return [Hash{Symbol => Object}]
-      def coerce(hash, options = EMPTY_HASH, &_block)
-        if block_given?
-          input = super(hash) { return yield }
-
-          catch(:schema_error) do
-            return resolve(input, options) do |key, value|
-              key.(value) { return yield }
-            end
-          end
-
-          yield
-        else
-          error = catch(:schema_error) do
-            return resolve(super(hash), options) do |key, value|
-              begin
-                key.(value)
-              rescue ConstraintError => error
-                raise SchemaError.new(key.name, value, error.result)
-              rescue CoercionError => error
-                raise SchemaError.new(key.name, value, error.message)
-              end
-            end
-          end
-
-          raise error
         end
       end
 

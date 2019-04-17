@@ -88,7 +88,7 @@ RSpec.describe Dry::Types::Constrained do
 
     it 'fails when coercion fails' do
       expect { type['foo'] }.to raise_error(
-        Dry::Types::ConstraintError, /foo/
+        Dry::Types::CoercionError, /can't convert String into Hash/
       )
     end
 

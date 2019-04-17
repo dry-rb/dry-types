@@ -14,17 +14,27 @@ module Dry
 
       # @param [Dry::Monads::Maybe, Object] input
       # @return [Dry::Monads::Maybe]
-      def call(input = Undefined, &block)
+      def call_safe(input = Undefined, &block)
         case input
         when Dry::Monads::Maybe
           input
         when Undefined
           None()
         else
-          Maybe(type.(input, &block))
+          Maybe(type.call_safe(input, &block))
         end
       end
-      alias_method :[], :call
+
+      def call_unsafe(input = Undefined)
+        case input
+        when Dry::Monads::Maybe
+          input
+        when Undefined
+          None()
+        else
+          Maybe(type.call_unsafe(input))
+        end
+      end
 
       # @param [Object] input
       # @return [Result::Success]

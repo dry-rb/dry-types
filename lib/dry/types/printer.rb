@@ -36,7 +36,7 @@ module Dry
           if type.is_a?(Type)
             return yield type.inspect
           else
-            raise ArgumentError, "Do not know how to print #{ type.class }"
+            raise ArgumentError, "Do not know how to print #{type.class}"
           end
         end
         send(print_with, type, &block)

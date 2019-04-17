@@ -23,27 +23,23 @@ module Dry
         @rule = options.fetch(:rule)
       end
 
-      # @param [Object] input
-      # @return [Object]
-      # @raise [ConstraintError]
-      def call(input, &block)
-        if block_given?
-          if rule[input]
-            type.(input, &block)
-          else
-            yield
-          end
+      def call_safe(input, &block)
+        if rule[input]
+          type.call_safe(input, &block)
         else
-          result = rule.(input)
-
-          if result.success?
-            type.(input, &block)
-          else
-            raise ConstraintError.new(result, input)
-          end
+          yield
         end
       end
-      alias_method :[], :call
+
+      def call_unsafe(input)
+        result = rule.(input)
+
+        if result.success?
+          type.call_unsafe(input)
+        else
+          raise ConstraintError.new(result, input)
+        end
+      end
 
       # @param [Object] input
       # @param [#call,nil] block
