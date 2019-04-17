@@ -17,32 +17,24 @@ RSpec.describe Dry::Types::Constructor::Function do
     context 'proc' do
       include_examples 'well-behaving coercion function' do
         subject(:fun) { described_class[proc { |value| Integer(value) }] }
-
-        specify { expect(fun).to be_wrapped }
       end
     end
 
     context 'lambda' do
       include_examples 'well-behaving coercion function' do
         subject(:fun) { described_class[lambda { |value| Integer(value) }] }
-
-        specify { expect(fun).to be_wrapped }
       end
     end
 
     context 'method' do
       include_examples 'well-behaving coercion function' do
         subject(:fun) { described_class[Kernel.method(:Integer)] }
-
-        specify { expect(fun).to be_wrapped }
       end
     end
 
     context 'private method' do
       include_examples 'well-behaving coercion function' do
         subject(:fun) { described_class[1.method(:Integer)] }
-
-        specify { expect(fun).to be_wrapped }
       end
     end
 
@@ -59,8 +51,6 @@ RSpec.describe Dry::Types::Constructor::Function do
 
           described_class[obj.method(:coerce)]
         end
-
-        specify { expect(fun).not_to be_wrapped }
       end
     end
 
@@ -75,8 +65,6 @@ RSpec.describe Dry::Types::Constructor::Function do
 
           described_class[fn]
         end
-
-        specify { expect(fun).to be_wrapped }
       end
     end
 
@@ -93,8 +81,6 @@ RSpec.describe Dry::Types::Constructor::Function do
 
           described_class[fn]
         end
-
-        specify { expect(fun).not_to be_wrapped }
       end
     end
   end
