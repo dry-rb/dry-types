@@ -15,6 +15,8 @@ module Dry
           super
         end
 
+        # @param [Object] input
+        # @return [Array]
         def call_unsafe(input)
           if primitive?(input)
             input.each_with_object([]) do |el, output|
@@ -29,6 +31,7 @@ module Dry
 
         # @param [Object] input
         # @return [Array]
+        # @api private
         def call_safe(input)
           if primitive?(input)
             input.each_with_object([]) do |el, output|

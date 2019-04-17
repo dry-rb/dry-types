@@ -23,14 +23,6 @@ module Dry
         @rule = options.fetch(:rule)
       end
 
-      def call_safe(input, &block)
-        if rule[input]
-          type.call_safe(input, &block)
-        else
-          yield
-        end
-      end
-
       def call_unsafe(input)
         result = rule.(input)
 
@@ -38,6 +30,14 @@ module Dry
           type.call_unsafe(input)
         else
           raise ConstraintError.new(result, input)
+        end
+      end
+
+      def call_safe(input, &block)
+        if rule[input]
+          type.call_safe(input, &block)
+        else
+          yield
         end
       end
 

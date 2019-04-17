@@ -25,14 +25,16 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash]
-      def call_safe(hash)
-        try(hash) { |failure| return yield }.input
-      end
-
       def call_unsafe(hash)
         try(hash) { |failure|
           raise MapError, failure.error.message
         }.input
+      end
+
+      # @param [Hash] hash
+      # @return [Hash]
+      def call_safe(hash)
+        try(hash) { |failure| return yield }.input
       end
 
       # @param [Hash] hash

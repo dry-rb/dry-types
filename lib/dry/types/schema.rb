@@ -50,12 +50,14 @@ module Dry
 
       # @param [Hash] hash
       # @return [Hash{Symbol => Object}]
-      def call_safe(hash, options = EMPTY_HASH)
-        resolve_safe(coerce(hash) { return yield }, options) { return yield }
-      end
-
       def call_unsafe(hash, options = EMPTY_HASH)
         resolve_unsafe(coerce(hash), options)
+      end
+
+      # @param [Hash] hash
+      # @return [Hash{Symbol => Object}]
+      def call_safe(hash, options = EMPTY_HASH)
+        resolve_safe(coerce(hash) { return yield }, options) { return yield }
       end
 
       # @param [Hash] hash

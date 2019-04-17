@@ -14,17 +14,6 @@ module Dry
 
       # @param [Dry::Monads::Maybe, Object] input
       # @return [Dry::Monads::Maybe]
-      def call_safe(input = Undefined, &block)
-        case input
-        when Dry::Monads::Maybe
-          input
-        when Undefined
-          None()
-        else
-          Maybe(type.call_safe(input, &block))
-        end
-      end
-
       def call_unsafe(input = Undefined)
         case input
         when Dry::Monads::Maybe
@@ -33,6 +22,19 @@ module Dry
           None()
         else
           Maybe(type.call_unsafe(input))
+        end
+      end
+
+      # @param [Dry::Monads::Maybe, Object] input
+      # @return [Dry::Monads::Maybe]
+      def call_safe(input = Undefined, &block)
+        case input
+        when Dry::Monads::Maybe
+          input
+        when Undefined
+          None()
+        else
+          Maybe(type.call_safe(input, &block))
         end
       end
 

@@ -60,14 +60,14 @@ module Dry
 
       # @param [Object] input
       # @return [Object]
-      def call_safe(input, &block)
-        left.call_safe(input) { right.call_safe(input, &block) }
+      def call_unsafe(input, &block)
+        left.call_safe(input) { right.call_unsafe(input) }
       end
 
       # @param [Object] input
       # @return [Object]
-      def call_unsafe(input, &block)
-        left.call_safe(input) { right.call_unsafe(input) }
+      def call_safe(input, &block)
+        left.call_safe(input) { right.call_safe(input, &block) }
       end
 
       def try(input)

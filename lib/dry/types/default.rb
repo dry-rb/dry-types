@@ -64,6 +64,14 @@ module Dry
         value.equal?(Undefined) || super
       end
 
+      def call_unsafe(input = Undefined)
+        if input.equal?(Undefined)
+          evaluate
+        else
+          Undefined.default(type.call_unsafe(input)) { evaluate }
+        end
+      end
+
       # @param [Object] input
       # @return [Object] value passed through {#type} or {#default} value
       def call_safe(input = Undefined, &block)
@@ -71,14 +79,6 @@ module Dry
           evaluate
         else
           Undefined.default(type.call_safe(input, &block)) { evaluate }
-        end
-      end
-
-      def call_unsafe(input = Undefined)
-        if input.equal?(Undefined)
-          evaluate
-        else
-          Undefined.default(type.call_unsafe(input)) { evaluate }
         end
       end
 

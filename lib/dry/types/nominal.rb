@@ -59,11 +59,13 @@ module Dry
 
       # @param [BasicObject] input
       # @return [BasicObject]
-      def call_safe(input)
+      def call_unsafe(input)
         input
       end
 
-      def call_unsafe(input)
+      # @param [BasicObject] input
+      # @return [BasicObject]
+      def call_safe(input)
         input
       end
 

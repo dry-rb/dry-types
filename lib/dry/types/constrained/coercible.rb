@@ -4,16 +4,6 @@ module Dry
   module Types
     class Constrained
       class Coercible < Constrained
-        def call_safe(input)
-          coerced = type.call_safe(input) { return yield }
-
-          if rule[coerced]
-            coerced
-          else
-            yield(coerced)
-          end
-        end
-
         def call_unsafe(input)
           coerced = type.call_unsafe(input)
           result = rule.(coerced)
@@ -22,6 +12,16 @@ module Dry
             coerced
           else
             raise ConstraintError.new(result, input)
+          end
+        end
+
+        def call_safe(input)
+          coerced = type.call_safe(input) { return yield }
+
+          if rule[coerced]
+            coerced
+          else
+            yield(coerced)
           end
         end
 
