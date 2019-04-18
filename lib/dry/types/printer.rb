@@ -104,6 +104,7 @@ module Dry
         keys = options.delete(:keys)
 
         visit_options(options, schema.meta) do |opts|
+          opts = "#{opts[1..-1]} " unless opts.empty?
           schema_parameters = "#{key_fn_str}#{type_fn_str}#{strict_str}#{opts}"
 
           header = "Schema<#{schema_parameters}keys={"

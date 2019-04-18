@@ -75,20 +75,10 @@ module Dry
           required(false)
         end
 
-        # Construct a default type. Default values are
-        # evaluated/applied when key is absent in schema
-        # input.
-        #
-        # @see Dry::Types::Default
-        # @return [Dry::Types::Schema::Key]
-        def default(input = Undefined, &block)
-          new(type.default(input, &block))
-        end
-
         # @see Dry::Types::Lax
         # @return [Dry::Types::Schema::Key]
         def lax
-          new(type.lax).required(false)
+          super.required(false)
         end
 
         # Dump to internal AST representation
@@ -103,6 +93,12 @@ module Dry
               type.to_ast(meta: meta)
             ]
           ]
+        end
+
+        private
+
+        def decorate?(response)
+          response.is_a?(Type)
         end
       end
     end
