@@ -259,4 +259,13 @@ RSpec.describe Dry::Types::Builder, '#default' do
       end
     end
   end
+
+  describe '#meta' do
+    subject(:type) { Dry::Types['nominal.string'].meta(foo: :bar).default('foo'.freeze) }
+
+    it 'adds uses meta from the decorated type' do
+      expect(type.meta).to eql(foo: :bar)
+      expect(type.meta(bar: :baz).meta).to eql(foo: :bar, bar: :baz)
+    end
+  end
 end
