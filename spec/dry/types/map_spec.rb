@@ -19,8 +19,7 @@ RSpec.describe Dry::Types::Map do
       Dry::Types::Map.new(
         ::Hash,
         key_type:   Dry::Types['strict.integer'],
-        value_type: Dry::Types['strict.string'],
-        meta:   { a: 1, b: 2, c: 3 }
+        value_type: Dry::Types['strict.string']
       )
     end
 
@@ -31,12 +30,6 @@ RSpec.describe Dry::Types::Map do
         expect(keyed_map.key_type).to eql Dry::Types['strict.integer']
         expect(complex_map.key_type).to eql Dry::Types['strict.integer']
       end
-
-      it 'must be a Type' do
-        expect {
-          Dry::Types::Map.new(::Hash, key_type: "seven")
-        }.to raise_error(Dry::Types::MapError, /must be a Dry::Types::Type/)
-      end
     end
 
     describe '#value_type' do
@@ -45,12 +38,6 @@ RSpec.describe Dry::Types::Map do
         expect(keyed_map.value_type).to eql Dry::Types['any']
         expect(value_map.value_type).to eql Dry::Types['strict.string']
         expect(complex_map.value_type).to eql Dry::Types['strict.string']
-      end
-
-      it 'must be a Type' do
-        expect {
-          Dry::Types::Map.new(::Hash, value_type: "seven")
-        }.to raise_error(Dry::Types::MapError, /must be a Dry::Types::Type/)
       end
     end
 
@@ -77,8 +64,7 @@ RSpec.describe Dry::Types::Map do
         expect(empty_map.with(key_type: Dry::Types['strict.integer'])).to eql keyed_map
         expect(empty_map.with(value_type: Dry::Types['strict.string'])).to eql value_map
         partial = value_map.with(key_type: Dry::Types['strict.integer'])
-        expect(partial).not_to eql complex_map
-        expect(partial.with(meta: {a:1, b:2, c:3})).to eql complex_map
+        expect(partial).to eql complex_map
       end
     end
 
@@ -91,15 +77,13 @@ RSpec.describe Dry::Types::Map do
                [:map, [
                   [:constrained, [
                      [:nominal, [Integer, {}]],
-                     [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]],
-                     {}
+                     [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]]
                    ]],
                   [:constrained, [
                      [:nominal, [String, {}]],
-                     [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]],
-                     {}
+                     [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]]
                    ]],
-                  { a:1, b:2, c:3 }
+                  {}
                 ]
                ]
              )

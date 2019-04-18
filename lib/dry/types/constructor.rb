@@ -6,7 +6,9 @@ require 'dry/types/constructor/function'
 module Dry
   module Types
     class Constructor < Nominal
-      include Dry::Equalizer(:type, :options, :meta, inspect: false)
+      include Dry::Equalizer(:type, :options, inspect: false)
+
+      private :meta
 
       # @return [#call]
       attr_reader :fn
@@ -93,9 +95,7 @@ module Dry
       #
       # @see Nominal#to_ast
       def to_ast(meta: true)
-        [:constructor, [type.to_ast(meta: meta),
-                        fn.to_ast,
-                        meta ? self.meta : EMPTY_HASH]]
+        [:constructor, [type.to_ast(meta: meta), fn.to_ast]]
       end
 
       # @api public

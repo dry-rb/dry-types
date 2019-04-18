@@ -6,7 +6,7 @@ module Dry
   module Types
     class Enum
       include Type
-      include Dry::Equalizer(:type, :options, :mapping, inspect: false)
+      include Dry::Equalizer(:type, :mapping, inspect: false)
       include Decorator
 
       # @return [Array]
@@ -58,9 +58,7 @@ module Dry
       #
       # @see Nominal#to_ast
       def to_ast(meta: true)
-        [:enum, [type.to_ast(meta: meta),
-                 mapping,
-                 meta ? self.meta : EMPTY_HASH]]
+        [:enum, [type.to_ast(meta: meta), mapping]]
       end
 
       # @return [String]

@@ -290,4 +290,17 @@ RSpec.describe Dry::Types::Sum do
       expect { type[12345] }.to raise_error(Dry::Types::ConstraintError)
     end
   end
+
+  describe '#meta' do
+    context 'optional types' do
+      let(:meta) { { foo: :bar } }
+
+      subject(:type) { Dry::Types['string'].optional }
+
+      it 'uses meta from the right branch' do
+        expect(type.meta(meta).meta).to eql(meta)
+        expect(type.meta(meta).right.meta).to eql(meta)
+      end
+    end
+  end
 end

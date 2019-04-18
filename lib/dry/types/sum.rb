@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/types/options'
+require 'dry/types/meta'
 
 module Dry
   module Types
@@ -8,6 +9,7 @@ module Dry
       include Type
       include Builder
       include Options
+      include Meta
       include Printable
       include Dry::Equalizer(:left, :right, :options, :meta, inspect: false)
 
@@ -104,6 +106,16 @@ module Dry
       # @return [Boolean]
       def primitive?(value)
         left.primitive?(value) || right.primitive?(value)
+      end
+
+      def meta(data = nil)
+        if data.nil?
+          optional? ? right.meta : super
+        elsif optional?
+          self.class.new(left, right.meta(data), options)
+        else
+          super
+        end
       end
 
       # @api public

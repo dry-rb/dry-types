@@ -134,11 +134,9 @@ module Dry
 
         [
           :schema,
-          [
-            keys.map { |key| key.to_ast(meta: meta) },
+          [keys.map { |key| key.to_ast(meta: meta) },
             opts,
-            meta ? self.meta : EMPTY_HASH
-          ]
+            meta ? self.meta : EMPTY_HASH]
         ]
       end
 

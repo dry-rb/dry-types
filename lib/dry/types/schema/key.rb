@@ -75,27 +75,10 @@ module Dry
           required(false)
         end
 
-        # Construct a default type. Default values are
-        # evaluated/applied when key is absent in schema
-        # input.
-        #
-        # @see Dry::Types::Default
-        # @return [Dry::Types::Schema::Key]
-        def default(input = Undefined, &block)
-          new(type.default(input, &block))
-        end
-
-        # Replace the underlying type
-        # @param [Dry::Types::Type] type
-        # @return [Dry::Types::Schema::Key]
-        def new(type)
-          self.class.new(type, name, options)
-        end
-
         # @see Dry::Types::Lax
         # @return [Dry::Types::Schema::Key]
         def lax
-          new(type.lax).required(false)
+          super.required(false)
         end
 
         # Dump to internal AST representation
@@ -112,22 +95,10 @@ module Dry
           ]
         end
 
-        # Get/set type metadata. The Key type doesn't have
-        # its out meta, it delegates these calls to the underlying
-        # type.
-        #
-        # @overload meta
-        #   @return [Hash] metadata associated with type
-        #
-        # @overload meta(data)
-        #   @param [Hash] new metadata to merge into existing metadata
-        #   @return [Type] new type with added metadata
-        def meta(data = nil)
-          if data.nil?
-            type.meta
-          else
-            new(type.meta(data))
-          end
+        private
+
+        def decorate?(response)
+          response.is_a?(Type)
         end
       end
     end

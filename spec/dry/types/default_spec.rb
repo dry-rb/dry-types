@@ -122,7 +122,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
   end
 
   describe '#with' do
-    subject(:type) { Dry::Types['nominal.time'].default { Time.now }.with(meta: { foo: :bar }) }
+    subject(:type) { Dry::Types['nominal.time'].default { Time.now }.meta(foo: :bar) }
 
     it_behaves_like Dry::Types::Nominal
 
@@ -257,6 +257,15 @@ RSpec.describe Dry::Types::Builder, '#default' do
             )
         end
       end
+    end
+  end
+
+  describe '#meta' do
+    subject(:type) { Dry::Types['nominal.string'].meta(foo: :bar).default('foo'.freeze) }
+
+    it 'adds uses meta from the decorated type' do
+      expect(type.meta).to eql(foo: :bar)
+      expect(type.meta(bar: :baz).meta).to eql(foo: :bar, bar: :baz)
     end
   end
 end

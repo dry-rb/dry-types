@@ -5,14 +5,8 @@ require 'dry/types/decorator'
 module Dry
   module Types
     class Default
-      include Type
-      include Decorator
-      include Builder
-      include Printable
-      include Dry::Equalizer(:type, :options, :value, inspect: false)
-
       class Callable < Default
-        include Dry::Equalizer(:type, :options, inspect: false)
+        include Dry::Equalizer(:type, inspect: false)
 
         # Evaluates given callable
         # @return [Object]
@@ -20,6 +14,12 @@ module Dry
           value.call(type)
         end
       end
+
+      include Type
+      include Decorator
+      include Builder
+      include Printable
+      include Dry::Equalizer(:type, :value, inspect: false)
 
       # @return [Object]
       attr_reader :value
