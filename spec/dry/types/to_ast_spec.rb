@@ -60,16 +60,14 @@ RSpec.describe Dry::Types, '#to_ast' do
         to eql([:constrained, [
                   [:nominal, [Integer, {}]],
                   [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]],
-                  {}
                ]])
     end
 
     specify 'with meta' do
       expect(type_with_meta.to_ast).
         to eql([:constrained, [
-                  [:nominal, [Integer, {}]],
-                  [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]],
-                  key: :value
+                  [:nominal, [Integer, key: :value]],
+                  [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]
                 ]])
     end
   end
@@ -126,7 +124,7 @@ RSpec.describe Dry::Types, '#to_ast' do
                    [
                      :constrained,
                      [
-                       [:nominal, [String, {}]],
+                       [:nominal, [String, key: :value]],
                        [
                          :and,
                          [
@@ -140,12 +138,10 @@ RSpec.describe Dry::Types, '#to_ast' do
                               [[:list, ["draft", "published", "archived"]], [:input, Undefined]]]
                            ]
                          ]
-                       ],
-                       {}
+                       ]
                      ]
                    ],
                    {"draft" => "draft", "published" => "published", "archived" => "archived"},
-                   key: :value
                  ]
                ])
     end

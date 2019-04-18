@@ -106,8 +106,8 @@ module Dry
       end
 
       def visit_map(node)
-        key_type, value_type = node
-        registry['nominal.hash'].map(visit(key_type), visit(value_type))
+        key_type, value_type, meta = node
+        registry['nominal.hash'].map(visit(key_type), visit(value_type)).meta(meta)
       end
 
       def visit_any(meta)

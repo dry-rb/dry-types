@@ -324,12 +324,10 @@ RSpec.describe Dry::Types::Compiler, '#call' do
                :map, [
                   [:constrained,
                    [[:nominal, [String, {}]],
-                    [:predicate, [:type?, [[:type, String], [:input, Undefined]]]],
-                    {}]],
+                    [:predicate, [:type?, [[:type, String], [:input, Undefined]]]]]],
                   [:constrained,
                    [[:nominal, [Integer, {}]],
-                    [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]],
-                    {}]],
+                    [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]]],
                   abc: 123, foo: 'bar'
                 ]
               ])

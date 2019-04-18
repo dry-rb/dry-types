@@ -5,7 +5,6 @@ module Dry
     class Map < Nominal
       def initialize(_primitive, key_type: Types['any'], value_type: Types['any'], meta: EMPTY_HASH)
         super(_primitive, key_type: key_type, value_type: value_type, meta: meta)
-        validate_options!
       end
 
       # @return [Type]
@@ -49,7 +48,9 @@ module Dry
       # @return [Array] An AST representation
       def to_ast(meta: true)
         [:map,
-         [key_type.to_ast(meta: true), value_type.to_ast(meta: true)]]
+         [key_type.to_ast(meta: true),
+          value_type.to_ast(meta: true),
+          meta ? self.meta : EMPTY_HASH]]
       end
 
       # @return [Boolean]
@@ -84,14 +85,6 @@ module Dry
         return success(output) if failures.empty?
 
         failure(input, MultipleError.new(failures))
-      end
-
-      def validate_options!
-        %i(key_type value_type).each do |opt|
-          type = send(opt)
-          next if type.is_a?(Type)
-          raise MapError, ":#{opt} must be a #{Type}, got: #{type.inspect}"
-        end
       end
     end
   end
