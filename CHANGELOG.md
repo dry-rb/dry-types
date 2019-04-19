@@ -28,6 +28,14 @@
 
 - During the work on this release, a lot of performance improvements were made. dry-types 1.0 combined with dry-logic 1.0 are multiple times faster than dry-types 0.15 and dry-logic 0.5 for common cases including constraints checking and coercion (flash-gordon)
 
+## Added
+
+- Types now can be converted to procs thus you pass them as blocks (flash-gordon)
+  ```ruby
+  %w(1 2 3).map(&Types::Coercible::Integer)
+  # => [1, 2, 3]
+  ```
+
 [Compare v0.15.0...v1.0.0](https://github.com/dry-rb/dry-types/compare/v0.15.0...v1.0.0)
 
 # 0.15.0 2019-03-22
