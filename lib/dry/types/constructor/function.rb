@@ -140,14 +140,26 @@ module Dry
           false
         end
 
-        def >>(other)
-          proc = other.is_a?(::Proc) ? other : other.fn
-          Function[@fn >> proc]
-        end
+        if RUBY_VERSION >= '2.6'
+          def >>(other)
+            proc = other.is_a?(::Proc) ? other : other.fn
+            Function[@fn >> proc]
+          end
 
-        def <<(other)
-          proc = other.is_a?(::Proc) ? other : other.fn
-          Function[@fn << proc]
+          def <<(other)
+            proc = other.is_a?(::Proc) ? other : other.fn
+            Function[@fn << proc]
+          end
+        else
+          def >>(other)
+            proc = other.is_a?(::Proc) ? other : other.fn
+            Function[-> x { proc[@fn[x]] }]
+          end
+
+          def <<(other)
+            proc = other.is_a?(::Proc) ? other : other.fn
+            Function[-> x { @fn[proc[x]] }]
+          end
         end
       end
     end
