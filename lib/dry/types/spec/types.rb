@@ -48,6 +48,14 @@ RSpec.shared_examples_for 'Dry::Types::Nominal without primitive' do
       end
     end
   end
+
+  describe '#to_proc' do
+    subject(:callable) { type.to_proc }
+
+    it 'converts a type to a proc' do
+      expect(callable).to be_a(Proc)
+    end
+  end
 end
 
 RSpec.shared_examples_for 'Dry::Types::Nominal#meta' do

@@ -159,6 +159,18 @@ RSpec.describe Dry::Types::Constructor do
     end
   end
 
+  describe '#to_proc' do
+    let(:type) { Dry::Types['coercible.integer'] }
+
+    example 'type can be passed as block' do
+      expect([1, '2', '03'].map(&type)).to eql([1, 2, 3])
+    end
+
+    it 'uses unsafe coercion' do
+      expect { type.to_proc.('a') }.to raise_error(Dry::Types::CoercionError)
+    end
+  end
+
   context 'decoration' do
     subject(:type) { Dry::Types['coercible.hash'] }
 
