@@ -37,11 +37,18 @@ module Dry
         # @return [Array]
         def call_safe(input)
           if primitive?(input)
-            input.each_with_object([]) do |el, output|
-              coerced = member.call_safe(el) { return yield }
+            failed = false
+
+            result = input.each_with_object([]) do |el, output|
+              coerced = member.call_safe(el) { |out = el|
+                failed = true
+                out
+              }
 
               output << coerced unless Undefined.equal?(coerced)
             end
+
+            failed ? yield(result) : result
           else
             yield
           end

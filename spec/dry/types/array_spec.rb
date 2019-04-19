@@ -46,6 +46,16 @@ RSpec.describe Dry::Types::Array do
         end
       end
 
+      context 'constructor types' do
+        subject(:array) do
+          Dry::Types['array'].of(Dry::Types['coercible.integer'])
+        end
+
+        it 'yields partially coerced values' do
+          expect(array.(['1', 2, 'foo']) { |xs| xs }).to eql([1, 2, 'foo'])
+        end
+      end
+
       context 'undefined' do
         subject(:array) do
           Dry::Types['array'].of(
