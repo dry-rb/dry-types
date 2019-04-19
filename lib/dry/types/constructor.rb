@@ -78,10 +78,7 @@ module Dry
       # @param [#call, nil] block
       # @return [Constructor]
       def constructor(new_fn = nil, **options, &block)
-        left = new_fn || block
-        right = fn
-
-        with(**options, fn: -> input { left[right[input]] })
+        with(**options, fn: fn >> (new_fn || block))
       end
       alias_method :append, :constructor
       alias_method :>>, :constructor
@@ -105,10 +102,7 @@ module Dry
       # @param [#call, nil] block
       # @return [Constructor]
       def prepend(new_fn = nil, **options, &block)
-        left = new_fn || block
-        right = fn
-
-        with(**options, fn: -> input { right[left[input]] })
+        with(**options, fn: fn << (new_fn || block))
       end
       alias_method :<<, :prepend
 

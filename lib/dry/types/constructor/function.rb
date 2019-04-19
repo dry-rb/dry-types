@@ -139,6 +139,16 @@ module Dry
         def wrapped?
           false
         end
+
+        def >>(other)
+          proc = other.is_a?(::Proc) ? other : other.fn
+          Function[@fn >> proc]
+        end
+
+        def <<(other)
+          proc = other.is_a?(::Proc) ? other : other.fn
+          Function[@fn << proc]
+        end
       end
     end
   end

@@ -126,4 +126,32 @@ RSpec.describe Dry::Types::Constructor::Function do
       end
     end
   end
+
+  describe '#>>' do
+    let(:power_2) { described_class[-> x { x ** 2 }] }
+
+    let(:mult_2) { described_class[-> x { x + 1 }] }
+
+    subject(:comp_a) { power_2 >> mult_2 }
+    subject(:comp_b) { mult_2 >> power_2 }
+
+    it 'composes two functions' do
+      expect(comp_a.(3)).to eql(10)
+      expect(comp_b.(3)).to eql(16)
+    end
+  end
+
+  describe '#<<' do
+    let(:power_2) { described_class[-> x { x ** 2 }] }
+
+    let(:mult_2) { described_class[-> x { x + 1 }] }
+
+    subject(:comp_a) { power_2 << mult_2 }
+    subject(:comp_b) { mult_2 << power_2 }
+
+    it 'composes two functions' do
+      expect(comp_a.(3)).to eql(16)
+      expect(comp_b.(3)).to eql(10)
+    end
+  end
 end
