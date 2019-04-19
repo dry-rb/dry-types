@@ -46,6 +46,13 @@ module Dry
         super || type.respond_to?(meth)
       end
 
+      # Wrap the type with a proc
+      # @return [Proc]
+      # @api public
+      def to_proc
+        proc { |value| self.(value) }
+      end
+
       private
 
       # @param [Object] response

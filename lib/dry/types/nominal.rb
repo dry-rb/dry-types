@@ -31,6 +31,8 @@ module Dry
         end
       end
 
+      ALWAYS = proc { true }
+
       # @param [Type,Class] primitive
       # @param [Hash] options
       def initialize(primitive, **options)
@@ -141,6 +143,13 @@ module Dry
 
       def lax
         self
+      end
+
+      # Wrap the type with a proc
+      # @return [Proc]
+      # @api public
+      def to_proc
+        ALWAYS
       end
     end
 

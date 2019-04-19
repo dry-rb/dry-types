@@ -19,7 +19,7 @@ RSpec.describe Dry::Types, '.[]' do
     end
   end
 
-  context 'with "nominalclass"' do
+  context 'with "nominal.class"' do
     let(:type) { Dry::Types['nominal.class'] }
 
     it_behaves_like 'a nominal type'

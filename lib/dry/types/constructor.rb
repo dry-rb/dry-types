@@ -116,6 +116,13 @@ module Dry
         Lax.new(Constructor.new(type.lax, options))
       end
 
+      # Wrap the type with a proc
+      # @return [Proc]
+      # @api public
+      def to_proc
+        proc { |value| self.(value) }
+      end
+
       private
 
       # @param [Symbol] meth
