@@ -124,6 +124,7 @@ module Dry
       def message
         "#{input.inspect} violates constraints (#{result} failed)"
       end
+      alias_method :to_s, :message
     end
   end
 end
