@@ -15,6 +15,8 @@ module Dry
           super
         end
 
+        # @api private
+        #
         # @param [Object] input
         # @return [Array]
         def call_unsafe(input)
@@ -29,9 +31,10 @@ module Dry
           end
         end
 
+        # @api private
+        #
         # @param [Object] input
         # @return [Array]
-        # @api private
         def call_safe(input)
           if primitive?(input)
             input.each_with_object([]) do |el, output|
@@ -71,12 +74,13 @@ module Dry
           end
         end
 
+        # Build a lax type
+        #
+        # @return [Lax]
         def lax
-          Lax.new(Member.new(primitive, { **options, member: member.lax}))
+          Lax.new(Member.new(primitive, { **options, member: member.lax }))
         end
 
-        # @api public
-        #
         # @see Nominal#to_ast
         def to_ast(meta: true)
           if member.respond_to?(:to_ast)

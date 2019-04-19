@@ -134,20 +134,21 @@ module Dry
 
       # Return AST representation of a type nominal
       #
-      # @api public
-      #
       # @return [Array]
       def to_ast(meta: true)
         [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
 
+      # Return self. Nominal types are lax by definition
+      #
+      # @return [Nominal]
       def lax
         self
       end
 
       # Wrap the type with a proc
+      #
       # @return [Proc]
-      # @api public
       def to_proc
         ALWAYS
       end

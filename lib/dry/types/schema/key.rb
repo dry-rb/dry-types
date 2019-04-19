@@ -75,8 +75,9 @@ module Dry
           required(false)
         end
 
-        # @see Dry::Types::Lax
-        # @return [Dry::Types::Schema::Key]
+        # Turn key into a lax type. Lax types are not strict hence such keys are not required
+        #
+        # @return [Lax]
         def lax
           super.required(false)
         end

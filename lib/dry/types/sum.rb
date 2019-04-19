@@ -108,6 +108,10 @@ module Dry
         left.primitive?(value) || right.primitive?(value)
       end
 
+      # Manage metadata to the type. If the type is an optional, #meta delegates
+      # to the right branch
+      #
+      # @see [Meta#meta]
       def meta(data = nil)
         if data.nil?
           optional? ? right.meta : super
@@ -118,8 +122,6 @@ module Dry
         end
       end
 
-      # @api public
-      #
       # @see Nominal#to_ast
       def to_ast(meta: true)
         [:sum, [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
@@ -137,8 +139,8 @@ module Dry
       end
 
       # Wrap the type with a proc
+      #
       # @return [Proc]
-      # @api public
       def to_proc
         proc { |value| self.(value) }
       end

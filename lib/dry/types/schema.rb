@@ -168,8 +168,8 @@ module Dry
       end
 
       # Whether the schema transforms input keys
+      #
       # @return [Boolean]
-      # @api public
       def trasform_keys?
         !options[:key_transform_fn].nil?
       end
@@ -233,6 +233,7 @@ module Dry
         true
       end
 
+      # @return [Lax]
       def lax
         Lax.new(schema(keys.map(&:lax)))
       end
@@ -240,8 +241,10 @@ module Dry
       private
 
       # @param [Array<Dry::Types::Schema::Keys>] keys
-      # @return [Dry::Types::Schema]
+      #
       # @api private
+      #
+      # @return [Dry::Types::Schema]
       def merge_keys(*keys)
         keys.
           flatten(1).
@@ -249,6 +252,11 @@ module Dry
           values
       end
 
+      # Validate and coerce a hash. Raise an exception on any error
+      #
+      # @api private
+      #
+      # @return [Hash]
       def resolve_unsafe(hash, options = EMPTY_HASH)
         result = {}
 
@@ -276,6 +284,11 @@ module Dry
         result
       end
 
+      # Validate and coerce a hash. Call a block and halt on any error
+      #
+      # @api private
+      #
+      # @return [Hash]
       def resolve_safe(hash, options = EMPTY_HASH, &block)
         result = {}
 
@@ -297,15 +310,16 @@ module Dry
         result
       end
 
-      def resolve_missing_keys(result, options)
+      # Try to add missing keys to the hash
+      def resolve_missing_keys(hash, options)
         skip_missing = options.fetch(:skip_missing, false)
         resolve_defaults = options.fetch(:resolve_defaults, true)
 
         keys.each do |key|
-          next if result.key?(key.name)
+          next if hash.key?(key.name)
 
           if key.default? && resolve_defaults
-            result[key.name] = key.call_unsafe(Undefined)
+            hash[key.name] = key.call_unsafe(Undefined)
           elsif key.required? && !skip_missing
             if block_given?
               return yield
@@ -323,6 +337,7 @@ module Dry
         UnknownKeysError.new(extra_keys)
       end
 
+      # @return [MissingKeyError]
       def missing_key(key)
         MissingKeyError.new(key)
       end

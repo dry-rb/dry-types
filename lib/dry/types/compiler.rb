@@ -4,6 +4,7 @@ require 'dry/core/deprecations'
 
 module Dry
   module Types
+    # @api private
     class Compiler
       extend ::Dry::Core::Deprecations[:'dry-types']
 

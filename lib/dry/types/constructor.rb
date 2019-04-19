@@ -27,8 +27,8 @@ module Dry
       end
 
       # @param [Type] type
+      # @param [Function] fn
       # @param [Hash] options
-      # @param [#call, nil] block
       def initialize(type, fn: nil, **options)
         @type = type
         @fn = fn
@@ -51,11 +51,15 @@ module Dry
         type.default?
       end
 
+      # @api private
+      # @return [Object]
       def call_safe(input)
         coerced = fn.(input) { return yield }
         type.call_safe(coerced) { |output = coerced| yield(output) }
       end
 
+      # @api private
+      # @return [Object]
       def call_unsafe(input)
         type.call_unsafe(fn.(input))
       end
@@ -73,6 +77,8 @@ module Dry
         type.try(value, &block)
       end
 
+      # Build a new constructor by appending a block to the coercion function
+      #
       # @param [#call, nil] new_fn
       # @param [Hash] options
       # @param [#call, nil] block
@@ -88,14 +94,12 @@ module Dry
         Constrained::Coercible
       end
 
-      # @api public
-      #
       # @see Nominal#to_ast
       def to_ast(meta: true)
         [:constructor, [type.to_ast(meta: meta), fn.to_ast]]
       end
 
-      # @api public
+      # Build a new constructor by prepending a block to the coercion function
       #
       # @param [#call, nil] new_fn
       # @param [Hash] options
@@ -106,19 +110,24 @@ module Dry
       end
       alias_method :<<, :prepend
 
+      # Build a lax type
+      #
+      # @return [Lax]
       def lax
         Lax.new(Constructor.new(type.lax, options))
       end
 
       # Wrap the type with a proc
+      #
       # @return [Proc]
-      # @api public
       def to_proc
         proc { |value| self.(value) }
       end
 
       private
 
+      # @api private
+      #
       # @param [Symbol] meth
       # @param [Boolean] include_private
       # @return [Boolean]
@@ -127,6 +136,9 @@ module Dry
       end
 
       # Delegates missing methods to {#type}
+      #
+      # @api private
+      #
       # @param [Symbol] method
       # @param [Array] args
       # @param [#call, nil] block
@@ -144,6 +156,7 @@ module Dry
         end
       end
 
+      # @api private
       def composable?(value)
         value.is_a?(Builder)
       end

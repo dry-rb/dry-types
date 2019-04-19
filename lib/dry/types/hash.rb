@@ -11,6 +11,7 @@ module Dry
       #   @param [{Symbol => Dry::Types::Nominal}] type_map
       #   @param [Hash] meta
       #   @return [Dry::Types::Schema]
+      #
       # @overload schema(keys)
       #   @param [Array<Dry::Types::Schema::Key>] key List of schema keys
       #   @param [Hash] meta
@@ -39,8 +40,7 @@ module Dry
         )
       end
 
-      # @param [{Symbol => Nominal}] type_map
-      # @return [Schema]
+      # @api private
       def weak(*)
         raise "Support for old hash schemas was removed, please refer to the CHANGELOG "\
               "on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/master/CHANGELOG.md"
@@ -71,8 +71,8 @@ module Dry
       end
 
       # Whether the type transforms types of schemas created by {Dry::Types::Hash#schema}
+      #
       # @return [Boolean]
-      # @api public
       def transform_types?
         !options[:type_transform_fn].nil?
       end

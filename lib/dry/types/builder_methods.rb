@@ -27,7 +27,6 @@ module Dry
       # @param [Hash{Symbol => Dry::Types::Type}] type_map
       #
       # @return [Dry::Types::Array]
-      # @api public
       def Hash(type_map)
         self::Hash.schema(type_map)
       end
@@ -43,7 +42,6 @@ module Dry
       # @param [Class,Module] klass Class or module
       #
       # @return [Dry::Types::Type]
-      # @api public
       def Instance(klass)
         Nominal.new(klass).constrained(type: klass)
       end
@@ -55,7 +53,6 @@ module Dry
       # @param [Object] value
       #
       # @return [Dry::Types::Type]
-      # @api public
       def Value(value)
         Nominal.new(value.class).constrained(eql: value)
       end
@@ -66,7 +63,6 @@ module Dry
       # @param [Object] object
       #
       # @return [Dry::Types::Type]
-      # @api public
       def Constant(object)
         Nominal.new(object.class).constrained(is: object)
       end
@@ -79,7 +75,6 @@ module Dry
       # @param [#call,nil] block Value constructor
       #
       # @return [Dry::Types::Type]
-      # @api public
       def Constructor(klass, cons = nil, &block)
         Nominal.new(klass).constructor(cons || block || klass.method(:new))
       end
@@ -89,7 +84,6 @@ module Dry
       # @param [Class] klass
       #
       # @return [Dry::Types::Type]
-      # @api public
       def Nominal(klass)
         Nominal.new(klass)
       end
@@ -104,7 +98,6 @@ module Dry
       # @param [Type] value_type Value type
       #
       # @return [Dry::Types::Map]
-      # @api public
       def Map(key_type, value_type)
         Types['nominal.hash'].map(key_type, value_type)
       end

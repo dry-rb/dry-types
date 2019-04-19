@@ -9,12 +9,33 @@ module Dry
 
       deprecate(:safe, :lax)
 
+      # Whether a value is a valid member of the type
+      #
+      # @return [Boolean]
       def valid?(input = Undefined)
         call_safe(input) { return false }
         true
       end
+      # Anything can be coerced matches
       alias_method :===, :valid?
 
+      # Apply type to a value
+      #
+      # @overload call(input = Undefined)
+      #   Possibly unsafe coercion attempt. If a value doesn't
+      #   match the type, an exception will be raised.
+      #
+      #   @param [Object] input
+      #   @return [Object]
+      #
+      # @overload call(input = Undefined)
+      #   When a block is passed, {#call} will never throw an exception on
+      #   failed coercion, instead it will call the block.
+      #
+      #   @param [Object] input
+      #   @yieldparam [Object] output Partially coerced value
+      #   @return [Object]
+      #
       def call(input = Undefined, &block)
         if block_given?
           call_safe(input, &block)

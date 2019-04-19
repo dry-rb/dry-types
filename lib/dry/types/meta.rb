@@ -10,7 +10,7 @@ module Dry
 
       # @param [Hash] new_options
       # @return [Type]
-      def with(**options)
+      def with(options)
         super(meta: @meta, **options)
       end
 

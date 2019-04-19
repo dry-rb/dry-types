@@ -35,14 +35,11 @@ module Dry
         block ? yield(result) : result
       end
 
-      # @api public
-      #
       # @see Nominal#to_ast
       def to_ast(meta: true)
         [:lax, type.to_ast(meta: meta)]
       end
 
-      # @api public
       # @return [Lax]
       def lax
         self

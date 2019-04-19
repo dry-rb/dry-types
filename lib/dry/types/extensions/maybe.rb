@@ -12,6 +12,8 @@ module Dry
       include Builder
       include Dry::Monads::Maybe::Mixin
 
+      # @api private
+      #
       # @param [Dry::Monads::Maybe, Object] input
       # @return [Dry::Monads::Maybe]
       def call_unsafe(input = Undefined)
@@ -25,6 +27,8 @@ module Dry
         end
       end
 
+      # @api private
+      #
       # @param [Dry::Monads::Maybe, Object] input
       # @return [Dry::Monads::Maybe]
       def call_safe(input = Undefined, &block)

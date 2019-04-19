@@ -2,6 +2,19 @@
 
 module Dry
   module Types
+    # Homogeneous mapping. It describes a hash with unknown keys that match a certain type.
+    #
+    # @example
+    #   type = Dry::Types['hash'].map(
+    #     Dry::Types['integer'].constrained(gteq: 1, lteq: 10),
+    #     Dry::Types['string']
+    #   )
+    #   type.(1 => 'right')
+    #   # => {1 => 'right'}
+    #   type.('1' => 'wrong')
+    #   # Dry::Types::MapError: "1" violates constraints (type?(Integer, "1") AND gteq?(1, "1") AND lteq?(10, "1") failed)
+    #   type.(11 => 'wrong')
+    #   # Dry::Types::MapError: 11 violates constraints (lteq?(10, 11) failed)
     class Map < Nominal
       def initialize(_primitive, key_type: Types['any'], value_type: Types['any'], meta: EMPTY_HASH)
         super(_primitive, key_type: key_type, value_type: value_type, meta: meta)
@@ -19,7 +32,7 @@ module Dry
 
       # @return [String]
       def name
-        "Map"
+        'Map'
       end
 
       # @param [Hash] hash
@@ -60,6 +73,7 @@ module Dry
 
       private
 
+      # @api private
       def coerce(input)
         return failure(
           input, CoercionError.new("#{input.inspect} must be an instance of #{primitive}")
@@ -82,9 +96,11 @@ module Dry
           end
         end
 
-        return success(output) if failures.empty?
-
-        failure(input, MultipleError.new(failures))
+        if failures.empty?
+          success(output)
+        else
+          failure(input, MultipleError.new(failures))
+        end
       end
     end
   end

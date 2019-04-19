@@ -60,10 +60,15 @@ module Dry
         success(call(input))
       end
 
+      # @return [Boolean]
       def valid?(value = Undefined)
-        value.equal?(Undefined) || super
+        Undefined.equal?(value) || super
       end
 
+      # @api private
+      #
+      # @param [Object] input
+      # @return [Object] value passed through {#type} or {#default} value
       def call_unsafe(input = Undefined)
         if input.equal?(Undefined)
           evaluate
@@ -72,6 +77,8 @@ module Dry
         end
       end
 
+      # @api pribate
+      #
       # @param [Object] input
       # @return [Object] value passed through {#type} or {#default} value
       def call_safe(input = Undefined, &block)
@@ -80,13 +87,6 @@ module Dry
         else
           Undefined.default(type.call_safe(input, &block)) { evaluate }
         end
-      end
-
-      private
-
-      # Replace underlying type
-      def __new__(type)
-        self.class.new(type, value, options)
       end
     end
   end

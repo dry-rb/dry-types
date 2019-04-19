@@ -29,19 +29,19 @@ module Dry
         freeze
       end
 
-      def call_safe(input, &block)
-        type.call_safe(map_value(input), &block)
-      end
-
+      # @api private
+      # @return [Object]
       def call_unsafe(input)
         type.call_unsafe(map_value(input))
       end
 
-      # @param [Object] input
-      # @yieldparam [Failure] failure
-      # @yieldreturn [Result]
-      # @return [Logic::Result]
-      # @return [Object] if coercion fails and a block is given
+      # @api private
+      # @return [Object]
+      def call_safe(input, &block)
+        type.call_safe(map_value(input), &block)
+      end
+
+      # @see Dry::Types::Constrained#try
       def try(input)
         super(map_value(input))
       end
@@ -54,15 +54,12 @@ module Dry
       # Check whether a value is in the enum
       alias_method :include?, :valid?
 
-      # @api public
-      #
       # @see Nominal#to_ast
       def to_ast(meta: true)
         [:enum, [type.to_ast(meta: meta), mapping]]
       end
 
       # @return [String]
-      # @api public
       def to_s
         PRINTER.(self)
       end
@@ -72,9 +69,10 @@ module Dry
 
       # Maps a value
       #
-      # @param [Object]
-      # @return [Object]
       # @api private
+      #
+      # @param [Object] input
+      # @return [Object]
       def map_value(input)
         if input.equal?(Undefined)
           type.call

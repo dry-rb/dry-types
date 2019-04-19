@@ -10,7 +10,10 @@ module Dry
 
     namespace self
 
+    # Base class for coercion errors raise by dry-types
+    #
     class CoercionError < StandardError
+      # @api private
       def self.handle(exception, meta: Undefined)
         if block_given?
           yield
@@ -23,8 +26,12 @@ module Dry
         end
       end
 
+      # Metadata associated with the error
+      #
+      # @return [Object]
       attr_reader :meta
 
+      # @api private
       def initialize(message, meta: Undefined, backtrace: Undefined)
         unless message.is_a?(::String)
           raise ArgumentError, "message must be a string, #{message.class} given"
@@ -36,17 +43,23 @@ module Dry
       end
     end
 
+    # Collection of multiple errors
+    #
     class MultipleError < CoercionError
+      # @return [Array<CoercionError>]
       attr_reader :errors
 
+      # @param [Array<CoercionError>] errors
       def initialize(errors)
         @errors = errors
       end
 
+      # @return string
       def message
         errors.map(&:message).join(', ')
       end
 
+      # @return [Array]
       def meta
         errors.map(&:meta)
       end
@@ -67,6 +80,7 @@ module Dry
     private_constant(:SchemaKeyError)
 
     class MissingKeyError < SchemaKeyError
+      # @return [Symbol]
       attr_reader :key
 
       # @param [String,Symbol] key
@@ -77,6 +91,7 @@ module Dry
     end
 
     class UnknownKeysError < SchemaKeyError
+      # @return [Array<Symbol>]
       attr_reader :keys
 
       # @param [<String, Symbol>] keys

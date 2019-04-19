@@ -8,7 +8,7 @@ module Dry
     # Export types registered in a container as module constants.
     # @example
     #   module Types
-    #     include Dry::Types.module(:strict, :coercible, :nominal, default: :strict)
+    #     include Dry::Types(:strict, :coercible, :nominal, default: :strict)
     #   end
     #   # Types.constants
     #   # => [:Class, :Strict, :Symbol, :Integer, :Float, :String, :Array, :Hash,

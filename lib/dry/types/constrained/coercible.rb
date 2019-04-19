@@ -4,6 +4,8 @@ module Dry
   module Types
     class Constrained
       class Coercible < Constrained
+        # @api private
+        # @return [Object]
         def call_unsafe(input)
           coerced = type.call_unsafe(input)
           result = rule.(coerced)
@@ -15,6 +17,8 @@ module Dry
           end
         end
 
+        # @api private
+        # @return [Object]
         def call_safe(input)
           coerced = type.call_safe(input) { return yield }
 
@@ -25,11 +29,7 @@ module Dry
           end
         end
 
-        # @param [Object] input
-        # @param [#call,nil] block
-        # @yieldparam [Failure] failure
-        # @yieldreturn [Result]
-        # @return [Result,nil]
+        # @see Dry::Types::Constrained#try
         def try(input, &block)
           result = type.try(input)
 

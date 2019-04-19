@@ -23,6 +23,8 @@ module Dry
         @rule = options.fetch(:rule)
       end
 
+      # @api private
+      # @return [Object]
       def call_unsafe(input)
         result = rule.(input)
 
@@ -33,6 +35,8 @@ module Dry
         end
       end
 
+      # @api private
+      # @return [Object]
       def call_safe(input, &block)
         if rule[input]
           type.call_safe(input, &block)
@@ -41,12 +45,20 @@ module Dry
         end
       end
 
-      # @param [Object] input
-      # @param [#call,nil] block
-      # @yieldparam [Failure] failure
-      # @yieldreturn [Result]
-      # @return [Logic::Result, Result]
-      # @return [Object] if block given and try fails
+      # Safe coercion attempt. It is similar to #call with a
+      # block given but returns a Result instance with metadata
+      # about errors (if any).
+      #
+      # @overload try(input)
+      #   @param [Object] input
+      #   @return [Logic::Result]
+      #
+      # @overload try(input)
+      #   @param [Object] input
+      #   @yieldparam [Failure] failure
+      #   @yieldreturn [Object]
+      #   @return [Object]
+      #
       def try(input, &block)
         result = rule.(input)
 
@@ -78,12 +90,13 @@ module Dry
         valid?(value)
       end
 
+      # Build lax type. Constraints are not applicable to lax types hence unwrapping
+      #
+      # @return [Lax]
       def lax
         type.lax
       end
 
-      # @api public
-      #
       # @see Nominal#to_ast
       def to_ast(meta: true)
         [:constrained, [type.to_ast(meta: meta), rule.to_ast]]

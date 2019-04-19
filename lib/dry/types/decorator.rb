@@ -47,8 +47,8 @@ module Dry
       end
 
       # Wrap the type with a proc
+      #
       # @return [Proc]
-      # @api public
       def to_proc
         proc { |value| self.(value) }
       end

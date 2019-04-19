@@ -64,6 +64,8 @@ module Dry
       container.register(name, type || block.call)
     end
 
+    # Get a built-in type by its name
+    #
     # @param [String,Class] name
     # @return [Type,Class]
     def self.[](name)
@@ -128,26 +130,26 @@ module Dry
   #
   #   module Types
   #     # imports all types as constants, uses modules for namespaces
-  #     include Dry::Types.module
+  #     include Dry::Types()
   #   end
-  #   # nominal types are exported by default
+  #   # strict types are exported by default
   #   Types::Integer
-  #   # => #<Dry::Types[Nominal<Integer>]>
-  #   Types::Strict::Integer
   #   # => #<Dry::Types[Constrained<Nominal<Integer> rule=[type?(Integer)]>]>
+  #   Types::Nominal::Integer
+  #   # => #<Dry::Types[Nominal<Integer>]>
   #
   # @example changing default types
   #
   #   module Types
-  #     include Dry::Types(default: :strict)
+  #     include Dry::Types(default: :nominal)
   #   end
   #   Types::Integer
-  #   # => #<Dry::Types[Constrained<Nominal<Integer> rule=[type?(Integer)]>]>
+  #   # => #<Dry::Types[Nominal<Integer>]>
   #
   # @example cherry-picking namespaces
   #
   #   module Types
-  #     include Dry::Types.module(:strict, :coercible)
+  #     include Dry::Types(:strict, :coercible)
   #   end
   #   # cherry-picking discards default types,
   #   # provide the :default option along with the list of
@@ -156,7 +158,7 @@ module Dry
   #
   # @example custom names
   #   module Types
-  #     include Dry::Types.module(coercible: :Kernel)
+  #     include Dry::Types(coercible: :Kernel)
   #   end
   #   Types::Kernel::Integer
   #   # => #<Dry::Types[Constructor<Nominal<Integer> fn=Kernel.Integer>]>

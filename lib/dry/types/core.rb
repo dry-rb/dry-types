@@ -62,14 +62,14 @@ module Dry
     end
 
     # Register `:bool` since it's common and not a built-in Ruby type :(
-    register("nominal.bool", self["nominal.true"] | self["nominal.false"])
-    bool = self["strict.true"] | self["strict.false"]
+    register('nominal.bool', self['nominal.true'] | self['nominal.false'])
+    bool = self['strict.true'] | self['strict.false']
     register("strict.bool", bool)
     register("bool", bool)
 
-    register("any", Any)
-    register("nominal.any", Any)
-    register("strict.any", Any)
+    register('any', Any)
+    register('nominal.any', Any)
+    register('strict.any', Any)
   end
 end
 

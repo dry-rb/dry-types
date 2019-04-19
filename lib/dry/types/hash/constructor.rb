@@ -11,12 +11,14 @@ module Dry
           ::Dry::Types::Hash::Constructor
         end
 
+        # @return [Lax]
         def lax
           type.lax.constructor(fn, meta: meta)
         end
 
         private
 
+        # @api private
         def composable?(value)
           super && !value.is_a?(Schema::Key)
         end

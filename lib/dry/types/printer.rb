@@ -28,7 +28,7 @@ module Dry
       def call(type)
         output = "".dup
         visit(type) { |str| output << str }
-        "#<Dry::Types[#{ output }]>"
+        "#<Dry::Types[#{output}]>"
       end
 
       def visit(type, &block)
@@ -52,7 +52,7 @@ module Dry
 
       def visit_array_member(array)
         visit(array.member) do |type|
-          yield "Array<#{ type }>"
+          yield "Array<#{type}>"
         end
       end
 
@@ -83,11 +83,11 @@ module Dry
       def visit_schema(schema)
         options = schema.options.dup
         size = schema.count
-        key_fn_str = ""
-        type_fn_str = ""
-        strict_str = ""
+        key_fn_str = ''
+        type_fn_str = ''
+        strict_str = ''
 
-        strict_str = "strict " if options.delete(:strict)
+        strict_str = 'strict ' if options.delete(:strict)
 
         if key_fn = options.delete(:key_transform_fn)
           visit_callable(key_fn) do |fn|
@@ -114,7 +114,7 @@ module Dry
           else
             yield header.dup << keys.map { |key|
               visit(key) { |type| type }
-            }.join(" ") << "}>"
+            }.join(' ') << '}>'
           end
         end
       end
@@ -127,7 +127,7 @@ module Dry
             options.delete(:value_type)
 
             visit_options(options) do |opts|
-              yield "Map<#{ key } => #{ value }>"
+              yield "Map<#{key} => #{value}>"
             end
           end
         end
@@ -136,9 +136,9 @@ module Dry
       def visit_key(key)
         visit(key.type) do |type|
           if key.required?
-            yield "#{ key.name }: #{ type }"
+            yield "#{key.name}: #{type}"
           else
-            yield "#{ key.name }?: #{ type }"
+            yield "#{key.name}?: #{type}"
           end
         end
       end
@@ -146,7 +146,7 @@ module Dry
       def visit_sum(sum)
         visit_sum_constructors(sum) do |constructors|
           visit_options(sum.options, sum.meta) do |opts|
-            yield "Sum<#{ constructors }#{ opts }>"
+            yield "Sum<#{constructors}#{opts}>"
           end
         end
       end
@@ -158,11 +158,11 @@ module Dry
             case sum.right
             when Sum
               visit_sum_constructors(sum.right) do |right|
-                yield "#{ left } | #{ right }"
+                yield "#{left} | #{right}"
               end
             else
               visit(sum.right) do |right|
-                yield "#{ left } | #{ right }"
+                yield "#{left} | #{right}"
               end
             end
           end
@@ -171,11 +171,11 @@ module Dry
             case sum.right
             when Sum
               visit_sum_constructors(sum.right) do |right|
-                yield "#{ left } | #{ right }"
+                yield "#{left} | #{right}"
               end
             else
               visit(sum.right) do |right|
-                yield "#{ left } | #{ right }"
+                yield "#{left} | #{right}"
               end
             end
           end
@@ -189,13 +189,13 @@ module Dry
 
           visit_options(options) do |opts|
             if mapping == enum.inverted_mapping
-              values = mapping.values.map(&:inspect).join(", ")
-              yield "Enum<#{ type } values={#{ values }}#{ opts }>"
+              values = mapping.values.map(&:inspect).join(', ')
+              yield "Enum<#{type} values={#{values}}#{opts}>"
             else
               mapping_str = mapping.map { |key, value|
-                "#{ key.inspect }=>#{ value.inspect }"
-              }.join(", ")
-              yield "Enum<#{ type } mapping={#{ mapping_str }}#{ opts }>"
+                "#{ key.inspect }=>#{value.inspect}"
+              }.join(', ')
+              yield "Enum<#{type} mapping={#{mapping_str}}#{opts}>"
             end
           end
         end
@@ -206,10 +206,10 @@ module Dry
           visit_options(default.options) do |opts|
             if default.is_a?(Default::Callable)
               visit_callable(default.value) do |fn|
-                yield "Default<#{ type } value_fn=#{ fn }#{ opts }>"
+                yield "Default<#{type} value_fn=#{fn}#{opts}>"
               end
             else
-              yield "Default<#{ type } value=#{ default.value.inspect }#{ opts }>"
+              yield "Default<#{type} value=#{default.value.inspect}#{opts}>"
             end
           end
         end
@@ -217,31 +217,31 @@ module Dry
 
       def visit_nominal(type)
         visit_options(type.options, type.meta) do |opts|
-          yield "Nominal<#{ type.primitive }#{ opts }>"
+          yield "Nominal<#{type.primitive}#{opts}>"
         end
       end
 
       def visit_lax(lax)
         visit(lax.type) do |type|
-          yield "Lax<#{ type }>"
+          yield "Lax<#{type}>"
         end
       end
 
       def visit_hash(hash)
         options = hash.options.dup
-        type_fn_str = ""
+        type_fn_str = ''
 
         if type_fn = options.delete(:type_transform_fn)
           visit_callable(type_fn) do |fn|
-            type_fn_str = "type_fn=#{ fn }"
+            type_fn_str = "type_fn=#{fn}"
           end
         end
 
         visit_options(options, hash.meta) do |opts|
           if opts.empty? && type_fn_str.empty?
-            yield "Hash"
+            yield 'Hash'
           else
-            yield "Hash<#{ type_fn_str }#{ opts }>"
+            yield "Hash<#{type_fn_str}#{opts}>"
           end
         end
       end
@@ -256,36 +256,36 @@ module Dry
           path, line = fn.source_location
 
           if line && line.zero?
-            yield ".#{ path }"
+            yield ".#{path}"
           elsif path
-            yield "#{ path.sub(Dir.pwd + "/", EMPTY_STRING) }:#{ line }"
+            yield "#{path.sub(Dir.pwd + '/', EMPTY_STRING) }:#{line}"
           elsif fn.lambda?
-            yield "(lambda)"
+            yield '(lambda)'
           else
             match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(\w+)\)>\z/)
 
             if match
-              yield ".#{ match[1] }"
+              yield ".#{match[1]}"
             else
-              yield "(proc)"
+              yield '(proc)'
             end
           end
         else
           call = fn.method(:call)
 
           if call.owner == fn.class
-            yield "#{ fn.class.to_s }#call"
+            yield "#{fn.class}#call"
           else
-            yield "#{ fn.to_s }.call"
+            yield "#{fn}.call"
           end
         end
       end
 
       def visit_options(options, meta = EMPTY_HASH)
         if options.empty? && meta.empty?
-          yield ""
+          yield ''
         else
-          opts = options.empty? ? "" : " options=#{ options.inspect }"
+          opts = options.empty? ? '' : " options=#{options.inspect}"
 
           if meta.empty?
             yield opts
@@ -293,13 +293,13 @@ module Dry
             values = meta.map do |key, value|
               case key
               when Symbol
-                "#{ key }: #{ value.inspect }"
+                "#{key}: #{value.inspect}"
               else
-                "#{ key.inspect }=>#{ value.inspect }"
+                "#{key.inspect}=>#{value.inspect}"
               end
             end
 
-            yield "#{ opts } meta={#{ values.join(", ") }}"
+            yield "#{opts} meta={#{values.join(', ')}}"
           end
         end
       end
