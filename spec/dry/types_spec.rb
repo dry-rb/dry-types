@@ -46,14 +46,6 @@ RSpec.describe Dry::Types do
     end
   end
 
-  describe '.module' do
-    it 'returns a module with built-in types' do
-      mod = Dry::Types.module
-
-      expect(mod::Coercible::String).to be_instance_of(Dry::Types::Constructor)
-    end
-  end
-
   describe 'missing constant' do
     it 'raises a nice error when a constant like Coercible or Strict is missing' do
       expect {
