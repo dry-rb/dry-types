@@ -1,3 +1,35 @@
+# 1.0.0 to-be-released
+
+## Changed
+
+- [BREAKING] Behavior of built-in constructor types was changed to be more strict. They will always raise an error on failed coercion (flash-gordon)
+  Compare:
+  ```ruby
+  # 0.15.0
+  Types::Params::Integer.('foo')
+  # => "foo"
+
+  # 1.0.0
+  Types::Params::Integer.('foo')
+  # => Dry::Types::CoercionError: invalid value for Integer(): "foo"
+  ```
+
+  To handle coercion errors `Type#call` now yields a block:
+
+  ```ruby
+  Types::Params::Integer.('foo') { :invalid } # => :invalid
+  ```
+  This makes work with coercions more straightforward and way faster.
+- [BREAKING] Safe types were renamed to Lax, this name better serves their purpose. The previous name is available but prints a warning (flash-gordon)
+- [BREAKING] Metadata is now pushed down to the decorated type. It is not likely you will notice a difference but this a breaking change that enables some use cases in rom related to the usage of default types in relations (flash-gordon)
+- Nominal types are now completely unconstrained. This fixes some inconsistencies when using them with constraints. `Nominal#try` will always return a successful result, for the previous behavior use `Nominal#try_coerce` or switch to strict types with passing a block to `#call` (flash-gordon)
+
+## Performance improvements
+
+- During the work on this release, a lot of performance improvements were made. dry-types 1.0 combined with dry-logic 1.0 are multiple times faster than dry-types 0.15 and dry-logic 0.5 for common cases including constraints checking and coercion (flash-gordon)
+
+[Compare v0.15.0...v1.0.0](https://github.com/dry-rb/dry-types/compare/v0.15.0...v1.0.0)
+
 # 0.15.0 2019-03-22
 
 ## Changed
