@@ -1,5 +1,9 @@
 --title 'dry-types'
+--query '@api.text != "private"'
+--embed-mixins
+-o doc
+-r README.md
+--files CHANGELOG.md
 --markup markdown
---readme README.md
---private
+--markup-provider=redcarpet
 lib/**/*.rb
