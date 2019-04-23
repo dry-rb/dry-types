@@ -2,7 +2,7 @@
 
 module Dry
   module Types
-    Any = Class.new(Nominal) do
+    class AnyClass < Nominal
       def self.name
         'Any'
       end
@@ -26,6 +26,8 @@ module Dry
       def to_ast(meta: true)
         [:any, meta ? self.meta : EMPTY_HASH]
       end
-    end.new
+    end
+
+    Any = AnyClass.new
   end
 end

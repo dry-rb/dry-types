@@ -10,6 +10,7 @@ module Dry
       include Dry::Equalizer(:type, :options, inspect: false)
       include Decorator
       include Builder
+      include Printable
       include Dry::Monads::Maybe::Mixin
 
       # @api private
@@ -83,7 +84,7 @@ module Dry
 
       def visit_maybe(maybe)
         visit(maybe.type) do |type|
-          yield "Maybe<#{ type }>"
+          yield "Maybe<#{type}>"
         end
       end
     end

@@ -10,7 +10,6 @@ module Types
   include Dry::Types()
 end
 
-
 begin
   require 'pry-byebug'
   binding.pry
