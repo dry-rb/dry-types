@@ -30,7 +30,28 @@
 
 ## Added
 
-- Types now can be converted to procs thus you pass them as blocks (flash-gordon)
+- API for custom constructor types was enhanced. If you pass your own callable to `.constructor` it can have a block in its signature. If a block is passed, you must call it on failied coercion, otherwise raise a type coercion error (flash-gordon)
+  Example:
+  ```ruby
+  proc do |input, &block|
+    if input.is_a? String
+      Integer(input, 10)
+    else
+      Integer(input)
+    end
+  rescue ArgumentError, TypeError => error
+    if block
+      block.call
+    else
+      raise Dry::Types::CoercionError.new(
+        error.message,
+        backtrace: error.backtrace
+      )
+    end
+  end
+  ```
+  This makes the exception handling your job so that dry-types won't have to catch and re-wrap all possible errors (this is not safe, generally speaking).
+- Types now can be converted to procs thus you can pass them as blocks (flash-gordon)
   ```ruby
   %w(1 2 3).map(&Types::Coercible::Integer)
   # => [1, 2, 3]
