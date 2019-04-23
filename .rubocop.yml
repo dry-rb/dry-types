@@ -1,6 +1,9 @@
 AllCops:
   TargetRubyVersion: 2.4
 
+Style/EachWithObject:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: single_quotes
@@ -14,12 +17,18 @@ Style/LambdaCall:
 Style/StabbyLambdaParentheses:
   Enabled: false
 
+Style/FormatString:
+  Enabled: false
+
+Layout/SpaceInLambdaLiteral:
+  Enabled: false
+
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
 
-Metrics/LineLength:                                                             
-  Max: 100 
+Metrics/LineLength:
+  Max: 100
 
 Metrics/MethodLength:
   Max: 22
@@ -41,3 +50,10 @@ Metrics/CyclomaticComplexity:
 
 Lint/BooleanSymbol:
   Enabled: false
+
+Style/AccessModifierDeclarations:
+  Enabled: false
+
+Style/BlockDelimiters:
+  EnforcedStyle: semantic
+
