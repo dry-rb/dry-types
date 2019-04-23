@@ -30,7 +30,7 @@
 
 ## Added
 
-- API for custom constructor types was enhanced. If you pass your own callable to `.constructor` it can have a block in its signature. If a block is passed, you must call it on failied coercion, otherwise raise a type coercion error (flash-gordon)
+- API for custom constructor types was enhanced. If you pass your own callable to `.constructor` it can have a block in its signature. If a block is passed, you must call it on failed coercion, otherwise raise a type coercion error (flash-gordon)
   Example:
   ```ruby
   proc do |input, &block|
