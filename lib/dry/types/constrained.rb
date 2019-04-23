@@ -6,6 +6,9 @@ require 'dry/types/constrained/coercible'
 
 module Dry
   module Types
+    # Constrained types apply rules to the input
+    #
+    # @api public
     class Constrained
       include Type
       include Decorator
@@ -17,14 +20,20 @@ module Dry
       attr_reader :rule
 
       # @param [Type] type
+      #
       # @param [Hash] options
+      #
+      # @api public
       def initialize(type, options)
         super
         @rule = options.fetch(:rule)
       end
 
       # @api private
+      #
       # @return [Object]
+      #
+      # @api public
       def call_unsafe(input)
         result = rule.(input)
 
@@ -36,7 +45,10 @@ module Dry
       end
 
       # @api private
+      #
       # @return [Object]
+      #
+      # @api public
       def call_safe(input, &block)
         if rule[input]
           type.call_safe(input, &block)
@@ -59,6 +71,7 @@ module Dry
       #   @yieldreturn [Object]
       #   @return [Object]
       #
+      # @api public
       def try(input, &block)
         result = rule.(input)
 
@@ -73,19 +86,28 @@ module Dry
       # @param [Hash] options
       #   The options hash provided to {Types.Rule} and combined
       #   using {&} with previous {#rule}
+      #
       # @return [Constrained]
+      #
       # @see Dry::Logic::Operators#and
+      #
+      # @api public
       def constrained(options)
         with(rule: rule & Types.Rule(options))
       end
 
       # @return [true]
+      #
+      # @api public
       def constrained?
         true
       end
 
       # @param [Object] value
+      #
       # @return [Boolean]
+      #
+      # @api public
       def ===(value)
         valid?(value)
       end
@@ -93,11 +115,13 @@ module Dry
       # Build lax type. Constraints are not applicable to lax types hence unwrapping
       #
       # @return [Lax]
+      # @api public
       def lax
         type.lax
       end
 
       # @see Nominal#to_ast
+      # @api public
       def to_ast(meta: true)
         [:constrained, [type.to_ast(meta: meta), rule.to_ast]]
       end
@@ -105,7 +129,10 @@ module Dry
       private
 
       # @param [Object] response
+      #
       # @return [Boolean]
+      #
+      # @api private
       def decorate?(response)
         super || response.is_a?(Constructor)
       end

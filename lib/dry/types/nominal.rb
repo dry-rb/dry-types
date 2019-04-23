@@ -8,6 +8,11 @@ require 'dry/types/meta'
 
 module Dry
   module Types
+    # Nominal types define a primitive class and do not apply any constructors or constraints
+    #
+    # Use these types for annotations and the base for building more complex types on top of them.
+    #
+    # @api public
     class Nominal
       include Type
       include Options
@@ -20,7 +25,10 @@ module Dry
       attr_reader :primitive
 
       # @param [Class] primitive
+      #
       # @return [Type]
+      #
+      # @api private
       def self.[](primitive)
         if primitive == ::Array
           Types::Array
@@ -35,6 +43,8 @@ module Dry
 
       # @param [Type,Class] primitive
       # @param [Hash] options
+      #
+      # @api private
       def initialize(primitive, **options)
         super
         @primitive = primitive
@@ -42,55 +52,79 @@ module Dry
       end
 
       # @return [String]
+      #
+      # @api public
       def name
         primitive.name
       end
 
       # @return [false]
+      #
+      # @api public
       def default?
         false
       end
 
       # @return [false]
+      #
+      # @api public
       def constrained?
         false
       end
 
       # @return [false]
+      #
+      # @api public
       def optional?
         false
       end
 
       # @param [BasicObject] input
+      #
       # @return [BasicObject]
+      #
+      # @api private
       def call_unsafe(input)
         input
       end
 
       # @param [BasicObject] input
+      #
       # @return [BasicObject]
+      #
+      # @api private
       def call_safe(input)
         input
       end
 
       # @param [Object] input
       # @param [#call,nil] block
+      #
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]
+      #
       # @return [Result,Logic::Result] when a block is not provided
       # @return [nil] otherwise
+      #
+      # @api public
       def try(input)
         success(input)
       end
 
       # @param (see Dry::Types::Success#initialize)
+      #
       # @return [Result::Success]
+      #
+      # @api public
       def success(input)
         Result::Success.new(input)
       end
 
       # @param (see Failure#initialize)
+      #
       # @return [Result::Failure]
+      #
+      # @api public
       def failure(input, error)
         unless error.is_a?(CoercionError)
           raise ArgumentError, "error must be a CoercionError"
@@ -99,12 +133,17 @@ module Dry
       end
 
       # Checks whether value is of a #primitive class
+      #
       # @param [Object] value
+      #
       # @return [Boolean]
+      #
+      # @api public
       def primitive?(value)
         value.is_a?(primitive)
       end
 
+      # @api private
       def coerce(input, &_block)
         if primitive?(input)
           input
@@ -115,6 +154,7 @@ module Dry
         end
       end
 
+      # @api private
       def try_coerce(input)
         result = success(input)
 
@@ -135,6 +175,8 @@ module Dry
       # Return AST representation of a type nominal
       #
       # @return [Array]
+      #
+      # @api public
       def to_ast(meta: true)
         [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
       end
@@ -142,6 +184,8 @@ module Dry
       # Return self. Nominal types are lax by definition
       #
       # @return [Nominal]
+      #
+      # @api public
       def lax
         self
       end
@@ -149,6 +193,8 @@ module Dry
       # Wrap the type with a proc
       #
       # @return [Proc]
+      #
+      # @api public
       def to_proc
         ALWAYS
       end

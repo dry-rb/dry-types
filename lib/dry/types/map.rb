@@ -9,34 +9,48 @@ module Dry
     #     Dry::Types['integer'].constrained(gteq: 1, lteq: 10),
     #     Dry::Types['string']
     #   )
+    #
     #   type.(1 => 'right')
     #   # => {1 => 'right'}
+    #
     #   type.('1' => 'wrong')
     #   # Dry::Types::MapError: "1" violates constraints (type?(Integer, "1") AND gteq?(1, "1") AND lteq?(10, "1") failed)
+    #
     #   type.(11 => 'wrong')
     #   # Dry::Types::MapError: 11 violates constraints (lteq?(10, 11) failed)
+    #
+    # @api public
     class Map < Nominal
       def initialize(_primitive, key_type: Types['any'], value_type: Types['any'], meta: EMPTY_HASH)
         super(_primitive, key_type: key_type, value_type: value_type, meta: meta)
       end
 
       # @return [Type]
+      #
+      # @api public
       def key_type
         options[:key_type]
       end
 
       # @return [Type]
+      #
+      # @api public
       def value_type
         options[:value_type]
       end
 
       # @return [String]
+      #
+      # @api public
       def name
         'Map'
       end
 
       # @param [Hash] hash
+      #
       # @return [Hash]
+      #
+      # @api private
       def call_unsafe(hash)
         try(hash) { |failure|
           raise MapError, failure.error.message
@@ -44,13 +58,19 @@ module Dry
       end
 
       # @param [Hash] hash
+      #
       # @return [Hash]
+      #
+      # @api private
       def call_safe(hash)
         try(hash) { return yield }.input
       end
 
       # @param [Hash] hash
+      #
       # @return [Result]
+      #
+      # @api public
       def try(hash)
         result = coerce(hash)
         return result if result.success? || !block_given?
@@ -58,7 +78,10 @@ module Dry
       end
 
       # @param meta [Boolean] Whether to dump the meta to the AST
+      #
       # @return [Array] An AST representation
+      #
+      # @api public
       def to_ast(meta: true)
         [:map,
          [key_type.to_ast(meta: true),
@@ -67,6 +90,8 @@ module Dry
       end
 
       # @return [Boolean]
+      #
+      # @api public
       def constrained?
         value_type.constrained?
       end

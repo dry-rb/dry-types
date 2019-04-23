@@ -16,6 +16,8 @@ module Dry
     # @see Dry::Types::Default::Callable#evaluate
     #
     # {Schema} implements Enumerable using its keys as collection.
+    #
+    # @api public
     class Schema < Hash
       NO_TRANSFORM = Dry::Types::FnContainer.register { |x| x }
       SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
@@ -33,8 +35,11 @@ module Dry
 
       # @param [Class] _primitive
       # @param [Hash] options
+      #
       # @option options [Array[Dry::Types::Schema::Key]] :keys
       # @option options [String] :key_transform_fn
+      #
+      # @api private
       def initialize(_primitive, **options)
         @keys = options.fetch(:keys)
         @name_key_map = keys.each_with_object({}) do |key, idx|
@@ -49,31 +54,44 @@ module Dry
       end
 
       # @param [Hash] hash
+      #
       # @return [Hash{Symbol => Object}]
+      #
+      # @api private
       def call_unsafe(hash, options = EMPTY_HASH)
         resolve_unsafe(coerce(hash), options)
       end
 
       # @param [Hash] hash
+      #
       # @return [Hash{Symbol => Object}]
+      #
+      # @api private
       def call_safe(hash, options = EMPTY_HASH)
         resolve_safe(coerce(hash) { return yield }, options) { return yield }
       end
 
       # @param [Hash] hash
+      #
       # @option options [Boolean] :skip_missing If true don't raise error if on missing keys
       # @option options [Boolean] :resolve_defaults If false default value
       #                                             won't be evaluated for missing key
       # @return [Hash{Symbol => Object}]
+      #
+      # @api public
       def apply(hash, options = EMPTY_HASH)
         call_unsafe(hash, options)
       end
 
       # @param [Hash] hash
+      #
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]
+      #
       # @return [Logic::Result]
       # @return [Object] if coercion fails and a block is given
+      #
+      # @api public
       def try(input)
         if primitive?(input)
           success = true
@@ -122,7 +140,10 @@ module Dry
       end
 
       # @param meta [Boolean] Whether to dump the meta to the AST
+      #
       # @return [Array] An AST representation
+      #
+      # @api public
       def to_ast(meta: true)
         if RUBY_VERSION >= "2.5"
           opts = options.slice(:key_transform_fn, :type_transform_fn, :strict)
@@ -141,21 +162,31 @@ module Dry
       end
 
       # Whether the schema rejects unknown keys
+      #
       # @return [Boolean]
+      #
+      # @api public
       def strict?
         options.fetch(:strict, false)
       end
 
       # Make the schema intolerant to unknown keys
+      #
       # @return [Schema]
+      #
+      # @api public
       def strict
         with(strict: true)
       end
 
       # Injects a key transformation function
+      #
       # @param [#call,nil] proc
       # @param [#call,nil] block
+      #
       # @return [Schema]
+      #
+      # @api public
       def with_key_transform(proc = nil, &block)
         fn = proc || block
 
@@ -170,6 +201,8 @@ module Dry
       # Whether the schema transforms input keys
       #
       # @return [Boolean]
+      #
+      # @api public
       def trasform_keys?
         !options[:key_transform_fn].nil?
       end
@@ -178,10 +211,13 @@ module Dry
       #   @param [{Symbol => Dry::Types::Nominal}] type_map
       #   @param [Hash] meta
       #   @return [Dry::Types::Schema]
+      #
       # @overload schema(keys)
       #   @param [Array<Dry::Types::Schema::Key>] key List of schema keys
       #   @param [Hash] meta
       #   @return [Dry::Types::Schema]
+      #
+      # @api public
       def schema(keys_or_map)
         if keys_or_map.is_a?(::Array)
           new_keys = keys_or_map
@@ -196,6 +232,8 @@ module Dry
       # Iterate over each key type
       #
       # @return [Array<Dry::Types::Schema::Key>,Enumerator]
+      #
+      # @api public
       def each(&block)
         keys.each(&block)
       end
@@ -203,12 +241,16 @@ module Dry
       # Whether the schema has the given key
       #
       # @param [Symbol] name Key name
+      #
       # @return [Boolean]
+      #
+      # @api public
       def key?(name)
         name_key_map.key?(name)
       end
 
-      # Fetch key type by a key name.
+      # Fetch key type by a key name
+      #
       # Behaves as ::Hash#fetch
       #
       # @overload key(name, fallback = Undefined)
@@ -220,6 +262,8 @@ module Dry
       #   @param [Symbol] name Key name
       #   @param [Proc] block Fallback block, runs if key is missing
       #   @return [Dry::Types::Schema::Key,Object] key type or block value if key is not in schema
+      #
+      # @api public
       def key(name, fallback = Undefined, &block)
         if Undefined.equal?(fallback)
           name_key_map.fetch(name, &block)
@@ -229,11 +273,15 @@ module Dry
       end
 
       # @return [Boolean]
+      #
+      # @api public
       def constrained?
         true
       end
 
       # @return [Lax]
+      #
+      # @api public
       def lax
         Lax.new(schema(keys.map(&:lax)))
       end
@@ -242,9 +290,9 @@ module Dry
 
       # @param [Array<Dry::Types::Schema::Keys>] keys
       #
-      # @api private
-      #
       # @return [Dry::Types::Schema]
+      #
+      # @api private
       def merge_keys(*keys)
         keys.
           flatten(1).
@@ -311,6 +359,8 @@ module Dry
       end
 
       # Try to add missing keys to the hash
+      #
+      # @api private
       def resolve_missing_keys(hash, options)
         skip_missing = options.fetch(:skip_missing, false)
         resolve_defaults = options.fetch(:resolve_defaults, true)
@@ -331,13 +381,18 @@ module Dry
       end
 
       # @param hash_keys [Array<Symbol>]
+      #
       # @return [UnknownKeysError]
+      #
+      # @api private
       def unexpected_keys(hash_keys)
         extra_keys = hash_keys.map(&transform_key) - name_key_map.keys
         UnknownKeysError.new(extra_keys)
       end
 
       # @return [MissingKeyError]
+      #
+      # @api private
       def missing_key(key)
         MissingKeyError.new(key)
       end

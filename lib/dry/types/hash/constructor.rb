@@ -4,6 +4,9 @@ require 'dry/types/constructor'
 
 module Dry
   module Types
+    # Hash type exposes additional APIs for working with schema hashes
+    #
+    # @api public
     class Hash < Nominal
       class Constructor < ::Dry::Types::Constructor
         # @api private
@@ -12,6 +15,8 @@ module Dry
         end
 
         # @return [Lax]
+        #
+        # @api public
         def lax
           type.lax.constructor(fn, meta: meta)
         end

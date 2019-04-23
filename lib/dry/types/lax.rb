@@ -5,6 +5,9 @@ require 'dry/types/decorator'
 
 module Dry
   module Types
+    # Lax types rescue from type-related errors when constructors fail
+    #
+    # @api public
     class Lax
       include Type
       include Decorator
@@ -15,7 +18,10 @@ module Dry
       private :options, :constructor
 
       # @param [Object] input
+      #
       # @return [Object]
+      #
+      # @api public
       def call(input)
         type.call_safe(input) { |output = input| output }
       end
@@ -25,9 +31,13 @@ module Dry
 
       # @param [Object] input
       # @param [#call,nil] block
+      #
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]
+      #
       # @return [Result,Logic::Result]
+      #
+      # @api public
       def try(input, &block)
         type.try(input, &block)
       rescue CoercionError => error
@@ -36,11 +46,15 @@ module Dry
       end
 
       # @see Nominal#to_ast
+      #
+      # @api public
       def to_ast(meta: true)
         [:lax, type.to_ast(meta: meta)]
       end
 
       # @return [Lax]
+      #
+      # @api public
       def lax
         self
       end
@@ -48,7 +62,10 @@ module Dry
       private
 
       # @param [Object, Dry::Types::Constructor] response
+      #
       # @return [Boolean]
+      #
+      # @api private
       def decorate?(response)
         super || response.is_a?(constructor_type)
       end

@@ -2,6 +2,11 @@
 
 module Dry
   module Types
+    # Common API for building type objects in a convenient way
+    #
+    # rubocop:disable Naming/MethodName
+    #
+    # @api public
     module BuilderMethods
       # @api private
       def included(base)
@@ -10,7 +15,8 @@ module Dry
       end
 
       # Build an array type.
-      # It is a shortcut for Array.of
+      #
+      # Shortcut for Array#of.
       #
       # @example
       #   Types::Strings = Types.Array(Types::String)

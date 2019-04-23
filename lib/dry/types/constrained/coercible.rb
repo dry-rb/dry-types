@@ -3,9 +3,13 @@
 module Dry
   module Types
     class Constrained
+      # Common coercion-related API for constrained types
+      #
+      # @api public
       class Coercible < Constrained
-        # @api private
         # @return [Object]
+        #
+        # @api private
         def call_unsafe(input)
           coerced = type.call_unsafe(input)
           result = rule.(coerced)
@@ -17,8 +21,9 @@ module Dry
           end
         end
 
-        # @api private
         # @return [Object]
+        #
+        # @api private
         def call_safe(input)
           coerced = type.call_safe(input) { return yield }
 
@@ -30,6 +35,8 @@ module Dry
         end
 
         # @see Dry::Types::Constrained#try
+        #
+        # @api public
         def try(input, &block)
           result = type.try(input)
 

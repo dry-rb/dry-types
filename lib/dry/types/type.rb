@@ -4,6 +4,9 @@ require 'dry/core/deprecations'
 
 module Dry
   module Types
+    # Common Type module denoting an object is a Type
+    #
+    # @api public
     module Type
       extend ::Dry::Core::Deprecations[:'dry-types']
 
@@ -12,6 +15,8 @@ module Dry
       # Whether a value is a valid member of the type
       #
       # @return [Boolean]
+      #
+      # @api private
       def valid?(input = Undefined)
         call_safe(input) { return false }
         true
@@ -36,6 +41,7 @@ module Dry
       #   @yieldparam [Object] output Partially coerced value
       #   @return [Object]
       #
+      # @api public
       def call(input = Undefined, &block)
         if block_given?
           call_safe(input, &block)

@@ -4,6 +4,9 @@ require 'dry/equalizer'
 
 module Dry
   module Types
+    # Schema is a hash with explicit member types defined
+    #
+    # @api public
     class Schema < Hash
       # Proxy type for schema keys. Contains only key name and
       # whether it's required or not. All other calls deletaged
@@ -30,15 +33,19 @@ module Dry
           @name = name
         end
 
+        # @api private
         def call_safe(input, &block)
           type.call_safe(input, &block)
         end
 
+        # @api private
         def call_unsafe(input)
           type.call_unsafe(input)
         end
 
         # @see Dry::Types::Nominal#try
+        #
+        # @api public
         def try(input, &block)
           type.try(input, &block)
         end
@@ -46,6 +53,8 @@ module Dry
         # Whether the key is required in schema input
         #
         # @return [Boolean]
+        #
+        # @api public
         def required?
           options.fetch(:required)
         end
@@ -60,6 +69,8 @@ module Dry
         #
         #   @param [Boolean] required New value
         #   @return [Dry::Types::Schema::Key]
+        #
+        # @api public
         def required(required = Undefined)
           if Undefined.equal?(required)
             options.fetch(:required)
@@ -71,6 +82,8 @@ module Dry
         # Make key not required
         #
         # @return [Dry::Types::Schema::Key]
+        #
+        # @api public
         def omittable
           required(false)
         end
@@ -78,6 +91,8 @@ module Dry
         # Turn key into a lax type. Lax types are not strict hence such keys are not required
         #
         # @return [Lax]
+        #
+        # @api public
         def lax
           super.required(false)
         end
@@ -85,6 +100,8 @@ module Dry
         # Dump to internal AST representation
         #
         # @return [Array]
+        #
+        # @api public
         def to_ast(meta: true)
           [
             :key,
@@ -98,6 +115,7 @@ module Dry
 
         private
 
+        # @api private
         def decorate?(response)
           response.is_a?(Type)
         end

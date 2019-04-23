@@ -5,6 +5,9 @@ require 'dry/types/decorator'
 
 module Dry
   module Types
+    # Maybe extension provides Maybe types where values are wrapped using `Either` monad
+    #
+    # @api public
     class Maybe
       include Type
       include Dry::Equalizer(:type, :options, inspect: false)
@@ -13,10 +16,11 @@ module Dry
       include Printable
       include Dry::Monads::Maybe::Mixin
 
-      # @api private
-      #
       # @param [Dry::Monads::Maybe, Object] input
+      #
       # @return [Dry::Monads::Maybe]
+      #
+      # @api private
       def call_unsafe(input = Undefined)
         case input
         when Dry::Monads::Maybe
@@ -28,10 +32,11 @@ module Dry
         end
       end
 
-      # @api private
-      #
       # @param [Dry::Monads::Maybe, Object] input
+      #
       # @return [Dry::Monads::Maybe]
+      #
+      # @api private
       def call_safe(input = Undefined, &block)
         case input
         when Dry::Monads::Maybe
@@ -44,7 +49,10 @@ module Dry
       end
 
       # @param [Object] input
+      #
       # @return [Result::Success]
+      #
+      # @api public
       def try(input = Undefined)
         res = if input.equal?(Undefined)
                 None()
@@ -56,13 +64,19 @@ module Dry
       end
 
       # @return [true]
+      #
+      # @api public
       def default?
         true
       end
 
       # @param [Object] value
+      #
       # @see Dry::Types::Builder#default
+      #
       # @raise [ArgumentError] if nil provided as default value
+      #
+      # @api public
       def default(value)
         if value.nil?
           raise ArgumentError, "nil cannot be used as a default of a maybe type"
@@ -73,15 +87,21 @@ module Dry
     end
 
     module Builder
+      # Turn a type into a maybe type
+      #
       # @return [Maybe]
+      #
+      # @api public
       def maybe
         Maybe.new(Types['strict.nil'] | self)
       end
     end
 
+    # @api private
     class Printer
       MAPPING[Maybe] = :visit_maybe
 
+      # @api private
       def visit_maybe(maybe)
         visit(maybe.type) do |type|
           yield "Maybe<#{type}>"

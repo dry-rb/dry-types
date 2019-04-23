@@ -4,6 +4,9 @@ require 'dry/types/options'
 
 module Dry
   module Types
+    # Common API for types
+    #
+    # @api public
     module Decorator
       include Options
 
@@ -18,30 +21,42 @@ module Dry
 
       # @param [Object] input
       # @param [#call, nil] block
+      #
       # @return [Result,Logic::Result]
       # @return [Object] if block given and try fails
+      #
+      # @api public
       def try(input, &block)
         type.try(input, &block)
       end
 
       # @return [Boolean]
+      #
+      # @api public
       def default?
         type.default?
       end
 
       # @return [Boolean]
+      #
+      # @api public
       def constrained?
         type.constrained?
       end
 
       # @return [Sum]
+      #
+      # @api public
       def optional
         Types['strict.nil'] | self
       end
 
       # @param [Symbol] meth
       # @param [Boolean] include_private
+      #
       # @return [Boolean]
+      #
+      # @api public
       def respond_to_missing?(meth, include_private = false)
         super || type.respond_to?(meth)
       end
@@ -49,6 +64,8 @@ module Dry
       # Wrap the type with a proc
       #
       # @return [Proc]
+      #
+      # @api public
       def to_proc
         proc { |value| self.(value) }
       end
@@ -56,15 +73,21 @@ module Dry
       private
 
       # @param [Object] response
+      #
       # @return [Boolean]
+      #
+      # @api private
       def decorate?(response)
         response.is_a?(type.class)
       end
 
       # Delegates missing methods to {#type}
+      #
       # @param [Symbol] meth
       # @param [Array] args
       # @param [#call, nil] block
+      #
+      # @api private
       def method_missing(meth, *args, &block)
         if type.respond_to?(meth)
           response = type.__send__(meth, *args, &block)
@@ -80,6 +103,8 @@ module Dry
       end
 
       # Replace underlying type
+      #
+      # @api private
       def __new__(type)
         self.class.new(type, *@__args__[1..-1], **@options)
       end

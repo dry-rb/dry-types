@@ -24,6 +24,9 @@ require 'dry/types/module'
 require 'dry/types/errors'
 
 module Dry
+  # Main library namespace
+  #
+  # @api public
   module Types
     extend Dry::Core::Extensions
     extend Dry::Core::ClassAttributes
@@ -45,20 +48,32 @@ module Dry
       raise RuntimeError, "Import Dry.Types, not Dry::Types"
     end
 
+    # Return container with registered built-in type objects
+    #
     # @return [Container{String => Nominal}]
+    #
+    # @api private
     def self.container
       @container ||= Container.new
     end
 
+    # Check if a give type is registered
+    #
+    # @return [Boolean]
+    #
     # @api private
     def self.registered?(class_or_identifier)
       container.key?(identifier(class_or_identifier))
     end
 
+    # Register a new built-in type
+    #
     # @param [String] name
     # @param [Type] type
     # @param [#call,nil] block
+    #
     # @return [Container{String => Nominal}]
+    #
     # @api private
     def self.register(name, type = nil, &block)
       container.register(name, type || block.call)
@@ -67,7 +82,10 @@ module Dry
     # Get a built-in type by its name
     #
     # @param [String,Class] name
+    #
     # @return [Type,Class]
+    #
+    # @api public
     def self.[](name)
       type_map.fetch_or_store(name) do
         case name
@@ -92,19 +110,29 @@ module Dry
       end
     end
 
+    # Infer a type identifier from the provided class
+    #
     # @param [#to_s] klass
+    #
     # @return [String]
     def self.identifier(klass)
       Inflector.underscore(klass).tr('/', '.')
     end
 
+    # Cached type map
+    #
     # @return [Concurrent::Map]
+    #
+    # @api private
     def self.type_map
       @type_map ||= Concurrent::Map.new
     end
 
-   # List of type keys defined in {Dry::Types.container}
-    # @return [<String>]
+    # List of type keys defined in {Dry::Types.container}
+    #
+    # @return [String]
+    #
+    # @api private
     def self.type_keys
       container.keys
     end
@@ -166,12 +194,18 @@ module Dry
   # @param [Array<Symbol>] namespaces List of type namespaces to export
   # @param [Symbol] default Default namespace to export
   # @param [Hash{Symbol => Symbol}] aliases Optional renamings, like strict: :Draconian
+  #
   # @return [Dry::Types::Module]
   #
-  # @see Dry::types::Module
+  # @see Dry::Types::Module
+  #
+  # @api public
+  #
+  # rubocop:disable Naming/MethodName
   def self.Types(*namespaces, default: Types::Undefined, **aliases)
     Types::Module.new(Types.container, *namespaces, default: default, **aliases)
   end
+  # rubocop:enable Naming/MethodName
 end
 
 require 'dry/types/core' # load built-in types

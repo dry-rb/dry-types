@@ -2,12 +2,19 @@
 
 module Dry
   module Types
+    # Common coercion functions used by the built-in `Params` and `JSON` types
+    #
+    # @api public
     module Coercions
       include Dry::Core::Constants
 
       # @param [String, Object] input
-      # @return [nil] if the input is an empty string
-      # @return [Object] otherwise the input object is returned
+      #
+      # @return [nil] if the input is an empty string or nil
+      #
+      # @raise CoercionError
+      #
+      # @api public
       def to_nil(input, &_block)
         if input.nil? || empty_str?(input)
           nil
@@ -19,8 +26,12 @@ module Dry
       end
 
       # @param [#to_str, Object] input
+      #
       # @return [Date, Object]
+      #
       # @see Date.parse
+      #
+      # @api public
       def to_date(input, &block)
         if input.respond_to?(:to_str)
           begin
@@ -36,8 +47,12 @@ module Dry
       end
 
       # @param [#to_str, Object] input
+      #
       # @return [DateTime, Object]
+      #
       # @see DateTime.parse
+      #
+      # @api public
       def to_date_time(input, &block)
         if input.respond_to?(:to_str)
           begin
@@ -53,8 +68,12 @@ module Dry
       end
 
       # @param [#to_str, Object] input
+      #
       # @return [Time, Object]
+      #
       # @see Time.parse
+      #
+      # @api public
       def to_time(input, &block)
         if input.respond_to?(:to_str)
           begin
@@ -72,8 +91,12 @@ module Dry
       private
 
       # Checks whether String is empty
+      #
       # @param [String, Object] value
+      #
       # @return [Boolean]
+      #
+      # @api private
       def empty_str?(value)
         EMPTY_STRING.eql?(value)
       end

@@ -6,9 +6,10 @@ require 'concurrent/map'
 module Dry
   module Types
     class Constructor < Nominal
+      # Function is used internally by Constructor types
+      #
       # @api private
       class Function
-
         # Wrapper for unsafe coercion functions
         #
         # @api private

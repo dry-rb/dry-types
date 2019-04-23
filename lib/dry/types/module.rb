@@ -10,10 +10,13 @@ module Dry
     #   module Types
     #     include Dry::Types(:strict, :coercible, :nominal, default: :strict)
     #   end
-    #   # Types.constants
+    #
+    #   Types.constants
     #   # => [:Class, :Strict, :Symbol, :Integer, :Float, :String, :Array, :Hash,
     #   #     :Decimal, :Nil, :True, :False, :Bool, :Date, :Nominal, :DateTime, :Range,
     #   #     :Coercible, :Time]
+    #
+    # @api public
     class Module < ::Module
       def initialize(registry, *args)
         @registry = registry

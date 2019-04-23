@@ -4,6 +4,9 @@ require 'dry/types/container'
 
 module Dry
   module Types
+    # Internal container for constructor functions used by the built-in types
+    #
+    # @api private
     class FnContainer
       # @api private
       def self.container

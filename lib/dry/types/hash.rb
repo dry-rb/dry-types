@@ -4,10 +4,13 @@ require 'dry/types/hash/constructor'
 
 module Dry
   module Types
+    # Hash types can be used to define maps and schemas
+    #
+    # @api public
     class Hash < Nominal
       NOT_REQUIRED = { required: false }.freeze
 
-      # @overload schmea(type_map, meta = EMPTY_HASH)
+      # @overload schema(type_map, meta = EMPTY_HASH)
       #   @param [{Symbol => Dry::Types::Nominal}] type_map
       #   @param [Hash] meta
       #   @return [Dry::Types::Schema]
@@ -16,6 +19,8 @@ module Dry
       #   @param [Array<Dry::Types::Schema::Key>] key List of schema keys
       #   @param [Hash] meta
       #   @return [Dry::Types::Schema]
+      #
+      # @api public
       def schema(keys_or_map, meta = EMPTY_HASH)
         if keys_or_map.is_a?(::Array)
           keys = keys_or_map
@@ -30,7 +35,10 @@ module Dry
       #
       # @param [Type] key_type
       # @param [Type] value_type
+      #
       # @return [Map]
+      #
+      # @api public
       def map(key_type, value_type)
         Map.new(
           primitive,
@@ -51,9 +59,13 @@ module Dry
       alias_method :symbolized, :weak
 
       # Injects a type transformation function for building schemas
+      #
       # @param [#call,nil] proc
       # @param [#call,nil] block
+      #
       # @return [Hash]
+      #
+      # @api public
       def with_type_transform(proc = nil, &block)
         fn = proc || block
 
@@ -73,12 +85,17 @@ module Dry
       # Whether the type transforms types of schemas created by {Dry::Types::Hash#schema}
       #
       # @return [Boolean]
+      #
+      # @api public
       def transform_types?
         !options[:type_transform_fn].nil?
       end
 
       # @param meta [Boolean] Whether to dump the meta to the AST
+      #
       # @return [Array] An AST representation
+      #
+      # @api public
       def to_ast(meta: true)
         if RUBY_VERSION >= "2.5"
           opts = options.slice(:type_transform_fn)

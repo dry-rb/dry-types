@@ -3,22 +3,29 @@
 module Dry
   module Types
     class Array < Nominal
+      # Member arrays define their member type that is applied to each element
+      #
+      # @api public
       class Member < Array
         # @return [Type]
         attr_reader :member
 
         # @param [Class] primitive
         # @param [Hash] options
+        #
         # @option options [Type] :member
+        #
+        # @api private
         def initialize(primitive, options = {})
           @member = options.fetch(:member)
           super
         end
 
-        # @api private
-        #
         # @param [Object] input
+        #
         # @return [Array]
+        #
+        # @api private
         def call_unsafe(input)
           if primitive?(input)
             input.each_with_object([]) do |el, output|
@@ -31,10 +38,10 @@ module Dry
           end
         end
 
-        # @api private
-        #
         # @param [Object] input
         # @return [Array]
+        #
+        # @api private
         def call_safe(input)
           if primitive?(input)
             failed = false
@@ -56,9 +63,13 @@ module Dry
 
         # @param [Array, Object] input
         # @param [#call,nil] block
+        #
         # @yieldparam [Failure] failure
         # @yieldreturn [Result]
+        #
         # @return [Result,Logic::Result]
+        #
+        # @api public
         def try(input, &block)
           if primitive?(input)
             output = []
@@ -84,11 +95,15 @@ module Dry
         # Build a lax type
         #
         # @return [Lax]
+        #
+        # @api public
         def lax
           Lax.new(Member.new(primitive, { **options, member: member.lax }))
         end
 
         # @see Nominal#to_ast
+        #
+        # @api public
         def to_ast(meta: true)
           if member.respond_to?(:to_ast)
             [:array, [member.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]

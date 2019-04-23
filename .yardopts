@@ -1,8 +1,8 @@
 --title 'dry-types'
 --query '@api.text != "private"'
 --embed-mixins
--o doc
--r README.md
+--output doc
+--readme README.md
 --files CHANGELOG.md
 --markup markdown
 --markup-provider=redcarpet

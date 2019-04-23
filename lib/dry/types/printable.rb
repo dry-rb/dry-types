@@ -2,8 +2,11 @@
 
 module Dry
   module Types
+    # @api private
     module Printable
       # @return [String]
+      #
+      # @api private
       def to_s
         PRINTER.(self) { super }
       end
