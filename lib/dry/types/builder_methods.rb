@@ -107,6 +107,22 @@ module Dry
       def Map(key_type, value_type)
         Types['nominal.hash'].map(key_type, value_type)
       end
+
+      # Builds a constrained nominal type accepting any value that
+      # responds to given methods
+      #
+      # @example
+      #   Types::Callable = Types.Contract(:call)
+      #   Types::Contact = Types.Contract(:name, :address)
+      #
+      # @param methods [Array<String, Symbol>] Method names
+      #
+      # @return [Dry::Types::Contrained]
+      def Contract(*methods)
+        methods.reduce(Types['nominal.any']) do |type, method|
+          type.constrained(respond_to: method)
+        end
+      end
     end
   end
 end
