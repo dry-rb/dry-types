@@ -93,6 +93,13 @@ RSpec.describe Dry::Types::Module do
       end
     end
 
+    describe '.Contract' do
+      it 'builds a constrained nominal type of any responding to methods' do
+        expect(mod.Contract(:new, :method)).
+          to eql(Dry::Types::Any.constrained(respond_to: :new).constrained(respond_to: :method))
+      end
+    end
+
     describe 'JSON' do
       it 'defines json types' do
         expect(mod::JSON::Decimal).to be(Dry::Types['json.decimal'])
