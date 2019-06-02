@@ -75,7 +75,7 @@ module Dry
       #
       # @api private
       def call_safe(input)
-        coerced = fn.(input) { return yield }
+        coerced = fn.(input) { |output = input| return yield(output) }
         type.call_safe(coerced) { |output = coerced| yield(output) }
       end
 

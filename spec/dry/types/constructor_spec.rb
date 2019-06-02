@@ -123,6 +123,22 @@ RSpec.describe Dry::Types::Constructor do
         expect(called).to be(true)
       end
     end
+
+    describe 'passing values to block on failure' do
+      let(:type) do
+        Dry::Types['nominal.integer'].constructor do |value, &block|
+          if value.is_a?(Integer)
+            value
+          else
+            block.(0)
+          end
+        end
+      end
+
+      it 'returns value provided from to the failure trigger block' do
+        expect(type.('123') { |v| v }).to be(0)
+      end
+    end
   end
 
   describe '#primitive' do
