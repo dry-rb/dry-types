@@ -175,8 +175,8 @@ module Dry
       # @return [Schema]
       #
       # @api public
-      def strict
-        with(strict: true)
+      def strict(strict = true)
+        with(strict: strict)
       end
 
       # Injects a key transformation function

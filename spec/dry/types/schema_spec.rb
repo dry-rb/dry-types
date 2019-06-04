@@ -285,6 +285,10 @@ RSpec.describe Dry::Types::Schema do
         }.to raise_error(Dry::Types::UnknownKeysError)
                .with_message('unexpected keys [:gender, :email] in Hash input')
       end
+
+      it 'can make a strict schema not strict again' do
+        expect(subject.strict(false)).not_to be_strict
+      end
     end
 
     describe '#strict?' do
