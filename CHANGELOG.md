@@ -1,3 +1,27 @@
+# 1.0.1 2019-06-04
+
+## Added
+
+- New builder method `Contract` constructs a type which accepts objects that respond to the given methods (waiting-for-dev)
+  ```ruby
+  Types = Dry.Types()
+  Types::Callable = Types.Contract(:call)
+  Types::Callable.valid?(Object.new) # => false
+  Types::Callable.valid?(proc {})    # => true
+  ```
+- In the case of failure the constructor block can now pass a different value (flash-gordon)
+  ```ruby
+  not_empty_string = Types::String.constructor do |value, &failure| 
+    value.strip.empty? ? failure.(nil) : value.strip
+  end
+  not_empty_string.('   ') { |v| v } # => nil
+  not_empty_string.lax.('     ')     # => nil
+  not_empty_string.lax.(' foo  ')    # => "foo"
+  ```
+- `Schema#strict` now accepts an boolean argument. If `fales` is passed this will turn a strict schema into a non-strict one (flash-gordon)
+
+[Compare v1.0.0...v1.0.1](https://github.com/dry-rb/dry-types/compare/v1.0.0...v1.0.1)
+
 # 1.0.0 2019-04-23
 
 ## Changed
