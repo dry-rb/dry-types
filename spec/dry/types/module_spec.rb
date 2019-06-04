@@ -95,6 +95,7 @@ RSpec.describe Dry::Types::Module do
 
     describe '.Contract' do
       it 'builds a constrained nominal type of any responding to methods' do
+        pending 'add support for Contract once dry-schema works nicely with new dry-logic'
         expect(mod.Contract(:new, :method)).
           to eql(Dry::Types::Any.constrained(respond_to: :new).constrained(respond_to: :method))
       end
