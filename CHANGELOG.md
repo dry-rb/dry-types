@@ -2,16 +2,9 @@
 
 ## Added
 
-- New builder method `Contract` constructs a type which accepts objects that respond to the given methods (waiting-for-dev)
-  ```ruby
-  Types = Dry.Types()
-  Types::Callable = Types.Contract(:call)
-  Types::Callable.valid?(Object.new) # => false
-  Types::Callable.valid?(proc {})    # => true
-  ```
 - In the case of failure the constructor block can now pass a different value (flash-gordon)
   ```ruby
-  not_empty_string = Types::String.constructor do |value, &failure| 
+  not_empty_string = Types::String.constructor do |value, &failure|
     value.strip.empty? ? failure.(nil) : value.strip
   end
   not_empty_string.('   ') { |v| v } # => nil
