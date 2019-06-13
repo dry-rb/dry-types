@@ -126,6 +126,11 @@ module Dry
         [:constrained, [type.to_ast(meta: meta), rule.to_ast]]
       end
 
+      # @api private
+      def constructor_type
+        type.constructor_type
+      end
+
       private
 
       # @param [Object] response

@@ -203,7 +203,13 @@ RSpec.describe Dry::Types::Constructor do
     end
 
     it "doesn't wrap not composable types" do
-      schema = type.schema(age: 'strict.integer').constructor { |input| input.transform_keys(&:to_sym) }
+      schema = type.schema(age: 'integer').constructor(&:to_hash)
+      expect(schema.key(:age)).to be_a(Dry::Types::Schema::Key)
+
+      schema = type
+        .constrained(type: Hash)
+        .schema(age: 'coercible.integer')
+        .constructor(&:to_hash)
       expect(schema.key(:age)).to be_a(Dry::Types::Schema::Key)
     end
 
