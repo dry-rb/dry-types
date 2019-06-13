@@ -68,6 +68,10 @@ RSpec.describe Dry::Types::Schema do
     it 'accepts a fallback block' do
       expect(schema.key(:missing) { :fallback }).to eql(:fallback)
     end
+
+    it 'discards schema constructor' do
+      expect(schema.constructor(&:to_hash).key(:name)).to be(schema.name_key_map[:name])
+    end
   end
 
   describe '#call' do
