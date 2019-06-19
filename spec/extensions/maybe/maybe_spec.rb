@@ -63,4 +63,16 @@ RSpec.describe Dry::Types::Nominal, '#maybe', :maybe do
       expect(type).to_not respond_to(:primitive)
     end
   end
+
+  context 'with keys' do
+    subject(:type) do
+      Dry::Types['hash'].schema(foo: Dry::Types['integer']).key(:foo)
+    end
+
+    it 'gets wrapped by key type' do
+      expect(type.maybe).to be_a(Dry::Types::Schema::Key)
+      expect(type.maybe[nil]).to be_none
+      expect(type.maybe[1]).to be_some
+    end
+  end
 end

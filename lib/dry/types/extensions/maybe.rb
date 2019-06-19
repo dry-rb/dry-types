@@ -98,6 +98,14 @@ module Dry
     end
 
     # @api private
+    class Schema::Key
+      # @api private
+      def maybe
+        __new__(type.maybe)
+      end
+    end
+
+    # @api private
     class Printer
       MAPPING[Maybe] = :visit_maybe
 
