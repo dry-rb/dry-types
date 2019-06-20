@@ -9,9 +9,21 @@
   Types::Callable.valid?(Object.new) # => false
   Types::Callable.valid?(proc {})    # => true
   ```
-- In the case of failure the constructor block can now pass a different value (flash-gordon)
+
+## Fixed
+
+- Converting schema keys to maybe types (flash-gordon)
+- Using `Schema#key` with hash constuctors (flash-gordon)
+
+[Compare v1.0.1...master](https://github.com/dry-rb/dry-types/compare/v1.0.1...master)
+
+# 1.0.1 2019-06-04
+
+## Added
+
+- In a case of failure the constructor block can now pass a different value (flash-gordon)
   ```ruby
-  not_empty_string = Types::String.constructor do |value, &failure| 
+  not_empty_string = Types::String.constructor do |value, &failure|
     value.strip.empty? ? failure.(nil) : value.strip
   end
   not_empty_string.('   ') { |v| v } # => nil
@@ -20,12 +32,7 @@
   ```
 - `Schema#strict` now accepts an boolean argument. If `fales` is passed this will turn a strict schema into a non-strict one (flash-gordon)
 
-## Fixed
-
-- Converting schema keys to maybe types (flash-gordon)
-- Using `Schema#key` with hash constuctors (flash-gordon)
-
-[Compare v1.0.0...master](https://github.com/dry-rb/dry-types/compare/v1.0.0...master)
+[Compare v1.0.0...v1.0.1](https://github.com/dry-rb/dry-types/compare/v1.0.0...v1.0.1)
 
 # 1.0.0 2019-04-23
 
