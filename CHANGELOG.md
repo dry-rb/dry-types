@@ -1,4 +1,4 @@
-# 1.0.1 2019-06-04
+# 1.1.0 to-be-released
 
 ## Added
 
@@ -20,7 +20,12 @@
   ```
 - `Schema#strict` now accepts an boolean argument. If `fales` is passed this will turn a strict schema into a non-strict one (flash-gordon)
 
-[Compare v1.0.0...v1.0.1](https://github.com/dry-rb/dry-types/compare/v1.0.0...v1.0.1)
+## Fixed
+
+- Converting schema keys to maybe types (flash-gordon)
+- Using `Schema#key` with hash constuctors (flash-gordon)
+
+[Compare v1.0.0...master](https://github.com/dry-rb/dry-types/compare/v1.0.0...master)
 
 # 1.0.0 2019-04-23
 
