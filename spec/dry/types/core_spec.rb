@@ -211,4 +211,18 @@ RSpec.describe Dry::Types::Nominal do
       expect(any.meta(name: :age).meta).to eql(name: :age)
     end
   end
+
+  context 'coercible by convention method' do
+    describe 'with Symbol' do
+      let(:coercible_symbol) { Dry::Types["coercible.symbol"] }
+
+      it_behaves_like 'Dry::Types::Nominal without primitive' do
+        let(:type) { coercible_symbol }
+      end
+
+      it 'accepts an object coercible to a symbol' do
+        expect(coercible_symbol['a']).to eql(:a)
+      end
+    end
+  end
 end

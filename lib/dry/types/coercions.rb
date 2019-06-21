@@ -88,6 +88,19 @@ module Dry
         end
       end
 
+      # @param [#to_sym, Object] input
+      #
+      # @return [Symbol, Object]
+      #
+      # @raise CoercionError
+      #
+      # @api public
+      def to_symbol(input, &block)
+        input.to_sym
+      rescue NoMethodError => error
+        CoercionError.handle(error, &block)
+      end
+
       private
 
       # Checks whether String is empty

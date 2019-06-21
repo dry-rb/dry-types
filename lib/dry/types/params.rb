@@ -51,5 +51,9 @@ module Dry
     register('params.hash') do
       self['nominal.hash'].constructor(Coercions::Params.method(:to_hash))
     end
+
+    register('params.symbol') do
+      self['nominal.symbol'].constructor(Coercions::Params.method(:to_symbol))
+    end
   end
 end

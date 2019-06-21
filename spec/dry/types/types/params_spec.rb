@@ -207,4 +207,16 @@ RSpec.describe Dry::Types::Nominal do
       expect(type[input]).to eql({})
     end
   end
+
+  describe 'params.symbol' do
+    subject(:type) { Dry::Types['params.symbol'] }
+
+    it_behaves_like 'a constrained type', inputs: [
+      Object.new, 1
+    ]
+
+    it 'coerces to a symbol' do
+      expect(type['a']).to eql(:a)
+    end
+  end
 end
