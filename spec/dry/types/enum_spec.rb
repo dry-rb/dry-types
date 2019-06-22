@@ -172,4 +172,12 @@ RSpec.describe Dry::Types::Enum do
       end
     end
   end
+
+  describe '#constructor' do
+    subject(:type) { Dry::Types['nominal.integer'].enum(4, 5) }
+
+    it 'builds a constructor type' do
+      expect(type.constructor(&:to_i).mapping).to eql(4 => 4, 5 => 5)
+    end
+  end
 end
