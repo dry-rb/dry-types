@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/equalizer'
+require 'dry/core/deprecations'
 
 module Dry
   module Types
@@ -14,6 +15,7 @@ module Dry
       #
       # @see Dry::Types::Schema
       class Key
+        extend ::Dry::Core::Deprecations[:'dry-types']
         include Type
         include Dry::Equalizer(:name, :type, :options, inspect: false)
         include Decorator
@@ -111,6 +113,22 @@ module Dry
               type.to_ast(meta: meta)
             ]
           ]
+        end
+
+        # @see Dry::Types::Meta#meta
+        #
+        # @api public
+        def meta(data = nil)
+          if data.nil? || !data.key?(:omittable)
+            super
+          else
+            self.class.warn(
+              'Using meta for making schema keys is deprecated, ' \
+              'please use .omittable or .required(false) instead' \
+              "\n" + Core::Deprecations::STACK.()
+            )
+            super.required(!data[:omittable])
+          end
         end
 
         private

@@ -31,4 +31,10 @@ RSpec.describe Dry::Types::Schema::Key do
       expect(key.omittable).not_to be_required
     end
   end
+
+  describe '#meta' do
+    it 'can make key omittable' do
+      expect(key.meta(omittable: true)).not_to be_required
+    end
+  end
 end
