@@ -72,6 +72,20 @@ RSpec.describe Dry::Types::Schema do
     it 'discards schema constructor' do
       expect(schema.constructor(&:to_hash).key(:name)).to be(schema.name_key_map[:name])
     end
+
+    context 'nested schema' do
+      let(:name_schema) do
+        Dry::Types['hash'].schema(first_name: 'string', last_name: 'string')
+      end
+
+      subject(:schema) do
+        Dry::Types['hash'].schema(name: name_schema)
+      end
+
+      it 'still discards constructor' do
+        expect(schema.constructor(&:to_hash).key(:name).type).to eql(name_schema)
+      end
+    end
   end
 
   describe '#call' do

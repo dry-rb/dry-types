@@ -141,6 +141,20 @@ RSpec.describe Dry::Types::Array do
         end
       end
     end
+
+    context 'nested array' do
+      let(:strings) do
+        Dry::Types['array'].of('string')
+      end
+
+      subject(:type) do
+        Dry::Types['array'].of(strings)
+      end
+
+      it 'still discards constructor' do
+        expect(type.constructor(&:to_a).member.type).to eql(strings)
+      end
+    end
   end
 
   describe '#to_s' do
