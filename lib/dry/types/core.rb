@@ -5,7 +5,7 @@ require 'dry/types/any'
 module Dry
   module Types
     # Primitives with {Kernel} coercion methods
-    COERCIBLE = {
+    KERNEL_COERCIBLE = {
       string: String,
       integer: Integer,
       float: Float,
@@ -14,10 +14,19 @@ module Dry
       hash: ::Hash
     }.freeze
 
-    # Primitives that are non-coercible through {Kernel} methods
+    # Primitives with coercions through by convention `to_*` methods
+    METHOD_COERCIBLE = {
+      symbol: Symbol
+    }.freeze
+
+    # By convention methods to coerce {METHOD_COERCIBLE} primitives
+    METHOD_COERCIBLE_METHODS = {
+      symbol: :to_sym
+    }.freeze
+
+    # Primitives that are non-coercible
     NON_COERCIBLE = {
       nil: NilClass,
-      symbol: Symbol,
       class: Class,
       true: TrueClass,
       false: FalseClass,
@@ -28,7 +37,10 @@ module Dry
     }.freeze
 
     # All built-in primitives
-    ALL_PRIMITIVES = COERCIBLE.merge(NON_COERCIBLE).freeze
+    ALL_PRIMITIVES = [KERNEL_COERCIBLE, METHOD_COERCIBLE, NON_COERCIBLE].reduce(&:merge).freeze
+
+    # All coercible types
+    COERCIBLE = KERNEL_COERCIBLE.merge(METHOD_COERCIBLE).freeze
 
     # All built-in primitives except {NilClass}
     NON_NIL = ALL_PRIMITIVES.reject { |name, _| name == :nil }.freeze
@@ -46,9 +58,16 @@ module Dry
       register("strict.#{name}", type)
     end
 
-    # Register {COERCIBLE} types
-    COERCIBLE.each do |name, primitive|
+    # Register {KERNEL_COERCIBLE} types
+    KERNEL_COERCIBLE.each do |name, primitive|
       register("coercible.#{name}", self["nominal.#{name}"].constructor(Kernel.method(primitive.name)))
+    end
+
+    # Register {METHOD_COERCIBLE} types
+    METHOD_COERCIBLE.each_key do |name|
+      register(
+        "coercible.#{name}", self["nominal.#{name}"].constructor(&METHOD_COERCIBLE_METHODS[name])
+      )
     end
 
     # Register optional strict {NON_NIL} types
