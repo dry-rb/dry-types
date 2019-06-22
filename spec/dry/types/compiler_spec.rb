@@ -219,7 +219,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     array = compiler.(ast)
 
-    expect(array.type.member.primitive).to be(String)
+    expect(array.member.primitive).to be(String)
   end
 
   it 'builds a json hash from a :json_hash node' do

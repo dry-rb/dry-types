@@ -118,6 +118,43 @@ RSpec.describe Dry::Types::Array do
         expect(type.to_s).to eql('#<Dry::Types[Array<Nominal<String>>]>')
       end
     end
+
+    describe '#constructor' do
+      subject(:type) { Dry::Types['params.array<params.integer>'] }
+
+      example 'getting member from a constructor type' do
+        expect(type.member.('1')).to be(1)
+      end
+
+      describe '#lax' do
+        subject(:type) { Dry::Types['array<integer>'].constructor(&:to_a) }
+
+        it 'makes type recursively lax' do
+          expect(type.lax.member).to eql(Dry::Types['nominal.integer'])
+        end
+      end
+
+      describe '#constrained' do
+        it 'applies constraints on top of constructor' do
+          expect(type.constrained(size: 1).(['1'])).to eql([1])
+          expect(type.constrained(size: 1).([]) { :fallback }).to be(:fallback)
+        end
+      end
+    end
+
+    context 'nested array' do
+      let(:strings) do
+        Dry::Types['array'].of('string')
+      end
+
+      subject(:type) do
+        Dry::Types['array'].of(strings)
+      end
+
+      it 'still discards constructor' do
+        expect(type.constructor(&:to_a).member.type).to eql(strings)
+      end
+    end
   end
 
   describe '#to_s' do

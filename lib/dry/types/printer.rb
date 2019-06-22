@@ -8,6 +8,7 @@ module Dry
         Nominal => :visit_nominal,
         Constructor => :visit_constructor,
         Hash::Constructor => :visit_constructor,
+        Array::Constructor => :visit_constructor,
         Constrained => :visit_constrained,
         Constrained::Coercible => :visit_constrained,
         Hash => :visit_hash,

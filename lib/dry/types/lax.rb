@@ -67,7 +67,7 @@ module Dry
       #
       # @api private
       def decorate?(response)
-        super || response.is_a?(constructor_type)
+        super || response.is_a?(type.constructor_type)
       end
     end
 
