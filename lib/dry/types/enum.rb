@@ -11,6 +11,7 @@ module Dry
       include Type
       include Dry::Equalizer(:type, :mapping, inspect: false)
       include Decorator
+      include Builder
 
       # @return [Array]
       attr_reader :values
