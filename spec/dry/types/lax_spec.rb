@@ -35,6 +35,11 @@ RSpec.describe Dry::Types::Nominal, '#lax' do
     it 'rescues from type-errors and returns input' do
       expect(type[age: 'wat', active: '1']).to eql(age: 'wat', active: true)
     end
+
+    it "doesn't decorate keys" do
+      expect(type.key(:age)).to be_a(Dry::Types::Schema::Key)
+      expect(type.key(:age).('23')).to eql(23)
+    end
   end
 
   context 'with an array' do

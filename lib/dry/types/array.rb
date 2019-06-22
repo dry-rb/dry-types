@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/types/array/member'
+require 'dry/types/array/constructor'
 
 module Dry
   module Types
@@ -23,6 +24,11 @@ module Dry
           end
 
         Array::Member.new(primitive, **options, member: member)
+      end
+
+      # @api private
+      def constructor_type
+        ::Dry::Types::Array::Constructor
       end
     end
   end

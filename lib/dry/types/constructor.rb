@@ -184,7 +184,7 @@ module Dry
         if type.respond_to?(method)
           response = type.__send__(method, *args, &block)
 
-          if composable?(response)
+          if response.is_a?(Type) && type.class == response.class
             response.constructor_type.new(response, options)
           else
             response
@@ -192,11 +192,6 @@ module Dry
         else
           super
         end
-      end
-
-      # @api private
-      def composable?(value)
-        value.is_a?(Builder)
       end
     end
   end

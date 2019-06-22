@@ -96,7 +96,7 @@ module Dry
         #
         # @api public
         def lax
-          super.required(false)
+          __new__(type.lax).required(false)
         end
 
         # Dump to internal AST representation

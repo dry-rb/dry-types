@@ -17,14 +17,14 @@ module Dry
         #
         # @api public
         def lax
-          type.lax.constructor(fn, meta: meta)
+          Lax.new(type.lax.constructor(fn, meta: meta))
         end
 
-        private
-
-        # @api private
-        def composable?(value)
-          super && value.is_a?(Constructor)
+        # @see Dry::Types::Array#of
+        #
+        # @api public
+        def of(member)
+          type.of(member).constructor(fn, meta: meta)
         end
       end
     end

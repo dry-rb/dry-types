@@ -21,11 +21,11 @@ module Dry
           type.lax.constructor(fn, meta: meta)
         end
 
-        private
-
-        # @api private
-        def composable?(value)
-          super && !value.is_a?(Schema::Key)
+        # @see Dry::Types::Array#of
+        #
+        # @api public
+        def schema(*args)
+          type.schema(*args).constructor(fn, meta: meta)
         end
       end
     end
