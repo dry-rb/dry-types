@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'dry/types/array/constructor'
+
 module Dry
   module Types
     class Array < Nominal
@@ -110,6 +112,11 @@ module Dry
           else
             [:array, [member, meta ? self.meta : EMPTY_HASH]]
           end
+        end
+
+        # @api private
+        def constructor_type
+          ::Dry::Types::Array::Constructor
         end
       end
     end
