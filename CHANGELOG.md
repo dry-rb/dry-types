@@ -9,11 +9,14 @@
   Types::Callable.valid?(Object.new) # => false
   Types::Callable.valid?(proc {})    # => true
   ```
+- New types: `coercible.symbol`, `params.symbol`, and `json.symbol`, all use `.to_sym` for coercion (waiting-for-dev)
 
 ## Fixed
 
 - Converting schema keys to maybe types (flash-gordon)
-- Using `Schema#key` with hash constuctors (flash-gordon)
+- Using `Schema#key` and `Array#member` on constuctors (flash-gordon)
+- Using `meta(omittable: true)` within `transform_types` works again but produces a warning, please migrate to `.omittable` or `.required(false)` (flash-gordon)
+- Bug with a constructror defined on top of enum (flash-gordon)
 
 [Compare v1.0.1...master](https://github.com/dry-rb/dry-types/compare/v1.0.1...master)
 
