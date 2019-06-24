@@ -93,9 +93,9 @@ RSpec.describe Dry::Types::Module do
       end
     end
 
-    describe '.Contract' do
+    describe '.Interface' do
       it 'builds a constrained nominal type of any responding to methods' do
-        expect(mod.Contract(:new, :method)).
+        expect(mod.Interface(:new, :method)).
           to eql(Dry::Types::Any.constrained(respond_to: :new).constrained(respond_to: :method))
       end
     end

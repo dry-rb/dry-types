@@ -2,10 +2,10 @@
 
 ## Added
 
-- New builder method `Contract` constructs a type which accepts objects that respond to the given methods (waiting-for-dev)
+- New builder method `Interface` constructs a type which accepts objects that respond to the given methods (waiting-for-dev)
   ```ruby
   Types = Dry.Types()
-  Types::Callable = Types.Contract(:call)
+  Types::Callable = Types.Interface(:call)
   Types::Callable.valid?(Object.new) # => false
   Types::Callable.valid?(proc {})    # => true
   ```
@@ -43,6 +43,7 @@
 
 - [BREAKING] Behavior of built-in constructor types was changed to be more strict. They will always raise an error on failed coercion (flash-gordon)
   Compare:
+
   ```ruby
   # 0.15.0
   Types::Params::Integer.('foo')
@@ -58,7 +59,9 @@
   ```ruby
   Types::Params::Integer.('foo') { :invalid } # => :invalid
   ```
+
   This makes work with coercions more straightforward and way faster.
+
 - [BREAKING] Safe types were renamed to Lax, this name better serves their purpose. The previous name is available but prints a warning (flash-gordon)
 - [BREAKING] Metadata is now pushed down to the decorated type. It is not likely you will notice a difference but this a breaking change that enables some use cases in rom related to the usage of default types in relations (flash-gordon)
 - Nominal types are now completely unconstrained. This fixes some inconsistencies when using them with constraints. `Nominal#try` will always return a successful result, for the previous behavior use `Nominal#try_coerce` or switch to strict types with passing a block to `#call` (flash-gordon)
@@ -181,6 +184,7 @@
   )
   ```
 - Key types have API for making keys omittable and back (flash-gordon)
+
   ```ruby
   # defining a base schema with optional keys
   lax_hash = Dry::Types['hash'].with_type_transform { |key| key.required(false) }
@@ -190,8 +194,10 @@
   # keys in user_schema are not required
   user_schema = lax_hash.schema(name: 'string', age: 'integer')
   ```
+
 - `Type#optional?` now recognizes more cases where `nil` is an allowed value (flash-gordon)
 - `Constructor#{prepend,append}` with `<<` and `>>` as aliases. `Constructor#append` works the same way `Constructor#constrcutor` does. `Constuctor#prepend` chains functions in the reverse order, see examples (flash-gordon)
+
   ```ruby
   to_int = Types::Coercible::Integer
   inc = to_int.append { |x| x + 2 }
@@ -200,6 +206,7 @@
   inc = to_int.prepend { |x| x + "2" }
   inc.("1") # => "1" -> "12" -> 12
   ```
+
 - Partial schema application for cases when you want to validate only a subset of keys (flash-gordon)
   This is useful when you want to update a key or two in an already-validated hash. A perfect example is `Dry::Struct#new` where this feature is now used.
   ```ruby
@@ -211,14 +218,15 @@
 
 ## Fixed
 
-* `Hash::Map` now behaves as a constrained type if its values are constrained (flash-gordon)
-* `coercible.integer` now doesn't blow up on invalid strings (exterm)
+- `Hash::Map` now behaves as a constrained type if its values are constrained (flash-gordon)
+- `coercible.integer` now doesn't blow up on invalid strings (exterm)
 
 [Compare v0.14.0...v0.15.0](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.15.0)
 
 # v0.14.1 2019-03-25
 
 ## Fixed
+
 - `coercible.integer` now doesn't blow up on invalid strings (exterm)
 
 [Compare v0.14.0...v0.14.1](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.14.1)
