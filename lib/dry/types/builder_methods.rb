@@ -112,13 +112,13 @@ module Dry
       # responds to given methods
       #
       # @example
-      #   Types::Callable = Types.Contract(:call)
-      #   Types::Contact = Types.Contract(:name, :address)
+      #   Types::Callable = Types.Interface(:call)
+      #   Types::Contact = Types.Interface(:name, :address)
       #
       # @param methods [Array<String, Symbol>] Method names
       #
       # @return [Dry::Types::Contrained]
-      def Contract(*methods)
+      def Interface(*methods)
         methods.reduce(Types['nominal.any']) do |type, method|
           type.constrained(respond_to: method)
         end
