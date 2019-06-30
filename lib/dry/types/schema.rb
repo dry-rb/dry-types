@@ -203,7 +203,7 @@ module Dry
       # @return [Boolean]
       #
       # @api public
-      def trasform_keys?
+      def transform_keys?
         !options[:key_transform_fn].nil?
       end
 
