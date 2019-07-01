@@ -14,6 +14,7 @@ end
 
 group :tools do
   gem 'pry-byebug', platform: :mri
+  gem 'rubocop'
 end
 
 group :benchmarks do
