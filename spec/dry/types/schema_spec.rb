@@ -461,4 +461,20 @@ RSpec.describe Dry::Types::Schema do
       end
     end
   end
+
+  describe '#transform_keys?' do
+    let(:schema) { Dry::Types['hash'].schema(name: 'string') }
+
+    context 'without key transformation' do
+      subject(:type) { schema }
+
+      specify { expect(type.transform_keys?).to be(false) }
+    end
+
+    context 'with key transformation' do
+      subject(:type) { schema.with_key_transform(:to_sym.to_proc) }
+
+      specify { expect(type.transform_keys?).to be(true) }
+    end
+  end
 end

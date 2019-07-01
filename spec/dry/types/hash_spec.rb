@@ -57,4 +57,20 @@ RSpec.describe Dry::Types::Hash do
       end
     end
   end
+
+  describe '#transform_types?' do
+    let(:hash) { Dry::Types['hash'].schema(name: 'string') }
+
+    context 'without type transformation' do
+      subject(:type) { hash }
+
+      specify { expect(type.transform_types?).to be(false) }
+    end
+
+    context 'with type transformation' do
+      subject(:type) { hash.with_type_transform(:optional.to_proc) }
+
+      specify { expect(type.transform_types?).to be(true) }
+    end
+  end
 end
