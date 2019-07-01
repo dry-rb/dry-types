@@ -50,11 +50,11 @@ RSpec.describe Dry::Types::Nominal do
         expect(result.input).to be(value)
       end
 
-      it "provides an error message" do
+      it 'provides an error message' do
         expect(result.error.message).to eql(':foo must be an instance of String')
       end
 
-      it "yields failure when given a block" do
+      it 'yields failure when given a block' do
         expect { |probe| type.try_coerce(value, &probe) }.to yield_with_args(result)
       end
     end
@@ -67,8 +67,8 @@ RSpec.describe Dry::Types::Nominal do
       context 'in case statement' do
         let(:value) do
           case 'Hello'
-            when type then '0_o'
-            else 2
+          when type then '0_o'
+          else 2
           end
         end
 
@@ -79,7 +79,7 @@ RSpec.describe Dry::Types::Nominal do
     end
 
     describe '#to_s' do
-      let(:type) { Dry::Types['nominal.string']  }
+      let(:type) { Dry::Types['nominal.string'] }
 
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Nominal<String>]>')

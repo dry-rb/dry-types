@@ -40,8 +40,8 @@ module Dry
       # @api public
       def try(input, &block)
         type.try(input, &block)
-      rescue CoercionError => error
-        result = failure(input, error.message)
+      rescue CoercionError => e
+        result = failure(input, e.message)
         block ? yield(result) : result
       end
 

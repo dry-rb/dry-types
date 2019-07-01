@@ -31,7 +31,7 @@ module Dry
             base.instance_exec(const_get(:Nominal, false)) do |nominal|
               extend Dry::Core::Deprecations[:'dry-types']
               const_set(:Definition, nominal)
-              deprecate_constant(:Definition, message: "Nominal")
+              deprecate_constant(:Definition, message: 'Nominal')
             end
           end
         end
@@ -93,8 +93,8 @@ module Dry
 
         (referenced.uniq - known).each do |name|
           raise ArgumentError,
-                "#{ name.inspect } is not a known type namespace. "\
-                "Supported options are #{ known.map(&:inspect).join(', ') }"
+                "#{name.inspect} is not a known type namespace. "\
+                "Supported options are #{known.map(&:inspect).join(', ')}"
         end
       end
 

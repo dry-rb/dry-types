@@ -3,9 +3,9 @@
 RSpec.describe Dry::Types::Schema do
   subject(:schema) do
     Dry::Types['hash'].schema(
-      name: "coercible.string",
-      age: "integer",
-      active: "params.bool"
+      name: 'coercible.string',
+      age: 'integer',
+      active: 'params.bool'
     )
   end
 
@@ -15,11 +15,11 @@ RSpec.describe Dry::Types::Schema do
 
   describe '#each' do
     it 'iterates over keys' do
-      expect(schema.each.to_a).to eql(schema.name_key_map.values_at(*%i(name age active)))
+      expect(schema.each.to_a).to eql(schema.name_key_map.values_at(:name, :age, :active))
     end
 
     it 'makes schema act as Enumerable' do
-      expect(schema.map(&:name)).to eql(%i(name age active))
+      expect(schema.map(&:name)).to eql(%i[name age active])
     end
 
     it 'returns enumerator' do
@@ -58,7 +58,7 @@ RSpec.describe Dry::Types::Schema do
     end
 
     it 'raises a key error if key is unknown' do
-      expect { schema.key(:missing) }.to raise_error(KeyError, "key not found: :missing")
+      expect { schema.key(:missing) }.to raise_error(KeyError, 'key not found: :missing')
     end
 
     it 'accepts a fallback' do
@@ -133,9 +133,9 @@ RSpec.describe Dry::Types::Schema do
 
     let(:hash_schema) do
       {
-        name: "coercible.string",
-        age: "strict.integer",
-        active: "params.bool",
+        name: 'coercible.string',
+        age: 'strict.integer',
+        active: 'params.bool',
         phone: PhoneType
       }
     end
@@ -162,7 +162,7 @@ RSpec.describe Dry::Types::Schema do
       let(:hash) do
         primitive.schema({
           **hash_schema,
-          age: Dry::Types["strict.integer"].default(21)
+          age: Dry::Types['strict.integer'].default(21)
         })
       end
 
@@ -191,11 +191,11 @@ RSpec.describe Dry::Types::Schema do
         phone: ['+48', '123-456-789']
       )
 
-      expect(user_hash).
-        to eql(
-             name: 'Jane', age: 21, active: true,
-             phone: phone.new('+48', '123-456-789')
-           )
+      expect(user_hash)
+        .to eql(
+          name: 'Jane', age: 21, active: true,
+          phone: phone.new('+48', '123-456-789')
+        )
     end
 
     it 'applies member types' do
@@ -295,7 +295,7 @@ RSpec.describe Dry::Types::Schema do
       subject { hash.strict }
 
       it 'makes the schema strict' do
-        expected_input = { name: :Jane, age: 21, active: true, phone: ['1', '2'] }
+        expected_input = { name: :Jane, age: 21, active: true, phone: %w[1 2] }
         unexpected_input = { gender: 'F', email: 'Jane@hotmail.biz' }
 
         expect {
@@ -319,14 +319,14 @@ RSpec.describe Dry::Types::Schema do
     describe '#with_key_transform' do
       it 'adds a key transformation' do
         schema = subject.with_key_transform { |k| k.downcase.to_sym }
-        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23])).
-          to eql(valid_input)
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23]))
+          .to eql(valid_input)
       end
 
       it 'accepts a proc' do
         schema = subject.with_key_transform(-> k { k.downcase.to_sym })
-        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23])).
-          to eql(valid_input)
+        expect(schema.('NAME' => 'John', 'AGE' => 23, 'ACTIVE' => true, 'PHONE' => [1, 23]))
+          .to eql(valid_input)
       end
 
       it 'raises an error on missing fn' do
@@ -337,16 +337,16 @@ RSpec.describe Dry::Types::Schema do
     describe 'optional keys' do
       let(:hash_schema) do
         {
-          name: "coercible.string",
-          age: "strict.integer",
-          active: "params.bool",
+          name: 'coercible.string',
+          age: 'strict.integer',
+          active: 'params.bool',
           phone: PhoneType.meta(required: false)
         }
       end
 
       it 'allows to skip certain keys' do
-        expect(subject.(name: :Jane, age: 21, active: '1')).
-          to eql(name: 'Jane', age: 21, active: true)
+        expect(subject.(name: :Jane, age: 21, active: '1'))
+          .to eql(name: 'Jane', age: 21, active: true)
       end
     end
 
@@ -366,7 +366,7 @@ RSpec.describe Dry::Types::Schema do
 
     describe 'keys ending with question mark' do
       let(:hash_schema) do
-        { name: "coercible.string", age?: "strict.integer" }
+        { name: 'coercible.string', age?: 'strict.integer' }
       end
 
       example 'not required' do
@@ -398,8 +398,8 @@ RSpec.describe Dry::Types::Schema do
       subject(:type) { Dry::Types['nominal.hash'].schema({}).with_key_transform(key_transformation) }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql("#<Dry::Types[Schema<key_fn=.to_sym keys={}>]>")
+        expect(type.to_s)
+          .to eql('#<Dry::Types[Schema<key_fn=.to_sym keys={}>]>')
       end
     end
 
@@ -409,8 +409,8 @@ RSpec.describe Dry::Types::Schema do
       subject(:type) { Dry::Types['nominal.hash'].with_type_transform(type_transformation).schema({}) }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql("#<Dry::Types[Schema<type_fn=.lax keys={}>]>")
+        expect(type.to_s)
+          .to eql('#<Dry::Types[Schema<type_fn=.lax keys={}>]>')
       end
     end
 
@@ -423,8 +423,8 @@ RSpec.describe Dry::Types::Schema do
       end
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql("#<Dry::Types[Schema<keys={name: Nominal<String> age?: Nominal<Integer>}>]>")
+        expect(type.to_s)
+          .to eql('#<Dry::Types[Schema<keys={name: Nominal<String> age?: Nominal<Integer>}>]>')
       end
     end
 
@@ -432,11 +432,12 @@ RSpec.describe Dry::Types::Schema do
       subject(:type) { Dry::Types['strict.hash'].schema(age: 'strict.integer') }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql(
+        expect(type.to_s)
+          .to eql(
             '#<Dry::Types[Constrained<Schema<'\
             'keys={age: Constrained<Nominal<Integer> rule=[type?(Integer)]>'\
-            '}> rule=[type?(Hash)]>]>')
+            '}> rule=[type?(Hash)]>]>'
+          )
       end
     end
   end
@@ -447,7 +448,7 @@ RSpec.describe Dry::Types::Schema do
         Dry::Types['nominal.hash'].schema(
           name: 'coercible.string',
           age: 'coercible.integer',
-          city: Dry::Types['strict.string'].default('New York'.freeze)
+          city: Dry::Types['strict.string'].default('New York')
         )
       end
 
@@ -456,8 +457,8 @@ RSpec.describe Dry::Types::Schema do
       end
 
       it 'can skip resolving default values' do
-        expect(type.apply({ age: '18' }, skip_missing: true, resolve_defaults: false)).
-          to eql(age: 18)
+        expect(type.apply({ age: '18' }, skip_missing: true, resolve_defaults: false))
+          .to eql(age: 18)
       end
     end
   end

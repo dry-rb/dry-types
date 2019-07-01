@@ -43,8 +43,8 @@ RSpec.describe Dry::Types::Constrained do
     context 'in case statement' do
       let(:value) do
         case 'awesome'
-          when type then 'accepted'
-          else 'invalid'
+        when type then 'accepted'
+        else 'invalid'
         end
       end
 
@@ -60,11 +60,11 @@ RSpec.describe Dry::Types::Constrained do
     end
 
     it 'returns string representation of the type' do
-      expect(type.to_s).
-        to eql(
-            "#<Dry::Types[Constrained<Nominal<String> "\
-            "rule=[type?(String) AND size?(3..12)]>]>"
-          )
+      expect(type.to_s)
+        .to eql(
+          '#<Dry::Types[Constrained<Nominal<String> '\
+          'rule=[type?(String) AND size?(3..12)]>]>'
+        )
     end
   end
 
@@ -159,11 +159,11 @@ RSpec.describe Dry::Types::Constrained do
     it_behaves_like Dry::Types::Nominal
 
     it 'passes when constraints are not violated' do
-      expect(type[[:foo, :bar, :baz]]).to eql(%w(foo bar baz))
+      expect(type[%i[foo bar baz]]).to eql(%w[foo bar baz])
     end
 
     it 'raises when a given constraint is violated' do
-      expect { type[%w(foo bar)] }.to raise_error(Dry::Types::ConstraintError)
+      expect { type[%w[foo bar]] }.to raise_error(Dry::Types::ConstraintError)
     end
   end
 
@@ -176,11 +176,11 @@ RSpec.describe Dry::Types::Constrained do
     it_behaves_like Dry::Types::Nominal
 
     it 'raises when a given constraint is violated' do
-      expect { type[%w(a b)] }.to raise_error(Dry::Types::ConstraintError)
+      expect { type[%w[a b]] }.to raise_error(Dry::Types::ConstraintError)
     end
 
     it 'coerces values' do
-      expect(type.try(%i(foo aa)).input).to eql(%w(foo aa))
+      expect(type.try(%i[foo aa]).input).to eql(%w[foo aa])
     end
   end
 

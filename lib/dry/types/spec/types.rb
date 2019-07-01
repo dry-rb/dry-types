@@ -2,7 +2,7 @@
 
 RSpec.shared_examples_for 'Dry::Types::Nominal without primitive' do
   def be_boolean
-    satisfy { |x| x == true || x == false  }
+    satisfy { |x| x == true || x == false }
   end
 
   describe '#constrained?' do
@@ -43,9 +43,7 @@ RSpec.shared_examples_for 'Dry::Types::Nominal without primitive' do
 
   describe '#to_s' do
     it 'returns a custom string representation' do
-      if type.class.name.start_with?('Dry::Types')
-        expect(type.to_s).to start_with('#<Dry::Types')
-      end
+      expect(type.to_s).to start_with('#<Dry::Types') if type.class.name.start_with?('Dry::Types')
     end
   end
 
@@ -81,7 +79,7 @@ RSpec.shared_examples_for 'Dry::Types::Nominal#meta' do
       expect(type.meta).not_to have_key :immutable_test
       derived = type.meta(immutable_test: 1)
       expect(derived.meta).to be_frozen
-      expect(derived.meta).to eql({immutable_test: 1})
+      expect(derived.meta).to eql(immutable_test: 1)
       expect(type.meta).not_to have_key :immutable_test
     end
   end
@@ -139,4 +137,3 @@ RSpec.shared_examples_for 'a nominal type' do |inputs: Object.new|
     end
   end
 end
-

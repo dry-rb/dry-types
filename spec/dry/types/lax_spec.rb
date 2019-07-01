@@ -56,8 +56,8 @@ RSpec.describe Dry::Types::Nominal, '#lax' do
     subject(:type) { Dry::Types['coercible.integer'].lax }
 
     it 'returns string representation of the type' do
-      expect(type.to_s).
-        to eql("#<Dry::Types[Lax<Constructor<Nominal<Integer> fn=Kernel.Integer>>]>")
+      expect(type.to_s)
+        .to eql('#<Dry::Types[Lax<Constructor<Nominal<Integer> fn=Kernel.Integer>>]>')
     end
   end
 end

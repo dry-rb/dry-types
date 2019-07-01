@@ -7,7 +7,7 @@ Schema = Dry::Types['params.hash'].schema(
   age?: 'coercible.integer'
 ).lax
 
-ValidInput = { email: 'jane@doe.org', age: '19' }
+ValidInput = { email: 'jane@doe.org', age: '19' }.freeze
 
 profile do
   10_000.times do

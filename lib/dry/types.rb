@@ -33,7 +33,7 @@ module Dry
     extend Dry::Core::Deprecations[:'dry-types']
     include Dry::Core::Constants
 
-    TYPE_SPEC_REGEX = %r[(.+)<(.+)>].freeze
+    TYPE_SPEC_REGEX = /(.+)<(.+)>/.freeze
 
     # @see Dry.Types
     def self.module(*namespaces, default: :nominal, **aliases)
@@ -45,7 +45,7 @@ module Dry
 
     # @api private
     def self.included(*)
-      raise RuntimeError, "Import Dry.Types, not Dry::Types"
+      raise 'Import Dry.Types, not Dry::Types'
     end
 
     # Return container with registered built-in type objects

@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 require 'concurrent/map'
@@ -16,8 +15,8 @@ module Dry
         class Safe < Function
           def call(input, &block)
             @fn.(input, &block)
-          rescue NoMethodError, TypeError, ArgumentError => error
-            CoercionError.handle(error, &block)
+          rescue NoMethodError, TypeError, ArgumentError => e
+            CoercionError.handle(e, &block)
           end
         end
 
@@ -91,8 +90,8 @@ module Dry
           class PrivateSafeCall < PrivateCall
             def call(input, &block)
               @target.send(@name, input)
-            rescue NoMethodError, TypeError, ArgumentError => error
-              CoercionError.handle(error, &block)
+            rescue NoMethodError, TypeError, ArgumentError => e
+              CoercionError.handle(e, &block)
             end
           end
 

@@ -10,8 +10,8 @@ RSpec.describe Dry::Types::Module do
 
     describe '.Array' do
       it 'builds an array type' do
-        expect(mod.Array(mod::Strict::Integer)).
-          to eql(Dry::Types['strict.array<strict.integer>'])
+        expect(mod.Array(mod::Strict::Integer))
+          .to eql(Dry::Types['strict.array<strict.integer>'])
       end
     end
 
@@ -19,15 +19,15 @@ RSpec.describe Dry::Types::Module do
       it 'builds a nominal of a class instance' do
         foo_type = Class.new
 
-        expect(mod.Instance(foo_type)).
-          to eql(Dry::Types::Nominal.new(foo_type).constrained(type: foo_type))
+        expect(mod.Instance(foo_type))
+          .to eql(Dry::Types::Nominal.new(foo_type).constrained(type: foo_type))
       end
     end
 
     describe '.Value' do
       it 'builds a nominal of a single value' do
-        expect(mod.Value({})).
-          to eql(Dry::Types::Nominal.new(Hash).constrained(eql: {}))
+        expect(mod.Value({}))
+          .to eql(Dry::Types::Nominal.new(Hash).constrained(eql: {}))
       end
     end
 
@@ -35,15 +35,15 @@ RSpec.describe Dry::Types::Module do
       it 'builds a nominal of a constant' do
         obj = Object.new
 
-        expect(mod.Constant(obj)).
-          to eql(Dry::Types::Nominal.new(Object).constrained(is: obj))
+        expect(mod.Constant(obj))
+          .to eql(Dry::Types::Nominal.new(Object).constrained(is: obj))
       end
     end
 
     describe '.Hash' do
       it 'builds a hash schema' do
-        expect(mod.Hash(age: Dry::Types['strict.integer'])).
-          to eql(Dry::Types['strict.hash'].schema(age: Dry::Types['strict.integer']))
+        expect(mod.Hash(age: Dry::Types['strict.integer']))
+          .to eql(Dry::Types['strict.hash'].schema(age: Dry::Types['strict.integer']))
       end
     end
 
@@ -58,11 +58,11 @@ RSpec.describe Dry::Types::Module do
       it 'builds a constructor type' do
         to_s = :to_s.to_proc
 
-        expect(mod.Constructor(String, &to_s)).
-          to eql(Dry::Types::Nominal.new(String).constructor(to_s))
+        expect(mod.Constructor(String, &to_s))
+          .to eql(Dry::Types::Nominal.new(String).constructor(to_s))
 
-        expect(mod.Constructor(String, to_s)).
-          to eql(Dry::Types::Nominal.new(String).constructor(to_s))
+        expect(mod.Constructor(String, to_s))
+          .to eql(Dry::Types::Nominal.new(String).constructor(to_s))
       end
 
       it 'uses .new method by default' do
@@ -80,8 +80,8 @@ RSpec.describe Dry::Types::Module do
     end
 
     it 'defines methods when included' do
-      expect(Module.new.tap { |m| m.include mod }.Nominal(String)).
-        to eql(mod.Nominal(String))
+      expect(Module.new.tap { |m| m.include mod }.Nominal(String))
+        .to eql(mod.Nominal(String))
     end
 
     describe '.Strict' do
@@ -95,8 +95,8 @@ RSpec.describe Dry::Types::Module do
 
     describe '.Interface' do
       it 'builds a constrained nominal type of any responding to methods' do
-        expect(mod.Interface(:new, :method)).
-          to eql(Dry::Types::Any.constrained(respond_to: :new).constrained(respond_to: :method))
+        expect(mod.Interface(:new, :method))
+          .to eql(Dry::Types::Any.constrained(respond_to: :new).constrained(respond_to: :method))
       end
     end
 
@@ -114,32 +114,32 @@ RSpec.describe Dry::Types::Module do
       let(:args) { [] }
 
       it 'contains all types by default' do
-        expect(mod.constants.to_set).
-          to be > %i(Strict Coercible Optional JSON Params Integer).to_set
+        expect(mod.constants.to_set)
+          .to be > %i[Strict Coercible Optional JSON Params Integer].to_set
       end
     end
 
-    %i(strict coercible params json nominal).each do |ns|
+    %i[strict coercible params json nominal].each do |ns|
       constant = Dry::Types::Inflector.camelize(ns.to_s).to_sym
 
       context ns.to_s do
         subject(:args) { [ns] }
 
-        it "includes only #{ ns } types" do
+        it "includes only #{ns} types" do
           constants = mod.constants(false)
           expect(constants).to eql([constant])
-          expect(mod.const_get(constant)::Decimal).
-            to be(Dry::Types["#{ ns }.decimal"])
+          expect(mod.const_get(constant)::Decimal)
+            .to be(Dry::Types["#{ns}.decimal"])
         end
       end
     end
 
     context 'multiple namespaces' do
-      subject(:args) { [:strict, :nominal] }
+      subject(:args) { %i[strict nominal] }
 
       it 'adds only two constants' do
         constants = mod.constants(false)
-        expect(constants.sort).to eql([:Nominal, :Strict])
+        expect(constants.sort).to eql(%i[Nominal Strict])
       end
     end
 
@@ -201,8 +201,8 @@ RSpec.describe Dry::Types::Module do
       end
 
       it 'rejects invalid options' do
-        expect { described_class.new(registry, default: :something) }.
-          to raise_error(ArgumentError, /:something/)
+        expect { described_class.new(registry, default: :something) }
+          .to raise_error(ArgumentError, /:something/)
       end
 
       context 'optional defaults' do

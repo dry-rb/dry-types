@@ -95,8 +95,8 @@ module Dry
       # @api public
       def try(input, &block)
         value = fn.(input)
-      rescue CoercionError => error
-        failure = failure(input, error)
+      rescue CoercionError => e
+        failure = failure(input, e)
         block_given? ? yield(failure) : failure
       else
         type.try(value, &block)

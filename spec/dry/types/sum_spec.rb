@@ -76,7 +76,7 @@ RSpec.describe Dry::Types::Sum do
 
       type = left | right
 
-      expect(type[%w(foo bar)]).to eql(%w(foo bar))
+      expect(type[%w[foo bar]]).to eql(%w[foo bar])
 
       expect(type[[{ name: 'foo' }, { name: 'bar' }]]).to eql([
         { name: 'foo' }, { name: 'bar' }
@@ -98,10 +98,10 @@ RSpec.describe Dry::Types::Sum do
 
       type = string_list | string_pairs
 
-      expect(type.(%w(foo))).to eql(%w(foo))
-      expect(type.(%w(foo bar))).to eql(%w(foo bar))
+      expect(type.(%w[foo])).to eql(%w[foo])
+      expect(type.(%w[foo bar])).to eql(%w[foo bar])
 
-      expect(type.([[1, 'foo'], [2, 'bar']])).to eql([['1', 'foo'], ['2', 'bar']])
+      expect(type.([[1, 'foo'], [2, 'bar']])).to eql([%w[1 foo], %w[2 bar]])
 
       expect { type[:oops] }.to raise_error(Dry::Types::ConstraintError, /:oops/)
 
@@ -109,8 +109,8 @@ RSpec.describe Dry::Types::Sum do
 
       expect { type.([%i[foo]]) }.to raise_error(Dry::Types::ConstraintError, /\[:foo\]/)
 
-      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, %r[[1]])
-      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, %r[[2]])
+      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, /[1]/)
+      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, /[2]/)
     end
   end
 
@@ -134,7 +134,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it 'raises ArgumentError when non of the types have a valid input' do
-      expect{
+      expect {
         type.success('true')
       }.to raise_error(ArgumentError, /Invalid success value 'true'/)
     end
@@ -149,7 +149,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#===' do
-    subject(:type) { Dry::Types['integer'] | Dry::Types['string']  }
+    subject(:type) { Dry::Types['integer'] | Dry::Types['string'] }
 
     it 'returns boolean' do
       expect(type.===('hello')).to eql(true)
@@ -160,7 +160,7 @@ RSpec.describe Dry::Types::Sum do
       let(:value) do
         case 'world'
         when type then 'accepted'
-          else 'invalid'
+        else 'invalid'
         end
       end
 
@@ -172,7 +172,7 @@ RSpec.describe Dry::Types::Sum do
 
   describe '#default' do
     it 'returns a default value sum type' do
-      type = (Dry::Types['nominal.nil'] | Dry::Types['nominal.string']).default('foo'.freeze)
+      type = (Dry::Types['nominal.nil'] | Dry::Types['nominal.string']).default('foo')
 
       expect(type.call).to eql('foo')
     end
@@ -192,7 +192,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe '#constructor' do
-    let(:type) {  (Dry::Types['nominal.string'] |  Dry::Types['nominal.nil']).constructor { |input| input ? input.to_s + ' world' : input } }
+    let(:type) { (Dry::Types['nominal.string'] | Dry::Types['nominal.nil']).constructor { |input| input ? input.to_s + ' world' : input } }
 
     it 'returns the correct value' do
       expect(type.call('hello')).to eql('hello world')
@@ -225,7 +225,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     it_behaves_like 'a disjunction of constraints' do
-      subject(:type) { Dry::Types['strict.true'] | two_addends  }
+      subject(:type) { Dry::Types['strict.true'] | two_addends }
 
       it 'accepts true' do
         rule = type.rule
@@ -259,19 +259,19 @@ RSpec.describe Dry::Types::Sum do
     context 'sum tree' do
       let(:type) do
         Dry::Types['nominal.string'] | Dry::Types['nominal.integer'] |
-        (Dry::Types['nominal.date'] | Dry::Types['nominal.time'])
+          (Dry::Types['nominal.date'] | Dry::Types['nominal.time'])
       end
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql(
-              '#<Dry::Types[Sum<'\
-              'Nominal<String> | '\
-              'Nominal<Integer> | '\
-              'Nominal<Date> | '\
-              'Nominal<Time>'\
-              '>]>'
-            )
+        expect(type.to_s)
+          .to eql(
+            '#<Dry::Types[Sum<'\
+            'Nominal<String> | '\
+            'Nominal<Integer> | '\
+            'Nominal<Date> | '\
+            'Nominal<Time>'\
+            '>]>'
+          )
       end
     end
   end

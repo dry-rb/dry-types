@@ -4,7 +4,7 @@ RSpec.describe Dry::Types::Enum do
   context 'with mapping' do
     subject(:type) { string.enum(mapping) }
 
-    let(:mapping) { {'draft' => 0, 'published' => 10, 'archived' => 20} }
+    let(:mapping) { { 'draft' => 0, 'published' => 10, 'archived' => 20 } }
     let(:values) { mapping.keys }
     let(:string) { Dry::Types['strict.string'] }
 
@@ -27,7 +27,7 @@ RSpec.describe Dry::Types::Enum do
       expect(type.mapping).to be_frozen
     end
 
-    it "works with optionals" do
+    it 'works with optionals' do
       expect(type.optional['draft']).to eql(mapping.key(0))
       expect(type.optional[0]).to be(mapping.key(0))
       expect(type.optional[nil]).to be nil
@@ -37,7 +37,7 @@ RSpec.describe Dry::Types::Enum do
   context 'with string type' do
     subject(:type) { string.enum(*values) }
 
-    let(:values) { %w(draft published archived) }
+    let(:values) { %w[draft published archived] }
     let(:string) { Dry::Types['strict.string'] }
 
     it_behaves_like Dry::Types::Nominal
@@ -64,7 +64,7 @@ RSpec.describe Dry::Types::Enum do
         let(:value) do
           case 'draft'
           when type then 'accepted'
-            else 'invalid'
+          else 'invalid'
           end
         end
 
@@ -75,15 +75,15 @@ RSpec.describe Dry::Types::Enum do
     end
 
     it 'allows defining an enum from a default-value type' do
-      with_default = string.default('draft'.freeze).enum(*values)
+      with_default = string.default('draft').enum(*values)
 
       expect(with_default.call).to eql('draft')
     end
 
     it "doesn't allows defining a default value for an enum" do
-      expect do
+      expect {
         type.default('published')
-      end.to raise_error(RuntimeError)
+      }.to raise_error(RuntimeError)
     end
 
     it 'aliases #[] as #call' do
@@ -152,23 +152,22 @@ RSpec.describe Dry::Types::Enum do
       subject(:type) { Dry::Types['nominal.integer'].enum(4, 5, 6) }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql("#<Dry::Types[Enum<Constrained<Nominal<Integer> "\
-                 "rule=[included_in?([4, 5, 6])]> values={4, 5, 6}>]>")
+        expect(type.to_s)
+          .to eql('#<Dry::Types[Enum<Constrained<Nominal<Integer> '\
+                 'rule=[included_in?([4, 5, 6])]> values={4, 5, 6}>]>')
       end
     end
 
     context 'mapping' do
-      let(:mapping) { {0 => 'draft', 10 => 'published', 20 => 'archived'} }
+      let(:mapping) { { 0 => 'draft', 10 => 'published', 20 => 'archived' } }
 
       subject(:type) { Dry::Types['nominal.integer'].enum(mapping) }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql('#<Dry::Types[Enum<Constrained<Nominal<Integer> '\
+        expect(type.to_s)
+          .to eql('#<Dry::Types[Enum<Constrained<Nominal<Integer> '\
                  'rule=[included_in?([0, 10, 20])]> '\
-                 'mapping={0=>"draft", 10=>"published", 20=>"archived"}>]>'
-                 )
+                 'mapping={0=>"draft", 10=>"published", 20=>"archived"}>]>')
       end
     end
   end

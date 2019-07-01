@@ -36,8 +36,8 @@ module Dry
         if input.respond_to?(:to_str)
           begin
             ::Date.parse(input)
-          rescue ArgumentError, RangeError => error
-            CoercionError.handle(error, &block)
+          rescue ArgumentError, RangeError => e
+            CoercionError.handle(e, &block)
           end
         elsif block_given?
           yield
@@ -57,8 +57,8 @@ module Dry
         if input.respond_to?(:to_str)
           begin
             ::DateTime.parse(input)
-          rescue ArgumentError => error
-            CoercionError.handle(error, &block)
+          rescue ArgumentError => e
+            CoercionError.handle(e, &block)
           end
         elsif block_given?
           yield
@@ -78,8 +78,8 @@ module Dry
         if input.respond_to?(:to_str)
           begin
             ::Time.parse(input)
-          rescue ArgumentError => error
-            CoercionError.handle(error, &block)
+          rescue ArgumentError => e
+            CoercionError.handle(e, &block)
           end
         elsif block_given?
           yield
@@ -97,8 +97,8 @@ module Dry
       # @api public
       def to_symbol(input, &block)
         input.to_sym
-      rescue NoMethodError => error
-        CoercionError.handle(error, &block)
+      rescue NoMethodError => e
+        CoercionError.handle(e, &block)
       end
 
       private

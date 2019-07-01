@@ -74,6 +74,7 @@ module Dry
       def try(hash)
         result = coerce(hash)
         return result if result.success? || !block_given?
+
         yield(result)
       end
 
@@ -100,11 +101,14 @@ module Dry
 
       # @api private
       def coerce(input)
-        return failure(
-          input, CoercionError.new("#{input.inspect} must be an instance of #{primitive}")
-        ) unless primitive?(input)
+        unless primitive?(input)
+          return failure(
+            input, CoercionError.new("#{input.inspect} must be an instance of #{primitive}")
+          )
+        end
 
-        output, failures = {}, []
+        output = {}
+        failures = []
 
         input.each do |k, v|
           res_k = key_type.try(k)

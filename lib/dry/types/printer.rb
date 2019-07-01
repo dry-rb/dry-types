@@ -27,7 +27,7 @@ module Dry
       }
 
       def call(type)
-        output = "".dup
+        output = ''.dup
         visit(type) { |str| output << str }
         "#<Dry::Types[#{output}]>"
       end
@@ -44,11 +44,11 @@ module Dry
       end
 
       def visit_any(_)
-        yield "Any"
+        yield 'Any'
       end
 
       def visit_array(_)
-         yield "Array"
+        yield 'Array'
       end
 
       def visit_array_member(array)
@@ -75,7 +75,7 @@ module Dry
           options = constrained.options.dup
           rule = options.delete(:rule)
 
-          visit_options(options) do |opts|
+          visit_options(options) do |_opts|
             yield "Constrained<#{type} rule=[#{rule}]>"
           end
         end
@@ -111,7 +111,7 @@ module Dry
           header = "Schema<#{schema_parameters}keys={"
 
           if size.zero?
-            yield "#{ header}}>"
+            yield "#{header}}>"
           else
             yield header.dup << keys.map { |key|
               visit(key) { |type| type }
@@ -127,7 +127,7 @@ module Dry
             options.delete(:key_type)
             options.delete(:value_type)
 
-            visit_options(options) do |opts|
+            visit_options(options) do |_opts|
               yield "Map<#{key} => #{value}>"
             end
           end
@@ -194,7 +194,7 @@ module Dry
               yield "Enum<#{type} values={#{values}}#{opts}>"
             else
               mapping_str = mapping.map { |key, value|
-                "#{ key.inspect }=>#{value.inspect}"
+                "#{key.inspect}=>#{value.inspect}"
               }.join(', ')
               yield "Enum<#{type} mapping={#{mapping_str}}#{opts}>"
             end
@@ -252,14 +252,14 @@ module Dry
 
         case fn
         when Method
-          yield "#{ fn.receiver }.#{ fn.name }"
+          yield "#{fn.receiver}.#{fn.name}"
         when Proc
           path, line = fn.source_location
 
-          if line && line.zero?
+          if line&.zero?
             yield ".#{path}"
           elsif path
-            yield "#{path.sub(Dir.pwd + '/', EMPTY_STRING) }:#{line}"
+            yield "#{path.sub(Dir.pwd + '/', EMPTY_STRING)}:#{line}"
           elsif fn.lambda?
             yield '(lambda)'
           else

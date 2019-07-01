@@ -86,7 +86,7 @@ RSpec.describe Dry::Types::Constructor do
       let(:value) do
         case 'world'
         when type then 'accepted'
-          else 'invalid'
+        else 'invalid'
         end
       end
 
@@ -215,7 +215,7 @@ RSpec.describe Dry::Types::Constructor do
 
     it 'chooses the right constructor types' do
       sum = type.schema(age: 'strict.integer').optional
-      schema = sum.constructor { |input| input.transform_keys(&:to_sym) if input }
+      schema = sum.constructor { |input| input&.transform_keys(&:to_sym) }
       expect(schema.right.key(:age)).to be_a(Dry::Types::Schema::Key)
     end
   end
@@ -266,7 +266,7 @@ RSpec.describe Dry::Types::Constructor do
     end
 
     it 'accepts block' do
-      prepended = type.prepend(id: 'named') { |s| s.ord }
+      prepended = type.prepend(id: 'named', &:ord)
 
       expect(prepended['foo']).to eql(102)
       expect(prepended.options).to include(id: 'named')
@@ -302,8 +302,8 @@ RSpec.describe Dry::Types::Constructor do
       subject(:type) { Dry::Types['coercible.integer'] }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql("#<Dry::Types[Constructor<Nominal<Integer> fn=Kernel.Integer>]>")
+        expect(type.to_s)
+          .to eql('#<Dry::Types[Constructor<Nominal<Integer> fn=Kernel.Integer>]>')
       end
     end
 
@@ -319,8 +319,8 @@ RSpec.describe Dry::Types::Constructor do
       subject(:type) { Dry::Types['nominal.integer'].constructor(Test::IntegerConstructor.new) }
 
       it 'returns string representation of the type' do
-        expect(type.to_s).
-          to eql("#<Dry::Types[Constructor<Nominal<Integer> fn=Test::IntegerConstructor#call>]>")
+        expect(type.to_s)
+          .to eql('#<Dry::Types[Constructor<Nominal<Integer> fn=Test::IntegerConstructor#call>]>')
       end
     end
   end

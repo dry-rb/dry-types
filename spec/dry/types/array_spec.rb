@@ -5,7 +5,7 @@ RSpec.describe Dry::Types::Array do
     context 'primitive' do
       shared_context 'array with a member type' do
         it 'returns an array with correct member values' do
-          expect(array[Set[1, 2, 3]]).to eql(%w(1 2 3))
+          expect(array[Set[1, 2, 3]]).to eql(%w[1 2 3])
         end
 
         it_behaves_like Dry::Types::Nominal do
@@ -31,11 +31,11 @@ RSpec.describe Dry::Types::Array do
         end
 
         it 'passes values through member type' do
-          expect(array[%w(3 4 5)]).to eql([3, 4, 5])
+          expect(array[%w[3 4 5]]).to eql([3, 4, 5])
         end
 
         it 'raises when input is not valid' do
-          expect { array[%w(1 2 3)] }.to raise_error(
+          expect { array[%w[1 2 3]] }.to raise_error(
             Dry::Types::ConstraintError,
             '"1" violates constraints (gt?(2, 1) failed)'
           )
@@ -92,15 +92,15 @@ RSpec.describe Dry::Types::Array do
     subject(:array) { Dry::Types['strict.array'].of(Dry::Types['strict.string']) }
 
     it 'returns boolean' do
-      expect(array.===(%w(hello world))).to eql(true)
+      expect(array.===(%w[hello world])).to eql(true)
       expect(array.===(['hello', 1234])).to eql(false)
     end
 
     context 'in case statement' do
       let(:value) do
-        case %w(hello world)
+        case %w[hello world]
         when array then 'accepted'
-          else 'invalid'
+        else 'invalid'
         end
       end
 

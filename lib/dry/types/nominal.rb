@@ -126,9 +126,8 @@ module Dry
       #
       # @api public
       def failure(input, error)
-        unless error.is_a?(CoercionError)
-          raise ArgumentError, "error must be a CoercionError"
-        end
+        raise ArgumentError, 'error must be a CoercionError' unless error.is_a?(CoercionError)
+
         Result::Failure.new(input, error)
       end
 
@@ -202,7 +201,7 @@ module Dry
 
     extend Dry::Core::Deprecations[:'dry-types']
     Definition = Nominal
-    deprecate_constant(:Definition, message: "Nominal")
+    deprecate_constant(:Definition, message: 'Nominal')
   end
 end
 

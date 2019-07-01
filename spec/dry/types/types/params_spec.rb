@@ -4,7 +4,7 @@ RSpec.describe Dry::Types::Nominal do
   describe 'params.nil' do
     subject(:type) { Dry::Types['params.nil'] }
 
-    it_behaves_like 'a constrained type', inputs: [Object.new, %w(foo)]
+    it_behaves_like 'a constrained type', inputs: [Object.new, %w[foo]]
 
     it 'coerces empty string to nil' do
       expect(type['']).to be(nil)
@@ -93,7 +93,7 @@ RSpec.describe Dry::Types::Nominal do
     ]
 
     it 'coerces to true' do
-      %w[1 on  t true  y yes].each do |value|
+      %w[1 on t true y yes].each do |value|
         expect(type[value]).to be(true)
       end
     end
@@ -175,7 +175,7 @@ RSpec.describe Dry::Types::Nominal do
     ]
 
     it 'returns coerced array' do
-      arr = %w(1 2 3)
+      arr = %w[1 2 3]
       expect(type[arr]).to eql([1, 2, 3])
     end
 

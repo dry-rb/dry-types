@@ -18,10 +18,10 @@ group :tools do
 end
 
 group :benchmarks do
+  gem 'attrio'
   gem 'benchmark-ips'
+  gem 'dry-struct'
+  gem 'fast_attributes'
   gem 'hotch'
   gem 'virtus'
-  gem 'fast_attributes'
-  gem 'attrio'
-  gem 'dry-struct'
 end

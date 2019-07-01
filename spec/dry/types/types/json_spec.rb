@@ -5,7 +5,7 @@ RSpec.describe Dry::Types::Nominal do
     subject(:type) { Dry::Types['json.nil'] }
 
     it_behaves_like 'a constrained type', inputs: [
-      Object.new, 'foo', %w(foo)
+      Object.new, 'foo', %w[foo]
     ]
 
     it 'coerces empty string to nil' do

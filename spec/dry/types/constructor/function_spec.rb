@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Types::Constructor::Function do
   describe '.[]' do
     shared_examples 'well-behaving coercion function' do
@@ -22,7 +24,7 @@ RSpec.describe Dry::Types::Constructor::Function do
 
     context 'lambda' do
       include_examples 'well-behaving coercion function' do
-        subject(:fun) { described_class[lambda { |value| Integer(value) }] }
+        subject(:fun) { described_class[->(value) { Integer(value) }] }
       end
     end
 
@@ -45,8 +47,8 @@ RSpec.describe Dry::Types::Constructor::Function do
 
           def obj.coerce(value, &block)
             Integer(value)
-          rescue ArgumentError => error
-            Dry::Types::CoercionError.handle(error, &block)
+          rescue ArgumentError => e
+            Dry::Types::CoercionError.handle(e, &block)
           end
 
           described_class[obj.method(:coerce)]
@@ -74,8 +76,8 @@ RSpec.describe Dry::Types::Constructor::Function do
           fn = Class.new {
             def call(value, &block)
               Integer(value)
-            rescue ArgumentError => error
-              Dry::Types::CoercionError.handle(error, &block)
+            rescue ArgumentError => e
+              Dry::Types::CoercionError.handle(e, &block)
             end
           }.new
 
@@ -128,7 +130,7 @@ RSpec.describe Dry::Types::Constructor::Function do
   end
 
   describe '#>>' do
-    let(:power_2) { described_class[-> x { x ** 2 }] }
+    let(:power_2) { described_class[-> x { x**2 }] }
 
     let(:mult_2) { described_class[-> x { x + 1 }] }
 
@@ -142,7 +144,7 @@ RSpec.describe Dry::Types::Constructor::Function do
   end
 
   describe '#<<' do
-    let(:power_2) { described_class[-> x { x ** 2 }] }
+    let(:power_2) { described_class[-> x { x**2 }] }
 
     let(:mult_2) { described_class[-> x { x + 1 }] }
 

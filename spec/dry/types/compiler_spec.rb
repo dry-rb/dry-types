@@ -161,7 +161,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     expect(arr['oops']).to eql('oops')
     expect(arr['']).to eql([])
-    expect(arr[%w(a b c)]).to eql(%w(a b c))
+    expect(arr[%w[a b c]]).to eql(%w[a b c])
   end
 
   it 'builds a lax params array with member' do
@@ -170,14 +170,14 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     arr = compiler.(ast)
 
     expect(arr['oops']).to eql('oops')
-    expect(arr[%w(1 2 3)]).to eql([1, 2, 3])
+    expect(arr[%w[1 2 3]]).to eql([1, 2, 3])
   end
 
   it 'builds a safe params hash' do
     type = Dry::Types['params.hash'].schema(
       email: Dry::Types['nominal.string'],
       age: Dry::Types['params.integer'],
-      admin: Dry::Types['params.bool'],
+      admin: Dry::Types['params.bool']
     ).with_key_transform(&:to_sym).lax
 
     ast = type.to_ast
@@ -300,7 +300,7 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     expect(type.valid?(4)).to be(false)
   end
 
-  let(:any_ast){ [:any, {}] }
+  let(:any_ast) { [:any, {}] }
 
   it 'builds the empty map' do
     ast = Dry::Types['nominal.hash'].map('any', 'any').to_ast
@@ -310,18 +310,18 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   end
 
   it 'builds a complex map' do
-    map = Dry::Types['hash'].
-            map('any', 'any').
-            meta(abc: 123).
-            meta(foo: 'bar').
-            with(key_type: Dry::Types['string']).
-            with(value_type: Dry::Types['integer'])
+    map = Dry::Types['hash']
+      .map('any', 'any')
+      .meta(abc: 123)
+      .meta(foo: 'bar')
+      .with(key_type: Dry::Types['string'])
+      .with(value_type: Dry::Types['integer'])
 
     ast = map.to_ast
 
-    expect(ast).
-      to eql([
-               :map, [
+    expect(ast)
+      .to eql([
+                :map, [
                   [:constrained,
                    [[:nominal, [String, {}]],
                     [:predicate, [:type?, [[:type, String], [:input, Undefined]]]]]],
@@ -336,8 +336,8 @@ RSpec.describe Dry::Types::Compiler, '#call' do
 
     expect(type).to eql(map)
     expect(type.meta).to eql(foo: 'bar', abc: 123)
-    expect(type.valid?({ 'x' => 5 })).to eql(true)
-    expect(type.valid?({ 5 => 'x' })).to eql(false)
+    expect(type.valid?('x' => 5)).to eql(true)
+    expect(type.valid?(5 => 'x')).to eql(false)
   end
 
   context 'constructors' do

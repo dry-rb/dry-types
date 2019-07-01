@@ -2,7 +2,7 @@
 
 RSpec.describe Dry::Types::Builder, '#default' do
   context 'with a nominal type' do
-    subject(:type) { Dry::Types['nominal.string'].default('foo'.freeze) }
+    subject(:type) { Dry::Types['nominal.string'].default('foo') }
 
     it_behaves_like Dry::Types::Nominal
 
@@ -24,7 +24,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
   end
 
   context 'with a constrained type' do
-    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
+    subject(:type) { Dry::Types['string'].default('foo') }
 
     it_behaves_like 'a constrained type'
   end
@@ -114,7 +114,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
   end
 
   describe 'decorator' do
-    subject(:type) { Dry::Types['strict.string'].default('foo'.freeze) }
+    subject(:type) { Dry::Types['strict.string'].default('foo') }
 
     it 'raises no-method error when type does not respond to a method' do
       expect { type.oh_noez }.to raise_error(NoMethodError, /oh_noez/)
@@ -154,7 +154,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
   end
 
   describe '#valid?' do
-    subject(:type) { Dry::Types['string'].default('foo'.freeze) }
+    subject(:type) { Dry::Types['string'].default('foo') }
 
     it 'returns true if value is valid' do
       expect(type.valid?('bar')).to eq true
@@ -176,10 +176,10 @@ RSpec.describe Dry::Types::Builder, '#default' do
   context 'with a constructor' do
     describe 'returning Undefined' do
       let(:non_empty_string) { Dry::Types['nominal.string'].constructor { |str| str.empty? ? Undefined : str } }
-      subject(:type) { non_empty_string.default("empty") }
+      subject(:type) { non_empty_string.default('empty') }
 
       it 'returns default value on empty input' do
-        expect(type[""]).to eql("empty")
+        expect(type['']).to eql('empty')
       end
     end
   end
@@ -202,10 +202,10 @@ RSpec.describe Dry::Types::Builder, '#default' do
         let(:line_no) { value_constructor.source_location[1] }
 
         it 'returns string representation of the type' do
-          expect(type.to_s).
-            to eql(
-              "#<Dry::Types[Default<Nominal<String> "\
-              "value_fn=spec/dry/types/default_spec.rb:#{ line_no }>]>"
+          expect(type.to_s)
+            .to eql(
+              '#<Dry::Types[Default<Nominal<String> '\
+              "value_fn=spec/dry/types/default_spec.rb:#{line_no}>]>"
             )
         end
       end
@@ -214,10 +214,10 @@ RSpec.describe Dry::Types::Builder, '#default' do
         let(:value_constructor) { method(:Integer).to_proc }
 
         it 'returns string representation of the type' do
-          expect(type.to_s).
-            to eql(
-              "#<Dry::Types[Default<Nominal<String> "\
-              "value_fn=(lambda)>]>"
+          expect(type.to_s)
+            .to eql(
+              '#<Dry::Types[Default<Nominal<String> '\
+              'value_fn=(lambda)>]>'
             )
         end
       end
@@ -226,10 +226,10 @@ RSpec.describe Dry::Types::Builder, '#default' do
         let(:value_constructor) { Kernel.method(:Integer) }
 
         it 'returns string representation of the type' do
-          expect(type.to_s).
-            to eql(
-              "#<Dry::Types[Default<Nominal<String> "\
-              "value_fn=Kernel.Integer>]>"
+          expect(type.to_s)
+            .to eql(
+              '#<Dry::Types[Default<Nominal<String> '\
+              'value_fn=Kernel.Integer>]>'
             )
         end
       end
@@ -239,7 +239,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
           obj = Object.new
 
           def obj.to_s
-            "callable"
+            'callable'
           end
 
           def obj.call(*)
@@ -250,10 +250,10 @@ RSpec.describe Dry::Types::Builder, '#default' do
         end
 
         it 'returns string representation of the type' do
-          expect(type.to_s).
-            to eql(
-              "#<Dry::Types[Default<Nominal<String> "\
-              "value_fn=callable.call>]>"
+          expect(type.to_s)
+            .to eql(
+              '#<Dry::Types[Default<Nominal<String> '\
+              'value_fn=callable.call>]>'
             )
         end
       end
@@ -261,7 +261,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
   end
 
   describe '#meta' do
-    subject(:type) { Dry::Types['nominal.string'].meta(foo: :bar).default('foo'.freeze) }
+    subject(:type) { Dry::Types['nominal.string'].meta(foo: :bar).default('foo') }
 
     it 'adds uses meta from the decorated type' do
       expect(type.meta).to eql(foo: :bar)

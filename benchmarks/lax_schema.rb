@@ -13,4 +13,3 @@ Benchmark.ips do |x|
   x.report("valid input") { schema.(params) }
   x.compare!
 end
-

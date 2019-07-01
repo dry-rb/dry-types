@@ -79,7 +79,7 @@ module Dry
       # @api public
       def default(value)
         if value.nil?
-          raise ArgumentError, "nil cannot be used as a default of a maybe type"
+          raise ArgumentError, 'nil cannot be used as a default of a maybe type'
         else
           super
         end

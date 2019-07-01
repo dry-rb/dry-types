@@ -156,8 +156,8 @@ module Dry
         [
           :schema,
           [keys.map { |key| key.to_ast(meta: meta) },
-            opts,
-            meta ? self.meta : EMPTY_HASH]
+           opts,
+           meta ? self.meta : EMPTY_HASH]
         ]
       end
 
@@ -190,9 +190,7 @@ module Dry
       def with_key_transform(proc = nil, &block)
         fn = proc || block
 
-        if fn.nil?
-          raise ArgumentError, "a block or callable argument is required"
-        end
+        raise ArgumentError, 'a block or callable argument is required' if fn.nil?
 
         handle = Dry::Types::FnContainer.register(fn)
         with(key_transform_fn: handle)
@@ -294,10 +292,10 @@ module Dry
       #
       # @api private
       def merge_keys(*keys)
-        keys.
-          flatten(1).
-          each_with_object({}) { |key, merged| merged[key.name] = key }.
-          values
+        keys
+          .flatten(1)
+          .each_with_object({}) { |key, merged| merged[key.name] = key }
+          .values
       end
 
       # Validate and coerce a hash. Raise an exception on any error
@@ -315,19 +313,17 @@ module Dry
           if type
             begin
               result[k] = type.call_unsafe(value)
-            rescue ConstraintError => error
-              raise SchemaError.new(type.name, value, error.result)
-            rescue CoercionError => error
-              raise SchemaError.new(type.name, value, error.message)
+            rescue ConstraintError => e
+              raise SchemaError.new(type.name, value, e.result)
+            rescue CoercionError => e
+              raise SchemaError.new(type.name, value, e.message)
             end
           elsif strict?
             raise unexpected_keys(hash.keys)
           end
         end
 
-        if result.size < keys.size
-          resolve_missing_keys(result, options)
-        end
+        resolve_missing_keys(result, options) if result.size < keys.size
 
         result
       end
@@ -351,9 +347,7 @@ module Dry
           end
         end
 
-        if result.size < keys.size
-          resolve_missing_keys(result, options, &block)
-        end
+        resolve_missing_keys(result, options, &block) if result.size < keys.size
 
         result
       end

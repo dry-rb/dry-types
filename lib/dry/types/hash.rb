@@ -50,8 +50,8 @@ module Dry
 
       # @api private
       def weak(*)
-        raise "Support for old hash schemas was removed, please refer to the CHANGELOG "\
-              "on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/master/CHANGELOG.md"
+        raise 'Support for old hash schemas was removed, please refer to the CHANGELOG '\
+              'on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/master/CHANGELOG.md'
       end
       alias_method :permissive, :weak
       alias_method :strict, :weak
@@ -69,9 +69,7 @@ module Dry
       def with_type_transform(proc = nil, &block)
         fn = proc || block
 
-        if fn.nil?
-          raise ArgumentError, "a block or callable argument is required"
-        end
+        raise ArgumentError, 'a block or callable argument is required' if fn.nil?
 
         handle = Dry::Types::FnContainer.register(fn)
         with(type_transform_fn: handle)
@@ -97,11 +95,11 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        if RUBY_VERSION >= "2.5"
-          opts = options.slice(:type_transform_fn)
-        else
-          opts = options.select { |k, _| k == :type_transform_fn }
-        end
+        opts = if RUBY_VERSION >= '2.5'
+                 options.slice(:type_transform_fn)
+               else
+                 options.select { |k, _| k == :type_transform_fn }
+               end
 
         [:hash, [opts, meta ? self.meta : EMPTY_HASH]]
       end

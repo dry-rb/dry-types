@@ -3,7 +3,7 @@
 RSpec.describe Dry::Types::Nominal, :maybe do
   describe 'with opt-in maybe types' do
     context 'with strict string' do
-      let(:string) { Dry::Types["maybe.strict.string"] }
+      let(:string) { Dry::Types['maybe.strict.string'] }
 
       it_behaves_like 'Dry::Types::Nominal without primitive' do
         let(:type) { string }
@@ -19,7 +19,7 @@ RSpec.describe Dry::Types::Nominal, :maybe do
     end
 
     context 'with coercible string' do
-      let(:string) { Dry::Types["maybe.coercible.string"] }
+      let(:string) { Dry::Types['maybe.coercible.string'] }
 
       it_behaves_like 'Dry::Types::Nominal without primitive' do
         let(:type) { string }
@@ -36,7 +36,7 @@ RSpec.describe Dry::Types::Nominal, :maybe do
   end
 
   describe 'defining coercible Maybe String' do
-    let(:maybe_string) { Dry::Types["coercible.string"].maybe }
+    let(:maybe_string) { Dry::Types['coercible.string'].maybe }
 
     it_behaves_like 'Dry::Types::Nominal without primitive' do
       let(:type) { maybe_string }
@@ -52,7 +52,7 @@ RSpec.describe Dry::Types::Nominal, :maybe do
   end
 
   describe 'defining Maybe String' do
-    let(:maybe_string) { Dry::Types["strict.string"].maybe }
+    let(:maybe_string) { Dry::Types['strict.string'].maybe }
 
     it_behaves_like 'Dry::Types::Nominal without primitive' do
       let(:type) { maybe_string }

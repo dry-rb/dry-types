@@ -75,7 +75,7 @@ module Dry
             ' Be careful: types will return the same instance of the default'\
             ' value every time. Call `.freeze` when setting the default'\
             ' or pass `shared: true` to discard this warning.'\
-            "\n#{ where }",
+            "\n#{where}",
             tag: :'dry-types'
           )
         end

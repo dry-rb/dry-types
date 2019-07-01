@@ -16,7 +16,7 @@ RSpec.describe Dry::Types::Hash do
   describe '#with_type_transform' do
     it 'adds a type transformation for schemas' do
       optional_keys = type.with_type_transform { |key| key.required(false) }
-      schema = optional_keys.schema(name: "strict.string", age: "strict.integer")
+      schema = optional_keys.schema(name: 'strict.string', age: 'strict.integer')
       expect(schema.(name: 'Jane')).to eql(name: 'Jane')
     end
 
@@ -27,7 +27,7 @@ RSpec.describe Dry::Types::Hash do
 
     it 'passes in key type with name available' do
       optional_age = type.with_type_transform { |key| key.name == :age ? key.required(false) : key }
-      schema = optional_age.schema(name: "strict.string", age: "strict.integer")
+      schema = optional_age.schema(name: 'strict.string', age: 'strict.integer')
       expect(schema.(name: 'Jane')).to eql(name: 'Jane')
     end
   end
