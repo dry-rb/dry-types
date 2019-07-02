@@ -1,4 +1,4 @@
-# 1.1.0 to-be-released
+# 1.1.0 2019-07-02
 
 ## Added
 
@@ -18,7 +18,7 @@
 - Using `meta(omittable: true)` within `transform_types` works again but produces a warning, please migrate to `.omittable` or `.required(false)` (flash-gordon)
 - Bug with a constructror defined on top of enum (flash-gordon)
 
-[Compare v1.0.1...master](https://github.com/dry-rb/dry-types/compare/v1.0.1...master)
+[Compare v1.0.1...v1.1.0](https://github.com/dry-rb/dry-types/compare/v1.0.1...v1.1.0)
 
 # 1.0.1 2019-06-04
 
