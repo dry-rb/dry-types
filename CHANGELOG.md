@@ -1,3 +1,11 @@
+# 1.1.1 2019-07-26
+
+## Fixed
+
+- A bug where meta was lost for lax array types (flash-gordon)
+
+[Compare v1.1.0...v1.1.1](https://github.com/dry-rb/dry-types/compare/v1.1.0...v1.1.1)
+
 # 1.1.0 2019-07-02
 
 ## Added
