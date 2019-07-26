@@ -100,7 +100,7 @@ module Dry
         #
         # @api public
         def lax
-          Lax.new(Member.new(primitive, { **options, member: member.lax }))
+          Lax.new(Member.new(primitive, { **options, member: member.lax, meta: meta }))
         end
 
         # @see Nominal#to_ast
