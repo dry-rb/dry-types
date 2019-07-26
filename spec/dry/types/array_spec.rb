@@ -117,6 +117,10 @@ RSpec.describe Dry::Types::Array do
       it 'returns string representation of the type' do
         expect(type.to_s).to eql('#<Dry::Types[Array<Nominal<String>>]>')
       end
+
+      it 'shows meta' do
+        expect(type.meta(foo: :bar).to_s).to eql('#<Dry::Types[Array<Nominal<String> meta={foo: :bar}>]>')
+      end
     end
 
     describe '#constructor' do
@@ -162,6 +166,10 @@ RSpec.describe Dry::Types::Array do
 
     it 'returns string representation of the type' do
       expect(type.to_s).to eql('#<Dry::Types[Array]>')
+    end
+
+    it 'adds meta' do
+      expect(type.meta(foo: :bar).to_s).to eql('#<Dry::Types[Array meta={foo: :bar}]>')
     end
   end
 end

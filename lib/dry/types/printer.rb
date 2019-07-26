@@ -47,13 +47,17 @@ module Dry
         yield 'Any'
       end
 
-      def visit_array(_)
-        yield 'Array'
+      def visit_array(type)
+        visit_options(EMPTY_HASH, type.meta) do |opts|
+          yield "Array#{opts}"
+        end
       end
 
       def visit_array_member(array)
         visit(array.member) do |type|
-          yield "Array<#{type}>"
+          visit_options(EMPTY_HASH, array.meta) do |opts|
+            yield "Array<#{type}#{opts}>"
+          end
         end
       end
 
