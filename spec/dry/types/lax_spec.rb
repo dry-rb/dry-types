@@ -43,12 +43,16 @@ RSpec.describe Dry::Types::Nominal, '#lax' do
   end
 
   context 'with an array' do
-    subject(:type) do
-      Dry::Types['array'].of(Dry::Types['coercible.integer']).lax
-    end
+    let(:source_type) { Dry::Types['array'].of(Dry::Types['coercible.integer']) }
+
+    subject(:type) { source_type.lax }
 
     it 'rescues from type-errors and returns input' do
       expect(type[['1', :a, 30]]).to eql([1, :a, 30])
+    end
+
+    it 'preserves meta' do
+      expect(source_type.meta(foo: :bar).lax.meta).to eql(foo: :bar)
     end
   end
 
