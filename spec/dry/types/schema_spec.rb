@@ -293,7 +293,7 @@ RSpec.describe Dry::Types::Schema do
 
     it 'uses type even if it is a class with a registered name' do
       bool = Class.new do
-        include(Dry::Types::Type)
+        extend Dry::Types::Type
 
         def self.meta
           {}

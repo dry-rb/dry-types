@@ -121,13 +121,8 @@ module Dry
       # @api private
       def resolve_type(type)
         case type
-        when ::Class
-          if type < Type
-            type
-          else
-            Types[type]
-          end
-        when ::String then Types[type]
+        when Type then type
+        when ::Class, ::String then Types[type]
         else type
         end
       end
