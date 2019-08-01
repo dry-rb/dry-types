@@ -182,7 +182,7 @@ module Dry
       # @api private
       def method_missing(method, *args, &block)
         if type.respond_to?(method)
-          response = type.__send__(method, *args, &block)
+          response = type.public_send(method, *args, &block)
 
           if response.is_a?(Type) && type.class == response.class
             response.constructor_type.new(response, options)

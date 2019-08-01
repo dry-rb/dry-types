@@ -372,7 +372,8 @@ RSpec.describe Dry::Types::Schema do
       example 'in presence of type transformation' do
         extended = subject.with_type_transform { |k| k.meta(transformed: true) }.schema(city: 'coercible.string')
         expect(extended.({ **valid_input, city: :London })).to include(city: 'London')
-        expect(extended.key(:city)).to eql(Dry::Types::Schema::Key.new(Dry::Types['coercible.string'], :city))
+        string = Dry::Types['coercible.string'].meta(transformed: true)
+        expect(extended.key(:city)).to eql(Dry::Types::Schema::Key.new(string, :city))
       end
     end
 

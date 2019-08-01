@@ -201,4 +201,14 @@ RSpec.describe Dry::Types::Constrained do
       expect(Dry::Types['string'].lax).to eql(Dry::Types['nominal.string'])
     end
   end
+
+  describe '#meta' do
+    subject(:type) do
+      Dry::Types['string'].meta(foo: :bar).constructor { }.constrained(max_size: 10)
+    end
+
+    it 'allows access to meta of the underlying type' do
+      expect(type.meta).to eql(foo: :bar)
+    end
+  end
 end
