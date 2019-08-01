@@ -90,7 +90,7 @@ module Dry
       # @api private
       def method_missing(meth, *args, &block)
         if type.respond_to?(meth)
-          response = type.__send__(meth, *args, &block)
+          response = type.public_send(meth, *args, &block)
 
           if decorate?(response)
             __new__(response)
