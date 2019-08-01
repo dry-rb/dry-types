@@ -291,6 +291,18 @@ RSpec.describe Dry::Types::Schema do
       expect(subject.({**valid_input, not: :expect})).not_to have_key(:not)
     end
 
+    it 'uses type even if it is a class with a registered name' do
+      bool = Class.new do
+        include(Dry::Types::Type)
+
+        def self.meta
+          {}
+        end
+      end
+      stub_const('Bool', bool)
+      expect(hash.schema(bool: bool).key(:bool).type).to be(bool)
+    end
+
     describe '#strict' do
       subject { hash.strict }
 

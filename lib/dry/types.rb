@@ -89,7 +89,7 @@ module Dry
     def self.[](name)
       type_map.fetch_or_store(name) do
         case name
-        when String
+        when ::String
           result = name.match(TYPE_SPEC_REGEX)
 
           if result
@@ -98,7 +98,12 @@ module Dry
           else
             container[name]
           end
-        when Class
+        when ::Class
+          warn(<<~DEPRECATION)
+            Using Dry::Types.[] with a class is deprecated, please use string identifiers: Dry::Types[Integer] -> Dry::Types['integer'].
+            If you're using dry-struct this means changing `attribute :counter, Integer` to `attribute :counter, Dry::Types['integer']` or to `attribute :counter, 'integer'`.
+          DEPRECATION
+
           type_name = identifier(name)
 
           if container.key?(type_name)
