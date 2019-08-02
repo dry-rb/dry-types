@@ -12,15 +12,13 @@ module Dry
     class Constructor < Nominal
       include Dry::Equalizer(:type, :options, inspect: false)
 
-      private :meta
-
       # @return [#call]
       attr_reader :fn
 
       # @return [Type]
       attr_reader :type
 
-      undef :constrained?
+      undef :constrained?, :meta
 
       # @param [Builder, Object] input
       # @param [Hash] options

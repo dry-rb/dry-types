@@ -15,7 +15,7 @@ module Dry
       include Printable
       include Dry::Equalizer(:type, inspect: false)
 
-      private :options, :constructor
+      undef :options, :constructor
 
       # @param [Object] input
       #
