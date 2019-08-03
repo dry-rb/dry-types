@@ -71,6 +71,20 @@ RSpec.describe Dry::Types::Module do
         expect(type['foo']).to eql('foo')
         expect { type[1] }.to raise_error(Dry::Types::CoercionError)
       end
+
+      it 'uses Types::Array for arrays' do
+        array = method(:Array)
+        expect(mod.Constructor(Array, array)).to eql(
+          Dry::Types['nominal.array'].constructor(array)
+        )
+      end
+
+      it 'uses Types::Hash for hashes' do
+        hash = method(:Hash)
+        expect(mod.Constructor(Hash, hash)).to eql(
+          Dry::Types['nominal.hash'].constructor(hash)
+        )
+      end
     end
 
     describe '.Nominal' do
