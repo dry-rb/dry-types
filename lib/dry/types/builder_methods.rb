@@ -25,7 +25,7 @@ module Dry
       #
       # @return [Dry::Types::Array]
       def Array(type)
-        self::Array.of(type)
+        Strict(::Array).of(type)
       end
 
       # Build a hash schema
@@ -34,7 +34,7 @@ module Dry
       #
       # @return [Dry::Types::Array]
       def Hash(type_map)
-        self::Hash.schema(type_map)
+        Strict(::Hash).schema(type_map)
       end
 
       # Build a type which values are instances of a given class
@@ -49,7 +49,7 @@ module Dry
       #
       # @return [Dry::Types::Type]
       def Instance(klass)
-        Nominal.new(klass).constrained(type: klass)
+        Nominal(klass).constrained(type: klass)
       end
       alias_method :Strict, :Instance
 
@@ -60,7 +60,7 @@ module Dry
       #
       # @return [Dry::Types::Type]
       def Value(value)
-        Nominal.new(value.class).constrained(eql: value)
+        Nominal(value.class).constrained(eql: value)
       end
 
       # Build a type with a single value
@@ -70,7 +70,7 @@ module Dry
       #
       # @return [Dry::Types::Type]
       def Constant(object)
-        Nominal.new(object.class).constrained(is: object)
+        Nominal(object.class).constrained(is: object)
       end
 
       # Build a constructor type
@@ -82,15 +82,7 @@ module Dry
       #
       # @return [Dry::Types::Type]
       def Constructor(klass, cons = nil, &block)
-        nominal = if klass <= ::Array
-                    Array.new(klass)
-                  elsif klass <= ::Hash
-                    Hash.new(klass)
-                  else
-                    Nominal.new(klass)
-                  end
-
-        nominal.constructor(cons || block || klass.method(:new))
+        Nominal(klass).constructor(cons || block || klass.method(:new))
       end
 
       # Build a nominal type
@@ -99,7 +91,13 @@ module Dry
       #
       # @return [Dry::Types::Type]
       def Nominal(klass)
-        Nominal.new(klass)
+        if klass <= ::Array
+          Array.new(klass)
+        elsif klass <= ::Hash
+          Hash.new(klass)
+        else
+          Nominal.new(klass)
+        end
       end
 
       # Build a map type
@@ -113,7 +111,7 @@ module Dry
       #
       # @return [Dry::Types::Map]
       def Map(key_type, value_type)
-        Types['nominal.hash'].map(key_type, value_type)
+        Nominal(::Hash).map(key_type, value_type)
       end
 
       # Builds a constrained nominal type accepting any value that

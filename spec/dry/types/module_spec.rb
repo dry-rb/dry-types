@@ -27,7 +27,7 @@ RSpec.describe Dry::Types::Module do
     describe '.Value' do
       it 'builds a nominal of a single value' do
         expect(mod.Value({}))
-          .to eql(Dry::Types::Nominal.new(Hash).constrained(eql: {}))
+          .to eql(Dry::Types::Hash.new(Hash).constrained(eql: {}))
       end
     end
 
@@ -96,6 +96,14 @@ RSpec.describe Dry::Types::Module do
     it 'defines methods when included' do
       expect(Module.new.tap { |m| m.include mod }.Nominal(String))
         .to eql(mod.Nominal(String))
+    end
+
+    it 'uses Types::Array for array types' do
+      expect(mod.Nominal(Array)).to be_a(Dry::Types::Array)
+    end
+
+    it 'uses Types::Hash for hash types' do
+      expect(mod.Nominal(Hash)).to be_a(Dry::Types::Hash)
     end
 
     describe '.Strict' do
