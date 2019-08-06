@@ -66,7 +66,9 @@ module Dry
         #
         # @api public
         def self.to_int(input, &block)
-          if input.is_a? String
+          if empty_str?(input)
+            nil
+          elsif input.is_a? String
             Integer(input, 10)
           else
             Integer(input)
