@@ -119,6 +119,10 @@ RSpec.describe Dry::Types::Nominal do
     it_behaves_like 'a constrained type', inputs: [
       Object.new, 'foo', '23asf', {}
     ]
+    
+    it 'coerces empty string to nil' do
+      expect(type['']).to be(nil)
+    end
 
     it 'coerces to an integer' do
       expect(type['312']).to be(312)
