@@ -18,7 +18,7 @@ module Dry
       # @return [Type]
       attr_reader :type
 
-      undef :constrained?, :meta
+      undef :constrained?, :meta, :optional?, :primitive, :default?, :name
 
       # @param [Builder, Object] input
       # @param [Hash] options
@@ -42,31 +42,6 @@ module Dry
         @fn = fn
 
         super(type, **options, fn: fn)
-      end
-
-      # Return the inner type's primitive
-      #
-      # @return [Class]
-      #
-      # @api public
-      def primitive
-        type.primitive
-      end
-
-      # Return the inner type's name
-      #
-      # @return [String]
-      #
-      # @api public
-      def name
-        type.name
-      end
-
-      # @return [Boolean]
-      #
-      # @api public
-      def default?
-        type.default?
       end
 
       # @return [Object]
