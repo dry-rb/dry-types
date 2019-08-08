@@ -82,7 +82,11 @@ module Dry
       #
       # @return [Dry::Types::Type]
       def Constructor(klass, cons = nil, &block)
-        Nominal(klass).constructor(cons || block || klass.method(:new))
+        if klass.is_a?(Type)
+          klass.constructor(cons || block || klass.method(:new))
+        else
+          Nominal(klass).constructor(cons || block || klass.method(:new))
+        end
       end
 
       # Build a nominal type

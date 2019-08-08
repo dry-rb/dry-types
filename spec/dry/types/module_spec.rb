@@ -85,6 +85,14 @@ RSpec.describe Dry::Types::Module do
           Dry::Types['nominal.hash'].constructor(hash)
         )
       end
+
+      it 'works with a type' do
+        to_s = :to_s.to_proc
+
+        expect(mod.Constructor(Dry::Types['nominal.string'], &to_s)).to eql(
+          mod.Constructor(String, &to_s)
+        )
+      end
     end
 
     describe '.Nominal' do
