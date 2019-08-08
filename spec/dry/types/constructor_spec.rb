@@ -324,4 +324,14 @@ RSpec.describe Dry::Types::Constructor do
       end
     end
   end
+
+  describe '#optional?' do
+    context 'for optional types' do
+      subject(:type) { Dry::Types['integer'].optional.constructor(&:itself) }
+
+      it 'returns true' do
+        expect(type).to be_optional
+      end
+    end
+  end
 end
