@@ -14,6 +14,9 @@ rvm:
   - 2.5.5
   - 2.4.6
   - jruby-9.2.7.0
+matrix:
+  allow_failures:
+    - rvm: jruby-9.2.7.0
 env:
   global:
     - COVERAGE=true
