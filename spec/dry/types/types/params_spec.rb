@@ -219,4 +219,20 @@ RSpec.describe Dry::Types::Nominal do
       expect(type['a']).to eql(:a)
     end
   end
+
+  context 'optional types' do
+    subject(:type) { Dry::Types['optional.params.integer'] }
+
+    it 'coerces empty strings to nil' do
+      expect(type['']).to be_nil
+    end
+
+    it 'parses integers' do
+      expect(type['40']).to be(40)
+    end
+
+    it 'raises an error on random strings' do
+      expect { type['abc'] }.to raise_error(Dry::Types::CoercionError)
+    end
+  end
 end
