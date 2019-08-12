@@ -30,6 +30,7 @@ module Dry
         def visit_hash(_)
           ::Hash
         end
+        alias_method :visit_schema, :visit_hash
 
         # @api private
         def visit_array(_)
