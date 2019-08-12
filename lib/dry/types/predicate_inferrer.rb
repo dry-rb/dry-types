@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/core/cache'
+require 'dry/types/predicate_registry'
 
 module Dry
   module Types
@@ -170,7 +171,7 @@ module Dry
       attr_reader :compiler
 
       # @api private
-      def initialize(registry)
+      def initialize(registry = PredicateRegistry.new)
         @compiler = Compiler.new(registry)
       end
 
