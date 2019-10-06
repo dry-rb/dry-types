@@ -1,4 +1,4 @@
-# 1.2.0 unreleased
+# 1.2.0 2019-10-06
 
 ## Changed
 
@@ -56,7 +56,7 @@
   end
   ```
 
-[Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-types/compare/v1.1.1...master)
+[Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-types/compare/v1.1.1...v1.2.0)
 
 # 1.1.1 2019-07-26
 
