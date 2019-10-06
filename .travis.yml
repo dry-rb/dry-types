@@ -10,16 +10,19 @@ after_script:
 script:
   - bundle exec rake
 rvm:
-  - 2.6.3
-  - 2.5.5
-  - 2.4.6
-  - jruby-9.2.7.0
-matrix:
-  allow_failures:
-    - rvm: jruby-9.2.7.0
+  - 2.6.5
+  - 2.5.7
+  - 2.4.9
+  - ruby-head
 env:
   global:
     - COVERAGE=true
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+  include:
+    - rvm: jruby-9.2.8.0
+      jdk: openjdk8
 notifications:
   email: false
   webhooks:
