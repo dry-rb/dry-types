@@ -2,33 +2,33 @@
 
 ## Changed
 
-* `Dry::Types.[]` used to work with classes, now it's deprecated (flash-gordon)
+- `Dry::Types.[]` used to work with classes, now it's deprecated (flash-gordon)
 
 ## Fixed
 
-* Bug with using a `Bool`-named struct as a schema key (flash-gordon)
-* A bunch of issues related to using `meta` on complex types (flash-gordon)
-* `Types.Constructor(...)` returns a `Types::Array` as it should (flash-gordon)
+- Bug with using a `Bool`-named struct as a schema key (flash-gordon)
+- A bunch of issues related to using `meta` on complex types (flash-gordon)
+- `Types.Constructor(...)` returns a `Types::Array` as it should (flash-gordon)
 
 ## Added
 
-* `Optional::Params` types that coerce empty strings to `nil` (flash-gordon)
+- `Optional::Params` types that coerce empty strings to `nil` (flash-gordon)
   ```ruby
   Dry::Types['optional.params.integer'].('') # => nil
   Dry::Types['optional.params.integer'].('140') # => 140
   Dry::Types['optional.params.integer'].('asd') # => exception!
   ```
   Keep in mind, Dry::Types['optional.params.integer'] and Dry::Types['params.integer'].optional are not the same, the latter doesn't handle empty strings.
-* Predicate inferrer was ported from dry-schema (authored by solnic)
+- Predicate inferrer was ported from dry-schema (authored by solnic)
   ```ruby
   require 'dry/types/predicate_inferrer'
-  Dry::Types::PredicateInferrer.new[Types::String] 
+  Dry::Types::PredicateInferrer.new[Types::String]
   # => [:str?]
   Dry::Types::PredicateInferrer.new[Types::String | Types::Integer]
   # => [[[:str?], [:int?]]]
   ```
   Note that the API of the predicate inferrer can change in the stable version, it's dictated by the needs of dry-schema so it should be considered as semi-stable. If you depend on it, write specs covering the desired behavior. Another option is copy-and-paste the whole thing to your project.
-* Primitive inferrer was ported from dry-schema (authored by solnic)
+- Primitive inferrer was ported from dry-schema (authored by solnic)
   ```ruby
   require 'dry/types/primitive_inferrer'
   Dry::Types::PrimitiveInferrer.new[Types::String]
@@ -39,6 +39,22 @@
   # => [NilClass, String]
   ```
   The primitive inferrer should be stable by now, you can rely on it.
+- The `monads` extension adds `Dry::Types::Result#to_monad`. This makes it compatible with do notation from dry-monads. Load it with `Dry::Types.load_extensions(:monads)` (skryukov)
+
+  ```ruby
+  Types = Dry.Types
+  Dry::Types.load_extensions(:monads)
+
+  class AddTen
+    include Dry::Monads[:result, :do]
+
+    def call(input)
+      integer = yield Types::Coercible::Integer.try(input)
+
+      Success(integer + 10)
+    end
+  end
+  ```
 
 [Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-types/compare/v1.1.1...master)
 
