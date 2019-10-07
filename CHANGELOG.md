@@ -18,7 +18,7 @@
   Dry::Types['optional.params.integer'].('140') # => 140
   Dry::Types['optional.params.integer'].('asd') # => exception!
   ```
-  Keep in mind, Dry::Types['optional.params.integer'] and Dry::Types['params.integer'].optional are not the same, the latter doesn't handle empty strings.
+  Keep in mind, `Dry::Types['optional.params.integer']` and `Dry::Types['params.integer'].optional` are not the same, the latter doesn't handle empty strings.
 - Predicate inferrer was ported from dry-schema (authored by solnic)
   ```ruby
   require 'dry/types/predicate_inferrer'
