@@ -106,4 +106,4 @@ Assuming you included types in a module called `Types`:
   - `Types::Maybe::Coercible::Array`
   - `Types::Maybe::Coercible::Hash`
 
-> `Maybe` types are not available by default - they must be loaded using `Dry::Types.load_extensions(:maybe)`. See [Optional Values](/gems/dry-types/optional-values) for more information.
+> `Maybe` types are not available by default - they must be loaded using `Dry::Types.load_extensions(:maybe)`. See [Optional Values](docs::optional-values) for more information.
