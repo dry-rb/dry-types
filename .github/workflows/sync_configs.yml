@@ -1,3 +1,5 @@
+name: sync_configs
+
 on:
   repository_dispatch:
 
