@@ -9,14 +9,14 @@ The [dry-monads gem](/gems/dry-monads/) provides approach to handling optional v
 > NOTE: Requires the [dry-monads gem](/gems/dry-monads/) to be loaded.
 1. Load the `:maybe` extension in your application.
 
-    ```ruby
-    require 'dry-types'
-    
-    Dry::Types.load_extensions(:maybe)
-    module Types
-      include Dry.Types()
-    end
-    ```
+```ruby
+require 'dry-types'
+
+Dry::Types.load_extensions(:maybe)
+module Types
+  include Dry.Types()
+end
+```
 
 2. Append `.maybe` to a _Type_ to return a _Monad_ object  
 
