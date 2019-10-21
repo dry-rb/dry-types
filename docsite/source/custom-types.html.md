@@ -91,4 +91,3 @@ ListOfStrings = Types.Array(Types::String)
 Callable = Types.Interface(:call)
 Contact = Types.Interface(:name, :phone)
 ```
-
