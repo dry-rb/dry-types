@@ -6,8 +6,8 @@ name: dry-types
 
 Built-in types are grouped under 6 categories:
 
-- `strict` - constrained types with a primitive type check applied to input
 - `nominal` - base type definitions with a primitive class and options
+- `strict` - constrained types with a primitive type check applied to input
 - `coercible` - types with constructors using kernel coercions
 - `params` - types with constructors performing non-strict coercions specific to HTTP parameters
 - `json` - types with constructors performing non-strict coercions specific to JSON
@@ -16,23 +16,6 @@ Built-in types are grouped under 6 categories:
 ### Categories
 
 Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) in a module called `Types`:
-
-* `Strict` types will raise an error if passed a value of the wrong type. `Strict` is the default Type, so `::Strict` can be omitted:
-  - `Types.nil`
-  - `Types.symbol`
-  - `Types.class`
-  - `Types.true`
-  - `Types.false`
-  - `Types.bool`
-  - `Types.integer`
-  - `Types.float`
-  - `Types.decimal`
-  - `Types.string`
-  - `Types.date`
-  - `Types.dateTime`
-  - `Types.time`
-  - `Types.array`
-  - `Types.hash`
 
 * Nominal types:
   - `Types::Nominal::Any`
@@ -72,8 +55,8 @@ Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) i
 > All types in the `strict` category are [constrained](docs::constraints) by a type-check that is applied to make sure that the input is an instance of the primitive:
 
 ``` ruby
-Types.integer[1] # => 1
-Types.integer['1'] # => raises Dry::Types::ConstraintError
+Types::Strict::Integer[1] # => 1
+Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
 ```
 
 * `Coercible` types will attempt to cast values to the correct class using kernel coercion methods:

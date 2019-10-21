@@ -7,7 +7,6 @@ prepare:
   - url: "https://raw.githubusercontent.com/dry-rb/devtools/master/shared/.rubocop.yml"
     path: ".rubocop.yml"
 
-
 exclude_patterns:
   - "benchmarks/"
   - "examples/"
