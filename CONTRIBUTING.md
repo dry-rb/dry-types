@@ -10,7 +10,7 @@ Report a feature request **only after discussing it first on [discourse.dry-rb.o
 
 ## Reporting questions, support requests, ideas, concerns etc.
 
-**PLEASE DON'T** - use [discourse.dry-rb.org](https://discourse.dry-rb.org) instead.
+**PLEASE DON'T** - use [discourse.dry-rb.org](http://discourse.dry-rb.org) instead.
 
 # Pull Request Guidelines
 
@@ -26,4 +26,4 @@ Other requirements:
 
 # Asking for help
 
-If these guidelines aren't helpful, and you're stuck, please post a message on [discourse.dry-rb.org](https://discourse.dry-rb.org).
+If these guidelines aren't helpful, and you're stuck, please post a message on [discourse.dry-rb.org](https://discourse.dry-rb.org) or join [our chat](https://dry-rb.zulipchat.com).
