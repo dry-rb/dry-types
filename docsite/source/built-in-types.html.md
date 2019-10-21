@@ -17,23 +17,6 @@ Built-in types are grouped under 6 categories:
 
 Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) in a module called `Types`:
 
-* `Strict` types will raise an error if passed a value of the wrong type. `Strict` is the default Type, so `::Strict` can be omitted:
-  - `Types.nil`
-  - `Types.symbol`
-  - `Types.class`
-  - `Types.true`
-  - `Types.false`
-  - `Types.bool`
-  - `Types.integer`
-  - `Types.float`
-  - `Types.decimal`
-  - `Types.string`
-  - `Types.date`
-  - `Types.dateTime`
-  - `Types.time`
-  - `Types.array`
-  - `Types.hash`
-
 * Nominal types:
   - `Types::Nominal::Any`
   - `Types::Nominal::Nil`
