@@ -15,6 +15,7 @@ sections:
   - enum
   - map
   - custom-types
+  - extensions
 ---
 
 `dry-types` is a simple and extendable type system for Ruby; useful for value coercions, applying constraints, defining complex structs or value objects and more. It was created as a successor to [Virtus](https://github.com/solnic/virtus).
@@ -35,7 +36,7 @@ User.new(name: 'Bob', age: 35)
 # => #<User name="Bob" age=35>
 ```
 
-See [Built-in Types](/gems/dry-types/1.0/built-in-types/) for a full list of available types.
+See [Built-in Types](docs::built-in-types/) for a full list of available types.
 
 By themselves, the basic type definitions like `Types.string` and `Types.integer` don't do anything except provide documentation about which type an attribute is expected to have. However, there are many more advanced possibilities:
 
@@ -66,7 +67,7 @@ User.new(name: 'Bob', age: 'not coercible')
 # => ArgumentError: invalid value for Integer(): "not coercible"
 ```
 
-- Use `.optional` to denote that an attribute can be `nil` (see [Optional Values](/gems/dry-types/1.0/optional-values)):
+- Use `.optional` to denote that an attribute can be `nil` (see [Optional Values](docs::optional-values)):
 
 ```ruby
 class User < Dry::Struct
@@ -84,7 +85,7 @@ User.new(name: 'Bob')
 # => Dry::Struct::Error: [User.new] :age is missing in Hash input
 ```
 
-- Add custom constraints (see [Constraints](/gems/dry-types/1.0/constraints.html)):
+- Add custom constraints (see [Constraints](docs::constraints.html)):
 
 ```ruby
 class User < Dry::Struct
@@ -122,16 +123,16 @@ Types.string[10000]
 
 ### Features
 
-* Support for [constrained types](/gems/dry-types/1.0/constraints)
-* Support for [optional values](/gems/dry-types/1.0/optional-values)
-* Support for [default values](/gems/dry-types/1.0/default-values)
-* Support for [sum types](/gems/dry-types/1.0/sum)
-* Support for [enums](/gems/dry-types/1.0/enum)
-* Support for [hash type with type schemas](/gems/dry-types/1.0/hash-schemas)
-* Support for [array type with members](/gems/dry-types/1.0/array-with-member)
+* Support for [constrained types](docs::constraints)
+* Support for [optional values](docs::optional-values)
+* Support for [default values](docs::default-values)
+* Support for [sum types](docs::sum)
+* Support for [enums](docs::enum)
+* Support for [hash type with type schemas](docs::hash-schemas)
+* Support for [array type with members](docs::array-with-member)
 * Support for arbitrary meta information
 * Support for typed struct objects via [dry-struct](/gems/dry-struct)
-* Types are [categorized](/gems/dry-types/1.0/built-in-types), which is especially important for optimized and dedicated coercion logic
+* Types are [categorized](docs::built-in-types), which is especially important for optimized and dedicated coercion logic
 * Types are composable and reusable objects
 * No const-missing magic and complicated const lookups
 * Roughly 6-10 x faster than Virtus

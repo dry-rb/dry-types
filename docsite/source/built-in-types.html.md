@@ -15,7 +15,7 @@ Built-in types are grouped under 6 categories:
 
 ### Categories
 
-Assuming you included `Dry::Types` ([see instructions](/gems/dry-types/1.0/getting-started)) in a module called `Types`:
+Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) in a module called `Types`:
 
 * `Strict` types will raise an error if passed a value of the wrong type. `Strict` is the default Type, so `::Strict` can be omitted:
   - `Types.nil`
@@ -113,4 +113,4 @@ Types.integer['1'] # => raises Dry::Types::ConstraintError
   - `Types::Maybe::Coercible::Array`
   - `Types::Maybe::Coercible::Hash`
 
-> `Maybe` types are not available by default - they must be loaded using `Dry::Types.load_extensions(:maybe)`. See [Optional Values](/gems/dry-types/1.0/optional-values) for more information.
+> `Maybe` types are not available by default - they must be loaded using `Dry::Types.load_extensions(:maybe)`. See [Maybe extension](docs::extensions/maybe) for more information.

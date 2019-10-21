@@ -1,3 +1,5 @@
+# this file is managed by dry-rb/devtools project
+
 AllCops:
   TargetRubyVersion: 2.4
 
@@ -20,6 +22,9 @@ Style/StabbyLambdaParentheses:
 Style/FormatString:
   Enabled: false
 
+Style/Documentation:
+  Enabled: false
+
 Layout/SpaceInLambdaLiteral:
   Enabled: false
 
@@ -40,9 +45,7 @@ Metrics/AbcSize:
   Max: 20
 
 Metrics/BlockLength:
-  Enabled: true
-  Exclude:
-    - 'spec/**/*_spec.rb'
+  Enabled: false
 
 Metrics/CyclomaticComplexity:
   Enabled: true
@@ -55,5 +58,29 @@ Style/AccessModifierDeclarations:
   Enabled: false
 
 Style/BlockDelimiters:
-  EnforcedStyle: semantic
+  Enabled: false
 
+Layout/IndentFirstArrayElement:
+  EnforcedStyle: consistent
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Lint/HandleExceptions:
+  Exclude:
+    - "spec/spec_helper.rb"
+
+Naming/FileName:
+  Exclude:
+    - "lib/dry-*.rb"
+
+Style/SymbolArray:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Naming/MethodName:
+  Enabled: false

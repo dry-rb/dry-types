@@ -15,6 +15,7 @@ end
 group :tools do
   gem 'pry-byebug', platform: :mri
   gem 'rubocop'
+  gem 'ossy', github: 'solnic/ossy', branch: 'master'
 end
 
 group :benchmarks do
