@@ -69,19 +69,21 @@ int['one'] # => 'one'
 
 ```ruby
 # In the full form
-Types::Hash.schema(name: Types::String, age: Types::Coercible::Integer)
+Types.hash.schema(name: Types.string, age: Types::Coercible::Integer)
 
 # Using Types.Hash()
-Types.Hash(:permissive, name: Types::String, age: Types::Coercible::Integer)
+Types.Hash(:permissive, name: Types.string, age: Types::Coercible::Integer)
 ```
 
-### `Types.Array`
+### `Types.array.of`
 
-`Types.Array` is a shortcut for `Types::Array.of`
+Check that an array and its contents have the specified types:
 
 ```ruby
-ListOfStrings = Types.Array(Types::String)
+ListOfStrings = Types.array.of(Types.string)
 ```
+
+Remember this requires ``
 
 ### `Types.Interface`
 

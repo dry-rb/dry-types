@@ -11,14 +11,14 @@ Types themselves have optional attributes you can apply to get further functiona
 By default, nil values raise an error:
 
 ``` ruby
-Types::Strict::String[nil]
+Types.string[nil]
 # => raises Dry::Types::ConstraintError
 ```
 
 Add `.optional` and `nil` values become valid:
 
 ```ruby
-optional_string = Types::Strict::String.optional
+optional_string = Types.string.optional
 
 optional_string[nil]
 # => nil
@@ -28,7 +28,7 @@ optional_string[123]
 # raises Dry::Types::ConstraintError
 ```
 
-`Types::String.optional` is just syntactic sugar for `Types::Strict::Nil | Types::Strict::String`.
+`Types.string.optional` is just syntactic sugar for `Types.nil | Types.string`.
 
 ### Handle optional values using Monads
 

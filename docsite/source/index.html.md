@@ -29,7 +29,7 @@ module Types
   include Dry.Types()
 end
 
-User = Dry.Struct(name: Types::String, age: Types::Integer)
+User = Dry.Struct(name: Types.string, age: Types.integer)
 
 User.new(name: 'Bob', age: 35)
 # => #<User name="Bob" age=35>
@@ -37,14 +37,14 @@ User.new(name: 'Bob', age: 35)
 
 See [Built-in Types](/gems/dry-types/1.0/built-in-types/) for a full list of available types.
 
-By themselves, the basic type definitions like `Types::String` and `Types::Integer` don't do anything except provide documentation about which type an attribute is expected to have. However, there are many more advanced possibilities:
+By themselves, the basic type definitions like `Types.string` and `Types.integer` don't do anything except provide documentation about which type an attribute is expected to have. However, there are many more advanced possibilities:
 
 - `Strict` types will raise an error if passed an attribute of the wrong type:
 
 ```ruby
 class User < Dry::Struct
-  attribute :name, Types::Strict::String
-  attribute :age,  Types::Strict::Integer
+  attribute :name, Types.string
+  attribute :age,  Types.integer
 end
 
 User.new(name: 'Bob', age: '18')
@@ -70,8 +70,8 @@ User.new(name: 'Bob', age: 'not coercible')
 
 ```ruby
 class User < Dry::Struct
-  attribute :name, Types::String
-  attribute :age,  Types::Integer.optional
+  attribute :name, Types.string
+  attribute :age,  Types.integer.optional
 end
 
 User.new(name: 'Bob', age: nil)
@@ -88,8 +88,8 @@ User.new(name: 'Bob')
 
 ```ruby
 class User < Dry::Struct
-  attribute :name, Types::Strict::String
-  attribute :age,  Types::Strict::Integer.constrained(gteq: 18)
+  attribute :name, Types.string
+  attribute :age,  Types.integer.constrained(gteq: 18)
 end
 
 User.new(name: 'Bob', age: 17)
@@ -100,21 +100,23 @@ User.new(name: 'Bob', age: 17)
 
 ```ruby
 class User < Dry::Struct
-  attribute :name, Types::String
-  attribute :age,  Types::Integer.meta(info: 'extra info about age')
+  attribute :name, Types.string
+  attribute :age,  Types.integer.meta(info: 'extra info about age')
 end
 ```
 
-- Pass values directly to `Dry::Types` without creating an object using `[]`:
+- Pass values directly to `Dry::Types` without creating an object using `[]` or as method names (`.string`, `.integer`):
 
 ```ruby
-Types::Strict::String["foo"]
+Types.string["foo"]
 # => "foo"
-Types::Strict::String["10000"]
+Types.string["10000"]
 # => "10000"
 Types::Coercible::String[10000]
 # => "10000"
-Types::Strict::String[10000]
+Types.send('coercible.integer')["100"]
+# => 100
+Types.string[10000]
 # Dry::Types::ConstraintError: 1000 violates constraints
 ```
 

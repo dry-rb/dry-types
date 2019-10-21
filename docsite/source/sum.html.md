@@ -12,7 +12,7 @@ For example `dry-types` defines the `Bool` type which is a sum consisting of the
 Another common case is defining that something can be either `nil` or something else:
 
 ``` ruby
-nil_or_string = Types::Nil | Types::String
+nil_or_string = Types.nil | Types.string
 
 nil_or_string[nil] # => nil
 nil_or_string["hello"] # => "hello"

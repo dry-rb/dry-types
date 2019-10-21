@@ -7,7 +7,7 @@ name: dry-types
 A type with a default value will return the configured value when the input is not defined:
 
 ``` ruby
-PostStatus = Types::String.default('draft')
+PostStatus = Types.string.default('draft')
 
 PostStatus[] # "draft"
 PostStatus["published"] # "published"
@@ -28,7 +28,7 @@ CallableDateTime[]
 `Dry::Types::Undefined` can be passed explicitly as a missing value:
 
 ```ruby
-PostStatus = Types::String.default('draft')
+PostStatus = Types.string.default('draft')
 
 PostStatus[Dry::Types::Undefined] # "draft"
 ```

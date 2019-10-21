@@ -11,7 +11,7 @@ All types support the constraints API, but not all constraints are suitable for 
 Under the hood it uses [`dry-logic`](/gems/dry-logic) and all of its predicates are supported.
 
 ``` ruby
-string = Types::String.constrained(min_size: 3)
+string = Types.string.constrained(min_size: 3)
 
 string['foo']
 # => "foo"
@@ -19,7 +19,7 @@ string['foo']
 string['fo']
 # => Dry::Types::ConstraintError: "fo" violates constraints
 
-email = Types::String.constrained(
+email = Types.string.constrained(
   format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 )
 

@@ -15,10 +15,10 @@ module Types
 end
 
 class Post < Dry::Struct
-  Statuses = Types::String.enum('draft', 'published', 'archived')
+  Statuses = Types.string.enum('draft', 'published', 'archived')
 
-  attribute :title, Types::String
-  attribute :body, Types::String
+  attribute :title, Types.string
+  attribute :body, Types.string
   attribute :status, Statuses
 end
 
@@ -42,10 +42,10 @@ Note that if you want to define an enum type with a default, you must call `.def
 
 ```ruby
 # this is the correct usage:
-Dry::Types::String.default('red').enum('blue', 'green', 'red')
+Dry::Types.string.default('red').enum('blue', 'green', 'red')
 
 # this will raise an error:
-Dry::Types::String.enum('blue', 'green', 'red').default('red')
+Dry::Types.string.enum('blue', 'green', 'red').default('red')
 ```
 
 ### Mappings
@@ -54,7 +54,7 @@ A classic example is mapping integers coming from somewhere (API/database/etc) t
 
 ```ruby
 class Cell < Dry::Struct
-  attribute :state, Types::String.enum('locked' => 0, 'open' => 1)
+  attribute :state, Types.string.enum('locked' => 0, 'open' => 1)
 end
 
 

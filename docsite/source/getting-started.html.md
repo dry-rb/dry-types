@@ -9,16 +9,29 @@ name: dry-types
 1. Make `Dry::Types` available to the application by creating a namespace that includes `Dry::Types`:
 
     ```ruby
+    require 'dry-types'
     module Types
-     include Dry.Types()
+      include Dry.Types()
+   
+      class << self
+        # @param String The key of the Dry::Type -- see Dry::Types.type_keys
+        def [] (type_key)
+          Dry::Types[type_key]
+        end
+        Dry::Types.type_keys.each do |method_name|
+          define_method method_name do
+            Dry::Types[method_name]
+          end
+        end
+      end
     end
     ```
    
-2. Reload the environment, & type `Types::Coercible::String` in the ruby console to confirm it worked:
+2. Reload the environment, & type `Types.string` in the ruby console to confirm it worked:
 
     ``` ruby
-    Types::Coercible::String
-    # => #<Dry::Types::Constructor type=#<Dry::Types::Definition primitive=String options={}>>
+    Types.string
+    # => #<Dry::Types[Constrained<Nominal<String> rule=[type?(String)]>]>
     ```
 
 ### Creating Your First Type
@@ -27,7 +40,7 @@ name: dry-types
 
     ```ruby
     class User < Dry::Struct
-      attribute :name, Types::String
+      attribute :name, Types.string
     end
     ```
 
@@ -41,7 +54,7 @@ name: dry-types
       Age = Integer.constrained(gt: 18)
     end
     class User < Dry::Struct
-      attribute :name, Types::String
+      attribute :name, Types.string
       attribute :email, Types::Email
       attribute :age, Types::Age
     end
@@ -51,7 +64,7 @@ name: dry-types
 
     ```ruby
     class Message < Dry::Struct
-      attribute :body, Types::String
+      attribute :body, Types.string
       attribute :to, User
     end
     ```

@@ -7,7 +7,7 @@ name: dry-types
 `Map` describes a homogeneous hashmap. This means only types of keys and values are known. You can simply imagine a map input as a list of key-value pairs.
 
 ```ruby
-int_float_hash = Types::Hash.map(Types::Integer, Types::Float)
+int_float_hash = Types.hash.map(Types.integer, Types.float)
 int_float_hash[100 => 300.0, 42 => 70.0]
 # => {100=>300.0, 42=>70.0}
 
