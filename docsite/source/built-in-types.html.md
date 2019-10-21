@@ -15,7 +15,7 @@ Built-in types are grouped under 6 categories:
 
 ### Categories
 
-Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) in a module called `Types`:
+Assuming you included `Dry::Types` ([see instructions](/gems/dry-types/1.0/getting-started)) in a module called `Types`:
 
 * `Strict` types will raise an error if passed a value of the wrong type. `Strict` is the default Type, so `::Strict` can be omitted:
   - `Types.nil`
@@ -52,24 +52,7 @@ Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) i
   - `Types::Nominal::Array`
   - `Types::Nominal::Hash`
 
-* `Strict` types will raise an error if passed a value of the wrong type:
-  - `Types::Strict::Nil`
-  - `Types::Strict::Symbol`
-  - `Types::Strict::Class`
-  - `Types::Strict::True`
-  - `Types::Strict::False`
-  - `Types::Strict::Bool`
-  - `Types::Strict::Integer`
-  - `Types::Strict::Float`
-  - `Types::Strict::Decimal`
-  - `Types::Strict::String`
-  - `Types::Strict::Date`
-  - `Types::Strict::DateTime`
-  - `Types::Strict::Time`
-  - `Types::Strict::Array`
-  - `Types::Strict::Hash`
-
-> All types in the `strict` category are [constrained](docs::constraints) by a type-check that is applied to make sure that the input is an instance of the primitive:
+> All types in the `strict` category are [constrained](/gems/dry-types/1.0/constraints) by a type-check that is applied to make sure that the input is an instance of the primitive:
 
 ``` ruby
 Types.integer[1] # => 1
@@ -130,4 +113,4 @@ Types.integer['1'] # => raises Dry::Types::ConstraintError
   - `Types::Maybe::Coercible::Array`
   - `Types::Maybe::Coercible::Hash`
 
-> `Maybe` types are not available by default - they must be loaded using `Dry::Types.load_extensions(:maybe)`. See [Maybe extension](docs::extensions/maybe) for more information.
+> `Maybe` types are not available by default - they must be loaded using `Dry::Types.load_extensions(:maybe)`. See [Optional Values](/gems/dry-types/1.0/optional-values) for more information.
