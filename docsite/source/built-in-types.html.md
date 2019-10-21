@@ -21,7 +21,7 @@ Assuming you included `Dry::Types` ([see instructions](/gems/dry-types/1.0/getti
   - `Types.nil`
   - `Types.symbol`
   - `Types.class`
-  - `Types.frue`
+  - `Types.true`
   - `Types.false`
   - `Types.bool`
   - `Types.integer`
