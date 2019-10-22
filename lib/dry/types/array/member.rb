@@ -89,7 +89,7 @@ module Dry
               block ? yield(failure) : failure
             end
           else
-            failure = failure(input, "#{input} is not an array")
+            failure = failure(input, CoercionError.new("#{input} is not an array"))
             block ? yield(failure) : failure
           end
         end
