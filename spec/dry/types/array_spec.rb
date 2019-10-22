@@ -19,6 +19,36 @@ RSpec.describe Dry::Types::Array do
         include_context 'array with a member type'
       end
 
+      context 'try' do
+        subject(:array) do
+          Dry::Types['nominal.array'].of(Dry::Types['strict.string'])
+        end
+
+        it 'with a valid array' do
+          expect(array.try(%w[a b])).to be_success
+        end
+
+        it 'an invalid type should be a failure' do
+          expect(array.try('some string')).to be_failure
+        end
+
+        it 'a broken constraint should be a failure' do
+          expect(array.try(['1', 2])).to be_failure
+        end
+
+        it 'a broken constraint with block' do
+          expect(
+            array.try(['1', '2', 3]) { |error| "error: #{error}" }
+          ).to match(/error: 3/)
+        end
+
+        it 'an invalid type with a block' do
+          expect(
+            array.try('X') { |x| 'error: ' + x.to_s }
+          ).to eql('error: X is not an array')
+        end
+      end
+
       context 'using method' do
         subject(:array) { Dry::Types['coercible.array'].of(Dry::Types['coercible.string']) }
 
