@@ -45,10 +45,6 @@ RSpec.describe Dry::Types::PrimitiveInferrer, '#[]' do
     expect(inferrer[type(:nil)]).to eql([NilClass])
   end
 
-  it 'returns FalseClass for a false type' do
-    expect(inferrer[type(:false)]).to eql([FalseClass])
-  end
-
   it 'returns TrueClass for a true type' do
     expect(inferrer[type(:true)]).to eql([TrueClass])
   end

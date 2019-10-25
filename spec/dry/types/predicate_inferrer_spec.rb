@@ -44,10 +44,6 @@ RSpec.describe Dry::Types::PredicateInferrer, '#[]' do
     expect(inferrer[type(:nil)]).to eql([:nil?])
   end
 
-  it 'returns false? for a false type' do
-    expect(inferrer[type(:false)]).to eql([:false?])
-  end
-
   it 'returns true? for a true type' do
     expect(inferrer[type(:true)]).to eql([:true?])
   end
