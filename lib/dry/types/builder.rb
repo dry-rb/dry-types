@@ -127,7 +127,7 @@ module Dry
       #
       # @api public
       def constructor(constructor = nil, **options, &block)
-        constructor_type.new(with(options), fn: constructor || block)
+        constructor_type.new(with(**options), fn: constructor || block)
       end
     end
   end

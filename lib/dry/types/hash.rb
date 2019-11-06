@@ -113,7 +113,7 @@ module Dry
 
         type_map.map do |map_key, type|
           name, options = key_name(map_key)
-          key = Schema::Key.new(resolve_type(type), name, options)
+          key = Schema::Key.new(resolve_type(type), name, **options)
           type_transform.(key)
         end
       end

@@ -40,7 +40,7 @@ module Dry
       # @param [Hash] options
       #
       # @api private
-      def initialize(left, right, options = {})
+      def initialize(left, right, **options)
         super
         @left, @right = left, right
         freeze
@@ -146,7 +146,7 @@ module Dry
         if data.nil?
           optional? ? right.meta : super
         elsif optional?
-          self.class.new(left, right.meta(data), options)
+          self.class.new(left, right.meta(data), **options)
         else
           super
         end

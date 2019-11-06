@@ -18,7 +18,7 @@ module Dry
         # @option options [Type] :member
         #
         # @api private
-        def initialize(primitive, options = {})
+        def initialize(primitive, **options)
           @member = options.fetch(:member)
           super
         end
@@ -100,7 +100,7 @@ module Dry
         #
         # @api public
         def lax
-          Lax.new(Member.new(primitive, { **options, member: member.lax, meta: meta }))
+          Lax.new(Member.new(primitive, **options, member: member.lax, meta: meta))
         end
 
         # @see Nominal#to_ast

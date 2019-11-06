@@ -109,7 +109,9 @@ RSpec.shared_examples_for Dry::Types::Nominal do
   end
 end
 
-RSpec.shared_examples_for 'a constrained type' do |inputs: Object.new|
+RSpec.shared_examples_for 'a constrained type' do |options = { inputs: Object.new }|
+  inputs = options[:inputs]
+
   let(:fallback) { Object.new }
 
   describe '#call' do

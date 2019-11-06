@@ -85,7 +85,7 @@ module Dry
       #
       # @api public
       def constructor(new_fn = nil, **options, &block)
-        with({**options, fn: fn >> (new_fn || block)})
+        with(**options, fn: fn >> (new_fn || block))
       end
       alias_method :append, :constructor
       alias_method :>>, :constructor
@@ -114,7 +114,7 @@ module Dry
       #
       # @api public
       def prepend(new_fn = nil, **options, &block)
-        with({**options, fn: fn << (new_fn || block)})
+        with(**options, fn: fn << (new_fn || block))
       end
       alias_method :<<, :prepend
 
@@ -123,7 +123,7 @@ module Dry
       # @return [Lax]
       # @api public
       def lax
-        Lax.new(Constructor.new(type.lax, options))
+        Lax.new(Constructor.new(type.lax, **options))
       end
 
       # Wrap the type with a proc
@@ -158,7 +158,7 @@ module Dry
           response = type.public_send(method, *args, &block)
 
           if response.is_a?(Type) && type.class == response.class
-            response.constructor_type.new(response, options)
+            response.constructor_type.new(response, **options)
           else
             response
           end

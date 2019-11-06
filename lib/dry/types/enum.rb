@@ -27,7 +27,7 @@ module Dry
       # @option options [Array] :values
       #
       # @api private
-      def initialize(type, options)
+      def initialize(type, **options)
         super
         @mapping = options.fetch(:mapping).freeze
         @values = @mapping.keys.freeze
