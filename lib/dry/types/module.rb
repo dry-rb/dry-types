@@ -18,10 +18,10 @@ module Dry
     #
     # @api public
     class Module < ::Module
-      def initialize(registry, *args)
+      def initialize(registry, *args, **kwargs)
         @registry = registry
-        check_parameters(*args)
-        constants = type_constants(*args)
+        check_parameters(*args, **kwargs)
+        constants = type_constants(*args, **kwargs)
         define_constants(constants)
         extend(BuilderMethods)
 

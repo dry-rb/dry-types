@@ -138,11 +138,13 @@ RSpec.describe Dry::Types::Module do
   end
 
   context 'parameters' do
-    subject(:mod) { Dry::Types::Module.new(registry, *args) }
+    subject(:mod) { Dry::Types::Module.new(registry, *args, **kwargs) }
+
+    let(:args) { [] }
+
+    let(:kwargs) { {} }
 
     context 'no options' do
-      let(:args) { [] }
-
       it 'contains all types by default' do
         expect(mod.constants.to_set)
           .to be > %i[Strict Coercible Optional JSON Params Integer].to_set
@@ -153,7 +155,7 @@ RSpec.describe Dry::Types::Module do
       constant = Dry::Types::Inflector.camelize(ns.to_s).to_sym
 
       context ns.to_s do
-        subject(:args) { [ns] }
+        let(:args) { [ns] }
 
         it "includes only #{ns} types" do
           constants = mod.constants(false)
@@ -165,7 +167,7 @@ RSpec.describe Dry::Types::Module do
     end
 
     context 'multiple namespaces' do
-      subject(:args) { %i[strict nominal] }
+      let(:args) { %i[strict nominal] }
 
       it 'adds only two constants' do
         constants = mod.constants(false)
@@ -175,7 +177,9 @@ RSpec.describe Dry::Types::Module do
 
     context 'default types' do
       context 'several namespaces with default' do
-        subject(:args) { [:nominal, default: :strict] }
+        let(:args) { [:nominal] }
+
+        let(:kwargs) { { default: :strict } }
 
         it 'adds strict types as default' do
           expect(mod::Integer).to be(Dry::Types['strict.integer'])
@@ -186,15 +190,13 @@ RSpec.describe Dry::Types::Module do
 
       context 'any' do
         context 'no options' do
-          subject(:args) { [] }
-
           it 'is available by default' do
             expect(mod::Any).to be(registry['any'])
           end
         end
 
         context 'strict' do
-          subject(:args) { [default: :strict] }
+          let(:kwargs) { { default: :strict } }
 
           it 'is available' do
             expect(mod::Any).to be(registry['any'])
@@ -204,8 +206,6 @@ RSpec.describe Dry::Types::Module do
 
       context 'bool' do
         context 'no options' do
-          subject(:args) { [] }
-
           it 'is available by default' do
             expect(mod::Bool).to be(registry['strict.bool'])
           end
@@ -213,7 +213,7 @@ RSpec.describe Dry::Types::Module do
       end
 
       context 'without namespaces' do
-        subject(:args) { [default: :strict] }
+        let(:kwargs) { { default: :strict } }
 
         it 'adds all namespaces wiht strict types as default' do
           expect(mod::Integer).to be(Dry::Types['strict.integer'])
@@ -222,7 +222,7 @@ RSpec.describe Dry::Types::Module do
       end
 
       context 'disabling defaults' do
-        subject(:args) { [default: false] }
+        let(:kwargs) { { default: false } }
 
         it "doesn't add nominal types as a default" do
           expect(mod::Nominal::Integer).to be(Dry::Types['nominal.integer'])
@@ -236,7 +236,7 @@ RSpec.describe Dry::Types::Module do
       end
 
       context 'optional defaults' do
-        subject(:args) { [default: :optional] }
+        let(:kwargs) { { default: :optional } }
 
         it 'adds optional types as defaults' do
           expect(mod::Strict::Integer).to be_optional

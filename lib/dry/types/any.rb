@@ -15,7 +15,7 @@ module Dry
 
       # @api private
       def initialize(**options)
-        super(::Object, options)
+        super(::Object, **options)
       end
 
       # @return [String]
@@ -30,7 +30,7 @@ module Dry
       # @return [Type]
       #
       # @api public
-      def with(new_options)
+      def with(**new_options)
         self.class.new(**options, meta: @meta, **new_options)
       end
 

@@ -24,7 +24,7 @@ module Dry
       # @param [Hash] options
       #
       # @api public
-      def initialize(type, options)
+      def initialize(type, **options)
         super
         @rule = options.fetch(:rule)
       end

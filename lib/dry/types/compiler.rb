@@ -68,12 +68,12 @@ module Dry
 
       def visit_hash(node)
         opts, meta = node
-        registry['nominal.hash'].with(opts.merge(meta: meta))
+        registry['nominal.hash'].with(**opts, meta: meta)
       end
 
       def visit_schema(node)
         keys, options, meta = node
-        registry['nominal.hash'].schema(keys.map { |key| visit(key) }).with(options.merge(meta: meta))
+        registry['nominal.hash'].schema(keys.map { |key| visit(key) }).with(**options, meta: meta)
       end
 
       def visit_json_hash(node)

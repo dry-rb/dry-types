@@ -14,7 +14,7 @@ module Dry
       attr_reader :type
 
       # @param [Type] type
-      def initialize(type, *)
+      def initialize(type, *, **)
         super
         @type = type
       end
@@ -101,6 +101,7 @@ module Dry
           super
         end
       end
+      ruby2_keywords(:method_missing) if respond_to?(:ruby2_keywords, true)
 
       # Replace underlying type
       #

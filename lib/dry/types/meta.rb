@@ -16,7 +16,7 @@ module Dry
       # @return [Type]
       #
       # @api public
-      def with(options)
+      def with(**options)
         super(meta: @meta, **options)
       end
 
