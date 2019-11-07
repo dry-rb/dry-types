@@ -1,3 +1,12 @@
+# 1.2.1 2019-11-07
+
+## Fixed
+
+- Fix keyword warnings reported by Ruby 2.7 (flash-gordon)
+- Error type in failing case in `Array::Member` (esparta)
+
+[Compare v1.2.0...v1.2.1](https://github.com/dry-rb/dry-types/compare/v1.2.0...v1.2.1)
+
 # 1.2.0 2019-10-06
 
 ## Changed
