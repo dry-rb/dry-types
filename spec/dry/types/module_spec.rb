@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'dry-struct'
 require 'spec_helper'
 
 RSpec.describe Dry::Types::Module do
@@ -92,6 +93,14 @@ RSpec.describe Dry::Types::Module do
         expect(mod.Constructor(Dry::Types['nominal.string'], &to_s)).to eql(
           mod.Constructor(String, &to_s)
         )
+      end
+
+      context 'with struct' do
+        let(:user_struct) { Dry.Struct(name: 'string') }
+
+        it 'returns struct back if no constructor block provided' do
+          expect(mod.Constructor(user_struct)).to be(user_struct)
+        end
       end
     end
 
