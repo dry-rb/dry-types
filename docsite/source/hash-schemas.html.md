@@ -143,7 +143,7 @@ user_hash[{}]
 Type transformations work perfectly with inheritance, you don't have to define same rules more than once:
 
 ```ruby
-SymbolizeAndOptionalSchema = Types::Hash.
+SymbolizeAndOptionalSchema = Types::Hash
   .schema({})
   .with_key_transform(&:to_sym)
   .with_type_transform { |type| type.required(false) }
