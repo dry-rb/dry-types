@@ -17,7 +17,7 @@ module Dry
       class Key
         extend ::Dry::Core::Deprecations[:'dry-types']
         include Type
-        include Dry::Equalizer(:name, :type, :options, inspect: false)
+        include Dry::Equalizer(:name, :type, :options, inspect: false, immutable: true)
         include Decorator
         include Builder
         include Printable

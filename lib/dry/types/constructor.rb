@@ -10,7 +10,7 @@ module Dry
     #
     # @api public
     class Constructor < Nominal
-      include Dry::Equalizer(:type, :options, inspect: false)
+      include Dry::Equalizer(:type, :options, inspect: false, immutable: true)
 
       # @return [#call]
       attr_reader :fn

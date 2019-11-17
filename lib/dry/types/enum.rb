@@ -9,7 +9,7 @@ module Dry
     # @api public
     class Enum
       include Type
-      include Dry::Equalizer(:type, :mapping, inspect: false)
+      include Dry::Equalizer(:type, :mapping, inspect: false, immutable: true)
       include Decorator
       include Builder
 

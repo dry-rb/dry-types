@@ -19,7 +19,7 @@ module Dry
       include Meta
       include Builder
       include Printable
-      include Dry::Equalizer(:primitive, :options, :meta, inspect: false)
+      include Dry::Equalizer(:primitive, :options, :meta, inspect: false, immutable: true)
 
       # @return [Class]
       attr_reader :primitive

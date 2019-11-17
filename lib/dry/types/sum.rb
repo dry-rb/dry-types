@@ -14,7 +14,7 @@ module Dry
       include Options
       include Meta
       include Printable
-      include Dry::Equalizer(:left, :right, :options, :meta, inspect: false)
+      include Dry::Equalizer(:left, :right, :options, :meta, inspect: false, immutable: true)
 
       # @return [Type]
       attr_reader :left
