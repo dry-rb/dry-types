@@ -12,6 +12,8 @@ group :test do
   platform :mri do
     gem 'simplecov', require: false
   end
+
+  gem 'dry-struct'
 end
 
 group :tools do
