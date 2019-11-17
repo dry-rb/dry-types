@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     paths:
-      - .github/workflows/ci.yml
+      - .github/workflows/custom_ci.yml
       - lib/**
       - spec/**
 
@@ -57,7 +57,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ["jruby:9.2.8", "ruby:rc"]
+        image: ["jruby:9.2.9", "ruby:rc"]
         dry_logic_from_master: ["true", "false"]
     container:
       image: ${{matrix.image}}
