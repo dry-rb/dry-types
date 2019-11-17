@@ -10,7 +10,7 @@ module Dry
     # @api public
     class Maybe
       include Type
-      include Dry::Equalizer(:type, :options, inspect: false)
+      include Dry::Equalizer(:type, :options, inspect: false, immutable: true)
       include Decorator
       include Builder
       include Printable

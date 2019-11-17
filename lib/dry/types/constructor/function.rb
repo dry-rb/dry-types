@@ -146,7 +146,7 @@ module Dry
           last_arg.equal?(:block)
         end
 
-        include Dry::Equalizer(:fn)
+        include Dry::Equalizer(:fn, immutable: true)
 
         attr_reader :fn
 
