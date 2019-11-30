@@ -1,3 +1,15 @@
+# 1.2.2 unreleased
+
+## Fixed
+
+- `Types.Contructor` doesn't re-wrap class instances implementing type interface, this fixes some quirks in dry-struct (flash-gordon)
+
+## Changed
+
+- Types now use immutable equalizers. This should improve performance in certain cases e.g. in ROM (flash-gordon)
+
+[Compare v1.2.1...master](https://github.com/dry-rb/dry-types/compare/v1.2.1...v1.2.2)
+
 # 1.2.1 2019-11-07
 
 ## Fixed
