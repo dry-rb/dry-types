@@ -1,21 +1,20 @@
 [gem]: https://rubygems.org/gems/dry-types
-[travis]: https://travis-ci.com/dry-rb/dry-types
+[ci]: https://github.com/dry-rb/dry-types/actions?query=workflow%3Aci
 [codeclimate]: https://codeclimate.com/github/dry-rb/dry-types
-[coveralls]: https://coveralls.io/r/dry-rb/dry-types
 [inchpages]: http://inch-ci.org/github/dry-rb/dry-types
 [chat]: https://dry-rb.zulipchat.com
 
 # dry-types [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)][chat]
 
 [![Gem Version](https://badge.fury.io/rb/dry-types.svg)][gem]
-[![Build Status](https://travis-ci.com/dry-rb/dry-types.svg?branch=master)][travis]
+[![Build Status](https://github.com/dry-rb/dry-types/workflows/ci/badge.svg)][ci]
 [![Code Climate](https://codeclimate.com/github/dry-rb/dry-types/badges/gpa.svg)][codeclimate]
 [![Test Coverage](https://codeclimate.com/github/dry-rb/dry-types/badges/coverage.svg)][codeclimate]
 [![Inline docs](http://inch-ci.org/github/dry-rb/dry-types.svg?branch=master)][inchpages]
 
 ## Links
 
-* [Documentation](http://dry-rb.org/gems/dry-types)
+- [Documentation](http://dry-rb.org/gems/dry-types)
 
 ## Development
 
