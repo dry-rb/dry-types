@@ -73,4 +73,18 @@ RSpec.describe Dry::Types::Hash do
       specify { expect(type.transform_types?).to be(true) }
     end
   end
+
+  describe '#schema' do
+    let(:hash) { Dry::Types['hash'] }
+
+    it 'accepts only symbol keys' do
+      ['string_key', 42, Object.new, {}, []].each do |invalid_key|
+        expect {
+          hash.schema(valid: 'symbol', invalid_key => 'integer')
+        }.to raise_error(
+          ArgumentError, /Schemas can only contain symbol keys/
+        )
+      end
+    end
+  end
 end

@@ -375,6 +375,16 @@ RSpec.describe Dry::Types::Schema do
         string = Dry::Types['coercible.string'].meta(transformed: true)
         expect(extended.key(:city)).to eql(Dry::Types::Schema::Key.new(string, :city))
       end
+
+      it 'accepts only symbol keys' do
+        ['string_key', 42, Object.new, {}, []].each do |invalid_key|
+          expect {
+            hash.schema(valid: 'symbol', invalid_key => 'integer')
+          }.to raise_error(
+            ArgumentError, /Schemas can only contain symbol keys/
+          )
+        end
+      end
     end
 
     describe 'keys ending with question mark' do

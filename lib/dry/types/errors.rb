@@ -2,7 +2,7 @@
 
 module Dry
   module Types
-    extend Dry::Core::ClassAttributes
+    extend ::Dry::Core::ClassAttributes
 
     # @!attribute [r] namespace
     #   @return [Container{String => Nominal}]
@@ -12,7 +12,7 @@ module Dry
 
     # Base class for coercion errors raise by dry-types
     #
-    class CoercionError < StandardError
+    class CoercionError < ::StandardError
       # @api private
       def self.handle(exception, meta: Undefined)
         if block_given?
@@ -34,7 +34,7 @@ module Dry
       # @api private
       def initialize(message, meta: Undefined, backtrace: Undefined)
         unless message.is_a?(::String)
-          raise ArgumentError, "message must be a string, #{message.class} given"
+          raise ::ArgumentError, "message must be a string, #{message.class} given"
         end
 
         super(message)
@@ -74,9 +74,9 @@ module Dry
       end
     end
 
-    MapError = Class.new(CoercionError)
+    MapError = ::Class.new(CoercionError)
 
-    SchemaKeyError = Class.new(CoercionError)
+    SchemaKeyError = ::Class.new(CoercionError)
     private_constant(:SchemaKeyError)
 
     class MissingKeyError < SchemaKeyError
