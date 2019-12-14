@@ -31,6 +31,10 @@ module Dry
             type.meta.fetch(:required) { !type.meta.fetch(:omittable, false) }
           end
 
+          unless name.is_a?(::Symbol)
+            raise ArgumentError, "Schemas can only contain symbol keys, #{name.inspect} given"
+          end
+
           super(type, name, required: required, **options)
           @name = name
         end
