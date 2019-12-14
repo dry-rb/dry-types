@@ -39,6 +39,12 @@ RSpec.describe Dry::Types::Nominal do
         type['Thu, 26 Nov 2015 00:00:00 GMT']
       ]).to all(eql(Date.new(2015, 11, 26)))
     end
+
+    it 'accepts date' do
+      date = Date.new(2015, 11, 26)
+
+      expect(type[date]).to be(date)
+    end
   end
 
   describe 'params.date_time' do
@@ -51,6 +57,11 @@ RSpec.describe Dry::Types::Nominal do
     it 'coerces to a date time' do
       expect(type['2015-11-26 12:00:00']).to eql(DateTime.new(2015, 11, 26, 12))
     end
+
+    it 'accepts datetime' do
+      datetime = DateTime.new(2015, 11, 26, 12)
+      expect(type[datetime]).to be(datetime)
+    end
   end
 
   describe 'params.time' do
@@ -62,6 +73,11 @@ RSpec.describe Dry::Types::Nominal do
 
     it 'coerces to a time' do
       expect(type['2015-11-26 12:00:00']).to eql(Time.new(2015, 11, 26, 12))
+    end
+
+    it 'accepts time' do
+      time = Time.new(2015, 11, 26, 12)
+      expect(type[time]).to be(time)
     end
   end
 
@@ -83,6 +99,11 @@ RSpec.describe Dry::Types::Nominal do
         expect(type[value]).to be(false)
       end
     end
+
+    it 'accepts true and false' do
+      expect(type[true]).to be(true)
+      expect(type[false]).to be(false)
+    end
   end
 
   describe 'params.true' do
@@ -97,6 +118,10 @@ RSpec.describe Dry::Types::Nominal do
         expect(type[value]).to be(true)
       end
     end
+
+    it 'accepts true' do
+      expect(type[true]).to be(true)
+    end
   end
 
   describe 'params.false' do
@@ -110,6 +135,10 @@ RSpec.describe Dry::Types::Nominal do
       %w[0 off f false n no].each do |value|
         expect(type[value]).to be(false)
       end
+    end
+
+    it 'accepts false' do
+      expect(type[false]).to be(false)
     end
   end
 
