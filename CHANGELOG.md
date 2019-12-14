@@ -1,4 +1,4 @@
-# 1.2.2 unreleased
+# 1.2.2 2019-12-14
 
 ## Fixed
 
@@ -7,8 +7,10 @@
 ## Changed
 
 - Types now use immutable equalizers. This should improve performance in certain cases e.g. in ROM (flash-gordon)
+- Attempting to use non-symbol keys in hash schemas raises an error. We always supported only symbols as keys but there was no check, now it'll throw an argument error. If you want to convert strings to symbols, use `Hash#with_key_transform` (flash-gordon)
+- Params and JSON types accept Time/Date/Datetime instances and boolean values. This can be useful in tests but we discourage you from relying on this behavior in production code. For example, building structs with `Params` types is considered a smell. There are dedicated tools for coercion, namely dry-schema and dry-validation. Be responsible user of dry-types! ❤ (flash-gordon)
 
-[Compare v1.2.1...master](https://github.com/dry-rb/dry-types/compare/v1.2.1...v1.2.2)
+[Compare v1.2.1...v1.2.2](https://github.com/dry-rb/dry-types/compare/v1.2.1...v1.2.2)
 
 # 1.2.1 2019-11-07
 
