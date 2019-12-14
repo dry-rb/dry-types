@@ -39,6 +39,8 @@ module Dry
           rescue ArgumentError, RangeError => e
             CoercionError.handle(e, &block)
           end
+        elsif input.is_a?(::Date)
+          input
         elsif block_given?
           yield
         else
@@ -60,6 +62,8 @@ module Dry
           rescue ArgumentError => e
             CoercionError.handle(e, &block)
           end
+        elsif input.is_a?(::DateTime)
+          input
         elsif block_given?
           yield
         else
@@ -81,6 +85,8 @@ module Dry
           rescue ArgumentError => e
             CoercionError.handle(e, &block)
           end
+        elsif input.is_a?(::Time)
+          input
         elsif block_given?
           yield
         else

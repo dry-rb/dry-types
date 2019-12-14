@@ -14,7 +14,7 @@ module Dry
         FALSE_VALUES = %w[0 off Off OFF f false False FALSE F n no No NO N].freeze
         BOOLEAN_MAP = ::Hash[
           TRUE_VALUES.product([true]) + FALSE_VALUES.product([false])
-        ].freeze
+        ].merge(true => true, false => false).freeze
 
         extend Coercions
 
