@@ -64,4 +64,21 @@ RSpec.describe Dry::Types::Nominal, '#lax' do
         .to eql('#<Dry::Types[Lax<Constructor<Nominal<Integer> fn=Kernel.Integer>>]>')
     end
   end
+
+  describe '#try' do
+    subject(:type) { Dry::Types['coercible.integer'].lax }
+
+    it 'delegates to underlying type' do
+      expect(type.try('1')).to be_a(Dry::Types::Result::Success)
+      expect(type.try('a')).to be_a(Dry::Types::Result::Failure)
+    end
+  end
+
+  describe '#lax' do
+    subject(:type) { Dry::Types['coercible.integer'].lax }
+
+    specify do
+      expect(type.lax).to be(type)
+    end
+  end
 end
