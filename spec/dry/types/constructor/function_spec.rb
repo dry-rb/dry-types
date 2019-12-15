@@ -41,18 +41,30 @@ RSpec.describe Dry::Types::Constructor::Function do
     end
 
     context 'method with fallback' do
-      include_examples 'well-behaving coercion function' do
-        subject(:fun) do
-          obj = Object.new
+      let(:obj) do
+        obj = Object.new
 
-          def obj.coerce(value, &block)
-            Integer(value)
-          rescue ArgumentError => e
-            Dry::Types::CoercionError.handle(e, &block)
-          end
-
-          described_class[obj.method(:coerce)]
+        def obj.coerce(value, &block)
+          Integer(value)
+        rescue ArgumentError => e
+          Dry::Types::CoercionError.handle(e, &block)
         end
+
+        obj
+      end
+
+      subject(:fun) do
+        described_class[obj.method(:coerce)]
+      end
+
+      include_examples 'well-behaving coercion function'
+
+      context 'private method' do
+        before do
+          obj.singleton_class.send(:private, :coerce)
+        end
+
+        include_examples 'well-behaving coercion function'
       end
     end
 

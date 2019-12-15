@@ -15,7 +15,7 @@ module Dry
         class Safe < Function
           def call(input, &block)
             @fn.(input, &block)
-          rescue NoMethodError, TypeError, ArgumentError => e
+          rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
             CoercionError.handle(e, &block)
           end
         end
@@ -30,7 +30,7 @@ module Dry
           #
           # @return [Function]
           def self.call_class(method, public, safe)
-            @cache.fetch_or_store([method, public, safe].hash) do
+            @cache.fetch_or_store([method, public, safe]) do
               if public
                 ::Class.new(PublicCall) do
                   include PublicCall.call_interface(method, safe)
@@ -53,7 +53,7 @@ module Dry
             #
             # @return [::Module]
             def self.call_interface(method, safe)
-              @interfaces.fetch_or_store([method, safe].hash) do
+              @interfaces.fetch_or_store([method, safe]) do
                 ::Module.new do
                   if safe
                     module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
@@ -65,7 +65,7 @@ module Dry
                     module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
                       def call(input, &block)
                         @target.#{method}(input)
-                      rescue NoMethodError, TypeError, ArgumentError => error
+                      rescue ::NoMethodError, ::TypeError, ::ArgumentError => error
                         CoercionError.handle(error, &block)
                       end
                     RUBY
@@ -90,7 +90,7 @@ module Dry
           class PrivateSafeCall < PrivateCall
             def call(input, &block)
               @target.send(@name, input)
-            rescue NoMethodError, TypeError, ArgumentError => e
+            rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
               CoercionError.handle(e, &block)
             end
           end
@@ -121,7 +121,7 @@ module Dry
         # @param [#call] fn
         # @return [Function]
         def self.[](fn)
-          raise ArgumentError, 'Missing constructor block' if fn.nil?
+          raise ::ArgumentError, 'Missing constructor block' if fn.nil?
 
           if fn.is_a?(Function)
             fn
@@ -146,7 +146,7 @@ module Dry
           last_arg.equal?(:block)
         end
 
-        include Dry::Equalizer(:fn, immutable: true)
+        include ::Dry::Equalizer(:fn, immutable: true)
 
         attr_reader :fn
 
@@ -163,7 +163,7 @@ module Dry
         # @return [Array]
         def to_ast
           if fn.is_a?(::Proc)
-            [:id, Dry::Types::FnContainer.register(fn)]
+            [:id, FnContainer.register(fn)]
           else
             [:callable, fn]
           end
