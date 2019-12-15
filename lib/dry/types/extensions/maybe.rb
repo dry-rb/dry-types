@@ -10,11 +10,11 @@ module Dry
     # @api public
     class Maybe
       include Type
-      include Dry::Equalizer(:type, :options, inspect: false, immutable: true)
+      include ::Dry::Equalizer(:type, :options, inspect: false, immutable: true)
       include Decorator
       include Builder
       include Printable
-      include Dry::Monads::Maybe::Mixin
+      include ::Dry::Monads::Maybe::Mixin
 
       # @param [Dry::Monads::Maybe, Object] input
       #
@@ -23,7 +23,7 @@ module Dry
       # @api private
       def call_unsafe(input = Undefined)
         case input
-        when Dry::Monads::Maybe
+        when ::Dry::Monads::Maybe
           input
         when Undefined
           None()
@@ -37,14 +37,14 @@ module Dry
       # @return [Dry::Monads::Maybe]
       #
       # @api private
-      def call_safe(input = Undefined, &block)
+      def call_safe(input = Undefined)
         case input
-        when Dry::Monads::Maybe
+        when ::Dry::Monads::Maybe
           input
         when Undefined
           None()
         else
-          Maybe(type.call_safe(input, &block))
+          Maybe(type.call_safe(input) { |output = input| return yield(output) })
         end
       end
 
@@ -93,7 +93,7 @@ module Dry
       #
       # @api public
       def maybe
-        Maybe.new(Types['strict.nil'] | self)
+        Maybe.new(Types['nil'] | self)
       end
     end
 
@@ -119,7 +119,7 @@ module Dry
 
     # Register non-coercible maybe types
     NON_NIL.each_key do |name|
-      register("maybe.strict.#{name}", self["strict.#{name}"].maybe)
+      register("maybe.strict.#{name}", self[name.to_s].maybe)
     end
 
     # Register coercible maybe types
