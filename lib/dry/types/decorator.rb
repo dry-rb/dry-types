@@ -44,13 +44,6 @@ module Dry
         type.constrained?
       end
 
-      # @return [Sum]
-      #
-      # @api public
-      def optional
-        Types['strict.nil'] | self
-      end
-
       # @param [Symbol] meth
       # @param [Boolean] include_private
       #
