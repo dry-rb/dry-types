@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dry-logic', '~> 1.0', '>= 1.0.2'
 
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'dry-monads', '~> 0.2'
+  spec.add_development_dependency 'dry-monads', '~> 1.0'
   spec.add_development_dependency 'rake', '~> 11.0'
   spec.add_development_dependency 'rspec', '~> 3.3'
   spec.add_development_dependency 'yard', '~> 0.9.5'

@@ -10,11 +10,11 @@ RSpec.describe Dry::Types::Nominal, :maybe do
       end
 
       it 'accepts nil' do
-        expect(string[nil].value).to be(nil)
+        expect(string[nil]).to be_none
       end
 
       it 'accepts a string' do
-        expect(string['something'].value).to eql('something')
+        expect(string['something'].value!).to eql('something')
       end
     end
 
@@ -26,11 +26,11 @@ RSpec.describe Dry::Types::Nominal, :maybe do
       end
 
       it 'accepts nil' do
-        expect(string[nil].value).to be(nil)
+        expect(string[nil]).to be_none
       end
 
       it 'accepts a string' do
-        expect(string[:something].value).to eql('something')
+        expect(string[:something].value!).to eql('something')
       end
     end
   end
@@ -43,11 +43,11 @@ RSpec.describe Dry::Types::Nominal, :maybe do
     end
 
     it 'accepts nil' do
-      expect(maybe_string[nil].value).to be(nil)
+      expect(maybe_string[nil]).to be_none
     end
 
     it 'accepts an object coercible to a string' do
-      expect(maybe_string[123].value).to eql('123')
+      expect(maybe_string[123].value!).to eql('123')
     end
   end
 
@@ -61,15 +61,15 @@ RSpec.describe Dry::Types::Nominal, :maybe do
     it 'accepts nil and returns None instance' do
       value = maybe_string[nil]
 
-      expect(value).to be_instance_of(Dry::Monads::Maybe::None)
-      expect(value.fmap(&:downcase).fmap(&:upcase).value).to be(nil)
+      expect(value).to be_none
+      expect(value.fmap(&:downcase).fmap(&:upcase)).to be_none
     end
 
     it 'accepts a string and returns Some instance' do
       value = maybe_string['SomeThing']
 
-      expect(value).to be_instance_of(Dry::Monads::Maybe::Some)
-      expect(value.fmap(&:downcase).fmap(&:upcase).value).to eql('SOMETHING')
+      expect(value).to be_some
+      expect(value.fmap(&:downcase).fmap(&:upcase).value!).to eql('SOMETHING')
     end
   end
 end

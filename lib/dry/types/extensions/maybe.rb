@@ -54,13 +54,13 @@ module Dry
       #
       # @api public
       def try(input = Undefined)
-        res = if input.equal?(Undefined)
-                None()
-              else
-                Maybe(type[input])
-              end
+        result = type.try(input)
 
-        Result::Success.new(res)
+        if result.success?
+          Result::Success.new(Maybe(result.input))
+        else
+          result
+        end
       end
 
       # @return [true]
