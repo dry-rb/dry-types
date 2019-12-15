@@ -133,15 +133,6 @@ module Dry
       @type_map ||= Concurrent::Map.new
     end
 
-    # List of type keys defined in {Dry::Types.container}
-    #
-    # @return [String]
-    #
-    # @api private
-    def self.type_keys
-      container.keys
-    end
-
     # @api private
     def self.const_missing(const)
       underscored = Inflector.underscore(const)
