@@ -40,9 +40,6 @@ module Dry
       # @api public
       def try(input, &block)
         type.try(input, &block)
-      rescue CoercionError => e
-        result = failure(input, e.message)
-        block ? yield(result) : result
       end
 
       # @see Nominal#to_ast
