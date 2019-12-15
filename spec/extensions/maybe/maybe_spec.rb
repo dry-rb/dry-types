@@ -82,12 +82,28 @@ RSpec.describe Dry::Types::Nominal, '#maybe', :maybe do
       extend Dry::Monads[:maybe]
     end
 
-    subject(:type) { Dry::Types['coercible.integer'].optional.maybe }
+    subject(:type) { Dry::Types['coercible.integer'].maybe }
 
     it 'maps successful result' do
       expect(type.try('1')).to eql(Dry::Types::Result::Success.new(Some(1)))
       expect(type.try(nil)).to eql(Dry::Types::Result::Success.new(None()))
       expect(type.try('a')).to be_a(Dry::Types::Result::Failure)
+    end
+  end
+
+  describe '#call' do
+    describe 'safe calls' do
+      before do
+        require 'dry/monads'
+        extend Dry::Monads[:maybe]
+      end
+
+      subject(:type) { Dry::Types['coercible.integer'].maybe }
+
+      specify do
+        expect(type.('a') { :fallback }).to be(:fallback)
+        expect(type.(Some(1)) { :fallback }).to eql(Some(1))
+      end
     end
   end
 end
