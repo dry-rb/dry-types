@@ -8,7 +8,7 @@ module Dry
     #
     # @api public
     class Result
-      include Dry::Equalizer(:input, inspect: false, immutable: true)
+      include ::Dry::Equalizer(:input, immutable: true)
 
       # @return [Object]
       attr_reader :input
@@ -43,7 +43,7 @@ module Dry
       #
       # @api public
       class Failure < Result
-        include Dry::Equalizer(:input, :error, inspect: false, immutable: true)
+        include ::Dry::Equalizer(:input, :error, immutable: true)
 
         # @return [#to_s]
         attr_reader :error

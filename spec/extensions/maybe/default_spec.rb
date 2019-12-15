@@ -13,7 +13,7 @@ RSpec.describe Dry::Types::Nominal, '#default', :maybe do
     end
 
     it 'accepts a non-nil value' do
-      expect(type.default(0)[0].value).to be(0)
+      expect(type.default(0)[0].value!).to be(0)
     end
   end
 end
