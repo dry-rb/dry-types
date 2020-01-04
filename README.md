@@ -1,27 +1,29 @@
 [gem]: https://rubygems.org/gems/dry-types
-[ci]: https://github.com/dry-rb/dry-types/actions?query=workflow%3Aci
-[codeclimate]: https://codeclimate.com/github/dry-rb/dry-types
-[inchpages]: http://inch-ci.org/github/dry-rb/dry-types
+[actions]: https://github.com/dry-rb/dry-types/actions
+[codacy]: https://www.codacy.com/gh/dry-rb/dry-types
 [chat]: https://dry-rb.zulipchat.com
+[inchpages]: http://inch-ci.org/github/dry-rb/dry-types
 
 # dry-types [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)][chat]
 
 [![Gem Version](https://badge.fury.io/rb/dry-types.svg)][gem]
-[![Build Status](https://github.com/dry-rb/dry-types/workflows/ci/badge.svg)][ci]
-[![Code Climate](https://codeclimate.com/github/dry-rb/dry-types/badges/gpa.svg)][codeclimate]
-[![Test Coverage](https://codeclimate.com/github/dry-rb/dry-types/badges/coverage.svg)][codeclimate]
+[![CI Status](https://github.com/dry-rb/dry-types/workflows/ci/badge.svg)][actions]
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/22edf59617be4aef97cfbe4e1c99f1ce)][codacy]
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/22edf59617be4aef97cfbe4e1c99f1ce)][codacy]
 [![Inline docs](http://inch-ci.org/github/dry-rb/dry-types.svg?branch=master)][inchpages]
 
 ## Links
 
-- [Documentation](http://dry-rb.org/gems/dry-types)
+* [User documentation](http://dry-rb.org/gems/dry-types)
+* [API documentation](http://rubydoc.info/gems/dry-types)
 
-## Development
+## Supported Ruby versions
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bundle exec rake run_specs` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+This library officially supports the following Ruby versions:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+* MRI >= `2.4`
+* jruby >= `9.2`
 
-## Contributing
+## License
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/dry-rb/dry-types.
+See `LICENSE` file.
