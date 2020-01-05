@@ -501,4 +501,45 @@ RSpec.describe Dry::Types::Schema do
       specify { expect(type.transform_keys?).to be(true) }
     end
   end
+
+  describe '#merge' do
+    it 'adds keys and values from given schema' do
+      schema1 = Dry::Types['hash'].schema(name: 'string')
+      schema2 = Dry::Types['hash'].schema(age: 'integer')
+
+      schema = schema1.merge(schema2)
+
+      expect(schema.keys.map(&:name)).to eq([:name, :age])
+    end
+
+    it 'gives preference to given struct' do
+      schema1 = Dry::Types['hash'].schema(foo: 'string')
+      schema2 = Dry::Types['hash'].schema(foo: 'integer')
+
+      schema = schema1.merge(schema2)
+
+      expect(schema[foo: 1]).to eq(foo: 1)
+    end
+
+    it 'keeps type transformations from both schemas' do
+      transf1 = ->(key) { key.constructor { 'Transf 1' } }
+      transf2 = ->(key) { key.constructor { 'Transf 2' } }
+      schema1 = Dry::Types['hash'].with_type_transform(transf1).schema(foo: 'string')
+      schema2 = Dry::Types['hash'].with_type_transform(transf2).schema(bar: 'string')
+
+      schema = schema1.merge(schema2)
+
+      expect(schema[foo: 'foo', bar: 'bar']).to eq(foo: 'Transf 1', bar: 'Transf 2')
+    end
+
+    it 'preserves key transformations from the caller schema' do
+      schema1 = Dry::Types['hash'].schema(foo: 'string').with_key_transform(&:to_sym)
+      transf2 = ->(key) { (key + '_').to_sym }
+      schema2 = Dry::Types['hash'].schema(bar: 'string').with_key_transform(transf2)
+
+      schema = schema1.merge(schema2)
+
+      expect(schema['foo' => 'foo', 'bar' => 'bar']).to eq(foo: 'foo', bar: 'bar')
+    end
+  end
 end

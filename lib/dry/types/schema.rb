@@ -284,6 +284,18 @@ module Dry
         Lax.new(schema(keys.map(&:lax)))
       end
 
+      # Merges given schema keys into current schema.
+      #
+      # A new instance is returned.
+      #
+      # @param schema [Schema]
+      # @return [Schema]
+      #
+      # @api public
+      def merge(other)
+        schema(other.keys)
+      end
+
       private
 
       # @param [Array<Dry::Types::Schema::Keys>] keys
