@@ -1,3 +1,11 @@
+# 1.2.3 unreleased
+
+## Added
+
+- `Schema#merge` for merging two hash schemas (waiting-for-dev)
+
+[Compare v1.2.2...master](https://github.com/dry-rb/dry-types/compare/v1.2.2...master)
+
 # 1.2.2 2019-12-14
 
 ## Fixed
