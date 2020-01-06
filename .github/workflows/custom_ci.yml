@@ -8,21 +8,20 @@ on:
       - spec/**
 
 jobs:
-  tests-mri:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["2.6.x", "2.5.x", "2.4.x"]
-        dry_logic_from_master: ["true", "false"]
+        ruby: ["2.4", "2.5", "2.6", "2.7", "jruby"]
         include:
-          - ruby: "2.6.x"
-            dry_logic_from_master: "false"
+          - ruby: "2.7"
+            dry_logic_from_master: "true"
             coverage: "true"
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+        uses: eregon/use-ruby-action@master
         with:
           ruby-version: ${{matrix.ruby}}
       - name: Download test reporter
@@ -51,26 +50,3 @@ jobs:
           GIT_BRANCH=`ruby -e "puts ENV['GITHUB_REF'].split('/', 3).last"` \
           GIT_COMMITTED_AT=`ruby -r time -e "puts Time.iso8601(ENV['GIT_COMMITTED_AT']).to_i"` \
           ./tmp/cc-test-reporter after-build
-
-  tests-others:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ["jruby:9.2.9", "ruby:rc"]
-        dry_logic_from_master: ["true", "false"]
-    container:
-      image: ${{matrix.image}}
-    steps:
-      - uses: actions/checkout@v1
-      - name: Install git
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends git
-      - name: Run all tests
-        env:
-          DRY_LOGIC_FROM_MASTER: ${{matrix.dry_logic_from_master}}
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --without tools docs
-          bundle exec rspec
