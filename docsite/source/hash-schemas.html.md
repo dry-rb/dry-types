@@ -124,6 +124,29 @@ user_hash['name' => 'Jane', 'city' => 'London']
 # => Dry::Types::UnknownKeysError: unexpected keys [:city] in Hash input
 ```
 
+### Merging schemas
+
+Similar than inheritance, two schemas can be merged.
+The resulting schema will have the sum of both sets
+of attributes.
+
+user_hash = Types::Hash.schema(
+  name: Types::String
+)
+
+address_hash = Types::Hash.schema(
+  address: Types::String
+)
+
+user_with_address_schema = user_hash.merge(address_hash)
+
+user_with_address_schema['name' => 'Jane', 'address' => 'C/ Foo']
+# => { name: 'Jane', address: 'C/ Foo' }
+```
+
+Keep in mind that key transformations from the caller schema are preserved,
+while each attribute keeps the type transformations from its original hash.
+
 ### Transforming types
 
 A schema can transform types with a block. For example, the following code makes all keys optional:
