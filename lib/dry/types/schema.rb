@@ -145,7 +145,7 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        if RUBY_VERSION >= "2.5"
+        if RUBY_VERSION >= '2.5'
           opts = options.slice(:key_transform_fn, :type_transform_fn, :strict)
         else
           opts = options.select { |k, _|

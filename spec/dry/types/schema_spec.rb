@@ -272,7 +272,7 @@ RSpec.describe Dry::Types::Schema do
         hash.schema(age: 'coercible.integer').call(name: :Jane, age: nil, active: true, phone: [])
       }.to raise_error(
         Dry::Types::SchemaError,
-        "nil (NilClass) has invalid type for :age violates constraints"\
+        'nil (NilClass) has invalid type for :age violates constraints'\
         " (can't convert nil into Integer failed)"
       )
     end
@@ -282,8 +282,8 @@ RSpec.describe Dry::Types::Schema do
         hash.schema(age: 'coercible.integer').call(name: :Jane, age: 'oops', active: true, phone: [])
       }.to raise_error(
         Dry::Types::SchemaError,
-        "\"oops\" (String) has invalid type for :age violates constraints"\
-        " (invalid value for Integer(): \"oops\" failed)"
+        '"oops" (String) has invalid type for :age violates constraints'\
+        ' (invalid value for Integer(): "oops" failed)'
       )
     end
 

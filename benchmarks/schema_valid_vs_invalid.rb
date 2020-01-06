@@ -15,7 +15,7 @@ INVALID_INPUT = {
 }
 
 Benchmark.ips do |x|
-  x.report("valid input") { PersonSchema.(VALID_INPUT) }
-  x.report("invalid input") { PersonSchema.(INVALID_INPUT) }
+  x.report('valid input') { PersonSchema.(VALID_INPUT) }
+  x.report('invalid input') { PersonSchema.(INVALID_INPUT) }
   x.compare!
 end

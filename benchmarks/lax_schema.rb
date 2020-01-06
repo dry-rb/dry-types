@@ -10,6 +10,6 @@ schema = Dry::Types['params.hash'].schema(
 params = { email: 'jane@doe.org', age: '19' }
 
 Benchmark.ips do |x|
-  x.report("valid input") { schema.(params) }
+  x.report('valid input') { schema.(params) }
   x.compare!
 end
