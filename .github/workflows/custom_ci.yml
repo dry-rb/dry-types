@@ -31,13 +31,16 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./tmp/cc-test-reporter
           chmod +x ./tmp/cc-test-reporter
           ./tmp/cc-test-reporter before-build
+      - name: Install latest bundler
+        run: |
+          gem install bundler
+          bundle config set without 'tools benchmarks docs'
       - name: Run all tests
         env:
           COVERAGE: ${{matrix.coverage}}
           DRY_LOGIC_FROM_MASTER: ${{matrix.dry_logic_from_master}}
         run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --without tools docs
+          bundle install --jobs 4 --retry 3
           bundle exec rake
       - name: Send coverage results
         if: "matrix.coverage == 'true'"
