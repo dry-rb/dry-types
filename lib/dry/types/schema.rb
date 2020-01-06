@@ -179,7 +179,7 @@ module Dry
         with(strict: strict)
       end
 
-      # Injects a key transformation function
+      # Inject a key transformation function
       #
       # @param [#call,nil] proc
       # @param [#call,nil] block
@@ -284,7 +284,7 @@ module Dry
         Lax.new(schema(keys.map(&:lax)))
       end
 
-      # Merges given schema keys into current schema.
+      # Merge given schema keys into current schema
       #
       # A new instance is returned.
       #
