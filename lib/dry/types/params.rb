@@ -58,6 +58,7 @@ module Dry
 
     COERCIBLE.each_key do |name|
       next if name.equal?(:string)
+
       register("optional.params.#{name}", self['params.nil'] | self["params.#{name}"])
     end
   end

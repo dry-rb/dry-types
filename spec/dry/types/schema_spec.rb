@@ -161,9 +161,9 @@ RSpec.describe Dry::Types::Schema do
     context 'members with default values' do
       let(:hash) do
         primitive.schema({
-          **hash_schema,
-          age: Dry::Types['strict.integer'].default(21)
-        })
+                           **hash_schema,
+                           age: Dry::Types['strict.integer'].default(21)
+                         })
       end
 
       it 'resolves missing keys with default values' do
@@ -253,42 +253,42 @@ RSpec.describe Dry::Types::Schema do
       expect {
         hash.call(name: :Jane, active: true, phone: ['+48', '123-456-789'])
       }.to raise_error(
-             Dry::Types::MissingKeyError, /:age is missing in Hash input/
-           )
+        Dry::Types::MissingKeyError, /:age is missing in Hash input/
+      )
     end
 
     it 'fails if any coercions are unsuccessful' do
       expect {
         hash.call(name: :Jane, age: 'oops', active: true, phone: [])
       }.to raise_error(
-              Dry::Types::SchemaError,
-              '"oops" (String) has invalid type for :age violates '\
-              'constraints (type?(Integer, "oops") failed)'
-            )
+        Dry::Types::SchemaError,
+        '"oops" (String) has invalid type for :age violates '\
+        'constraints (type?(Integer, "oops") failed)'
+      )
     end
 
     it 'provides a key for type errors' do
       expect {
         hash.schema(age: 'coercible.integer').call(name: :Jane, age: nil, active: true, phone: [])
       }.to raise_error(
-             Dry::Types::SchemaError,
-             "nil (NilClass) has invalid type for :age violates constraints"\
-             " (can't convert nil into Integer failed)"
-           )
+        Dry::Types::SchemaError,
+        "nil (NilClass) has invalid type for :age violates constraints"\
+        " (can't convert nil into Integer failed)"
+      )
     end
 
     it 'provides a key for argument errors' do
       expect {
         hash.schema(age: 'coercible.integer').call(name: :Jane, age: 'oops', active: true, phone: [])
       }.to raise_error(
-             Dry::Types::SchemaError,
-             "\"oops\" (String) has invalid type for :age violates constraints"\
-             " (invalid value for Integer(): \"oops\" failed)"
-           )
+        Dry::Types::SchemaError,
+        "\"oops\" (String) has invalid type for :age violates constraints"\
+        " (invalid value for Integer(): \"oops\" failed)"
+      )
     end
 
     it 'ignores unexpected keys' do
-      expect(subject.({**valid_input, not: :expect})).not_to have_key(:not)
+      expect(subject.({ **valid_input, not: :expect })).not_to have_key(:not)
     end
 
     it 'uses type even if it is a class with a registered name' do
@@ -313,7 +313,7 @@ RSpec.describe Dry::Types::Schema do
         expect {
           subject.(expected_input.merge(unexpected_input))
         }.to raise_error(Dry::Types::UnknownKeysError)
-               .with_message('unexpected keys [:gender, :email] in Hash input')
+          .with_message('unexpected keys [:gender, :email] in Hash input')
       end
 
       it 'can make a strict schema not strict again' do

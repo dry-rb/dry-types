@@ -79,8 +79,8 @@ RSpec.describe Dry::Types::Sum do
       expect(type[%w[foo bar]]).to eql(%w[foo bar])
 
       expect(type[[{ name: 'foo' }, { name: 'bar' }]]).to eql([
-        { name: 'foo' }, { name: 'bar' }
-      ])
+                                                                { name: 'foo' }, { name: 'bar' }
+                                                              ])
     end
 
     it 'works with two complex types with constraints' do

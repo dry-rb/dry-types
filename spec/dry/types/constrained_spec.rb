@@ -204,7 +204,7 @@ RSpec.describe Dry::Types::Constrained do
 
   describe '#meta' do
     subject(:type) do
-      Dry::Types['string'].meta(foo: :bar).constructor { }.constrained(max_size: 10)
+      Dry::Types['string'].meta(foo: :bar).constructor {}.constrained(max_size: 10)
     end
 
     it 'allows access to meta of the underlying type' do

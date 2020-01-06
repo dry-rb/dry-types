@@ -146,12 +146,12 @@ RSpec.describe Dry::Types::Compiler, '#call' do
     ]
 
     expect(arr[input]).to eql([
-      email: 'jane@doe.org', age: 20, admin: true
-    ])
+                                email: 'jane@doe.org', age: 20, admin: true
+                              ])
 
     expect(arr[['foo' => 'bar', 'age' => '20', 'admin' => '1']]).to eql([
-      age: 20, admin: true
-    ])
+                                                                          age: 20, admin: true
+                                                                        ])
   end
 
   it 'builds a lax params array' do
@@ -260,12 +260,12 @@ RSpec.describe Dry::Types::Compiler, '#call' do
   it 'build or constrained' do
     ast = [
       :constrained, [[:nominal, [Integer, {}]],
-      [:or,
-        [
-          [:predicate, [:lt?, [[:num, 5], [:input, Undefined]]]],
-          [:predicate, [:gt?, [[:num, 18], [:input, Undefined]]]]
-        ]
-      ],{}]]
+                     [:or,
+                      [
+                        [:predicate, [:lt?, [[:num, 5], [:input, Undefined]]]],
+                        [:predicate, [:gt?, [[:num, 18], [:input, Undefined]]]]
+                      ]], {}]
+    ]
 
     type = compiler.(ast)
 
