@@ -1,0 +1,10 @@
+jobs:
+  tests:
+    strategy:
+      matrix:
+        include:
+          - ruby: "2.7"
+            dry_logic_from_master: "true"
+    steps:
+      env:
+        DRY_LOGIC_FROM_MASTER: ${{matrix.dry_logic_from_master}}
