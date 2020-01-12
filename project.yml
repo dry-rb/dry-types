@@ -1,2 +1,19 @@
 name: dry-types
 codacy_id: f2d71613195f4da993acb9ac9d6ea336
+gemspec:
+  authors: ["Piotr Solnica"]
+  email: ["piotr.solnica@gmail.com"]
+  summary: "Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc"
+  development_dependencies:
+    - bundler
+    - rake
+    - rspec
+    - yard
+    - [dry-monads, "~> 1.0"]
+  runtime_dependencies:
+    - [concurrent-ruby, "~> 1.0"]
+    - [dry-container, "~> 0.3"]
+    - [dry-core, "~> 0.4", ">= 0.4.4"]
+    - [dry-equalizer, "~> 0.3"]
+    - [dry-inflector, "~> 0.1", ">= 0.1.2"]
+    - [dry-logic, "~> 1.0", ">= 1.0.2"]
