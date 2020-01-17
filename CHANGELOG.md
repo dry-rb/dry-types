@@ -1,47 +1,34 @@
-# 1.2.3 unreleased
+## 1.2.3 unreleased
 
-## Added
+
+### Added
 
 - `Schema#merge` for merging two hash schemas (waiting-for-dev)
 
-[Compare v1.2.2...master](https://github.com/dry-rb/dry-types/compare/v1.2.2...master)
+## 1.2.2 2019-12-14
 
-# 1.2.2 2019-12-14
 
-## Fixed
+### Fixed
 
 - `Types.Contructor` doesn't re-wrap class instances implementing type interface, this fixes some quirks in dry-struct (flash-gordon)
 
-## Changed
+### Changed
 
 - Types now use immutable equalizers. This should improve performance in certain cases e.g. in ROM (flash-gordon)
 - Attempting to use non-symbol keys in hash schemas raises an error. We always supported only symbols as keys but there was no check, now it'll throw an argument error. If you want to convert strings to symbols, use `Hash#with_key_transform` (flash-gordon)
 - Params and JSON types accept Time/Date/Datetime instances and boolean values. This can be useful in tests but we discourage you from relying on this behavior in production code. For example, building structs with `Params` types is considered a smell. There are dedicated tools for coercion, namely dry-schema and dry-validation. Be responsible user of dry-types! ❤ (flash-gordon)
+## 1.2.1 2019-11-07
 
-[Compare v1.2.1...v1.2.2](https://github.com/dry-rb/dry-types/compare/v1.2.1...v1.2.2)
 
-# 1.2.1 2019-11-07
-
-## Fixed
+### Fixed
 
 - Fix keyword warnings reported by Ruby 2.7 (flash-gordon)
 - Error type in failing case in `Array::Member` (esparta)
 
-[Compare v1.2.0...v1.2.1](https://github.com/dry-rb/dry-types/compare/v1.2.0...v1.2.1)
+## 1.2.0 2019-10-06
 
-# 1.2.0 2019-10-06
 
-## Changed
-
-- `Dry::Types.[]` used to work with classes, now it's deprecated (flash-gordon)
-
-## Fixed
-
-- Bug with using a `Bool`-named struct as a schema key (flash-gordon)
-- A bunch of issues related to using `meta` on complex types (flash-gordon)
-- `Types.Constructor(...)` returns a `Types::Array` as it should (flash-gordon)
-
-## Added
+### Added
 
 - `Optional::Params` types that coerce empty strings to `nil` (flash-gordon)
   ```ruby
@@ -87,19 +74,26 @@
   end
   ```
 
-[Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-types/compare/v1.1.1...v1.2.0)
+### Fixed
 
-# 1.1.1 2019-07-26
+- Bug with using a `Bool`-named struct as a schema key (flash-gordon)
+- A bunch of issues related to using `meta` on complex types (flash-gordon)
+- `Types.Constructor(...)` returns a `Types::Array` as it should (flash-gordon)
 
-## Fixed
+### Changed
+
+- `Dry::Types.[]` used to work with classes, now it's deprecated (flash-gordon)
+## 1.1.1 2019-07-26
+
+
+### Fixed
 
 - A bug where meta was lost for lax array types (flash-gordon)
 
-[Compare v1.1.0...v1.1.1](https://github.com/dry-rb/dry-types/compare/v1.1.0...v1.1.1)
+## 1.1.0 2019-07-02
 
-# 1.1.0 2019-07-02
 
-## Added
+### Added
 
 - New builder method `Interface` constructs a type which accepts objects that respond to the given methods (waiting-for-dev)
   ```ruby
@@ -110,18 +104,17 @@
   ```
 - New types: `coercible.symbol`, `params.symbol`, and `json.symbol`, all use `.to_sym` for coercion (waiting-for-dev)
 
-## Fixed
+### Fixed
 
 - Converting schema keys to maybe types (flash-gordon)
 - Using `Schema#key` and `Array#member` on constuctors (flash-gordon)
 - Using `meta(omittable: true)` within `transform_types` works again but produces a warning, please migrate to `.omittable` or `.required(false)` (flash-gordon)
 - Bug with a constructror defined on top of enum (flash-gordon)
 
-[Compare v1.0.1...v1.1.0](https://github.com/dry-rb/dry-types/compare/v1.0.1...v1.1.0)
+## 1.0.1 2019-06-04
 
-# 1.0.1 2019-06-04
 
-## Added
+### Added
 
 - In a case of failure the constructor block can now pass a different value (flash-gordon)
   ```ruby
@@ -134,42 +127,10 @@
   ```
 - `Schema#strict` now accepts an boolean argument. If `fales` is passed this will turn a strict schema into a non-strict one (flash-gordon)
 
-[Compare v1.0.0...v1.0.1](https://github.com/dry-rb/dry-types/compare/v1.0.0...v1.0.1)
+## 1.0.0 2019-04-23
 
-# 1.0.0 2019-04-23
 
-## Changed
-
-- [BREAKING] Behavior of built-in constructor types was changed to be more strict. They will always raise an error on failed coercion (flash-gordon)
-  Compare:
-
-  ```ruby
-  # 0.15.0
-  Types::Params::Integer.('foo')
-  # => "foo"
-
-  # 1.0.0
-  Types::Params::Integer.('foo')
-  # => Dry::Types::CoercionError: invalid value for Integer(): "foo"
-  ```
-
-  To handle coercion errors `Type#call` now yields a block:
-
-  ```ruby
-  Types::Params::Integer.('foo') { :invalid } # => :invalid
-  ```
-
-  This makes work with coercions more straightforward and way faster.
-
-- [BREAKING] Safe types were renamed to Lax, this name better serves their purpose. The previous name is available but prints a warning (flash-gordon)
-- [BREAKING] Metadata is now pushed down to the decorated type. It is not likely you will notice a difference but this a breaking change that enables some use cases in rom related to the usage of default types in relations (flash-gordon)
-- Nominal types are now completely unconstrained. This fixes some inconsistencies when using them with constraints. `Nominal#try` will always return a successful result, for the previous behavior use `Nominal#try_coerce` or switch to strict types with passing a block to `#call` (flash-gordon)
-
-## Performance improvements
-
-- During the work on this release, a lot of performance improvements were made. dry-types 1.0 combined with dry-logic 1.0 are multiple times faster than dry-types 0.15 and dry-logic 0.5 for common cases including constraints checking and coercion (flash-gordon)
-
-## Added
+### Added
 
 - API for custom constructor types was enhanced. If you pass your own callable to `.constructor` it can have a block in its signature. If a block is passed, you must call it on failed coercion, otherwise raise a type coercion error (flash-gordon)
   Example:
@@ -198,44 +159,37 @@
   # => [1, 2, 3]
   ```
 
-[Compare v0.15.0...v1.0.0](https://github.com/dry-rb/dry-types/compare/v0.15.0...v1.0.0)
+### Changed
 
-# 0.15.0 2019-03-22
+- [BREAKING] Behavior of built-in constructor types was changed to be more strict. They will always raise an error on failed coercion (flash-gordon)
+  Compare:
 
-## Changed
-
-- [BREAKING] Internal representation of hash schemas was changed to be a simple list of key types (flash-gordon)
-  `Dry::Types::Hash#with_type_transform` now yields a key type instead of type + name:
   ```ruby
-  Dry::Types['strict.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
-  ```
-- [BREAKING] Definition types were renamed to nominal (flash-gordon)
-- [BREAKING] Top-level types returned by `Dry::Types.[]` are now strict (flash-gordon)
-  ```ruby
-  # before
-  Dry::Types['integer']
-  # => #<Dry::Types[Nominal<Integer>]>
-  # now
-  Dry::Types['integer']
-  # => <Dry::Types[Constrained<Nominal<Integer> rule=[type?(Integer)]>]>
-  # you can still access nominal types using namespace
-  Dry::Types['nominal.integer']
-  # => #<Dry::Types[Nominal<Integer>]>
-  ```
-- [BREAKING] Default values are not evaluated if the decorated type returns `nil`. They are triggered on `Undefined` instead (GustavoCaso + flash-gordon)
-- [BREAKING] Support for old hash schemas was fully removed. This makes dry-types not compatible with dry-validation < 1.0 (flash-gordon)
-- `Dry::Types.module` is deprecated in favor of `Dry.Types` (flash-gordon)
-  Keep in mind `Dry.Types` uses strict types for top-level names, that is after
-  ```ruby
-  module Types
-    include Dry.Types
-  end
-  ```
-  `Types::Integer` is a strict type. If you want it to be nominal, use `include Dry.Types(default: :nominal)`. See other options below.
-- `params.integer` now always converts strings to decimal numbers, this means `09` will be coerced to `9` (threw an error before) (skryukov)
-- Ruby 2.3 is EOL and not officially supported. It may work but we don't test it.
+  # 0.15.0
+  Types::Params::Integer.('foo')
+  # => "foo"
 
-## Added
+  # 1.0.0
+  Types::Params::Integer.('foo')
+  # => Dry::Types::CoercionError: invalid value for Integer(): "foo"
+  ```
+
+  To handle coercion errors `Type#call` now yields a block:
+
+  ```ruby
+  Types::Params::Integer.('foo') { :invalid } # => :invalid
+  ```
+
+  This makes work with coercions more straightforward and way faster.
+- [BREAKING] Safe types were renamed to Lax, this name better serves their purpose. The previous name is available but prints a warning (flash-gordon)
+- [BREAKING] Metadata is now pushed down to the decorated type. It is not likely you will notice a difference but this a breaking change that enables some use cases in rom related to the usage of default types in relations (flash-gordon)
+- Nominal types are now completely unconstrained. This fixes some inconsistencies when using them with constraints. `Nominal#try` will always return a successful result, for the previous behavior use `Nominal#try_coerce` or switch to strict types with passing a block to `#call` (flash-gordon)
+- ## Performance improvements
+- During the work on this release, a lot of performance improvements were made. dry-types 1.0 combined with dry-logic 1.0 are multiple times faster than dry-types 0.15 and dry-logic 0.5 for common cases including constraints checking and coercion (flash-gordon)
+## 0.15.0 2019-03-22
+
+
+### Added
 
 - Improved string representation of types (flash-gordon)
   ```ruby
@@ -293,7 +247,6 @@
   # keys in user_schema are not required
   user_schema = lax_hash.schema(name: 'string', age: 'integer')
   ```
-
 - `Type#optional?` now recognizes more cases where `nil` is an allowed value (flash-gordon)
 - `Constructor#{prepend,append}` with `<<` and `>>` as aliases. `Constructor#append` works the same way `Constructor#constrcutor` does. `Constuctor#prepend` chains functions in the reverse order, see examples (flash-gordon)
 
@@ -305,7 +258,6 @@
   inc = to_int.prepend { |x| x + "2" }
   inc.("1") # => "1" -> "12" -> 12
   ```
-
 - Partial schema application for cases when you want to validate only a subset of keys (flash-gordon)
   This is useful when you want to update a key or two in an already-validated hash. A perfect example is `Dry::Struct#new` where this feature is now used.
   ```ruby
@@ -315,87 +267,99 @@
   value.merge(update)
   ```
 
-## Fixed
+### Fixed
 
 - `Hash::Map` now behaves as a constrained type if its values are constrained (flash-gordon)
 - `coercible.integer` now doesn't blow up on invalid strings (exterm)
 
-[Compare v0.14.0...v0.15.0](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.15.0)
+### Changed
 
-# v0.14.1 2019-03-25
+- [BREAKING] Internal representation of hash schemas was changed to be a simple list of key types (flash-gordon)
+  `Dry::Types::Hash#with_type_transform` now yields a key type instead of type + name:
+  ```ruby
+  Dry::Types['strict.hash'].with_type_transform { |key| key.name == :age ? key.required(false) : key }
+  ```
+- [BREAKING] Definition types were renamed to nominal (flash-gordon)
+- [BREAKING] Top-level types returned by `Dry::Types.[]` are now strict (flash-gordon)
+  ```ruby
+  # before
+  Dry::Types['integer']
+  # => #<Dry::Types[Nominal<Integer>]>
+  # now
+  Dry::Types['integer']
+  # => <Dry::Types[Constrained<Nominal<Integer> rule=[type?(Integer)]>]>
+  # you can still access nominal types using namespace
+  Dry::Types['nominal.integer']
+  # => #<Dry::Types[Nominal<Integer>]>
+  ```
+- [BREAKING] Default values are not evaluated if the decorated type returns `nil`. They are triggered on `Undefined` instead (GustavoCaso + flash-gordon)
+- [BREAKING] Support for old hash schemas was fully removed. This makes dry-types not compatible with dry-validation < 1.0 (flash-gordon)
+- `Dry::Types.module` is deprecated in favor of `Dry.Types` (flash-gordon)
+  Keep in mind `Dry.Types` uses strict types for top-level names, that is after
+  ```ruby
+  module Types
+    include Dry.Types
+  end
+  ```
+  `Types::Integer` is a strict type. If you want it to be nominal, use `include Dry.Types(default: :nominal)`. See other options below.
+- `params.integer` now always converts strings to decimal numbers, this means `09` will be coerced to `9` (threw an error before) (skryukov)
+- Ruby 2.3 is EOL and not officially supported. It may work but we don't test it.
+## 0.14.1 2019-03-25
 
-## Fixed
+
+### Fixed
 
 - `coercible.integer` now doesn't blow up on invalid strings (exterm)
 
-[Compare v0.14.0...v0.14.1](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.14.1)
+## 0.14.0 2019-01-29
 
-# v0.14.0 2019-01-29
 
-## Changed
-
-- [BREAKING] Support for Ruby 2.2 was dropped. It reached EOL on March 31, 2018.
-- `dry-logic` was updated to `~> 0.5` (solnic)
-
-## Fixed
+### Fixed
 
 - `valid?` works correctly with constructors now (cgeorgii)
 
-[Compare v0.13.4...v0.14.0](https://github.com/dry-rb/dry-types/compare/v0.13.4...v0.14.0)
+### Changed
 
-# v0.13.4 2018-12-21
+- [BREAKING] Support for Ruby 2.2 was dropped. It reached EOL on March 31, 2018.
+- `dry-logic` was updated to `~> 0.5` (solnic)
+## 0.13.4 2018-12-21
 
-## Fixed
+
+### Fixed
 
 - Fixed warnings about keyword arguments from Ruby 2.6. See https://bugs.ruby-lang.org/issues/14183 for all the details (flash-gordon)
 
-# v0.13.3 2018-11-25
+## 0.13.3 2018-11-25
 
-## Fixed
+
+### Fixed
 
 - `Dry::Types::Hash#try` returns `Failure` instead of throwing an exception on missing keys (GustavoCaso)
 
-[Compare v0.13.2...v0.13.3](https://github.com/dry-rb/dry-types/compare/v0.13.2...v0.13.3)
+## 0.13.2 2018-05-30
 
-# v0.13.2 2018-05-30
 
-## Fixed
+### Fixed
 
 - `Defaults#valid?` now works fine when passing `Dry::Core::Constans::Undefined` as value (GustavoCaso)
 - `valid?` for constructor types wrapping `Sum`s (GustavoCaso)
 
-[Compare v0.13.1...v0.13.2](https://github.com/dry-rb/dry-types/compare/v0.13.1...v0.13.2)
+## 0.13.1 2018-05-28
 
-# v0.13.1 2018-05-28
 
-## Fixed
+### Added
+
+- `params.int` was added to make the upgrade process in dry-validation smoother (available after you `require 'dry/types/compat/int'`) (flash-gordon)
+
+### Fixed
 
 - Defaults now works fine with meta (GustavoCaso)
 - Defaults are now re-decorated properly (flash-gordon)
 
-## Added
+## 0.13.0 2018-05-03
 
-- `params.int` was added to make the upgrade process in dry-validation smoother (available after you `require 'dry/types/compat/int'`) (flash-gordon)
 
-[Compare v0.13.0...v0.13.1](https://github.com/dry-rb/dry-types/compare/v0.13.0...v0.13.1)
-
-# v0.13.0 2018-05-03
-
-## Changed
-
-- [BREAKING] Renamed `Types::Form` to `Types::Params`. You can opt-in the former name with `require 'dry/types/compat/form_types'`. It will be dropped in the next release (ndrluis)
-- [BREAKING] The `Int` types was renamed to `Integer`, this was the only type named differently from the standard Ruby classes so it has been made consistent. The former name is available with `require 'dry/types/compat/int'` (GustavoCaso + flash-gordon)
-- [BREAKING] Default types are not evaluated on `nil`. Default values are evaluated _only_ if no value were given.
-  ```ruby
-    type = Types::Strict::String.default("hello")
-    type[nil] # => constraint error
-    type[] # => "hello"
-  ```
-  This change allowed to greatly simplify hash schemas, make them a lot more flexible yet predictable (see below).
-- [BREAKING] `Dry::Types.register_class` was removed, `Dry::Types.register` was made private API, do not register your types in the global `dry-types` container, use a module instead, e.g. `Types` (flash-gordon)
-- [BREAKING] Enum types don't accept value index anymore. Instead, explicit mapping is supported, see below (flash-gordon)
-
-## Added
+### Added
 
 - Hash schemas were rewritten. The old API is still around but is going to be deprecated and removed before 1.0. The new API is simpler and more flexible. Instead of having a bunch of predefined schemas you can build your own by combining the following methods:
 
@@ -433,7 +397,6 @@
   ```
 
   (flash-gordon)
-
 - `Types.Strict` is an alias for `Types.Instance` (flash-gordon)
   ```ruby
   strict_range = Types.Strict(Range)
@@ -463,175 +426,166 @@
   dict[10] # => 'published'
   ```
 
-## Fixed
+### Fixed
 
 - Fixed applying constraints to optional type, i.e. `.optional.constrained` works correctly (flash-gordon)
 - Fixed enum working with optionals (flash-gordon)
-
-## Internal
-
+- ## Internal
 - Dropped the `dry-configurable` dependency (GustavoCaso)
 - The gem now uses `dry-inflector` for inflections instead of `inflecto` (GustavoCaso)
 
-[Compare v0.12.2...v0.13.0](https://github.com/dry-rb/dry-types/compare/v0.12.2...v0.13.0)
+### Changed
 
-# v0.12.2 2017-11-04
+- [BREAKING] Renamed `Types::Form` to `Types::Params`. You can opt-in the former name with `require 'dry/types/compat/form_types'`. It will be dropped in the next release (ndrluis)
+- [BREAKING] The `Int` types was renamed to `Integer`, this was the only type named differently from the standard Ruby classes so it has been made consistent. The former name is available with `require 'dry/types/compat/int'` (GustavoCaso + flash-gordon)
+- [BREAKING] Default types are not evaluated on `nil`. Default values are evaluated _only_ if no value were given.
+  ```ruby
+    type = Types::Strict::String.default("hello")
+    type[nil] # => constraint error
+    type[] # => "hello"
+  ```
+  This change allowed to greatly simplify hash schemas, make them a lot more flexible yet predictable (see below).
+- [BREAKING] `Dry::Types.register_class` was removed, `Dry::Types.register` was made private API, do not register your types in the global `dry-types` container, use a module instead, e.g. `Types` (flash-gordon)
+- [BREAKING] Enum types don't accept value index anymore. Instead, explicit mapping is supported, see below (flash-gordon)
+## 0.12.2 2017-11-04
 
-## Fixed
+
+### Fixed
 
 - The type compiler was fixed for simple rules such as used for strict type checks (flash-gordon)
 - Fixed an error on `Dry::Types['json.decimal'].try(nil)` (nesaulov)
 - Fixed an error on calling `try` on an array type built of constrained types (flash-gordon)
 - Implemented `===` for enum types (GustavoCaso)
 
-[Compare v0.12.1...v0.12.2](https://github.com/dry-rb/dry-types/compare/v0.12.1...v0.12.2)
+## 0.12.1 2017-10-11
 
-# v0.12.1 2017-10-11
 
-## Fixed
+### Fixed
 
 - `Constructor#try` rescues `ArgumentError` (raised in cases like `Integer('foo')`) (flash-gordon)
 - `#constructor` works correctly for default and enum types (solnic)
 - Optional sum types work correctly in `safe` mode (GustavoCaso)
 - The equalizer of constrained types respects meta (flash-gordon)
 
-[Compare v0.12.0...v0.12.1](https://github.com/dry-rb/dry-types/compare/v0.12.0...v0.12.1)
+## 0.12.0 2017-09-15
 
-# v0.12.0 2017-09-15
 
-## Added
+### Added
 
 - A bunch of shortcut methods for constructing types to the autogenerated module, e.g. `Types.Constructor(String, &:to_s)` (flash-gordon)
-
-## Deprecated
-
+- ## Deprecated
 - `Types::Array#member` was deprecated in favor of `Types::Array#of` (flash-gordon)
 
-[Compare v0.11.1...v0.12.0](https://github.com/dry-rb/dry-types/compare/v0.11.1...v0.12.0)
+## 0.11.1 2017-08-14
 
-# v0.11.1 2017-08-14
 
-## Changed
-
-- Constructors are now equalized using `fn` and `meta` too (flash-gordon)
-
-## Fixed
+### Fixed
 
 - Fixed `Constructor#name` with `Sum`-types (flash-gordon)
 
-[Compare v0.11.0...v0.11.1](https://github.com/dry-rb/dry-types/compare/v0.11.0...v0.11.1)
+### Changed
 
-# v0.11.0 2017-06-30
+- Constructors are now equalized using `fn` and `meta` too (flash-gordon)
+## 0.11.0 2017-06-30
 
-## Added
+
+### Added
 
 - `#to_ast` available for all type objects (GustavoCaso)
 - `Types::Array#of` as an alias for `#member` (maliqq)
 - Detailed failure objects are passed to results which improves constraint violation messages (GustavoCaso)
 
-[Compare v0.10.3...v0.11.0](https://github.com/dry-rb/dry-types/compare/v0.10.3...v0.11.0)
+## 0.10.3 2017-05-06
 
-# v0.10.3 2017-05-06
 
-## Added
+### Added
 
 - Callable defaults accept the underlying type (v-kolesnikov)
 
-[Compare v0.10.2...v0.10.3](https://github.com/dry-rb/dry-types/compare/v0.10.2...v0.10.3)
+## 0.10.2 2017-04-28
 
-# v0.10.2 2017-04-28
 
-## Fixed
+### Fixed
 
 - Fixed `Type#optional?` for sum types (flash-gordon)
 
-[Compare v0.10.1...v0.10.2](https://github.com/dry-rb/dry-types/compare/v0.10.1...v0.10.2)
+## 0.10.1 2017-04-28
 
-# v0.10.1 2017-04-28
 
-## Added
+### Added
 
 - `Type#optional?` returns true if type is Sum and left is nil (GustavoCaso)
 - `Type#pristine` returns a type without `meta` (flash-gordon)
 
-## Fixed
+### Fixed
 
 - `meta` is used in type equality again (solnic)
 - `Any` works correctly with meta again (flash-gordon)
 
-[Compare v0.10.0...v0.10.1](https://github.com/dry-rb/dry-types/compare/v0.10.0...v0.10.1)
+## 0.10.0 2017-04-26
 
-# v0.10.0 2017-04-26
 
-## Added
+### Added
 
 - Types can be used in `case` statements now (GustavoCaso)
 
-## Fixed
+### Fixed
 
 - Return original value when Date.parse raises a RangeError (jviney)
 
-## Changed
+### Changed
 
 - Meta data are now stored separately from options (flash-gordon)
 - `Types::Object` was renamed to `Types::Any` (flash-gordon)
+## 0.9.4 2017-01-24
 
-[Compare v0.9.4...v0.10.0](https://github.com/dry-rb/dry-types/compare/v0.9.4...v0.10.0)
 
-# v0.9.4 2017-01-24
-
-## Added
+### Added
 
 - Added `Types::Object` which passes an object of any type (flash-gordon)
 
-[Compare v0.9.3...v0.9.4](https://github.com/dry-rb/dry-types/compare/v0.9.3...v0.9.4)
+## 0.9.3 2016-12-03
 
-# v0.9.3 2016-12-03
 
-## Fixed
+### Fixed
 
 - Updated to dry-core >= 0.2.1 (ruby warnings are gone) (flash-gordon)
 
-[Compare v0.9.2...v0.9.3](https://github.com/dry-rb/dry-types/compare/v0.9.2...v0.9.3)
+## 0.9.2 2016-11-13
 
-# v0.9.2 2016-11-13
 
-## Added
+### Added
 
 - Support for `"Y"` and `"N"` as `true` and `false` values, respectively (scare21410)
 
-## Changed
+### Changed
 
 - Optimized object allocation in hash schemas, resulting in up to 25% speed boost (davydovanton)
+## 0.9.1 2016-11-04
 
-[Compare v0.9.1...v0.9.2](https://github.com/dry-rb/dry-types/compare/v0.9.1...v0.9.2)
 
-# v0.9.1 2016-11-04
-
-## Fixed
+### Fixed
 
 - `Hash#strict_with_defaults` properly evaluates callable defaults (bolshakov)
 
-## Changed
+### Changed
 
 - `Hash#weak` accepts Hash-descendants again (solnic)
+## 0.9.0 2016-09-21
 
-[Compare v0.9.0...v0.9.1](https://github.com/dry-rb/dry-types/compare/v0.9.0...v0.9.1)
 
-# v0.9.0 2016-09-21
-
-## Added
+### Added
 
 - `Hash#strict_with_defaults` which validates presence of all required keys and respects default types for missing _values_ (backus)
 - `Type#constrained?` method (flash-gordon)
 
-## Fixed
+### Fixed
 
 - Summing two constrained types works correctly (flash-gordon)
 - `Types::Array::Member#valid?` in cases where member type is a constraint (solnic)
 - `Hash::Schema#try` handles exceptions properly and returns a failure object (solnic)
 
-## Changed
+### Changed
 
 - [BREAKING] Renamed `Hash##{schema=>permissive}` (backus)
 - [BREAKING] `dry-monads` dependency was made optional, Maybe types are available after `Dry::Types.load_extensions(:maybe)` (flash-gordon)
@@ -639,46 +593,41 @@
 - `Types::Form::Bool` supports upcased true/false values (kirs)
 - `Types::Form::{Date,DateTime,Time}` fail gracefully for invalid input (padde)
 - ice_nine dependency has been dropped as it was required by Struct only (flash-gordon)
+## 0.8.1 2016-07-13
 
-[Compare v0.8.1...v0.9.0](https://github.com/dry-rb/dry-types/compare/v0.8.1...v0.9.0)
 
-# v0.8.1 2016-07-13
-
-## Fixed
+### Fixed
 
 - Compiler no longer chokes on type nodes without args (solnic)
 - Removed `bin/console` from gem package (solnic)
 
-[Compare v0.8.0...v0.8.1](https://github.com/dry-rb/dry-types/compare/v0.8.0...v0.8.1)
+## 0.8.0 2016-07-01
 
-# v0.8.0 2016-07-01
 
-## Added
+### Added
 
 - `Struct` now implements `Type` interface so ie `SomeStruct | String` works now (flash-gordon)
 - `:weak` Hash constructor which can partially coerce a hash even when it includes invalid values (solnic)
 - Types include `Dry::Equalizer` now (flash-gordon)
 
-## Fixed
+### Fixed
 
 - `Struct#to_hash` descends into arrays too (nepalez)
 - `Default#with` works now (flash-gordon)
 
-## Changed
+### Changed
 
 - `:symbolized` hash schema is now based on `:weak` schema (solnic)
 - `Struct::Value` instances are now **deeply frozen** via ice_nine (backus)
+## 0.7.2 2016-05-11
 
-[Compare v0.7.2...v0.8.0](https://github.com/dry-rb/dry-types/compare/v0.7.2...v0.8.0)
 
-# v0.7.2 2016-05-11
-
-## Fixed
+### Fixed
 
 - `Bool#default` gladly accepts `false` as its value (solnic)
 - Creating an empty schema with input processor no longer fails (lasseebert)
 
-## Changed
+### Changed
 
 - Allow multiple calls to meta (solnic)
 - Allow capitalised versions of true and false values for boolean coercions (nil0bject)
@@ -687,27 +636,23 @@
 - Decimal coercions now work with Float (flash-gordon)
 - Coerce empty strings in form posts to blank arrays and hashes (timriley)
 - update to use dry-logic v0.2.3 (fran-worley)
+## 0.7.1 2016-04-06
 
-[Compare v0.7.1...v0.7.2](https://github.com/dry-rb/dry-types/compare/v0.7.1...v0.7.2)
 
-# v0.7.1 2016-04-06
-
-## Added
+### Added
 
 - `JSON::*` types with JSON-specific coercions (coop)
 
-## Fixed
+### Fixed
 
 - Schema is properly inherited in Struct (backus)
 - `constructor_type` is properly inherited in Struct (fbernier)
 
-[Compare v0.7.0...v0.7.1](https://github.com/dry-rb/dry-types/compare/v0.7.0...v0.7.1)
-
-# v0.7.0 2016-03-30
+## 0.7.0 2016-03-30
 
 Major focus of this release is to make complex type composition possible and improving constraint errors to be more meaningful.
 
-## Added
+### Added
 
 - `Type#try` interface that tries to process the input and return a result object which can be either a success or failure (solnic)
 - `#meta` interface for setting arbitrary meta data on types (solnic)
@@ -717,12 +662,12 @@ Major focus of this release is to make complex type composition possible and imp
 - Compiler supports `[:constructor, [primitive, fn_proc]]` nodes (solnic)
 - Compiler supports building schema-less `form.hash` types (solnic)
 
-## Fixed
+### Fixed
 
 - `Sum` now supports complex types like `Array` or `Hash` with member types and/or constraints (solnic)
 - `Default#constrained` will properly wrap a new constrained type (solnic)
 
-## Changed
+### Changed
 
 - [BREAKING] Renamed `Type#{optional=>maybe}` (AMHOL)
 - [BREAKING] `Type#optional(other)` builds a sum: `Strict::Nil | other` (AMHOL)
@@ -734,14 +679,11 @@ Major focus of this release is to make complex type composition possible and imp
 - `#maybe` uses `Strict::Nil` now (solnic)
 - `Type#default` will raise if `nil` was passed for `Maybe` type (solnic)
 - `Hash` with a schema will set maybe values for missing keys or nils (flash-gordon)
-
-[Compare v0.6.0...v0.7.0](https://github.com/dry-rb/dry-types/compare/v0.6.0...v0.7.0)
-
-# v0.6.0 2016-03-16
+## 0.6.0 2016-03-16
 
 Renamed from `dry-data` to `dry-types` and:
 
-## Added
+### Added
 
 - `Dry::Types.module` which returns a namespace for inclusion which has all
   built-in types defined as constants (solnic)
@@ -753,7 +695,7 @@ Renamed from `dry-data` to `dry-types` and:
 - `Types.register_class` accepts a second arg which is the name of the class'
   constructor method, defaults to `:new` (solnic)
 
-## Fixed
+### Fixed
 
 - `Struct` will simply pass-through the input if it is already a struct (solnic)
 - `default` will raise if a value violates constraints (solnic)
@@ -765,30 +707,31 @@ Renamed from `dry-data` to `dry-types` and:
   no single primitive for an optional value (solnic)
 - `Optional` passes-through a value which is already a maybe (solnic)
 
-## Changed
+### Changed
 
 - `Dry::Types::Definition` is now the base type definition object (solnic)
 - `Dry::Types::Constructor` is now a type definition with a constructor function (solnic)
+## 0.5.1 2016-01-11
 
-[Compare v0.5.1...v0.6.0](https://github.com/dry-rb/dry-types/compare/v0.5.1...v0.6.0)
 
-# v0.5.1 2016-01-11
-
-## Added
+### Added
 
 - `Dry::Data::Type#safe` for types which can skip constructor when primitive does
   not match input's class (solnic)
 - `form.array` and `form.hash` safe types (solnic)
 
-[Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-types/compare/v0.5.0...v0.5.1)
+## 0.5.0 2016-01-11
 
-# v0.5.0 2016-01-11
 
-## Added
+### Added
 
 - `Type#default` interface for defining a type with a default value (solnic)
 
-## Changed
+### Fixed
+
+- `attribute` raises proper error when type definition is missing (solnic)
+
+### Changed
 
 - [BREAKING] `Dry::Data::Type.new` accepts constructor and _options_ now (solnic)
 - Renamed `Dry::Data::Type::{Enum,Constrained}` => `Dry::Data::{Enum,Constrained}` (solnic)
@@ -796,61 +739,48 @@ Renamed from `dry-data` to `dry-types` and:
 - Constrained types are now always available (solnic)
 - `strict.*` category uses constrained types with `:type?` predicate (solnic)
 - `SumType#call` no longer needs to rescue from `TypeError` (solnic)
+## 0.4.2 2015-12-27
 
-## Fixed
 
-- `attribute` raises proper error when type definition is missing (solnic)
-
-[Compare v0.4.2...v0.5.0](https://github.com/dry-rb/dry-types/compare/v0.4.2...v0.5.0)
-
-# v0.4.2 2015-12-27
-
-## Added
+### Added
 
 - Support for arrays in type compiler (solnic)
 
-## Changed
+### Changed
 
 - Array member uses type objects now rather than just their constructors (solnic)
+## 0.4.0 2015-12-11
 
-[Compare v0.4.1...v0.4.2](https://github.com/dry-rb/dry-types/compare/v0.4.1...v0.4.2)
 
-# v0.4.0 2015-12-11
-
-## Added
+### Added
 
 - Support for sum-types with constraint type (solnic)
 - `Dry::Data::Type#optional` for defining optional types (solnic)
 
-## Changed
+### Changed
 
 - `Dry::Data['optional']` was **removed** in favor of `Dry::Data::Type#optional` (solnic)
+## 0.3.2 2015-12-10
 
-[Compare v0.3.2...v0.4.0](https://github.com/dry-rb/dry-types/compare/v0.3.2...v0.4.0)
 
-# v0.3.2 2015-12-10
-
-## Added
+### Added
 
 - `Dry::Data::Value` which works like a struct but is a value object with equalizer (solnic)
 
-## Fixed
+### Fixed
 
 - Added missing require for `dry-equalizer` (solnic)
 
-[Compare v0.3.1...v0.3.2](https://github.com/dry-rb/dry-types/compare/v0.3.1...v0.3.2)
+## 0.3.1 2015-12-09
 
-# v0.3.1 2015-12-09
 
-## Changed
+### Changed
 
 - Removed require of constrained type and make it optional (solnic)
+## 0.3.0 2015-12-09
 
-[Compare v0.3.0...v0.3.1](https://github.com/dry-rb/dry-types/compare/v0.3.0...v0.3.1)
 
-# v0.3.0 2015-12-09
-
-## Added
+### Added
 
 - `Type#constrained` interface for defining constrained types (solnic)
 - `Dry::Data` can be configured with a type namespace (solnic)
@@ -858,41 +788,36 @@ Renamed from `dry-data` to `dry-types` and:
 - `Dry::Data::Type#enum` for defining an enum from a specific type (solnic)
 - New types: `symbol` and `class` along with their `strict` versions (solnic)
 
-[Compare v0.2.1...v0.3.0](https://github.com/dry-rb/dry-types/compare/v0.2.1...v0.3.0)
+## 0.2.1 2015-11-30
 
-# v0.2.1 2015-11-30
 
-## Added
+### Added
 
 - Type compiler supports nested hashes now (solnic)
 
-## Fixed
+### Fixed
 
 - `form.bool` sum is using correct right-side `form.false` type (solnic)
 
-## Changed
+### Changed
 
 - Improved structure of the ast (solnic)
+## 0.2.0 2015-11-29
 
-[Compare v0.2.0...v0.2.1](https://github.com/dry-rb/dry-types/compare/v0.2.0...v0.2.1)
 
-# v0.2.0 2015-11-29
-
-## Added
+### Added
 
 - `form.nil` which coerces empty strings to `nil` (solnic)
 - `bool` sum-type (true | false) (solnic)
 - Type compiler supports sum-types now (solnic)
 
-## Changed
+### Changed
 
 - Constructing optional types uses the new `Dry::Data["optional"]` built-in type (solnic)
+## 0.1.0 2015-11-27
 
-[Compare v0.1.0...v0.2.0](https://github.com/dry-rb/dry-types/compare/v0.1.0...v0.2.0)
 
-# v0.1.0 2015-11-27
-
-## Added
+### Added
 
 - `form.*` coercible types (solnic)
 - `Type::Hash#strict` for defining hashes with a strict schema (solnic)
@@ -901,8 +826,6 @@ Renamed from `dry-data` to `dry-types` and:
   setting its `.new` method as the constructor (solnic)
 - `Dry::Data::Compiler` for building a type from a simple ast (solnic)
 
-[Compare v0.0.1...HEAD](https://github.com/dry-rb/dry-types/compare/v0.0.1...HEAD)
-
-# v0.0.1 2015-10-05
+## 0.0.1 2015-10-05
 
 First public release
