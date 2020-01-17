@@ -15,7 +15,7 @@ module Dry
       include Printable
       include Dry::Equalizer(:type, inspect: false, immutable: true)
 
-      undef :options, :constructor
+      undef :options, :constructor, :<<, :>>, :prepend, :append
 
       # @param [Object] input
       #

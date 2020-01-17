@@ -129,6 +129,10 @@ module Dry
       def constructor(constructor = nil, **options, &block)
         constructor_type.new(with(**options), fn: constructor || block)
       end
+      alias_method :append, :constructor
+      alias_method :prepend, :constructor
+      alias_method :>>, :constructor
+      alias_method :<<, :constructor
     end
   end
 end

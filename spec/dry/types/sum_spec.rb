@@ -5,8 +5,8 @@ RSpec.describe Dry::Types::Sum do
     subject(:type) { Dry::Types['bool'] }
 
     it_behaves_like 'Dry::Types::Nominal#meta'
-
     it_behaves_like 'Dry::Types::Nominal without primitive'
+    it_behaves_like 'a composable constructor'
 
     it 'is frozen' do
       expect(type).to be_frozen
@@ -15,6 +15,8 @@ RSpec.describe Dry::Types::Sum do
 
   it_behaves_like 'a constrained type' do
     let(:type) { Dry::Types['integer'] | Dry::Types['string'] }
+
+    it_behaves_like 'a composable constructor'
   end
 
   describe '#optional?' do

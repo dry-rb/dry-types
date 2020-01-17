@@ -5,9 +5,9 @@ RSpec.describe Dry::Types::Map do
     let(:type) { Dry::Types::Map.new(::Hash) }
 
     it_behaves_like 'Dry::Types::Nominal#meta'
-
     it_behaves_like Dry::Types::Nominal
     it_behaves_like 'a constrained type'
+    it_behaves_like 'a composable constructor'
   end
 
   context 'options' do

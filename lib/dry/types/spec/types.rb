@@ -139,3 +139,14 @@ RSpec.shared_examples_for 'a nominal type' do |inputs: Object.new|
     end
   end
 end
+
+RSpec.shared_examples_for 'a composable constructor' do
+  describe '#constructor' do
+    it 'has aliases for composition' do
+      expect(type.method(:append)).to eql(type.method(:constructor))
+      expect(type.method(:prepend)).to eql(type.method(:constructor))
+      expect(type.method(:<<)).to eql(type.method(:constructor))
+      expect(type.method(:>>)).to eql(type.method(:constructor))
+    end
+  end
+end

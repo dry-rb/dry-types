@@ -4,6 +4,7 @@ RSpec.describe Dry::Types::Nominal do
   subject(:type) { Dry::Types::Nominal.new(String) }
 
   it_behaves_like 'Dry::Types::Nominal#meta'
+  it_behaves_like 'a composable constructor'
 
   it 'is frozen' do
     expect(type).to be_frozen
