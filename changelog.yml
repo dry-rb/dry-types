@@ -7,7 +7,7 @@
   - |- 
     Aliases for `.constructor` to non-constructor types. Now you can call `.prepend`/`.append` without silly checks for the type being a constructor (flash-gordon)
       ```ruby
-      (Dry::Types['integer'].prepend(-> { _1 + 1 })).(x) # => 2
+      (Dry::Types['integer'].prepend(-> { _1 + 1 })).(1) # => 2
       (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
       ```
 - version: 1.2.2
