@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc"
   spec.description   = spec.summary
   spec.homepage      = 'https://dry-rb.org/gems/dry-types'
-  spec.files         = Dir['CHANGELOG.md', 'LICENSE', 'README.md', 'dry-types.gemspec', 'lib/**/*']
+  spec.files         = Dir["CHANGELOG.md", "LICENSE", "README.md", "dry-types.gemspec", "lib/**/*"]
   spec.require_paths = ['lib']
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
