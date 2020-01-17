@@ -4,6 +4,11 @@
 ### Added
 
 - `Schema#merge` for merging two hash schemas (waiting-for-dev)
+- Aliases for `.constructor` to non-constructor types. Now you can call `.prepend`/`.append` without silly checks for the type being a constructor (flash-gordon)
+  ```ruby
+  (Dry::Types['integer'].prepend(-> { _1 + 1 })).(1) # => 2
+  (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
+  ```
 
 ## 1.2.2 2019-12-14
 
