@@ -73,6 +73,8 @@ RSpec.describe Dry::Types::Array do
 
         it_behaves_like Dry::Types::Nominal do
           subject(:type) { array }
+
+          it_behaves_like 'a composable constructor'
         end
       end
 

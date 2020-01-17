@@ -87,6 +87,7 @@ RSpec.describe Dry::Types::Nominal do
     it_behaves_like 'a constrained type', inputs: [
       Object.new, 'huh?'
     ]
+    it_behaves_like 'a composable constructor'
 
     it 'coerces to true' do
       (Dry::Types::Coercions::Params::TRUE_VALUES + [1]).each do |value|

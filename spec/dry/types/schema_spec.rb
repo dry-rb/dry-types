@@ -11,6 +11,8 @@ RSpec.describe Dry::Types::Schema do
 
   it_behaves_like 'a constrained type' do
     let(:type) { schema }
+
+    it_behaves_like 'a composable constructor'
   end
 
   describe '#each' do
@@ -152,10 +154,14 @@ RSpec.describe Dry::Types::Schema do
 
     it_behaves_like Dry::Types::Nominal do
       let(:type) { Dry::Types['nominal.hash'].schema(hash_schema) }
+
+      it_behaves_like 'a composable constructor'
     end
 
     it_behaves_like 'Dry::Types::Nominal#meta' do
       let(:type) { Dry::Types['nominal.hash'].schema(hash_schema) }
+
+      it_behaves_like 'a composable constructor'
     end
 
     context 'members with default values' do
