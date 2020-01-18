@@ -11,7 +11,7 @@
   ```
 
 
-[Compare v1.2.2...master](https://github.com/dry-rb/dry-types/compare/v1.2.2...master)
+[Compare v1.2.2...v1.2.3](https://github.com/dry-rb/dry-types/compare/v1.2.2...v1.2.3)
 
 ## 1.2.2 2019-12-14
 
