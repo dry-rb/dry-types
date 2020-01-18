@@ -9,7 +9,8 @@
       (Dry::Types['integer'].prepend(-> { _1 + 1 })).(1) # => 2
       (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
       ```
-  - `Schema::Key#optional` returns an instance of `Schema::Key` is it should have been
+  fixed:
+  - "`Schema::Key#optional` returns an instance of `Schema::Key` is it should have been"
 - version: 1.2.2
   date: '2019-12-14'
   fixed:
