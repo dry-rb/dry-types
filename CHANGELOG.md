@@ -10,6 +10,7 @@
   (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
   ```
 
+
 [Compare v1.2.2...master](https://github.com/dry-rb/dry-types/compare/v1.2.2...master)
 
 ## 1.2.2 2019-12-14
@@ -24,6 +25,7 @@
 - Types now use immutable equalizers. This should improve performance in certain cases e.g. in ROM (flash-gordon)
 - Attempting to use non-symbol keys in hash schemas raises an error. We always supported only symbols as keys but there was no check, now it'll throw an argument error. If you want to convert strings to symbols, use `Hash#with_key_transform` (flash-gordon)
 - Params and JSON types accept Time/Date/Datetime instances and boolean values. This can be useful in tests but we discourage you from relying on this behavior in production code. For example, building structs with `Params` types is considered a smell. There are dedicated tools for coercion, namely dry-schema and dry-validation. Be responsible user of dry-types! ❤ (flash-gordon)
+
 [Compare v1.2.1...v1.2.2](https://github.com/dry-rb/dry-types/compare/v1.2.1...v1.2.2)
 
 ## 1.2.1 2019-11-07
@@ -33,6 +35,7 @@
 
 - Fix keyword warnings reported by Ruby 2.7 (flash-gordon)
 - Error type in failing case in `Array::Member` (esparta)
+
 
 [Compare v1.2.0...v1.2.1](https://github.com/dry-rb/dry-types/compare/v1.2.0...v1.2.1)
 
@@ -94,6 +97,7 @@
 ### Changed
 
 - `Dry::Types.[]` used to work with classes, now it's deprecated (flash-gordon)
+
 [Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-types/compare/v1.1.1...v1.2.0)
 
 ## 1.1.1 2019-07-26
@@ -102,6 +106,7 @@
 ### Fixed
 
 - A bug where meta was lost for lax array types (flash-gordon)
+
 
 [Compare v1.1.0...v1.1.1](https://github.com/dry-rb/dry-types/compare/v1.1.0...v1.1.1)
 
@@ -126,6 +131,7 @@
 - Using `meta(omittable: true)` within `transform_types` works again but produces a warning, please migrate to `.omittable` or `.required(false)` (flash-gordon)
 - Bug with a constructror defined on top of enum (flash-gordon)
 
+
 [Compare v1.0.1...v1.1.0](https://github.com/dry-rb/dry-types/compare/v1.0.1...v1.1.0)
 
 ## 1.0.1 2019-06-04
@@ -143,6 +149,7 @@
   not_empty_string.lax.(' foo  ')    # => "foo"
   ```
 - `Schema#strict` now accepts an boolean argument. If `fales` is passed this will turn a strict schema into a non-strict one (flash-gordon)
+
 
 [Compare v1.0.0...v1.0.1](https://github.com/dry-rb/dry-types/compare/v1.0.0...v1.0.1)
 
@@ -205,6 +212,7 @@
 - Nominal types are now completely unconstrained. This fixes some inconsistencies when using them with constraints. `Nominal#try` will always return a successful result, for the previous behavior use `Nominal#try_coerce` or switch to strict types with passing a block to `#call` (flash-gordon)
 - ## Performance improvements
 - During the work on this release, a lot of performance improvements were made. dry-types 1.0 combined with dry-logic 1.0 are multiple times faster than dry-types 0.15 and dry-logic 0.5 for common cases including constraints checking and coercion (flash-gordon)
+
 [Compare v0.15.0...v1.0.0](https://github.com/dry-rb/dry-types/compare/v0.15.0...v1.0.0)
 
 ## 0.15.0 2019-03-22
@@ -325,6 +333,7 @@
   `Types::Integer` is a strict type. If you want it to be nominal, use `include Dry.Types(default: :nominal)`. See other options below.
 - `params.integer` now always converts strings to decimal numbers, this means `09` will be coerced to `9` (threw an error before) (skryukov)
 - Ruby 2.3 is EOL and not officially supported. It may work but we don't test it.
+
 [Compare v0.14.1...v0.15.0](https://github.com/dry-rb/dry-types/compare/v0.14.1...v0.15.0)
 
 ## 0.14.1 2019-03-25
@@ -333,6 +342,7 @@
 ### Fixed
 
 - `coercible.integer` now doesn't blow up on invalid strings (exterm)
+
 
 [Compare v0.14.0...v0.14.1](https://github.com/dry-rb/dry-types/compare/v0.14.0...v0.14.1)
 
@@ -347,6 +357,7 @@
 
 - [BREAKING] Support for Ruby 2.2 was dropped. It reached EOL on March 31, 2018.
 - `dry-logic` was updated to `~> 0.5` (solnic)
+
 [Compare v0.13.4...v0.14.0](https://github.com/dry-rb/dry-types/compare/v0.13.4...v0.14.0)
 
 ## 0.13.4 2018-12-21
@@ -355,6 +366,7 @@
 ### Fixed
 
 - Fixed warnings about keyword arguments from Ruby 2.6. See https://bugs.ruby-lang.org/issues/14183 for all the details (flash-gordon)
+
 
 [Compare v0.13.3...v0.13.4](https://github.com/dry-rb/dry-types/compare/v0.13.3...v0.13.4)
 
@@ -365,6 +377,7 @@
 
 - `Dry::Types::Hash#try` returns `Failure` instead of throwing an exception on missing keys (GustavoCaso)
 
+
 [Compare v0.13.2...v0.13.3](https://github.com/dry-rb/dry-types/compare/v0.13.2...v0.13.3)
 
 ## 0.13.2 2018-05-30
@@ -374,6 +387,7 @@
 
 - `Defaults#valid?` now works fine when passing `Dry::Core::Constans::Undefined` as value (GustavoCaso)
 - `valid?` for constructor types wrapping `Sum`s (GustavoCaso)
+
 
 [Compare v0.13.1...v0.13.2](https://github.com/dry-rb/dry-types/compare/v0.13.1...v0.13.2)
 
@@ -388,6 +402,7 @@
 
 - Defaults now works fine with meta (GustavoCaso)
 - Defaults are now re-decorated properly (flash-gordon)
+
 
 [Compare v0.13.0...v0.13.1](https://github.com/dry-rb/dry-types/compare/v0.13.0...v0.13.1)
 
@@ -482,6 +497,7 @@
   This change allowed to greatly simplify hash schemas, make them a lot more flexible yet predictable (see below).
 - [BREAKING] `Dry::Types.register_class` was removed, `Dry::Types.register` was made private API, do not register your types in the global `dry-types` container, use a module instead, e.g. `Types` (flash-gordon)
 - [BREAKING] Enum types don't accept value index anymore. Instead, explicit mapping is supported, see below (flash-gordon)
+
 [Compare v0.12.2...v0.13.0](https://github.com/dry-rb/dry-types/compare/v0.12.2...v0.13.0)
 
 ## 0.12.2 2017-11-04
@@ -493,6 +509,7 @@
 - Fixed an error on `Dry::Types['json.decimal'].try(nil)` (nesaulov)
 - Fixed an error on calling `try` on an array type built of constrained types (flash-gordon)
 - Implemented `===` for enum types (GustavoCaso)
+
 
 [Compare v0.12.1...v0.12.2](https://github.com/dry-rb/dry-types/compare/v0.12.1...v0.12.2)
 
@@ -506,6 +523,7 @@
 - Optional sum types work correctly in `safe` mode (GustavoCaso)
 - The equalizer of constrained types respects meta (flash-gordon)
 
+
 [Compare v0.12.0...v0.12.1](https://github.com/dry-rb/dry-types/compare/v0.12.0...v0.12.1)
 
 ## 0.12.0 2017-09-15
@@ -516,6 +534,7 @@
 - A bunch of shortcut methods for constructing types to the autogenerated module, e.g. `Types.Constructor(String, &:to_s)` (flash-gordon)
 - ## Deprecated
 - `Types::Array#member` was deprecated in favor of `Types::Array#of` (flash-gordon)
+
 
 [Compare v0.11.1...v0.12.0](https://github.com/dry-rb/dry-types/compare/v0.11.1...v0.12.0)
 
@@ -529,6 +548,7 @@
 ### Changed
 
 - Constructors are now equalized using `fn` and `meta` too (flash-gordon)
+
 [Compare v0.11.0...v0.11.1](https://github.com/dry-rb/dry-types/compare/v0.11.0...v0.11.1)
 
 ## 0.11.0 2017-06-30
@@ -540,6 +560,7 @@
 - `Types::Array#of` as an alias for `#member` (maliqq)
 - Detailed failure objects are passed to results which improves constraint violation messages (GustavoCaso)
 
+
 [Compare v0.10.3...v0.11.0](https://github.com/dry-rb/dry-types/compare/v0.10.3...v0.11.0)
 
 ## 0.10.3 2017-05-06
@@ -549,6 +570,7 @@
 
 - Callable defaults accept the underlying type (v-kolesnikov)
 
+
 [Compare v0.10.2...v0.10.3](https://github.com/dry-rb/dry-types/compare/v0.10.2...v0.10.3)
 
 ## 0.10.2 2017-04-28
@@ -557,6 +579,7 @@
 ### Fixed
 
 - Fixed `Type#optional?` for sum types (flash-gordon)
+
 
 [Compare v0.10.1...v0.10.2](https://github.com/dry-rb/dry-types/compare/v0.10.1...v0.10.2)
 
@@ -572,6 +595,7 @@
 
 - `meta` is used in type equality again (solnic)
 - `Any` works correctly with meta again (flash-gordon)
+
 
 [Compare v0.10.0...v0.10.1](https://github.com/dry-rb/dry-types/compare/v0.10.0...v0.10.1)
 
@@ -590,6 +614,7 @@
 
 - Meta data are now stored separately from options (flash-gordon)
 - `Types::Object` was renamed to `Types::Any` (flash-gordon)
+
 [Compare v0.9.4...v0.10.0](https://github.com/dry-rb/dry-types/compare/v0.9.4...v0.10.0)
 
 ## 0.9.4 2017-01-24
@@ -599,6 +624,7 @@
 
 - Added `Types::Object` which passes an object of any type (flash-gordon)
 
+
 [Compare v0.9.3...v0.9.4](https://github.com/dry-rb/dry-types/compare/v0.9.3...v0.9.4)
 
 ## 0.9.3 2016-12-03
@@ -607,6 +633,7 @@
 ### Fixed
 
 - Updated to dry-core >= 0.2.1 (ruby warnings are gone) (flash-gordon)
+
 
 [Compare v0.9.2...v0.9.3](https://github.com/dry-rb/dry-types/compare/v0.9.2...v0.9.3)
 
@@ -620,6 +647,7 @@
 ### Changed
 
 - Optimized object allocation in hash schemas, resulting in up to 25% speed boost (davydovanton)
+
 [Compare v0.9.1...v0.9.2](https://github.com/dry-rb/dry-types/compare/v0.9.1...v0.9.2)
 
 ## 0.9.1 2016-11-04
@@ -632,6 +660,7 @@
 ### Changed
 
 - `Hash#weak` accepts Hash-descendants again (solnic)
+
 [Compare v0.9.0...v0.9.1](https://github.com/dry-rb/dry-types/compare/v0.9.0...v0.9.1)
 
 ## 0.9.0 2016-09-21
@@ -656,6 +685,7 @@
 - `Types::Form::Bool` supports upcased true/false values (kirs)
 - `Types::Form::{Date,DateTime,Time}` fail gracefully for invalid input (padde)
 - ice_nine dependency has been dropped as it was required by Struct only (flash-gordon)
+
 [Compare v0.8.1...v0.9.0](https://github.com/dry-rb/dry-types/compare/v0.8.1...v0.9.0)
 
 ## 0.8.1 2016-07-13
@@ -665,6 +695,7 @@
 
 - Compiler no longer chokes on type nodes without args (solnic)
 - Removed `bin/console` from gem package (solnic)
+
 
 [Compare v0.8.0...v0.8.1](https://github.com/dry-rb/dry-types/compare/v0.8.0...v0.8.1)
 
@@ -686,6 +717,7 @@
 
 - `:symbolized` hash schema is now based on `:weak` schema (solnic)
 - `Struct::Value` instances are now **deeply frozen** via ice_nine (backus)
+
 [Compare v0.7.2...v0.8.0](https://github.com/dry-rb/dry-types/compare/v0.7.2...v0.8.0)
 
 ## 0.7.2 2016-05-11
@@ -705,6 +737,7 @@
 - Decimal coercions now work with Float (flash-gordon)
 - Coerce empty strings in form posts to blank arrays and hashes (timriley)
 - update to use dry-logic v0.2.3 (fran-worley)
+
 [Compare v0.7.1...v0.7.2](https://github.com/dry-rb/dry-types/compare/v0.7.1...v0.7.2)
 
 ## 0.7.1 2016-04-06
@@ -718,6 +751,7 @@
 
 - Schema is properly inherited in Struct (backus)
 - `constructor_type` is properly inherited in Struct (fbernier)
+
 
 [Compare v0.7.0...v0.7.1](https://github.com/dry-rb/dry-types/compare/v0.7.0...v0.7.1)
 
@@ -752,6 +786,7 @@ Major focus of this release is to make complex type composition possible and imp
 - `#maybe` uses `Strict::Nil` now (solnic)
 - `Type#default` will raise if `nil` was passed for `Maybe` type (solnic)
 - `Hash` with a schema will set maybe values for missing keys or nils (flash-gordon)
+
 [Compare v0.6.0...v0.7.0](https://github.com/dry-rb/dry-types/compare/v0.6.0...v0.7.0)
 
 ## 0.6.0 2016-03-16
@@ -786,6 +821,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 - `Dry::Types::Definition` is now the base type definition object (solnic)
 - `Dry::Types::Constructor` is now a type definition with a constructor function (solnic)
+
 [Compare v0.5.1...v0.6.0](https://github.com/dry-rb/dry-types/compare/v0.5.1...v0.6.0)
 
 ## 0.5.1 2016-01-11
@@ -796,6 +832,7 @@ Renamed from `dry-data` to `dry-types` and:
 - `Dry::Data::Type#safe` for types which can skip constructor when primitive does
   not match input's class (solnic)
 - `form.array` and `form.hash` safe types (solnic)
+
 
 [Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-types/compare/v0.5.0...v0.5.1)
 
@@ -818,6 +855,7 @@ Renamed from `dry-data` to `dry-types` and:
 - Constrained types are now always available (solnic)
 - `strict.*` category uses constrained types with `:type?` predicate (solnic)
 - `SumType#call` no longer needs to rescue from `TypeError` (solnic)
+
 [Compare v0.4.2...v0.5.0](https://github.com/dry-rb/dry-types/compare/v0.4.2...v0.5.0)
 
 ## 0.4.2 2015-12-27
@@ -830,6 +868,7 @@ Renamed from `dry-data` to `dry-types` and:
 ### Changed
 
 - Array member uses type objects now rather than just their constructors (solnic)
+
 [Compare v0.4.0...v0.4.2](https://github.com/dry-rb/dry-types/compare/v0.4.0...v0.4.2)
 
 ## 0.4.0 2015-12-11
@@ -843,6 +882,7 @@ Renamed from `dry-data` to `dry-types` and:
 ### Changed
 
 - `Dry::Data['optional']` was **removed** in favor of `Dry::Data::Type#optional` (solnic)
+
 [Compare v0.3.2...v0.4.0](https://github.com/dry-rb/dry-types/compare/v0.3.2...v0.4.0)
 
 ## 0.3.2 2015-12-10
@@ -856,6 +896,7 @@ Renamed from `dry-data` to `dry-types` and:
 
 - Added missing require for `dry-equalizer` (solnic)
 
+
 [Compare v0.3.1...v0.3.2](https://github.com/dry-rb/dry-types/compare/v0.3.1...v0.3.2)
 
 ## 0.3.1 2015-12-09
@@ -864,6 +905,7 @@ Renamed from `dry-data` to `dry-types` and:
 ### Changed
 
 - Removed require of constrained type and make it optional (solnic)
+
 [Compare v0.3.0...v0.3.1](https://github.com/dry-rb/dry-types/compare/v0.3.0...v0.3.1)
 
 ## 0.3.0 2015-12-09
@@ -876,6 +918,7 @@ Renamed from `dry-data` to `dry-types` and:
 - `Dry::Data.finalize` can be used to define types as constants under configured namespace (solnic)
 - `Dry::Data::Type#enum` for defining an enum from a specific type (solnic)
 - New types: `symbol` and `class` along with their `strict` versions (solnic)
+
 
 [Compare v0.2.1...v0.3.0](https://github.com/dry-rb/dry-types/compare/v0.2.1...v0.3.0)
 
@@ -893,6 +936,7 @@ Renamed from `dry-data` to `dry-types` and:
 ### Changed
 
 - Improved structure of the ast (solnic)
+
 [Compare v0.2.0...v0.2.1](https://github.com/dry-rb/dry-types/compare/v0.2.0...v0.2.1)
 
 ## 0.2.0 2015-11-29
@@ -907,6 +951,7 @@ Renamed from `dry-data` to `dry-types` and:
 ### Changed
 
 - Constructing optional types uses the new `Dry::Data["optional"]` built-in type (solnic)
+
 [Compare v0.1.0...v0.2.0](https://github.com/dry-rb/dry-types/compare/v0.1.0...v0.2.0)
 
 ## 0.1.0 2015-11-27
@@ -920,6 +965,7 @@ Renamed from `dry-data` to `dry-types` and:
 - `Dry::Data.register_class` short-cut interface for registering a class and
   setting its `.new` method as the constructor (solnic)
 - `Dry::Data::Compiler` for building a type from a simple ast (solnic)
+
 
 [Compare v0.0.1...v0.1.0](https://github.com/dry-rb/dry-types/compare/v0.0.1...v0.1.0)
 
