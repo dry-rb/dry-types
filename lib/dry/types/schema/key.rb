@@ -122,8 +122,8 @@ module Dry
         # @see Dry::Types::Meta#meta
         #
         # @api public
-        def meta(data = nil)
-          if data.nil? || !data.key?(:omittable)
+        def meta(data = Undefined)
+          if Undefined.equal?(data) || !data.key?(:omittable)
             super
           else
             self.class.warn(
