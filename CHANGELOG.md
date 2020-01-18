@@ -10,6 +10,10 @@
   (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
   ```
 
+### Fixed
+
+- `Schema::Key#optional` returns an instance of `Schema::Key` is it should have been
+
 
 [Compare v1.2.2...v1.2.3](https://github.com/dry-rb/dry-types/compare/v1.2.2...v1.2.3)
 
