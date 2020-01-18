@@ -28,8 +28,8 @@ module Dry
       #   @return [Type] new type with added metadata
       #
       # @api public
-      def meta(data = nil)
-        if !data
+      def meta(data = Undefined)
+        if Undefined.equal?(data)
           @meta
         elsif data.empty?
           self

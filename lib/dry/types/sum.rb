@@ -142,8 +142,8 @@ module Dry
       # @see [Meta#meta]
       #
       # @api public
-      def meta(data = nil)
-        if data.nil?
+      def meta(data = Undefined)
+        if Undefined.equal?(data)
           optional? ? right.meta : super
         elsif optional?
           self.class.new(left, right.meta(data), **options)
