@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Dry::Types::Schema::Key do
-  let(:key) { described_class.new(Dry::Types['strict.integer'], :age) }
+  let(:key) { described_class.new(Dry::Types['integer'], :age) }
+
   subject { key }
 
   it_behaves_like Dry::Types::Nominal do
@@ -35,6 +36,15 @@ RSpec.describe Dry::Types::Schema::Key do
   describe '#meta' do
     it 'can make key omittable' do
       expect(key.meta(omittable: true)).not_to be_required
+    end
+  end
+
+  describe '#optional' do
+    let(:key) { described_class.new(Dry::Types['integer'], :age) }
+
+    it 'makes type optional' do
+      expect(key.optional).to be_optional
+      expect(key.optional).to be_a(described_class)
     end
   end
 end
