@@ -20,7 +20,6 @@ group :benchmarks do
   platform :mri do
     gem 'attrio'
     gem 'benchmark-ips'
-    gem 'dry-struct'
     gem 'fast_attributes'
     gem 'hotch'
     gem 'virtus'

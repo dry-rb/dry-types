@@ -103,6 +103,15 @@ module Dry
           __new__(type.lax).required(false)
         end
 
+        # Make wrapped type optional
+        #
+        # @return [Key]
+        #
+        # @api public
+        def optional
+          __new__(type.optional)
+        end
+
         # Dump to internal AST representation
         #
         # @return [Array]
