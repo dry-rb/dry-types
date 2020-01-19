@@ -1,4 +1,4 @@
-## 1.2.3 unreleased
+## 1.3.0 unreleased
 
 
 ### Added
@@ -9,13 +9,14 @@
   (Dry::Types['integer'].prepend(-> { _1 + 1 })).(1) # => 2
   (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
   ```
+- `Hash::Schema#clear` returns a schema with the same options but without keys
 
 ### Fixed
 
 - `Schema::Key#optional` returns an instance of `Schema::Key` is it should have been
 
 
-[Compare v1.2.2...v1.2.3](https://github.com/dry-rb/dry-types/compare/v1.2.2...v1.2.3)
+[Compare v1.2.2...v1.3.0](https://github.com/dry-rb/dry-types/compare/v1.2.2...v1.3.0)
 
 ## 1.2.2 2019-12-14
 
