@@ -548,4 +548,10 @@ RSpec.describe Dry::Types::Schema do
       expect(schema['foo' => 'foo', 'bar' => 'bar']).to eq(foo: 'foo', bar: 'bar')
     end
   end
+
+  describe '#clear' do
+    it 'simply removes all keys' do
+      expect(Dry::Types['hash'].schema(foo: 'string').clear).to eql(Dry::Types['hash'].schema({}))
+    end
+  end
 end
