@@ -296,6 +296,15 @@ module Dry
         schema(other.keys)
       end
 
+      # Empty schema with the same options
+      #
+      # @return [Schema]
+      #
+      # @api public
+      def clear
+        with(keys: EMPTY_ARRAY)
+      end
+
       private
 
       # @param [Array<Dry::Types::Schema::Keys>] keys
