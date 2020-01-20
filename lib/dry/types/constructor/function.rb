@@ -169,30 +169,16 @@ module Dry
           end
         end
 
-        if RUBY_VERSION >= '2.6'
-          # @return [Function]
-          def >>(other)
-            proc = other.is_a?(::Proc) ? other : other.fn
-            Function[@fn >> proc]
-          end
+        # @return [Function]
+        def >>(other)
+          f = Function[other]
+          Function[-> x, &b { f.(self.(x, &b), &b) }]
+        end
 
-          # @return [Function]
-          def <<(other)
-            proc = other.is_a?(::Proc) ? other : other.fn
-            Function[@fn << proc]
-          end
-        else
-          # @return [Function]
-          def >>(other)
-            proc = other.is_a?(::Proc) ? other : other.fn
-            Function[-> x { proc[@fn[x]] }]
-          end
-
-          # @return [Function]
-          def <<(other)
-            proc = other.is_a?(::Proc) ? other : other.fn
-            Function[-> x { @fn[proc[x]] }]
-          end
+        # @return [Function]
+        def <<(other)
+          f = Function[other]
+          Function[-> x, &b { self.(f.(x, &b), &b) }]
         end
       end
     end

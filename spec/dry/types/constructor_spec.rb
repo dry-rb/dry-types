@@ -271,6 +271,16 @@ RSpec.describe Dry::Types::Constructor do
       expect(prepended['foo']).to eql(102)
       expect(prepended.options).to include(id: 'named')
     end
+
+    context 'when first function accepts a failsafe block' do
+      context 'but not the second' do
+        subject(:type) { Dry::Types['params.date'].prepend(&:first) }
+
+        it 'combines them safely' do
+          expect(type.(['foo']) { :failsafe }).to eql(:failsafe)
+        end
+      end
+    end
   end
 
   describe '#append' do
