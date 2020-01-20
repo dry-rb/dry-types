@@ -12,6 +12,7 @@
   - "`Hash::Schema#clear` returns a schema with the same options but without keys"
   fixed:
   - "`Schema::Key#optional` returns an instance of `Schema::Key` is it should have been"
+  - "Composition with function handling exceptions. This could occasionally lead to unexpected exceptions (flash-gordon)"
 - version: 1.2.2
   date: '2019-12-14'
   fixed:
