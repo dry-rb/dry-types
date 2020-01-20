@@ -14,6 +14,7 @@
 ### Fixed
 
 - `Schema::Key#optional` returns an instance of `Schema::Key` is it should have been
+- Composition with function handling exceptions. This could occasionally lead to unexpected exceptions (flash-gordon)
 
 
 [Compare v1.2.2...v1.3.0](https://github.com/dry-rb/dry-types/compare/v1.2.2...v1.3.0)
