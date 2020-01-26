@@ -61,6 +61,7 @@ Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
 
 * `Coercible` types will attempt to cast values to the correct class using kernel coercion methods:
   - `Types::Coercible::String`
+  - `Types::Coercible::Symbol`
   - `Types::Coercible::Integer`
   - `Types::Coercible::Float`
   - `Types::Coercible::Decimal`
@@ -83,6 +84,7 @@ Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
 
 * Types suitable for `JSON` processing with coercions:
   - `Types::JSON::Nil`
+  - `Types::JSON::Symbol`
   - `Types::JSON::Date`
   - `Types::JSON::DateTime`
   - `Types::JSON::Time`
