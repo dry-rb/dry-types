@@ -72,7 +72,9 @@ module Dry
 
     # Register optional strict {NON_NIL} types
     NON_NIL.each_key do |name|
-      register("optional.strict.#{name}", self["strict.#{name}"].optional)
+      type = self[name.to_s].optional
+      register("optional.strict.#{name}", type)
+      register("optional.#{name}", type)
     end
 
     # Register optional {COERCIBLE} types

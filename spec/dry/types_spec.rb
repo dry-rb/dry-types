@@ -44,6 +44,10 @@ RSpec.describe Dry::Types do
     it 'returns unregistered types back' do
       expect(Dry::Types[unregistered_type]).to be(unregistered_type)
     end
+
+    it 'has strict types as default in optional namespace' do
+      expect(Dry::Types['optional.string']).to eql(Dry::Types['string'].optional)
+    end
   end
 
   describe 'missing constant' do
