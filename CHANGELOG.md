@@ -10,6 +10,29 @@
   (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
   ```
 - `Hash::Schema#clear` returns a schema with the same options but without keys
+- Optional namespace now includes strict types by default (@flash-gordon)
+
+### Fixed
+
+- `Schema::Key#optional` returns an instance of `Schema::Key` is it should have been
+- Composition with function handling exceptions. This could occasionally lead to unexpected exceptions (flash-gordon)
+
+
+[Compare v1.3.0...v1.3.0](https://github.com/dry-rb/dry-types/compare/v1.3.0...v1.3.0)
+
+## 1.3.0 unreleased
+
+
+### Added
+
+- `Schema#merge` for merging two hash schemas (waiting-for-dev)
+- Aliases for `.constructor` to non-constructor types. Now you can call `.prepend`/`.append` without silly checks for the type being a constructor (flash-gordon)
+  ```ruby
+  (Dry::Types['integer'].prepend(-> { _1 + 1 })).(1) # => 2
+  (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
+  ```
+- `Hash::Schema#clear` returns a schema with the same options but without keys
+- Optional namespace now includes strict types by default (@flash-gordon)
 
 ### Fixed
 
