@@ -191,7 +191,7 @@ RSpec.describe Dry::Types::Module do
         let(:kwargs) { { default: :strict } }
 
         it 'adds strict types as default' do
-          expect(mod::Integer).to be(Dry::Types['strict.integer'])
+          expect(mod::Integer).to be(Dry::Types['integer'])
           expect(mod::Nominal::Integer).to be(Dry::Types['nominal.integer'])
           expect { mod::Params }.to raise_error(NameError)
         end
@@ -251,6 +251,10 @@ RSpec.describe Dry::Types::Module do
           expect(mod::Strict::Integer).to be_optional
           expect(mod::Coercible::Integer).to be_optional
         end
+      end
+
+      example 'default types in optional ns are strict' do
+        expect(mod::Optional::String).to eql(mod::String.optional)
       end
     end
 
