@@ -265,12 +265,4 @@ RSpec.describe Dry::Types::Nominal do
       expect { type['abc'] }.to raise_error(Dry::Types::CoercionError)
     end
   end
-
-  describe 'params.string' do
-    subject(:type) { Dry::Types['params.string'] }
-
-    it 'is an alias for coercible.string' do
-      expect(type).to eql(Dry::Types['coercible.string'])
-    end
-  end
 end
