@@ -1,12 +1,13 @@
 ---
 - version: 1.3.0
-  summary:
+  summary: 
   date: unreleased
-  fixed:
-  - "`Schema::Key#optional` returns an instance of `Schema::Key` as it should have done"
-  - "Composition with function handling exceptions. This could occasionally lead to
-    unexpected exceptions (@flash-gordon)"
-  added:
+  fixed: &1
+  - "`Schema::Key#optional` returns an instance of `Schema::Key` as it should have
+    done"
+  - Composition with function handling exceptions. This could occasionally lead to
+    unexpected exceptions (@flash-gordon)
+  added: &2
   - "`Schema#merge` for merging two hash schemas (@waiting-for-dev)"
   - |-
     Aliases for `.constructor` to non-constructor types. Now you can call `.prepend`/`.append` without silly checks for the type being a constructor (flash-gordon)
@@ -15,7 +16,15 @@
       (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
       ```
   - "`Hash::Schema#clear` returns a schema with the same options but without keys"
-  - "Optional namespace now includes strict types by default (@flash-gordon)"
+  - Optional namespace now includes strict types by default (@flash-gordon)
+  - "`Params::String` which can be occasionally useful. Don't forget, params are normally
+    strings already (@flash-gordon)"
+  changed: 
+- version: 1.3.0
+  summary: 
+  date: unreleased
+  fixed: *1
+  added: *2
 - version: 1.2.2
   date: '2019-12-14'
   fixed:
