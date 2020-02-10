@@ -1,14 +1,13 @@
 ---
 - version: 1.3.0
-  summary: 
+  summary:
   date: unreleased
-  fixed: &2
-  - "`Schema::Key#optional` returns an instance of `Schema::Key` is it should have
-    been"
-  - Composition with function handling exceptions. This could occasionally lead to
-    unexpected exceptions (flash-gordon)
-  added: &1
-  - "`Schema#merge` for merging two hash schemas (waiting-for-dev)"
+  fixed:
+  - "`Schema::Key#optional` returns an instance of `Schema::Key` as it should have done"
+  - "Composition with function handling exceptions. This could occasionally lead to
+    unexpected exceptions (@flash-gordon)""
+  added:
+  - "`Schema#merge` for merging two hash schemas (@waiting-for-dev)"
   - |-
     Aliases for `.constructor` to non-constructor types. Now you can call `.prepend`/`.append` without silly checks for the type being a constructor (flash-gordon)
       ```ruby
@@ -16,17 +15,12 @@
       (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
       ```
   - "`Hash::Schema#clear` returns a schema with the same options but without keys"
-  - Optional namespace now includes strict types by default (@flash-gordon)
-  changed: 
-- version: 1.3.0
-  date: unreleased
-  added: *1
-  fixed: *2
+  - "Optional namespace now includes strict types by default (@flash-gordon)"
 - version: 1.2.2
   date: '2019-12-14'
   fixed:
   - "`Types.Contructor` doesn't re-wrap class instances implementing type interface,
-    this fixes some quirks in dry-struct (flash-gordon)"
+    this fixes some quirks in dry-struct (@flash-gordon)"
   changed:
   - Types now use immutable equalizers. This should improve performance in certain
     cases e.g. in ROM (flash-gordon)
