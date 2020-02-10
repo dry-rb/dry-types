@@ -103,6 +103,9 @@ class User < Dry::Struct
   attribute :name, Types::String
   attribute :age,  Types::Integer.meta(info: 'extra info about age')
 end
+
+User.schema.key(:age).meta
+# => {:info=>"extra info about age"}
 ```
 
 - Pass values directly to `Dry::Types` without creating an object using `[]`:
