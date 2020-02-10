@@ -16,7 +16,6 @@
       ```
   - "`Hash::Schema#clear` returns a schema with the same options but without keys"
   - Optional namespace now includes strict types by default (@flash-gordon)
-    strings already (@flash-gordon)"
 - version: 1.2.2
   date: '2019-12-14'
   fixed:
