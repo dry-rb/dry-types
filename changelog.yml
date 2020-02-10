@@ -5,7 +5,7 @@
   fixed:
   - "`Schema::Key#optional` returns an instance of `Schema::Key` as it should have done"
   - "Composition with function handling exceptions. This could occasionally lead to
-    unexpected exceptions (@flash-gordon)""
+    unexpected exceptions (@flash-gordon)"
   added:
   - "`Schema#merge` for merging two hash schemas (@waiting-for-dev)"
   - |-
