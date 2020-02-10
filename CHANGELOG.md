@@ -10,7 +10,7 @@
   (Dry::Types['coercible.integer']  >> -> { _1 * 2 }).('99') # => 198
   ```
 - `Hash::Schema#clear` returns a schema with the same options but without keys
-- Optional namespace now includes strict types by default (@flash-gordon) strings already (@flash-gordon)"
+- Optional namespace now includes strict types by default (@flash-gordon)
 
 ### Fixed
 
