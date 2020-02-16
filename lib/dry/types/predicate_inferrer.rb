@@ -71,6 +71,7 @@ module Dry
         def visit_hash(_)
           HASH
         end
+        alias_method :visit_schema, :visit_hash
 
         # @api private
         def visit_array(_)

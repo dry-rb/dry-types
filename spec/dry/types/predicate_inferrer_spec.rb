@@ -82,6 +82,17 @@ RSpec.describe Dry::Types::PredicateInferrer, '#[]' do
     expect(inferrer[type(:any)]).to eql([])
   end
 
+  it 'returns hash? for hash' do
+    expect(inferrer[type(:hash)]).to eql([:hash?])
+  end
+
+  # it is a compromise
+  # inferring complex schemas as predicates
+  # is not our goal at this point
+  it 'returns hash? for schemas' do
+    expect(inferrer[type(:hash).schema(name: 'string')]).to eql([:hash?])
+  end
+
   context 'constrained types' do
     it 'extracts predicates from contrained types' do
       expect(inferrer[type(:integer).constrained(gteq: 18)]).to eql([:int?, gteq?: 18])
