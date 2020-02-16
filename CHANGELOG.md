@@ -1,11 +1,11 @@
-## 1.3.0 2020-02-17
+## 1.3.1 2020-02-17
 
 
 ### Changed
 
 - Predicate inferrer now returns `hash?` for hash schemas. Note, it doesn't spit more complex predstructuress because we have different plans for dry-schema (@flash-gordon)
 
-[Compare v1.3.0...v1.3.0](https://github.com/dry-rb/dry-types/compare/v1.3.0...v1.3.0)
+[Compare v1.3.0...v1.3.1](https://github.com/dry-rb/dry-types/compare/v1.3.0...v1.3.1)
 
 ## 1.3.0 2020-02-10
 
