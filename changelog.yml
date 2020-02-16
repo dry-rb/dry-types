@@ -3,7 +3,7 @@
   date: '2020-02-17'
   changed:
     - "Predicate inferrer now returns `hash?` for hash schemas. Note, it doesn't spit
-      more complex predstructuress because we have different plans for dry-schema (@flash-gordon)"
+      more complex preds because we have different plans for dry-schema (@flash-gordon)"
 - version: 1.3.0
   date: '2020-02-10'
   fixed:
