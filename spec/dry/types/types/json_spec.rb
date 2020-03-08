@@ -8,8 +8,8 @@ RSpec.describe Dry::Types::Nominal do
       Object.new, 'foo', %w[foo]
     ]
 
-    it 'coerces empty string to nil' do
-      expect(type['']).to be(nil)
+    it 'rejects empty string' do
+      expect(type.('') { :fallback }).to eql(:fallback)
     end
   end
 

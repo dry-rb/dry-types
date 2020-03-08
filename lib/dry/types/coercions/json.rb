@@ -14,6 +14,23 @@ module Dry
       module JSON
         extend Coercions
 
+        # @param [Object] input
+        #
+        # @return [nil] if the input is nil
+        #
+        # @raise CoercionError
+        #
+        # @api public
+        def self.to_nil(input, &_block)
+          if input.nil?
+            nil
+          elsif block_given?
+            yield
+          else
+            raise CoercionError, "#{input.inspect} is not nil"
+          end
+        end
+
         # @param [#to_d, Object] input
         #
         # @return [BigDecimal,nil]
