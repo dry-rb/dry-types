@@ -8,23 +8,6 @@ module Dry
     module Coercions
       include Dry::Core::Constants
 
-      # @param [String, Object] input
-      #
-      # @return [nil] if the input is an empty string or nil
-      #
-      # @raise CoercionError
-      #
-      # @api public
-      def to_nil(input, &_block)
-        if input.nil? || empty_str?(input)
-          nil
-        elsif block_given?
-          yield
-        else
-          raise CoercionError, "#{input.inspect} is not nil"
-        end
-      end
-
       # @param [#to_str, Object] input
       #
       # @return [Date, Object]

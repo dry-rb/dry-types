@@ -18,6 +18,23 @@ module Dry
 
         extend Coercions
 
+        # @param [Object] input
+        #
+        # @return [nil] if the input is an empty string or nil
+        #
+        # @raise CoercionError
+        #
+        # @api public
+        def self.to_nil(input, &_block)
+          if input.nil? || empty_str?(input)
+            nil
+          elsif block_given?
+            yield
+          else
+            raise CoercionError, "#{input.inspect} is not nil"
+          end
+        end
+
         # @param [String, Object] input
         #
         # @return [Boolean,Object]
