@@ -1,3 +1,15 @@
+## unreleased 
+
+
+### Fixed
+
+- `json.nil` no longer coerces empty strings to `nil`. It was a long-standing
+bug that for some reason existed unnoticed for years. Technically,
+this may be a breaking change (@flash-gordon)
+
+
+[Compare v1.3.1...master](https://github.com/dry-rb/dry-types/compare/v1.3.1...master)
+
 ## 1.3.1 2020-02-17
 
 
