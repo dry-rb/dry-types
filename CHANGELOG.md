@@ -1,4 +1,4 @@
-## unreleased 
+## 1.4.0 2020-03-09
 
 
 ### Fixed
@@ -8,7 +8,7 @@ bug that for some reason existed unnoticed for years. Technically,
 this may be a breaking change (@flash-gordon)
 
 
-[Compare v1.3.1...master](https://github.com/dry-rb/dry-types/compare/v1.3.1...master)
+[Compare v1.3.1...v1.4.0](https://github.com/dry-rb/dry-types/compare/v1.3.1...v1.4.0)
 
 ## 1.3.1 2020-02-17
 
