@@ -4,8 +4,8 @@
   fixed:
   - |-
     `json.nil` no longer coerces empty strings to `nil`. It was a long-standing
-    bug that for some reason existed unnoticed for years. Technically,
-    this may be a breaking change (@flash-gordon)
+    bug that for some reason remained unnoticed for years. Technically,
+    this may be a breaking change for JSON schemas described with dry-schema (@flash-gordon)
 - version: 1.3.1
   date: '2020-02-17'
   changed:
