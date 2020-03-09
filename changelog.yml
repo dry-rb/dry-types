@@ -1,5 +1,6 @@
 ---
-- version: unreleased
+- version: 1.4.0
+  date: '2020-03-09'
   fixed:
   - |-
     `json.nil` no longer coerces empty strings to `nil`. It was a long-standing
