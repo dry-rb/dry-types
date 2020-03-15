@@ -83,7 +83,7 @@ module Dry
         call_unsafe(hash, options)
       end
 
-      # @param [Hash] hash
+      # @param input [Hash] hash
       #
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]
@@ -288,7 +288,7 @@ module Dry
       #
       # A new instance is returned.
       #
-      # @param schema [Schema]
+      # @param other [Schema] schema
       # @return [Schema]
       #
       # @api public

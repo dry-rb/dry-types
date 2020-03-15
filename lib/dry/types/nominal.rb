@@ -98,7 +98,6 @@ module Dry
       end
 
       # @param [Object] input
-      # @param [#call,nil] block
       #
       # @yieldparam [Failure] failure
       # @yieldreturn [Result]

@@ -11,7 +11,7 @@ module Dry
         @meta = meta.freeze
       end
 
-      # @param [Hash] new_options
+      # @param options [Hash] new_options
       #
       # @return [Type]
       #
