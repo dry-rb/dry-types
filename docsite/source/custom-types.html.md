@@ -48,7 +48,7 @@ user_type = Types.Constructor(User)
 user_type[name: 'John']
 
 # Using a method User.build
-user_type = Types.Constructor(User, &:build)
+user_type = Types.Constructor(User, User.method(:build))
 
 # Using a block
 user_type = Types.Constructor(User) { |values| User.new(values) }
