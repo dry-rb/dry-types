@@ -75,7 +75,7 @@ int['one'] # => 'one'
 Types::Hash.schema(name: Types::String, age: Types::Coercible::Integer)
 
 # Using Types.Hash()
-Types.Hash(:permissive, name: Types::String, age: Types::Coercible::Integer)
+Types.Hash(name: Types::String, age: Types::Coercible::Integer)
 ```
 
 ### `Types.Array`

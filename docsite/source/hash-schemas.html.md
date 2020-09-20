@@ -126,10 +126,11 @@ user_hash['name' => 'Jane', 'city' => 'London']
 
 ### Merging schemas
 
-Similar than inheritance, two schemas can be merged.
+Similar to inheritance, two schemas can be merged.
 The resulting schema will have the sum of both sets
 of attributes.
 
+```ruby
 user_hash = Types::Hash.schema(
   name: Types::String
 )
