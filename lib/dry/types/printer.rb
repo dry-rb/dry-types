@@ -255,22 +255,22 @@ module Dry
         fn = callable.is_a?(String) ? FnContainer[callable] : callable
 
         case fn
-        when Method
+        when ::Method
           yield "#{fn.receiver}.#{fn.name}"
-        when Proc
+        when ::Proc
           path, line = fn.source_location
 
           if line&.zero?
             yield ".#{path}"
           elsif path
             yield "#{path.sub(Dir.pwd + '/', EMPTY_STRING)}:#{line}"
-          elsif fn.lambda?
-            yield '(lambda)'
           else
-            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(\w+)\)>\z/)
+            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/)
 
             if match
-              yield ".#{match[1]}"
+              yield ".#{match[:name]}"
+            elsif fn.lambda?
+              yield '(lambda)'
             else
               yield '(proc)'
             end
