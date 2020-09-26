@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'support/coverage'
+require_relative 'support/warnings'
+require_relative 'support/rspec_options'
 
 require 'pathname'
 
@@ -24,11 +26,6 @@ RSpec.configure do |config|
     Dry::Types.load_extensions(:maybe)
   end
 
-  config.filter_run_when_matching :focus
-  config.disable_monkey_patching!
-
-  config.warnings = true
-
   config.before do
     @types = Dry::Types.container._container.keys
 
@@ -42,10 +39,6 @@ RSpec.configure do |config|
 
   config.after do
     Object.send(:remove_const, Test.remove_constants.name)
-  end
-
-  config.define_derived_metadata do |meta|
-    meta[:aggregate_failures] = true
   end
 
   config.order = 'random'
