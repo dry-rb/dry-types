@@ -4,7 +4,7 @@ require 'bigdecimal'
 require 'date'
 require 'set'
 
-require 'concurrent'
+require 'concurrent/map'
 
 require 'dry-container'
 require 'dry-equalizer'
