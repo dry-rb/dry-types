@@ -24,6 +24,10 @@ module Dry
         Constructor
       end
 
+      def wrapper_type
+        Wrapper
+      end
+
       # Compose two types into a Sum type
       #
       # @param [Type] other
@@ -42,7 +46,7 @@ module Dry
       #
       # @api public
       def optional
-        Types['strict.nil'] | self
+        Types['nil'] | self
       end
 
       # Turn a type into a constrained type
@@ -133,6 +137,10 @@ module Dry
       alias_method :prepend, :constructor
       alias_method :>>, :constructor
       alias_method :<<, :constructor
+
+      def wrap(wrap = nil, **options, &block)
+        wrapper_type.new(with(**options), fn: wrap || block)
+      end
     end
   end
 end

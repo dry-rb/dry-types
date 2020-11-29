@@ -9,6 +9,9 @@ module Dry
         Constructor => :visit_constructor,
         Hash::Constructor => :visit_constructor,
         Array::Constructor => :visit_constructor,
+        Wrapper => :visit_wrapper,
+        Hash::Wrapper => :visit_wrapper,
+        Array::Wrapper => :visit_wrapper,
         Constrained => :visit_constrained,
         Constrained::Coercible => :visit_constrained,
         Hash => :visit_hash,
@@ -69,6 +72,19 @@ module Dry
 
             visit_options(options) do |opts|
               yield "Constructor<#{type} fn=#{fn}#{opts}>"
+            end
+          end
+        end
+      end
+
+      def visit_wrapper(wrapper)
+        visit(wrapper.type) do |type|
+          visit_callable(wrapper.fn) do |fn|
+            options = wrapper.options.dup
+            options.delete(:fn)
+
+            visit_options(options) do |opts|
+              yield "Wrapper<#{type} fn=#{fn}#{opts}>"
             end
           end
         end

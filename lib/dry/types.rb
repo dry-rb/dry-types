@@ -19,6 +19,7 @@ require 'dry/types/type'
 require 'dry/types/printable'
 require 'dry/types/nominal'
 require 'dry/types/constructor'
+require 'dry/types/wrapper'
 require 'dry/types/module'
 
 require 'dry/types/errors'

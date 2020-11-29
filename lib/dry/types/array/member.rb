@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/types/array/constructor'
+require 'dry/types/array/wrapper'
 
 module Dry
   module Types
@@ -117,6 +118,11 @@ module Dry
         # @api private
         def constructor_type
           ::Dry::Types::Array::Constructor
+        end
+
+        # @api private
+        def wrapper_type
+          ::Dry::Types::Array::Wrap
         end
       end
     end

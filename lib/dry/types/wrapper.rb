@@ -9,7 +9,7 @@ module Dry
     # a new value. Coercion is a common use case for constructor types.
     #
     # @api public
-    class Constructor < Nominal
+    class Wrapper < Nominal
       include Dry::Equalizer(:type, :options, inspect: false, immutable: true)
 
       # @return [#call]
@@ -27,7 +27,7 @@ module Dry
       # @api public
       def self.new(input, **options, &block)
         type = input.is_a?(Builder) ? input : Nominal.new(input)
-        super(type, **options, fn: Function[options.fetch(:fn, block)])
+        super(type, **options, fn: options.fetch(:fn, block))
       end
 
       # Instantiate a new constructor type instance
@@ -47,16 +47,15 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_safe(input)
-        coerced = fn.(input) { |output = input| return yield(output) }
-        type.call_safe(coerced) { |output = coerced| yield(output) }
+      def call_safe(input, &block)
+        fn.(type, input, &block)
       end
 
       # @return [Object]
       #
       # @api private
       def call_unsafe(input)
-        type.call_unsafe(fn.(input))
+        fn.(type, input)
       end
 
       # @param [Object] input
@@ -75,55 +74,19 @@ module Dry
         type.try(value, &block)
       end
 
-      # Build a new constructor by appending a block to the coercion function
-      #
-      # @param [#call, nil] new_fn
-      # @param [Hash] options
-      # @param [#call, nil] block
-      #
-      # @return [Constructor]
-      #
-      # @api public
-      def constructor(new_fn = nil, **options, &block)
-        with(**options, fn: fn >> (new_fn || block))
-      end
-      alias_method :append, :constructor
-      alias_method :>>, :constructor
-
-      # @return [Class]
-      #
-      # @api private
-      def constrained_type
-        Constrained::Coercible
-      end
-
       # @see Nominal#to_ast
       #
       # @api public
       def to_ast(meta: true)
-        [:constructor, [type.to_ast(meta: meta), fn.to_ast]]
+        [:wrapper, [type.to_ast(meta: meta), fn]]
       end
-
-      # Build a new constructor by prepending a block to the coercion function
-      #
-      # @param [#call, nil] new_fn
-      # @param [Hash] options
-      # @param [#call, nil] block
-      #
-      # @return [Constructor]
-      #
-      # @api public
-      def prepend(new_fn = nil, **options, &block)
-        with(**options, fn: fn << (new_fn || block))
-      end
-      alias_method :<<, :prepend
 
       # Build a lax type
       #
       # @return [Lax]
       # @api public
       def lax
-        Lax.new(Constructor.new(type.lax, **options))
+        Lax.new(Wrapper.new(type.lax, **options))
       end
 
       # Wrap the type with a proc
@@ -133,6 +96,13 @@ module Dry
       # @api public
       def to_proc
         proc { |value| self.(value) }
+      end
+
+      # @return [Class]
+      #
+      # @api private
+      def constrained_type
+        Constrained::Coercible
       end
 
       private

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/types/hash/constructor'
+require 'dry/types/hash/wrapper'
 
 module Dry
   module Types
