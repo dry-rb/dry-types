@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'setup'
+require_relative "setup"
 
 INVALID_INPUT = {
   name: :John,
-  age: '20',
+  age: "20",
   email: nil
 }.freeze
 

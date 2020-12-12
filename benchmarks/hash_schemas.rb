@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift('lib')
+$LOAD_PATH.unshift("lib")
 
-require 'bundler/setup'
-require 'dry-types'
+require "bundler/setup"
+require "dry-types"
 
 module SchemaBench
   def self.hash_schema(type)
-    Dry::Types['nominal.hash'].public_send(
+    Dry::Types["nominal.hash"].public_send(
       type,
-      email: Dry::Types['nominal.string'],
-      age: Dry::Types['params.integer'],
-      admin: Dry::Types['params.bool'],
-      address: Dry::Types['nominal.hash'].public_send(
+      email: Dry::Types["nominal.string"],
+      age: Dry::Types["params.integer"],
+      admin: Dry::Types["params.bool"],
+      address: Dry::Types["nominal.hash"].public_send(
         type,
-        city: Dry::Types['nominal.string'],
-        street: Dry::Types['nominal.string']
+        city: Dry::Types["nominal.string"],
+        street: Dry::Types["nominal.string"]
       )
     )
   end
@@ -29,14 +29,14 @@ module SchemaBench
       .to_h
 
   INPUT = {
-    email: 'jane@doe.org',
-    age: '20',
-    admin: '1',
-    address: { city: 'NYC', street: 'Street 1/2' }
+    email: "jane@doe.org",
+    age: "20",
+    admin: "1",
+    address: { city: "NYC", street: "Street 1/2" }
   }.freeze
 end
 
-require 'benchmark/ips'
+require "benchmark/ips"
 
 Benchmark.ips do |x|
   SchemaBench::SCHEMAS.each do |schema_type, schema|

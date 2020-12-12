@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
-require 'bigdecimal'
-require 'date'
-require 'set'
+require "bigdecimal"
+require "date"
+require "set"
 
-require 'concurrent/map'
+require "concurrent/map"
 
-require 'dry-container'
-require 'dry-equalizer'
-require 'dry/core/extensions'
-require 'dry/core/constants'
-require 'dry/core/class_attributes'
+require "dry-container"
+require "dry-equalizer"
+require "dry/core/extensions"
+require "dry/core/constants"
+require "dry/core/class_attributes"
 
-require 'dry/types/version'
-require 'dry/types/container'
-require 'dry/types/inflector'
-require 'dry/types/type'
-require 'dry/types/printable'
-require 'dry/types/nominal'
-require 'dry/types/constructor'
-require 'dry/types/module'
+require "dry/types/version"
+require "dry/types/container"
+require "dry/types/inflector"
+require "dry/types/type"
+require "dry/types/printable"
+require "dry/types/nominal"
+require "dry/types/constructor"
+require "dry/types/module"
 
-require 'dry/types/errors'
+require "dry/types/errors"
 
 module Dry
   # Main library namespace
@@ -45,7 +45,7 @@ module Dry
 
     # @api private
     def self.included(*)
-      raise 'Import Dry.Types, not Dry::Types'
+      raise "Import Dry.Types, not Dry::Types"
     end
 
     # Return container with registered built-in type objects
@@ -121,7 +121,7 @@ module Dry
     #
     # @return [String]
     def self.identifier(klass)
-      Inflector.underscore(klass).tr('/', '.')
+      Inflector.underscore(klass).tr("/", ".")
     end
 
     # Cached type map
@@ -137,11 +137,11 @@ module Dry
     def self.const_missing(const)
       underscored = Inflector.underscore(const)
 
-      if container.keys.any? { |key| key.split('.')[0] == underscored }
+      if container.keys.any? { |key| key.split(".")[0] == underscored }
         raise NameError,
-              'dry-types does not define constants for default types. '\
+              "dry-types does not define constants for default types. "\
               'You can access the predefined types with [], e.g. Dry::Types["integer"] '\
-              'or generate a module with types using Dry.Types()'
+              "or generate a module with types using Dry.Types()"
       else
         super
       end
@@ -204,6 +204,6 @@ module Dry
   # rubocop:enable Naming/MethodName
 end
 
-require 'dry/types/core' # load built-in types
-require 'dry/types/extensions'
-require 'dry/types/printer'
+require "dry/types/core" # load built-in types
+require "dry/types/extensions"
+require "dry/types/printer"
