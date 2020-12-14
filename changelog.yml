@@ -1,4 +1,8 @@
 ---
+- version: 1.5.0
+  date: '2020-12-14'
+  added:
+  - Add `#or_nil` to support nullifying invalid values (@ianks)
 - version: 1.4.0
   date: '2020-03-09'
   fixed:
