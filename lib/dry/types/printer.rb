@@ -18,6 +18,7 @@ module Dry
         Array => :visit_array,
         Array::Member => :visit_array_member,
         Lax => :visit_lax,
+        OrNil => :visit_or_nil,
         Enum => :visit_enum,
         Default => :visit_default,
         Default::Callable => :visit_default,
@@ -229,6 +230,12 @@ module Dry
       def visit_lax(lax)
         visit(lax.type) do |type|
           yield "Lax<#{type}>"
+        end
+      end
+
+      def visit_or_nil(or_nil)
+        visit(or_nil.type) do |type|
+          yield "OrNil<#{type}>"
         end
       end
 

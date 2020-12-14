@@ -40,6 +40,10 @@ module Dry
       end
       deprecate(:visit_safe, :visit_lax)
 
+      def visit_or_nil(node)
+        Types::OrNil.new(visit(node))
+      end
+
       def visit_nominal(node)
         type, meta = node
         nominal_name = "nominal.#{Types.identifier(type)}"

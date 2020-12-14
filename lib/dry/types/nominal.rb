@@ -188,6 +188,15 @@ module Dry
         self
       end
 
+      # Return a type which checks the primitive, and returns nil if the check fails 
+      #
+      # @return [OrNil]
+      #
+      # @api public
+      def or_nil
+        constrained(type: primitive).or_nil
+      end
+
       # Wrap the type with a proc
       #
       # @return [Proc]

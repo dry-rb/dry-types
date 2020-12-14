@@ -117,6 +117,16 @@ module Dry
         Lax.new(self)
       end
 
+      # Turn a type into a or_nil type that will rescue from type-errors and
+      # return nil
+      #
+      # @return [OrNil]
+      #
+      # @api public
+      def or_nil
+        OrNil.new(self)
+      end
+
       # Define a constructor for the type
       #
       # @param [#call,nil] constructor
@@ -141,4 +151,5 @@ require 'dry/types/default'
 require 'dry/types/constrained'
 require 'dry/types/enum'
 require 'dry/types/lax'
+require 'dry/types/or_nil'
 require 'dry/types/sum'

@@ -103,6 +103,15 @@ module Dry
           __new__(type.lax).required(false)
         end
 
+        # Turn key into a or_nil type. OrNil types are not strict hence such keys are not required
+        #
+        # @return [OrNil]
+        #
+        # @api public
+        def or_nil
+          __new__(type.or_nil).required(false)
+        end
+
         # Make wrapped type optional
         #
         # @return [Key]
