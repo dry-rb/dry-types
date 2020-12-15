@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry-struct'
-require 'spec_helper'
+require 'dry/struct'
 
 RSpec.describe Dry::Types::Module do
   let(:registry) { Dry::Types.container }

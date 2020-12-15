@@ -36,6 +36,20 @@ RSpec.describe Dry::Types::Constructor do
     end
   end
 
+  describe '.[]' do
+    context 'wrapping constructor' do
+      let(:type) do
+        wrapper = -> input, type { type.(input + 10) * 200 }
+
+        Dry::Types::Constructor[Integer, fn: wrapper]
+      end
+
+      specify do
+        expect(type.(10)).to eql(4000)
+      end
+    end
+  end
+
   describe '#valid?' do
     it 'returns boolean' do
       expect(type.valid?('hello')).to eql(true)
@@ -160,6 +174,38 @@ RSpec.describe Dry::Types::Constructor do
 
       expect(upcaser[:foo]).to eql('FOO')
       expect(upcaser.options[:id]).to be(:upcaser)
+    end
+
+    context 'wrapping' do
+      context 'simple case of wrapping contructor' do
+        let(:type) do
+          super().constructor { |input, type| type.(input + 1) + '8' }
+        end
+
+        it 'wraps' do
+          expect(type.(100)).to eql('1018')
+        end
+      end
+
+      context 'fallback type' do
+        let(:type) do
+          Dry::Types['coercible.integer'].constructor do |input, type, &block|
+            type.(input) { |output| block ? block.(output) : :fallback }
+          end
+        end
+
+        it 'returns coerced value for valid input' do
+          expect(type.('10')).to eql(10)
+        end
+
+        it 'returns fallback value for invalid input' do
+          expect(type.('abc')).to eql(:fallback)
+        end
+
+        it 'returns a different fallback if block provided' do
+          expect(type.('abc') { :failsafe }).to eql(:failsafe)
+        end
+      end
     end
   end
 
@@ -329,8 +375,9 @@ RSpec.describe Dry::Types::Constructor do
       subject(:type) { Dry::Types['nominal.integer'].constructor(Test::IntegerConstructor.new) }
 
       it 'returns string representation of the type' do
-        expect(type.to_s)
-          .to eql('#<Dry::Types[Constructor<Nominal<Integer> fn=Test::IntegerConstructor#call>]>')
+        expect(type.to_s).to eql(
+          '#<Dry::Types[Constructor<Nominal<Integer> fn=Test::IntegerConstructor#call>]>'
+        )
       end
     end
   end

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/types/fn_container'
-require 'dry/types/constructor/function'
+require "dry/types/fn_container"
+require "dry/types/constructor/function"
+require "dry/types/constructor/wrapper"
 
 module Dry
   module Types
@@ -28,6 +29,32 @@ module Dry
       def self.new(input, **options, &block)
         type = input.is_a?(Builder) ? input : Nominal.new(input)
         super(type, **options, fn: Function[options.fetch(:fn, block)])
+      end
+
+      # @param [Builder, Object] input
+      # @param [Hash] options
+      # @param [#call, nil] block
+      #
+      # @api public
+      def self.[](type, fn:, **options)
+        function = Function[fn]
+
+        if function.wrapper?
+          wrapper_type.new(type, fn: function, **options)
+        else
+          new(type, fn: function, **options)
+        end
+      end
+
+      # @api private
+      def self.wrapper_type
+        @wrapper_type ||= begin
+          if self < Wrapper
+            self
+          else
+            const_set(:Wrapping, ::Class.new(self).include(Wrapper))
+          end
+        end
       end
 
       # Instantiate a new constructor type instance
@@ -85,7 +112,13 @@ module Dry
       #
       # @api public
       def constructor(new_fn = nil, **options, &block)
-        with(**options, fn: fn >> (new_fn || block))
+        next_fn = Function[new_fn || block]
+
+        if next_fn.wrapper?
+          self.class.wrapper_type.new(with(**options), fn: next_fn)
+        else
+          with(**options, fn: fn >> next_fn)
+        end
       end
       alias_method :append, :constructor
       alias_method :>>, :constructor
@@ -123,7 +156,7 @@ module Dry
       # @return [Lax]
       # @api public
       def lax
-        Lax.new(Constructor.new(type.lax, **options))
+        Lax.new(constructor_type[type.lax, **options])
       end
 
       # Wrap the type with a proc
@@ -157,8 +190,8 @@ module Dry
         if type.respond_to?(method)
           response = type.public_send(method, *args, &block)
 
-          if response.is_a?(Type) && type.class == response.class
-            response.constructor_type.new(response, **options)
+          if response.is_a?(Type) && type.class.equal?(response.class)
+            response.constructor_type[response, **options]
           else
             response
           end

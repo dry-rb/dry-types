@@ -116,6 +116,24 @@ RSpec.describe Dry::Types::Constrained do
     end
   end
 
+  context 'with a wrapping constructor' do
+    subject(:type) do
+      Dry::Types['coercible.integer'].constructor { |input, t|
+        t.(input + '0') + 10
+      }.constrained(gt: 300)
+    end
+
+    example 'success' do
+      expect(type.('30')).to eql(310)
+      expect(type.valid?('30')).to be(true)
+    end
+
+    example 'failure' do
+      expect(type.('20') { :fallback }).to eql(:fallback)
+      expect(type.valid?('20')).to be(false)
+    end
+  end
+
   context 'with an optional sum type' do
     subject(:type) do
       Dry::Types['nominal.string'].constrained(size: 4).optional

@@ -7,8 +7,6 @@ module Dry
       MAPPING = {
         Nominal => :visit_nominal,
         Constructor => :visit_constructor,
-        Hash::Constructor => :visit_constructor,
-        Array::Constructor => :visit_constructor,
         Constrained => :visit_constrained,
         Constrained::Coercible => :visit_constrained,
         Hash => :visit_hash,
@@ -34,7 +32,9 @@ module Dry
 
       def visit(type, &block)
         print_with = MAPPING.fetch(type.class) do
-          if type.is_a?(Type)
+          if type.class < Constructor
+            :visit_constructor
+          elsif type.is_a?(Type)
             return yield type.inspect
           else
             raise ArgumentError, "Do not know how to print #{type.class}"

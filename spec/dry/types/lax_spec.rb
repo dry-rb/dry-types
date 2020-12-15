@@ -40,6 +40,22 @@ RSpec.describe Dry::Types::Nominal, '#lax' do
       expect(type.key(:age)).to be_a(Dry::Types::Schema::Key)
       expect(type.key(:age).('23')).to eql(23)
     end
+
+    context "wrapping constructors" do
+      let(:age) do
+        Dry::Types["coercible.integer"].constructor do |input, type|
+          type.(input) + 1
+        end
+      end
+
+      subject(:type) do
+        Dry::Types["params.hash"].schema(age: age, active: "params.bool").lax
+      end
+
+      it "applies its types" do
+        expect(type[age: "23", active: "f"]).to eql(age: 24, active: false)
+      end
+    end
   end
 
   context 'with an array' do

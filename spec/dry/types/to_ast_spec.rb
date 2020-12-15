@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe Dry::Types, '#to_ast' do
   let(:fn) { Kernel.method(:String) }
 

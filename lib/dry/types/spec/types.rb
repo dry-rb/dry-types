@@ -127,6 +127,18 @@ RSpec.shared_examples_for 'a constrained type' do |options = { inputs: Object.ne
       end
     end
   end
+
+  describe "#constructor" do
+    let(:wrapping_constructor) do
+      type.constructor { |input, type| type.(input) { fallback } }
+    end
+
+    it "can be wrapped" do
+      Array(inputs).each do |input|
+        expect(wrapping_constructor.(input)).to be(fallback)
+      end
+    end
+  end
 end
 
 RSpec.shared_examples_for 'a nominal type' do |inputs: Object.new|
