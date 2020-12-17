@@ -188,7 +188,7 @@ module Dry
         self
       end
 
-      # Return a type which checks the primitive, and returns nil if the check fails 
+      # Return a type which checks the primitive, and returns nil if the check fails
       #
       # @return [OrNil]
       #

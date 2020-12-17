@@ -4,7 +4,7 @@ require "dry/types/decorator"
 
 module Dry
   module Types
-    # Lax types rescue from type-related errors when constructors fail and return nil
+    # OrNil types rescue from type-related errors when constructors fail and return nil
     #
     # @api public
     class OrNil

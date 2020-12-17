@@ -151,5 +151,5 @@ require 'dry/types/default'
 require 'dry/types/constrained'
 require 'dry/types/enum'
 require 'dry/types/lax'
-require 'dry/types/or_nil'
+require "dry/types/or_nil"
 require 'dry/types/sum'
