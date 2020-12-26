@@ -59,7 +59,7 @@ module Dry
       # Turn a type into a type with a default value
       #
       # @param [Object] input
-      # @param [Hash] options
+      # @option [Boolean] shared Whether it's safe to share the value across type applications
       # @param [#call,nil] block
       #
       # @raise [ConstraintError]
@@ -69,8 +69,8 @@ module Dry
       # @api public
       def default(input = Undefined, options = EMPTY_HASH, &block)
         unless input.frozen? || options[:shared]
-          where = Dry::Core::Deprecations::STACK.()
-          Dry::Core::Deprecations.warn(
+          where = Core::Deprecations::STACK.()
+          Core::Deprecations.warn(
             "#{input.inspect} is mutable."\
             ' Be careful: types will return the same instance of the default'\
             ' value every time. Call `.freeze` when setting the default'\
@@ -80,12 +80,16 @@ module Dry
           )
         end
 
-        value = input.equal?(Undefined) ? block : input
+        value = Undefined.default(input, block)
+        type = Default[value].new(self, value)
 
-        if value.respond_to?(:call) || valid?(value)
-          Default[value].new(self, value)
+        if !type.callable? && !valid?(value)
+          raise ConstraintError.new(
+            "default value #{value.inspect} violates constraints",
+            value
+          )
         else
-          raise ConstraintError.new("default value #{value.inspect} violates constraints", value)
+          type
         end
       end
 
@@ -133,6 +137,50 @@ module Dry
       alias_method :prepend, :constructor
       alias_method :>>, :constructor
       alias_method :<<, :constructor
+
+      # Use the given value on type mismatch
+      #
+      # @param [Object] value
+      # @option [Boolean] shared Whether it's safe to share the value across type applications
+      # @param [#call,nil] fallback
+      #
+      # @return [Constructor]
+      #
+      # @api public
+      def fallback(value = Undefined, shared: false, &_fallback)
+        if Undefined.equal?(value) && !block_given?
+          raise ::ArgumentError, "fallback value or a block must be given"
+        end
+
+        if !block_given? && !valid?(value)
+          raise ConstraintError.new(
+            "fallback value #{value.inspect} violates constraints",
+            value
+          )
+        end
+
+        unless value.frozen? || shared
+          where = Core::Deprecations::STACK.()
+          Core::Deprecations.warn(
+            "#{value.inspect} is mutable."\
+            " Be careful: types will return the same instance of the fallback"\
+            " value every time. Call `.freeze` when setting the fallback"\
+            " or pass `shared: true` to discard this warning."\
+            "\n#{where}",
+            tag: :'dry-types'
+          )
+        end
+
+        constructor do |input, type, &_block|
+          type.(input) do |output = input|
+            if block_given?
+              yield(output)
+            else
+              value
+            end
+          end
+        end
+      end
     end
   end
 end

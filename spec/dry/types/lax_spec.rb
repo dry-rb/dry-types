@@ -42,18 +42,30 @@ RSpec.describe Dry::Types::Nominal, '#lax' do
     end
 
     context "wrapping constructors" do
-      let(:age) do
-        Dry::Types["coercible.integer"].constructor do |input, type|
-          type.(input) + 1
+      subject(:type) do
+        Dry::Types["hash"].schema(age: age, active: "params.bool").lax
+      end
+
+      context "modification" do
+        let(:age) do
+          Dry::Types["coercible.integer"].constructor do |input, type|
+            type.(input) + 1
+          end
+        end
+
+        it "applies its types" do
+          expect(type[age: "23", active: "f"]).to eql(age: 24, active: false)
         end
       end
 
-      subject(:type) do
-        Dry::Types["params.hash"].schema(age: age, active: "params.bool").lax
-      end
+      context "fallback" do
+        let(:age) do
+          Dry::Types["integer"].constrained(gteq: 18).fallback(18).meta(foo: :bar)
+        end
 
-      it "applies its types" do
-        expect(type[age: "23", active: "f"]).to eql(age: 24, active: false)
+        it "applies its types" do
+          expect(type[age: "aa", active: "f"]).to eql(age: 18, active: false)
+        end
       end
     end
   end
