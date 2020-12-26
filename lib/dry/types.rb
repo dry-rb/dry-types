@@ -6,8 +6,7 @@ require "set"
 
 require "concurrent/map"
 
-require "dry-container"
-require "dry-equalizer"
+require "dry/container"
 require "dry/core/extensions"
 require "dry/core/constants"
 require "dry/core/class_attributes"
