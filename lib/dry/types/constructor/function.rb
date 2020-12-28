@@ -34,6 +34,10 @@ module Dry
               if public
                 ::Class.new(PublicCall) do
                   include PublicCall.call_interface(method, safe)
+
+                  define_method(:__to_s__) do
+                    "#<PublicCall for :#{method}>"
+                  end
                 end
               elsif safe
                 PrivateCall
@@ -116,6 +120,20 @@ module Dry
           end
         end
 
+        class Wrapper < Function
+          # @return [Object]
+          def call(input, type, &block)
+            @fn.(input, type, &block)
+          rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
+            CoercionError.handle(e, &block)
+          end
+          alias_method :[], :call
+
+          def arity
+            2
+          end
+        end
+
         # Choose or build specialized invokation code for a callable
         #
         # @param [#call] fn
@@ -125,6 +143,8 @@ module Dry
 
           if fn.is_a?(Function)
             fn
+          elsif fn.respond_to?(:arity) && fn.arity.equal?(2)
+            Wrapper.new(fn)
           elsif fn.is_a?(::Method)
             MethodCall[fn, yields_block?(fn)]
           elsif yields_block?(fn)
@@ -159,6 +179,15 @@ module Dry
           @fn.(input, &block)
         end
         alias_method :[], :call
+
+        # @return [Integer]
+        def arity
+          1
+        end
+
+        def wrapper?
+          arity.equal?(2)
+        end
 
         # @return [Array]
         def to_ast

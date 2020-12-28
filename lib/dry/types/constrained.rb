@@ -29,11 +29,9 @@ module Dry
         @rule = options.fetch(:rule)
       end
 
-      # @api private
-      #
       # @return [Object]
       #
-      # @api public
+      # @api private
       def call_unsafe(input)
         result = rule.(input)
 
@@ -44,11 +42,9 @@ module Dry
         end
       end
 
-      # @api private
-      #
       # @return [Object]
       #
-      # @api public
+      # @api private
       def call_safe(input, &block)
         if rule[input]
           type.call_safe(input, &block)

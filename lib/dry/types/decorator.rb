@@ -100,7 +100,7 @@ module Dry
       #
       # @api private
       def __new__(type)
-        self.class.new(type, *@__args__[1..-1], **@options)
+        self.class.new(type, *@__args__.drop(1), **@options)
       end
     end
   end

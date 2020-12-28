@@ -363,5 +363,20 @@ RSpec.describe Dry::Types::Compiler, '#call' do
       expect(type).to eql(source)
       expect(type.('1')).to eql(1)
     end
+
+    example "wrapping constructor" do
+      fn = lambda do |input, type, &block|
+        300 + type.("#{input}0", &block)
+      end
+
+      source = Dry::Types["coercible.integer"].constructor(fn)
+
+      ast = source.to_ast
+
+      type = compiler.(ast)
+
+      expect(type['123']).to eql(1530)
+      expect(type).to eql(source)
+    end
   end
 end
