@@ -38,7 +38,8 @@ jobs:
       COVERAGE_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
       DRY_LOGIC_FROM_MASTER: "${{matrix.dry_logic_from_master}}"
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout
+      uses: actions/checkout@v1
     - name: Install package dependencies
       run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
     - name: Set up Ruby
