@@ -95,13 +95,7 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        opts = if RUBY_VERSION >= "2.5"
-                 options.slice(:type_transform_fn)
-               else
-                 options.select { |k, _| k == :type_transform_fn }
-               end
-
-        [:hash, [opts, meta ? self.meta : EMPTY_HASH]]
+        [:hash, [options.slice(:type_transform_fn), meta ? self.meta : EMPTY_HASH]]
       end
 
       private

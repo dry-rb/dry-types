@@ -145,18 +145,10 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        if RUBY_VERSION >= "2.5"
-          opts = options.slice(:key_transform_fn, :type_transform_fn, :strict)
-        else
-          opts = options.select { |k, _|
-            k == :key_transform_fn || k == :type_transform_fn || k == :strict
-          }
-        end
-
         [
           :schema,
           [keys.map { |key| key.to_ast(meta: meta) },
-           opts,
+           options.slice(:key_transform_fn, :type_transform_fn, :strict),
            meta ? self.meta : EMPTY_HASH]
         ]
       end
