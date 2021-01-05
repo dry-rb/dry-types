@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/types/decorator'
+require "dry/types/decorator"
 
 module Dry
   module Types
@@ -58,8 +58,8 @@ module Dry
 
       # @api private
       def default(*)
-        raise '.enum(*values).default(value) is not supported. Call '\
-              '.default(value).enum(*values) instead'
+        raise ".enum(*values).default(value) is not supported. Call "\
+              ".default(value).enum(*values) instead"
       end
 
       # Check whether a value is in the enum

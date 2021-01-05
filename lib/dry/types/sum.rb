@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/types/options'
-require 'dry/types/meta'
+require "dry/types/options"
+require "dry/types/meta"
 
 module Dry
   module Types
@@ -50,7 +50,7 @@ module Dry
       #
       # @api public
       def name
-        [left, right].map(&:name).join(' | ')
+        [left, right].map(&:name).join(" | ")
       end
 
       # @return [false]

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/types/fn_container'
+require "dry/types/fn_container"
 
 module Dry
   module Types
@@ -145,7 +145,7 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        if RUBY_VERSION >= '2.5'
+        if RUBY_VERSION >= "2.5"
           opts = options.slice(:key_transform_fn, :type_transform_fn, :strict)
         else
           opts = options.select { |k, _|
@@ -190,7 +190,7 @@ module Dry
       def with_key_transform(proc = nil, &block)
         fn = proc || block
 
-        raise ArgumentError, 'a block or callable argument is required' if fn.nil?
+        raise ArgumentError, "a block or callable argument is required" if fn.nil?
 
         handle = Dry::Types::FnContainer.register(fn)
         with(key_transform_fn: handle)

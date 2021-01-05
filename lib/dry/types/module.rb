@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/core/deprecations'
-require 'dry/types/builder_methods'
+require "dry/core/deprecations"
+require "dry/types/builder_methods"
 
 module Dry
   module Types
@@ -31,7 +31,7 @@ module Dry
             base.instance_exec(const_get(:Nominal, false)) do |nominal|
               extend Dry::Core::Deprecations[:'dry-types']
               const_set(:Definition, nominal)
-              deprecate_constant(:Definition, message: 'Nominal')
+              deprecate_constant(:Definition, message: "Nominal")
             end
           end
         end
@@ -69,7 +69,7 @@ module Dry
       def registry_tree
         @registry_tree ||= @registry.keys.each_with_object({}) { |key, tree|
           type = @registry[key]
-          *modules, const_name = key.split('.').map { |part|
+          *modules, const_name = key.split(".").map { |part|
             Inflector.camelize(part).to_sym
           }
           next if modules.empty?
@@ -87,14 +87,14 @@ module Dry
         referenced.concat(aliases.keys)
 
         known = @registry.keys.map { |k|
-          ns, *path = k.split('.')
+          ns, *path = k.split(".")
           ns.to_sym unless path.empty?
         }.compact.uniq
 
         (referenced.uniq - known).each do |name|
           raise ArgumentError,
                 "#{name.inspect} is not a known type namespace. "\
-                "Supported options are #{known.map(&:inspect).join(', ')}"
+                "Supported options are #{known.map(&:inspect).join(", ")}"
         end
       end
 

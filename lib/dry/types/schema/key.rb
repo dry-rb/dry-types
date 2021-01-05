@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/core/equalizer'
-require 'dry/core/deprecations'
+require "dry/core/equalizer"
+require "dry/core/deprecations"
 
 module Dry
   module Types
@@ -136,8 +136,8 @@ module Dry
             super
           else
             self.class.warn(
-              'Using meta for making schema keys is deprecated, ' \
-              'please use .omittable or .required(false) instead' \
+              "Using meta for making schema keys is deprecated, " \
+              "please use .omittable or .required(false) instead" \
               "\n" + Core::Deprecations::STACK.()
             )
             super.required(!data[:omittable])

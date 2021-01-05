@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/types/constructor'
+require "dry/types/constructor"
 
 module Dry
   module Types

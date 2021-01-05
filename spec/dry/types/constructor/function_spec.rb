@@ -1,46 +1,46 @@
 # frozen_string_literal: true
 
 RSpec.describe Dry::Types::Constructor::Function do
-  describe '.[]' do
-    shared_examples 'well-behaving coercion function' do
-      it 'applies constructor' do
-        expect(fun.('1')).to eql(1)
+  describe ".[]" do
+    shared_examples "well-behaving coercion function" do
+      it "applies constructor" do
+        expect(fun.("1")).to eql(1)
       end
 
-      it 'rescues errors and re-throws them as coercion errors' do
-        expect { fun.('a') }.to raise_error(Dry::Types::CoercionError)
+      it "rescues errors and re-throws them as coercion errors" do
+        expect { fun.("a") }.to raise_error(Dry::Types::CoercionError)
       end
 
-      it 'extends accepts a fallback block' do
-        expect(fun.('a') { :fallback }).to be(:fallback)
+      it "extends accepts a fallback block" do
+        expect(fun.("a") { :fallback }).to be(:fallback)
       end
     end
 
-    context 'proc' do
-      include_examples 'well-behaving coercion function' do
+    context "proc" do
+      include_examples "well-behaving coercion function" do
         subject(:fun) { described_class[proc { |value| Integer(value) }] }
       end
     end
 
-    context 'lambda' do
-      include_examples 'well-behaving coercion function' do
+    context "lambda" do
+      include_examples "well-behaving coercion function" do
         subject(:fun) { described_class[->(value) { Integer(value) }] }
       end
     end
 
-    context 'method' do
-      include_examples 'well-behaving coercion function' do
+    context "method" do
+      include_examples "well-behaving coercion function" do
         subject(:fun) { described_class[Kernel.method(:Integer)] }
       end
     end
 
-    context 'private method' do
-      include_examples 'well-behaving coercion function' do
+    context "private method" do
+      include_examples "well-behaving coercion function" do
         subject(:fun) { described_class[1.method(:Integer)] }
       end
     end
 
-    context 'method with fallback' do
+    context "method with fallback" do
       let(:obj) do
         obj = Object.new
 
@@ -57,19 +57,19 @@ RSpec.describe Dry::Types::Constructor::Function do
         described_class[obj.method(:coerce)]
       end
 
-      include_examples 'well-behaving coercion function'
+      include_examples "well-behaving coercion function"
 
-      context 'private method' do
+      context "private method" do
         before do
           obj.singleton_class.send(:private, :coerce)
         end
 
-        include_examples 'well-behaving coercion function'
+        include_examples "well-behaving coercion function"
       end
     end
 
-    context 'callable object without fallback' do
-      include_examples 'well-behaving coercion function' do
+    context "callable object without fallback" do
+      include_examples "well-behaving coercion function" do
         subject(:fun) do
           fn = Class.new {
             def call(value)
@@ -82,8 +82,8 @@ RSpec.describe Dry::Types::Constructor::Function do
       end
     end
 
-    context 'callable object with fallback' do
-      include_examples 'well-behaving coercion function' do
+    context "callable object with fallback" do
+      include_examples "well-behaving coercion function" do
         subject(:fun) do
           fn = Class.new {
             def call(value, &block)
@@ -99,10 +99,10 @@ RSpec.describe Dry::Types::Constructor::Function do
     end
   end
 
-  describe '#to_ast' do
+  describe "#to_ast" do
     subject(:function) { described_class[fn] }
 
-    context 'proc' do
+    context "proc" do
       let(:fn) { proc { |value| Integer(value) } }
 
       specify do
@@ -110,15 +110,15 @@ RSpec.describe Dry::Types::Constructor::Function do
       end
     end
 
-    context 'method call' do
-      let(:fn) { 'foo'.method(:Integer) }
+    context "method call" do
+      let(:fn) { "foo".method(:Integer) }
 
       specify do
-        expect(function.to_ast).to eql([:method, 'foo', :Integer])
+        expect(function.to_ast).to eql([:method, "foo", :Integer])
       end
     end
 
-    context 'callable' do
+    context "callable" do
       let(:fn) do
         Class.new {
           def call(input)
@@ -132,7 +132,7 @@ RSpec.describe Dry::Types::Constructor::Function do
       end
     end
 
-    context 'globally accessible receiver' do
+    context "globally accessible receiver" do
       let(:fn) { Kernel.method(:Integer) }
 
       specify do
@@ -141,7 +141,7 @@ RSpec.describe Dry::Types::Constructor::Function do
     end
   end
 
-  describe '#>>' do
+  describe "#>>" do
     let(:power_2) { described_class[-> x { x**2 }] }
 
     let(:mult_2) { described_class[-> x { x + 1 }] }
@@ -149,13 +149,13 @@ RSpec.describe Dry::Types::Constructor::Function do
     subject(:comp_a) { power_2 >> mult_2 }
     subject(:comp_b) { mult_2 >> power_2 }
 
-    it 'composes two functions' do
+    it "composes two functions" do
       expect(comp_a.(3)).to eql(10)
       expect(comp_b.(3)).to eql(16)
     end
   end
 
-  describe '#<<' do
+  describe "#<<" do
     let(:power_2) { described_class[-> x { x**2 }] }
 
     let(:mult_2) { described_class[-> x { x + 1 }] }
@@ -163,7 +163,7 @@ RSpec.describe Dry::Types::Constructor::Function do
     subject(:comp_a) { power_2 << mult_2 }
     subject(:comp_b) { mult_2 << power_2 }
 
-    it 'composes two functions' do
+    it "composes two functions" do
       expect(comp_a.(3)).to eql(16)
       expect(comp_b.(3)).to eql(10)
     end

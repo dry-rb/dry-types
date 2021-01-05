@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/core/cache'
-require 'dry/types/predicate_registry'
+require "dry/core/cache"
+require "dry/types/predicate_registry"
 
 module Dry
   module Types
@@ -46,7 +46,7 @@ module Dry
 
         # @api private
         def infer_predicate(type)
-          [TYPE_TO_PREDICATE.fetch(type) { :"#{type.name.split('::').last.downcase}?" }]
+          [TYPE_TO_PREDICATE.fetch(type) { :"#{type.name.split("::").last.downcase}?" }]
         end
 
         # @api private

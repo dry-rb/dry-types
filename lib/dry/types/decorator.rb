@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/types/options'
+require "dry/types/options"
 
 module Dry
   module Types

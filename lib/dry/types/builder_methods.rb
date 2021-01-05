@@ -4,7 +4,6 @@ module Dry
   module Types
     # Common API for building type objects in a convenient way
     #
-    # rubocop:disable Naming/MethodName
     #
     # @api public
     module BuilderMethods
@@ -133,7 +132,7 @@ module Dry
       #
       # @return [Dry::Types::Contrained]
       def Interface(*methods)
-        methods.reduce(Types['nominal.any']) do |type, method|
+        methods.reduce(Types["nominal.any"]) do |type, method|
           type.constrained(respond_to: method)
         end
       end

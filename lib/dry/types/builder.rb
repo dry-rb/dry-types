@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/core/deprecations'
+require "dry/core/deprecations"
 
 module Dry
   module Types
@@ -42,7 +42,7 @@ module Dry
       #
       # @api public
       def optional
-        Types['strict.nil'] | self
+        Types["strict.nil"] | self
       end
 
       # Turn a type into a constrained type
@@ -72,9 +72,9 @@ module Dry
           where = Core::Deprecations::STACK.()
           Core::Deprecations.warn(
             "#{input.inspect} is mutable."\
-            ' Be careful: types will return the same instance of the default'\
-            ' value every time. Call `.freeze` when setting the default'\
-            ' or pass `shared: true` to discard this warning.'\
+            " Be careful: types will return the same instance of the default"\
+            " value every time. Call `.freeze` when setting the default"\
+            " or pass `shared: true` to discard this warning."\
             "\n#{where}",
             tag: :'dry-types'
           )
@@ -185,8 +185,8 @@ module Dry
   end
 end
 
-require 'dry/types/default'
-require 'dry/types/constrained'
-require 'dry/types/enum'
-require 'dry/types/lax'
-require 'dry/types/sum'
+require "dry/types/default"
+require "dry/types/constrained"
+require "dry/types/enum"
+require "dry/types/lax"
+require "dry/types/sum"

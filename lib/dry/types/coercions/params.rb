@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'bigdecimal'
-require 'bigdecimal/util'
+require "bigdecimal"
+require "bigdecimal/util"
 
 module Dry
   module Types
@@ -112,7 +112,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_decimal(input, &block)
+        def self.to_decimal(input, &_block)
           to_float(input) do
             if block_given?
               return yield

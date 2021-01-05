@@ -25,7 +25,7 @@ module Dry
       }
 
       def call(type)
-        output = ''.dup
+        output = "".dup
         visit(type) { |str| output << str }
         "#<Dry::Types[#{output}]>"
       end
@@ -44,7 +44,7 @@ module Dry
       end
 
       def visit_any(_)
-        yield 'Any'
+        yield "Any"
       end
 
       def visit_array(type)
@@ -88,11 +88,11 @@ module Dry
       def visit_schema(schema)
         options = schema.options.dup
         size = schema.count
-        key_fn_str = ''
-        type_fn_str = ''
-        strict_str = ''
+        key_fn_str = ""
+        type_fn_str = ""
+        strict_str = ""
 
-        strict_str = 'strict ' if options.delete(:strict)
+        strict_str = "strict " if options.delete(:strict)
 
         if key_fn = options.delete(:key_transform_fn)
           visit_callable(key_fn) do |fn|
@@ -119,7 +119,7 @@ module Dry
           else
             yield header.dup << keys.map { |key|
               visit(key) { |type| type }
-            }.join(' ') << '}>'
+            }.join(" ") << "}>"
           end
         end
       end
@@ -194,12 +194,12 @@ module Dry
 
           visit_options(options) do |opts|
             if mapping == enum.inverted_mapping
-              values = mapping.values.map(&:inspect).join(', ')
+              values = mapping.values.map(&:inspect).join(", ")
               yield "Enum<#{type} values={#{values}}#{opts}>"
             else
               mapping_str = mapping.map { |key, value|
                 "#{key.inspect}=>#{value.inspect}"
-              }.join(', ')
+              }.join(", ")
               yield "Enum<#{type} mapping={#{mapping_str}}#{opts}>"
             end
           end
@@ -234,7 +234,7 @@ module Dry
 
       def visit_hash(hash)
         options = hash.options.dup
-        type_fn_str = ''
+        type_fn_str = ""
 
         if type_fn = options.delete(:type_transform_fn)
           visit_callable(type_fn) do |fn|
@@ -244,7 +244,7 @@ module Dry
 
         visit_options(options, hash.meta) do |opts|
           if opts.empty? && type_fn_str.empty?
-            yield 'Hash'
+            yield "Hash"
           else
             yield "Hash<#{type_fn_str}#{opts}>"
           end
@@ -263,16 +263,16 @@ module Dry
           if line&.zero?
             yield ".#{path}"
           elsif path
-            yield "#{path.sub(Dir.pwd + '/', EMPTY_STRING)}:#{line}"
+            yield "#{path.sub(Dir.pwd + "/", EMPTY_STRING)}:#{line}"
           else
             match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/)
 
             if match
               yield ".#{match[:name]}"
             elsif fn.lambda?
-              yield '(lambda)'
+              yield "(lambda)"
             else
-              yield '(proc)'
+              yield "(proc)"
             end
           end
         else
@@ -288,9 +288,9 @@ module Dry
 
       def visit_options(options, meta = EMPTY_HASH)
         if options.empty? && meta.empty?
-          yield ''
+          yield ""
         else
-          opts = options.empty? ? '' : " options=#{options.inspect}"
+          opts = options.empty? ? "" : " options=#{options.inspect}"
 
           if meta.empty?
             yield opts
@@ -304,7 +304,7 @@ module Dry
               end
             end
 
-            yield "#{opts} meta={#{values.join(', ')}}"
+            yield "#{opts} meta={#{values.join(", ")}}"
           end
         end
       end

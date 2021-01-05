@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'date'
-require 'bigdecimal'
-require 'bigdecimal/util'
-require 'time'
+require "date"
+require "bigdecimal"
+require "bigdecimal/util"
+require "time"
 
 module Dry
   module Types
@@ -38,7 +38,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_decimal(input, &block)
+        def self.to_decimal(input, &_block)
           if input.is_a?(::Float)
             input.to_d
           else

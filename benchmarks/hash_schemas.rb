@@ -32,7 +32,7 @@ module SchemaBench
     email: "jane@doe.org",
     age: "20",
     admin: "1",
-    address: { city: "NYC", street: "Street 1/2" }
+    address: {city: "NYC", street: "Street 1/2"}
   }.freeze
 end
 

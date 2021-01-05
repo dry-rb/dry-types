@@ -21,7 +21,7 @@ module Dry
     #
     # @api public
     class Map < Nominal
-      def initialize(_primitive, key_type: Types['any'], value_type: Types['any'], meta: EMPTY_HASH)
+      def initialize(_primitive, key_type: Types["any"], value_type: Types["any"], meta: EMPTY_HASH)
         super(_primitive, key_type: key_type, value_type: value_type, meta: meta)
       end
 
@@ -43,7 +43,7 @@ module Dry
       #
       # @api public
       def name
-        'Map'
+        "Map"
       end
 
       # @param [Hash] hash

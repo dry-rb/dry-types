@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/monads/maybe'
-require 'dry/types/decorator'
+require "dry/monads/maybe"
+require "dry/types/decorator"
 
 module Dry
   module Types
@@ -79,7 +79,7 @@ module Dry
       # @api public
       def default(value)
         if value.nil?
-          raise ArgumentError, 'nil cannot be used as a default of a maybe type'
+          raise ArgumentError, "nil cannot be used as a default of a maybe type"
         else
           super
         end
@@ -93,7 +93,7 @@ module Dry
       #
       # @api public
       def maybe
-        Maybe.new(Types['nil'] | self)
+        Maybe.new(Types["nil"] | self)
       end
     end
 

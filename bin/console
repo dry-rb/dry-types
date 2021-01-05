@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'dry/types'
+require "bundler/setup"
+require "dry/types"
 
 Dry::Types.load_extensions(:maybe)
 
@@ -11,10 +11,10 @@ module Types
 end
 
 begin
-  require 'pry-byebug'
+  require "pry-byebug"
   binding.pry
 rescue LoadError
-  require 'irb'
+  require "irb"
   binding.irb
 end
 

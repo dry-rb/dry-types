@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/core/deprecations'
-require 'dry/types/decorator'
+require "dry/core/deprecations"
+require "dry/types/decorator"
 
 module Dry
   module Types

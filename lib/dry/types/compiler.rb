@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/core/deprecations'
+require "dry/core/deprecations"
 
 module Dry
   module Types
@@ -63,37 +63,37 @@ module Dry
       def visit_array(node)
         member, meta = node
         member = member.is_a?(Class) ? member : visit(member)
-        registry['nominal.array'].of(member).meta(meta)
+        registry["nominal.array"].of(member).meta(meta)
       end
 
       def visit_hash(node)
         opts, meta = node
-        registry['nominal.hash'].with(**opts, meta: meta)
+        registry["nominal.hash"].with(**opts, meta: meta)
       end
 
       def visit_schema(node)
         keys, options, meta = node
-        registry['nominal.hash'].schema(keys.map { |key| visit(key) }).with(**options, meta: meta)
+        registry["nominal.hash"].schema(keys.map { |key| visit(key) }).with(**options, meta: meta)
       end
 
       def visit_json_hash(node)
         keys, meta = node
-        registry['json.hash'].schema(keys.map { |key| visit(key) }, meta)
+        registry["json.hash"].schema(keys.map { |key| visit(key) }, meta)
       end
 
       def visit_json_array(node)
         member, meta = node
-        registry['json.array'].of(visit(member)).meta(meta)
+        registry["json.array"].of(visit(member)).meta(meta)
       end
 
       def visit_params_hash(node)
         keys, meta = node
-        registry['params.hash'].schema(keys.map { |key| visit(key) }, meta)
+        registry["params.hash"].schema(keys.map { |key| visit(key) }, meta)
       end
 
       def visit_params_array(node)
         member, meta = node
-        registry['params.array'].of(visit(member)).meta(meta)
+        registry["params.array"].of(visit(member)).meta(meta)
       end
 
       def visit_key(node)
@@ -108,11 +108,11 @@ module Dry
 
       def visit_map(node)
         key_type, value_type, meta = node
-        registry['nominal.hash'].map(visit(key_type), visit(value_type)).meta(meta)
+        registry["nominal.hash"].map(visit(key_type), visit(value_type)).meta(meta)
       end
 
       def visit_any(meta)
-        registry['any'].meta(meta)
+        registry["any"].meta(meta)
       end
 
       def compile_fn(fn)

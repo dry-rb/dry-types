@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'concurrent/map'
+require "concurrent/map"
 
 module Dry
   module Types
@@ -139,7 +139,7 @@ module Dry
         # @param [#call] fn
         # @return [Function]
         def self.[](fn)
-          raise ::ArgumentError, 'Missing constructor block' if fn.nil?
+          raise ::ArgumentError, "Missing constructor block" if fn.nil?
 
           if fn.is_a?(Function)
             fn

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/types/decorator'
+require "dry/types/decorator"
 
 module Dry
   module Types

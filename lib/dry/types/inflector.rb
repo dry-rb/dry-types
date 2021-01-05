@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/inflector'
+require "dry/inflector"
 
 module Dry
   module Types

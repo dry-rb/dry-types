@@ -10,7 +10,7 @@ module Dry
     # @api public
     class AnyClass < Nominal
       def self.name
-        'Any'
+        "Any"
       end
 
       # @api private
@@ -22,7 +22,7 @@ module Dry
       #
       # @api public
       def name
-        'Any'
+        "Any"
       end
 
       # @param [Hash] new_options

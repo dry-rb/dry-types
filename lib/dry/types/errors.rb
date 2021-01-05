@@ -56,7 +56,7 @@ module Dry
 
       # @return string
       def message
-        errors.map(&:message).join(', ')
+        errors.map(&:message).join(", ")
       end
 
       # @return [Array]

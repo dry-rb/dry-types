@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/types/hash/constructor'
+require "dry/types/hash/constructor"
 
 module Dry
   module Types
@@ -8,7 +8,7 @@ module Dry
     #
     # @api public
     class Hash < Nominal
-      NOT_REQUIRED = { required: false }.freeze
+      NOT_REQUIRED = {required: false}.freeze
 
       # @overload schema(type_map, meta = EMPTY_HASH)
       #   @param [{Symbol => Dry::Types::Nominal}] type_map
@@ -50,8 +50,8 @@ module Dry
 
       # @api private
       def weak(*)
-        raise 'Support for old hash schemas was removed, please refer to the CHANGELOG '\
-              'on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/master/CHANGELOG.md'
+        raise "Support for old hash schemas was removed, please refer to the CHANGELOG "\
+              "on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/master/CHANGELOG.md"
       end
       alias_method :permissive, :weak
       alias_method :strict, :weak
@@ -69,7 +69,7 @@ module Dry
       def with_type_transform(proc = nil, &block)
         fn = proc || block
 
-        raise ArgumentError, 'a block or callable argument is required' if fn.nil?
+        raise ArgumentError, "a block or callable argument is required" if fn.nil?
 
         handle = Dry::Types::FnContainer.register(fn)
         with(type_transform_fn: handle)
@@ -95,7 +95,7 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        opts = if RUBY_VERSION >= '2.5'
+        opts = if RUBY_VERSION >= "2.5"
                  options.slice(:type_transform_fn)
                else
                  options.select { |k, _| k == :type_transform_fn }
@@ -129,7 +129,7 @@ module Dry
 
       # @api private
       def key_name(key)
-        if key.to_s.end_with?('?')
+        if key.to_s.end_with?("?")
           [key.to_s.chop.to_sym, NOT_REQUIRED]
         else
           [key, EMPTY_HASH]
@@ -139,5 +139,5 @@ module Dry
   end
 end
 
-require 'dry/types/schema/key'
-require 'dry/types/schema'
+require "dry/types/schema/key"
+require "dry/types/schema"

@@ -196,11 +196,9 @@ module Dry
   #
   # @api public
   #
-  # rubocop:disable Naming/MethodName
   def self.Types(*namespaces, default: Types::Undefined, **aliases)
     Types::Module.new(Types.container, *namespaces, default: default, **aliases)
   end
-  # rubocop:enable Naming/MethodName
 end
 
 require "dry/types/core" # load built-in types

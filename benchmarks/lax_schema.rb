@@ -7,7 +7,7 @@ schema = Dry::Types["params.hash"].schema(
   age?: "params.integer"
 ).lax
 
-params = { email: "jane@doe.org", age: "19" }
+params = {email: "jane@doe.org", age: "19"}
 
 Benchmark.ips do |x|
   x.report("valid input") { schema.(params) }

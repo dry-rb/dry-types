@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/types/array/member'
-require 'dry/types/array/constructor'
+require "dry/types/array/member"
+require "dry/types/array/constructor"
 
 module Dry
   module Types

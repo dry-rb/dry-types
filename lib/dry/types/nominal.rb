@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'dry/core/deprecations'
-require 'dry/types/builder'
-require 'dry/types/result'
-require 'dry/types/options'
-require 'dry/types/meta'
+require "dry/core/deprecations"
+require "dry/types/builder"
+require "dry/types/result"
+require "dry/types/options"
+require "dry/types/meta"
 
 module Dry
   module Types
@@ -125,7 +125,7 @@ module Dry
       #
       # @api public
       def failure(input, error)
-        raise ArgumentError, 'error must be a CoercionError' unless error.is_a?(CoercionError)
+        raise ArgumentError, "error must be a CoercionError" unless error.is_a?(CoercionError)
 
         Result::Failure.new(input, error)
       end
@@ -200,10 +200,10 @@ module Dry
 
     extend Dry::Core::Deprecations[:'dry-types']
     Definition = Nominal
-    deprecate_constant(:Definition, message: 'Nominal')
+    deprecate_constant(:Definition, message: "Nominal")
   end
 end
 
-require 'dry/types/array'
-require 'dry/types/hash'
-require 'dry/types/map'
+require "dry/types/array"
+require "dry/types/hash"
+require "dry/types/map"

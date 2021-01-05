@@ -47,11 +47,11 @@ RSpec.describe Dry::Types::Builder do
         end
 
         let(:john_input) do
-          { name: "John", age: "20", email: "john@doe.com" }
+          {name: "John", age: "20", email: "john@doe.com"}
         end
 
         let(:john_output) do
-          { name: "John", age: 20, email: "john@doe.com" }
+          {name: "John", age: 20, email: "john@doe.com"}
         end
 
         example "working complex type" do
@@ -60,7 +60,7 @@ RSpec.describe Dry::Types::Builder do
           expect(type.([nil])).to eql([])
           expect(type.([{}])).to eql([])
           expect(type.([john_input])).to eql([john_output])
-          expect(type.([john_input, { name: "Jane", age: "22" }])).to eql([john_output])
+          expect(type.([john_input, {name: "Jane", age: "22"}])).to eql([john_output])
         end
       end
     end

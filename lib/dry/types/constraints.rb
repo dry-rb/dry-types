@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/logic/rule_compiler'
-require 'dry/logic/predicates'
-require 'dry/logic/rule/predicate'
+require "dry/logic/rule_compiler"
+require "dry/logic/predicates"
+require "dry/logic/rule/predicate"
 
 module Dry
   # Helper methods for constraint types

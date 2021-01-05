@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/types/container'
+require "dry/types/container"
 
 module Dry
   module Types
