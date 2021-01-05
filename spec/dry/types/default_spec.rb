@@ -45,7 +45,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
 
       it_behaves_like 'Dry::Types::Nominal without primitive'
 
-      it 'allows nil' do
+      specify do
         expect(type[]).to eq({})
       end
     end
@@ -55,7 +55,7 @@ RSpec.describe Dry::Types::Builder, '#default' do
 
       it_behaves_like 'Dry::Types::Nominal without primitive'
 
-      it 'allows nil' do
+      specify do
         expect(type[]).to eq({})
       end
     end

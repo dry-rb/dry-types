@@ -17,6 +17,11 @@ module Dry
         def evaluate
           value.call(type)
         end
+
+        # @return [true]
+        def callable?
+          true
+        end
       end
 
       include Type
@@ -110,6 +115,13 @@ module Dry
         else
           Undefined.default(type.call_safe(input, &block)) { evaluate }
         end
+      end
+
+      # @return [false]
+      #
+      # @api private
+      def callable?
+        false
       end
     end
   end
