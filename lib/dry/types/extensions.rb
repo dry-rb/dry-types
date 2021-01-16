@@ -7,3 +7,7 @@ end
 Dry::Types.register_extension(:monads) do
   require "dry/types/extensions/monads"
 end
+
+Dry::Types.register_extension(:builders) do
+  require "dry/types/extensions/builders"
+end
