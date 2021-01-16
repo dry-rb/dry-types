@@ -56,6 +56,8 @@ module Dry
       self["nominal.symbol"].constructor(Coercions::Params.method(:to_symbol))
     end
 
+    register("params.string", self["string"])
+
     COERCIBLE.each_key do |name|
       next if name.equal?(:string)
 
