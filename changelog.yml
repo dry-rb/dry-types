@@ -5,35 +5,36 @@
   - |-
     Wrapping constructor types :tada: (@flash-gordon)
 
-    Constructor blocks can have a second argument.
-    The second argument is the underlying type itself:
-    ```ruby
-    age_from_year = Dry::Types['coercible.integer'].constructor do |input, type|
-      Date.today.year - type.(input)
-    end
-    age_from_year.('2000') # => 21
-    ```
-    With wrapping constructors you have control over "type application". You can even
-    run it more than once:
-    ```ruby
-    inc = Dry::Types['integer'].constructor(&:succ)
-    inc2x = inc.constructor { _2.(_2.(_2.(_1))) }
-    inc2x.(10) # => 13
-    ```
+      Constructor blocks can have a second argument.
+      The second argument is the underlying type itself:
+      ```ruby
+      age_from_year = Dry::Types['coercible.integer'].constructor do |input, type|
+        Date.today.year - type.(input)
+      end
+      age_from_year.('2000') # => 21
+      ```
+      With wrapping constructors you have control over "type application". You can even
+      run it more than once:
+      ```ruby
+      inc = Dry::Types['integer'].constructor(&:succ)
+      inc2x = inc.constructor { _2.(_2.(_2.(_1))) }
+      inc2x.(10) # => 13
+      ```
   - |-
     Fallbacks :tada: (@flash-gordon)
 
-    ```ruby
-    age = Dry::Types['coercible.ineger'].fallback(18)
-    age.('10') # => 10
-    age.('20') # => 20
-    age.('abc') # => 18
-    ```
+      ```ruby
+      age = Dry::Types['coercible.ineger'].fallback(18)
+      age.('10') # => 10
+      age.('20') # => 20
+      age.('abc') # => 18
+      ```
 
-    Fallbacks are different from default values: the later will be evaluated
-    only when *no input* provided.
+      Fallbacks are different from default values: the later will be evaluated
+      only when *no input* provided.
 
-    Under the hood, `.fallback` creates a wrapping constructor.
+      Under the hood, `.fallback` creates a wrapping constructor.
+  - '`params.string` as an alias for `strict.string`. This addition should be non-breaking (@flash-gordon)'
 
 - version: 1.4.0
   date: '2020-03-09'
