@@ -72,12 +72,6 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
     expect(inferrer[type(:integer).enum(1, 2)]).to eql([:int?, included_in?: [1, 2]])
   end
 
-  it "returns type?(type) for arbitrary types" do
-    custom_type = Dry::Types::Nominal.new(double(:some_type, name: "ObjectID"))
-
-    expect(inferrer[custom_type]).to eql([type?: custom_type.primitive])
-  end
-
   it "returns nothing for any" do
     expect(inferrer[type(:any)]).to eql([])
   end
@@ -132,6 +126,36 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
       it "ignores unknown predicates" do
         expect(inferrer[type(:integer).constrained(gteq: 99_999)]).to eql([:int?])
       end
+    end
+  end
+
+  describe "infering predicates based on class names" do
+    it "is deprecated by default" do
+      custom_type = Dry::Types::Nominal.new(double(:some_type, name: "URI"))
+
+      expect { inferrer[custom_type] }.to raise_error(
+        KeyError, /Automatic predicate inferring from class names is deprecated/
+      )
+    end
+
+    context "enabled" do
+      around do |ex|
+        Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name true
+        ex.run
+        Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name false
+      end
+
+      specify do
+        custom_type = Dry::Types::Nominal.new(double(:some_type, name: "ObjectID"))
+
+        expect(inferrer[custom_type]).to eql([type?: custom_type.primitive])
+      end
+    end
+
+    example "anonymous class" do
+      custom_type = Dry::Types::Nominal.new(Class.new)
+
+      expect(inferrer[custom_type]).to eql([type?: custom_type.primitive])
     end
   end
 end
