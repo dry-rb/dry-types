@@ -250,6 +250,14 @@ RSpec.describe Dry::Types::Nominal do
     end
   end
 
+  describe "params.string" do
+    subject(:type) { Dry::Types["params.string"] }
+
+    it "is equal to strict.string" do
+      expect(type).to be(Dry::Types["string"])
+    end
+  end
+
   context "optional types" do
     subject(:type) { Dry::Types["optional.params.integer"] }
 
