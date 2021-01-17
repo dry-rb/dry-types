@@ -145,6 +145,12 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
         Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name false
       end
 
+      it "should be removed once 2.0 is released" do
+        if Dry::Types::VERSION.start_with?('2.')
+          raise "Remove infer_predicate_by_class_name"
+        end
+      end
+
       specify do
         custom_type = Dry::Types::Nominal.new(double(:some_type, name: "ObjectID"))
 
