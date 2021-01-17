@@ -36,7 +36,7 @@
       Under the hood, `.fallback` creates a wrapping constructor.
   - '`params.string` as an alias for `strict.string`. This addition should be non-breaking (@flash-gordon)'
   changed:
-  - -|
+  - |-
     Inferring predicates from class names is deprecated. It's very unlikely your code depends on it,
       however, if it does, you'll get an exception with instructions. (@flash-gordon)
 
