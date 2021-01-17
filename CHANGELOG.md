@@ -39,8 +39,12 @@
 
 ### Changed
 
-- -| Inferring predicates from class names is deprecated. It's very unlikely your code depends on it, however, if it does, you'll get an exception with instructions. (@flash-gordon)
-```ruby Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name true ```
+- Inferring predicates from class names is deprecated. It's very unlikely your code depends on it,
+  however, if it does, you'll get an exception with instructions. (@flash-gordon)
+
+  ```ruby
+  Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name true
+  ```
 
 [Compare v1.4.0...master](https://github.com/dry-rb/dry-types/compare/v1.4.0...master)
 
