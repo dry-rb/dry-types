@@ -57,4 +57,20 @@ RSpec.describe Dry::Types do
       }.to raise_error(NameError, /dry-types does not define constants for default types/)
     end
   end
+
+  describe ".define_builder" do
+    it "adds a new builder method" do
+      Dry::Types.define_builder(:or_nil) { |type| type.optional.fallback(nil) }
+      constructed = Dry::Types["integer"].or_nil
+
+      expect(constructed.("123")).to be_nil
+    end
+
+    it "has support for arguments" do
+      Dry::Types.define_builder(:or) { |type, fallback| type.fallback(fallback) }
+      constructed = Dry::Types["integer"].or(300)
+
+      expect(constructed.("123")).to eql(300)
+    end
+  end
 end

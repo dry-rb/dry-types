@@ -42,7 +42,7 @@ module Dry
       #
       # @api public
       def optional
-        Types["strict.nil"] | self
+        Types["nil"] | self
       end
 
       # Turn a type into a constrained type
