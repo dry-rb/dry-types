@@ -37,6 +37,10 @@
   Under the hood, `.fallback` creates a wrapping constructor.
 - `params.string` as an alias for `strict.string`. This addition should be non-breaking (@flash-gordon)
 
+### Changed
+
+- -| Inferring predicates from class names is deprecated. It's very unlikely your code depends on it, however, if it does, you'll get an exception with instructions. (@flash-gordon)
+```ruby Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name true ```
 
 [Compare v1.4.0...master](https://github.com/dry-rb/dry-types/compare/v1.4.0...master)
 
