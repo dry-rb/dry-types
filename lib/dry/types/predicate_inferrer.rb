@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "dry/core/cache"
+require "dry/core/class_attributes"
 require "dry/types/predicate_registry"
 
 module Dry
@@ -12,13 +13,14 @@ module Dry
       extend Core::Cache
 
       TYPE_TO_PREDICATE = {
-        DateTime => :date_time?,
-        FalseClass => :false?,
-        Integer => :int?,
-        NilClass => :nil?,
-        String => :str?,
-        TrueClass => :true?,
-        BigDecimal => :decimal?
+        ::DateTime => :date_time?,
+        ::FalseClass => :false?,
+        ::Integer => :int?,
+        ::NilClass => :nil?,
+        ::String => :str?,
+        ::TrueClass => :true?,
+        ::BigDecimal => :decimal?,
+        ::Array => :array?
       }.freeze
 
       REDUCED_TYPES = {
@@ -35,6 +37,11 @@ module Dry
       #
       # @api private
       class Compiler
+        extend Core::ClassAttributes
+
+        defines :infer_predicate_by_class_name
+        infer_predicate_by_class_name false
+
         # @return [PredicateRegistry]
         # @api private
         attr_reader :registry
@@ -46,7 +53,35 @@ module Dry
 
         # @api private
         def infer_predicate(type)
-          [TYPE_TO_PREDICATE.fetch(type) { :"#{type.name.split("::").last.downcase}?" }]
+          pred = TYPE_TO_PREDICATE.fetch(type) do
+            if type.name.nil?
+              nil
+            else
+              candidate = :"#{type.name.split("::").last.downcase}?"
+
+              if registry.key?(candidate)
+                if self.class.infer_predicate_by_class_name
+                  candidate
+                else
+                  raise ::KeyError, <<~MESSAGE
+                    Automatic predicate inferring from class names is deprecated
+                    and will be removed in dry-types 2.0.
+                    Use `Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name true`
+                    to restore the previous behavior or change predicates.
+                    Note: for dry-schema and dry-validation use Dry::Schema::PredicateInferrer::Compiler.
+                  MESSAGE
+                end
+              else
+                nil
+              end
+            end
+          end
+
+          if pred.nil?
+            EMPTY_ARRAY
+          else
+            [pred]
+          end
         end
 
         # @api private
@@ -60,7 +95,7 @@ module Dry
           type = node[0]
           predicate = infer_predicate(type)
 
-          if registry.key?(predicate[0])
+          if !predicate.empty? && registry.key?(predicate[0])
             predicate
           else
             [type?: type]
