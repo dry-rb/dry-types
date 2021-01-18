@@ -14,8 +14,11 @@ module Dry
 
       TYPE_TO_PREDICATE = {
         ::DateTime => :date_time?,
+        ::Date => :date?,
+        ::Time => :time?,
         ::FalseClass => :false?,
         ::Integer => :int?,
+        ::Float => :float?,
         ::NilClass => :nil?,
         ::String => :str?,
         ::TrueClass => :true?,

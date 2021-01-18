@@ -56,6 +56,18 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
     expect(inferrer[type(:bool)]).to eql([:bool?])
   end
 
+  it "returns date? for date type" do
+    expect(inferrer[type(:date)]).to eql([:date?])
+  end
+
+  it "returns float? for float type" do
+    expect(inferrer[type(:float)]).to eql([:float?])
+  end
+
+  it "returns time? for time type" do
+    expect(inferrer[type(:time)]).to eql([:time?])
+  end
+
   it "returns decimal? or str? for a sum type" do
     expect(inferrer[type(:decimal) | type(:string)]).to eql([[[:decimal?], [:str?]]])
   end
@@ -129,7 +141,7 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
     end
   end
 
-  describe "infering predicates based on class names" do
+  describe "inferring predicates based on class names" do
     it "is deprecated by default" do
       custom_type = Dry::Types::Nominal.new(double(:some_type, name: "URI"))
 
