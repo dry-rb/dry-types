@@ -40,7 +40,7 @@ module Dry
         extend Core::ClassAttributes
 
         defines :infer_predicate_by_class_name
-        infer_predicate_by_class_name false
+        infer_predicate_by_class_name nil
 
         # @return [PredicateRegistry]
         # @api private
@@ -54,7 +54,7 @@ module Dry
         # @api private
         def infer_predicate(type)
           pred = TYPE_TO_PREDICATE.fetch(type) do
-            if type.name.nil?
+            if type.name.nil? || self.class.infer_predicate_by_class_name.equal?(false)
               nil
             else
               candidate = :"#{type.name.split("::").last.downcase}?"
@@ -67,7 +67,9 @@ module Dry
                     Automatic predicate inferring from class names is deprecated
                     and will be removed in dry-types 2.0.
                     Use `Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name true`
-                    to restore the previous behavior or change predicates.
+                    to restore the previous behavior
+                    or `Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name false`
+                    to explicitly opt-out (i.e. no exception + no inferring).
                     Note: for dry-schema and dry-validation use Dry::Schema::PredicateInferrer::Compiler.
                   MESSAGE
                 end

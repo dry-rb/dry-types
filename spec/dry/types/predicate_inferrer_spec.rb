@@ -138,11 +138,26 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
       )
     end
 
+    context "disabled" do
+      around do |ex|
+        Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name false
+        ex.run
+        Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name nil
+      end
+
+      it "can be turned off" do
+        require "uri"
+        custom_type = Dry::Types::Nominal.new(URI)
+
+        expect(inferrer[custom_type]).to eql([type?: URI])
+      end
+    end
+
     context "enabled" do
       around do |ex|
         Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name true
         ex.run
-        Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name false
+        Dry::Types::PredicateInferrer::Compiler.infer_predicate_by_class_name nil
       end
 
       it "should be removed once 2.0 is released" do
