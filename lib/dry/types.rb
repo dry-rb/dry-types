@@ -36,7 +36,7 @@ module Dry
 
     # @see Dry.Types
     def self.module(*namespaces, default: :nominal, **aliases)
-      Module.new(container, *namespaces, default: default, **aliases)
+      ::Module.new(container, *namespaces, default: default, **aliases)
     end
     deprecate_class_method :module, message: <<~DEPRECATION
       Use Dry.Types() instead. Beware, it exports strict types by default, for old behavior use Dry.Types(default: :nominal). See more options in the changelog
@@ -129,7 +129,7 @@ module Dry
     #
     # @api private
     def self.type_map
-      @type_map ||= Concurrent::Map.new
+      @type_map ||= ::Concurrent::Map.new
     end
 
     # @api private
@@ -137,12 +137,39 @@ module Dry
       underscored = Inflector.underscore(const)
 
       if container.keys.any? { |key| key.split(".")[0] == underscored }
-        raise NameError,
+        raise ::NameError,
               "dry-types does not define constants for default types. "\
               'You can access the predefined types with [], e.g. Dry::Types["integer"] '\
               "or generate a module with types using Dry.Types()"
       else
         super
+      end
+    end
+
+    # Add a new type builder method. This is a public API for defining custom
+    # type constructors
+    #
+    # @example simple custom type constructor
+    #   Dry::Types.define_builder(:or_nil) do |type|
+    #     type.optional.fallback(nil)
+    #   end
+    #
+    #   Dry::Types["integer"].or_nil.("foo") # => nil
+    #
+    # @example fallback alias
+    #   Dry::Types.define_builder(:or) do |type, fallback|
+    #     type.fallback(fallback)
+    #   end
+    #
+    #   Dry::Types["integer"].or(100).("foo") # => 100
+    #
+    # @param [Symbol] method
+    # @param [#call] block
+    #
+    # @api public
+    def self.define_builder(method, &block)
+      Builder.define_method(method) do |*args|
+        block.(self, *args)
       end
     end
   end
