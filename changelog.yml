@@ -1,6 +1,6 @@
 ---
 - version: 1.5.0
-  date: '2020-01-21'
+  date: '2021-01-21'
   added:
   - |-
     Wrapping constructor types :tada: (@flash-gordon)
