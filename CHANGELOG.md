@@ -36,6 +36,16 @@
 
   Under the hood, `.fallback` creates a wrapping constructor.
 - `params.string` as an alias for `strict.string`. This addition should be non-breaking (@flash-gordon)
+- API for defining custom type builders similar to `.default`, `.constructor`, or `.optional` (@flash-gordon)
+
+  ```ruby
+  # Making an alias for `.fallback`
+  Dry::Types.define_builder(:or) { |type, v| type.fallback(v) }
+
+  # Using new builder
+  type = Dry::Types['integer'].or(-273)
+  type.(:invalid) # => -273
+  ```
 
 ### Changed
 
