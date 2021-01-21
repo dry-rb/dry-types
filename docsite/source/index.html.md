@@ -8,6 +8,7 @@ sections:
   - built-in-types
   - optional-values
   - default-values
+  - fallbacks
   - sum
   - constraints
   - hash-schemas
@@ -15,6 +16,7 @@ sections:
   - enum
   - map
   - custom-types
+  - custom-type-builders
   - extensions
 ---
 
