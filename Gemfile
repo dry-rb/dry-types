@@ -23,5 +23,6 @@ group :benchmarks do
     gem "fast_attributes"
     gem "hotch"
     gem "virtus"
+    gem "activemodel"
   end
 end
