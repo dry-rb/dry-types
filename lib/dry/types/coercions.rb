@@ -103,7 +103,7 @@ module Dry
         EMPTY_STRING.eql?(value)
       end
 
-      ISO_DATE = /\A(\d{4})-(\d\d)-(\d\d)\z/
+      ISO_DATE = /\A(\d{4})-(\d\d)-(\d\d)\z/.freeze
       def fast_string_to_date(string)
         if string =~ ISO_DATE
           ::Date.new $1.to_i, $2.to_i, $3.to_i
@@ -116,7 +116,7 @@ module Dry
         (\d\d):(\d\d):(\d\d)(?:\.(\d{1,6})\d*)?  # 10:20:30.123456
         (?:(Z(?=\z)|[+-]\d\d)(?::?(\d\d))?)?     # +09:00
         \z
-      /x
+      /x.freeze
       def fast_string_to_time(string)
         return unless ISO_DATETIME =~ string
 
@@ -132,7 +132,6 @@ module Dry
 
         ::Time.local($1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i, $6.to_i, usec, offset)
       end
-
     end
   end
 end
