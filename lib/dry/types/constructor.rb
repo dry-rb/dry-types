@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "dry/core/equalizer"
 require "dry/types/fn_container"
 require "dry/types/constructor/function"
 require "dry/types/constructor/wrapper"
