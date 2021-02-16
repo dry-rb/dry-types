@@ -1,4 +1,9 @@
 ---
+- version: 1.5.1
+  date: '2021-02-16'
+  fixed:
+  - |-
+    Add missing requires for internal usage of `Dry::Equalizer` (@timriley in #418)
 - version: 1.5.0
   date: '2021-01-21'
   added:
