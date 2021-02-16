@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "dry/core/equalizer"
 require "dry/monads/maybe"
 require "dry/types/decorator"
 
