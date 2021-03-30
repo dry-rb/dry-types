@@ -1,4 +1,8 @@
 ---
+- version: unreleased
+  date:
+  changed:
+  - "Optimize `PredicateRegistry` for Ruby 2.7+ (see #420 for more details) (@casperisfine)"
 - version: 1.5.1
   date: '2021-02-16'
   fixed:
