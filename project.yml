@@ -1,4 +1,5 @@
 name: dry-types
+custom_ci: true
 codacy_id: f2d71613195f4da993acb9ac9d6ea336
 gemspec:
   authors: ["Piotr Solnica"]
