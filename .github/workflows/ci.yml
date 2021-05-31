@@ -1,21 +1,23 @@
----
+# This file is synced from dry-rb/template-gem repo
 name: ci
-'on':
+
+on:
   push:
     paths:
-    - ".github/workflows/ci.yml"
-    - lib/**
-    - "*.gemspec"
-    - spec/**
-    - Rakefile
-    - Gemfile
-    - Gemfile.devtools
-    - ".rubocop.yml"
-    - project.yml
+      - ".github/workflows/ci.yml"
+      - "lib/**"
+      - "*.gemspec"
+      - "spec/**"
+      - "Rakefile"
+      - "Gemfile"
+      - "Gemfile.devtools"
+      - ".rubocop.yml"
+      - "project.yml"
   pull_request:
     branches:
-    - master
-  create: 
+      - master
+  create:
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -23,61 +25,58 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-        - '3.0'
-        - '2.7'
-        - '2.6'
-        - '2.5'
-        - jruby
+        - "3.0"
+        - "2.7"
+        - "2.6"
+        - "2.5"
+        - "jruby"
         include:
-        - ruby: '3.0'
-          coverage: 'true'
-        - ruby: '2.7'
-          dry_logic_from_master: 'true'
+          - ruby: "3.0"
+            coverage: "true"
     env:
-      COVERAGE: "${{matrix.coverage}}"
-      COVERAGE_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
-      DRY_LOGIC_FROM_MASTER: "${{matrix.dry_logic_from_master}}"
+      COVERAGE: ${{matrix.coverage}}
+      COVERAGE_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Install package dependencies
-      run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: "${{matrix.ruby}}"
-    - name: Install latest bundler
-      run: |
-        gem install bundler --no-document
-        bundle config set without 'tools benchmarks docs'
-    - name: Bundle install
-      run: bundle install --jobs 4 --retry 3
-    - name: Run all tests
-      run: bundle exec rake
-    - name: Run codacy-coverage-reporter
-      uses: codacy/codacy-coverage-reporter-action@master
-      if: env.COVERAGE == 'true' && env.COVERAGE_TOKEN != ''
-      with:
-        project-token: "${{secrets.CODACY_PROJECT_TOKEN}}"
-        coverage-reports: coverage/coverage.xml
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install package dependencies
+        run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.ruby}}
+      - name: Install latest bundler
+        run: |
+          gem install bundler --no-document
+          bundle config set without 'tools benchmarks docs'
+      - name: Bundle install
+        run: bundle install --jobs 4 --retry 3
+      - name: Run all tests
+        run: bundle exec rake
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        if: env.COVERAGE == 'true' && env.COVERAGE_TOKEN != ''
+        with:
+          project-token: ${{secrets.CODACY_PROJECT_TOKEN}}
+          coverage-reports: coverage/coverage.xml
   release:
     runs-on: ubuntu-latest
     if: contains(github.ref, 'tags') && github.event_name == 'create'
     needs: tests
     env:
       GITHUB_LOGIN: dry-bot
-      GITHUB_TOKEN: "${{secrets.GH_PAT}}"
+      GITHUB_TOKEN: ${{secrets.GH_PAT}}
     steps:
-    - uses: actions/checkout@v1
-    - name: Install package dependencies
-      run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.6
-    - name: Install dependencies
-      run: gem install ossy --no-document
-    - name: Trigger release workflow
-      run: |
-        tag=$(echo $GITHUB_REF | cut -d / -f 3)
-        ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"sha\":\"${{github.sha}}\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\",\"repo_name\":\"${{github.event.repository.name}}\"}"
+      - uses: actions/checkout@v1
+      - name: Install package dependencies
+        run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - name: Install dependencies
+        run: gem install ossy --no-document
+      - name: Trigger release workflow
+        run: |
+          tag=$(echo $GITHUB_REF | cut -d / -f 3)
+          ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"sha\":\"${{github.sha}}\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\",\"repo_name\":\"${{github.event.repository.name}}\"}"
