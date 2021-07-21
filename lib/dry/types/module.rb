@@ -38,6 +38,9 @@ module Dry
       end
 
       # @api private
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/PerceivedComplexity
       def type_constants(*namespaces, default: Undefined, **aliases)
         if namespaces.empty? && aliases.empty? && Undefined.equal?(default)
           default_ns = :Strict
@@ -64,6 +67,9 @@ module Dry
           constants.update(value) if key == default_ns
         end
       end
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/PerceivedComplexity
 
       # @api private
       def registry_tree

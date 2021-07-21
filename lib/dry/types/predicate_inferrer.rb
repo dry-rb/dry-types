@@ -141,7 +141,7 @@ module Dry
           left = visit(left_node)
           right = visit(right_node)
 
-          if left.eql?(NIL)
+          if left.eql?(NIL) # rubocop:disable Lint/DeprecatedConstants
             right
           else
             [[left, right]]
@@ -175,9 +175,9 @@ module Dry
         def visit_predicate(node)
           pred, args = node
 
-          if pred.equal?(:type?)
+          if pred.equal?(:type?) || !registry.key?(pred)
             EMPTY_ARRAY
-          elsif registry.key?(pred)
+          else
             *curried, _ = args
             values = curried.map { |_, v| v }
 
@@ -186,8 +186,6 @@ module Dry
             else
               [pred => values[0]]
             end
-          else
-            EMPTY_ARRAY
           end
         end
 
