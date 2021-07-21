@@ -118,7 +118,7 @@ RSpec.describe Dry::Types::Constrained do
   context "with a wrapping constructor" do
     subject(:type) do
       Dry::Types["coercible.integer"].constructor { |input, t|
-        t.(input + "0") + 10
+        t.("#{input}0") + 10
       }.constrained(gt: 300)
     end
 

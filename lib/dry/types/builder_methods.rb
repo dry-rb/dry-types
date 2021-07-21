@@ -80,7 +80,7 @@ module Dry
       # @param [#call,nil] block Value constructor
       #
       # @return [Dry::Types::Type]
-      def Constructor(klass, cons = nil, &block)
+      def Constructor(klass, cons = nil, &block) # rubocop:disable Metrics/PerceivedComplexity:
         if klass.is_a?(Type)
           if cons || block
             klass.constructor(cons || block)

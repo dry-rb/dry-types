@@ -147,7 +147,7 @@ module Dry
       # @return [Constructor]
       #
       # @api public
-      def fallback(value = Undefined, shared: false, &_fallback)
+      def fallback(value = Undefined, shared: false, &_fallback) # rubocop:disable Metrics/PerceivedComplexity
         if Undefined.equal?(value) && !block_given?
           raise ::ArgumentError, "fallback value or a block must be given"
         end

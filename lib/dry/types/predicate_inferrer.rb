@@ -55,7 +55,7 @@ module Dry
         end
 
         # @api private
-        def infer_predicate(type)
+        def infer_predicate(type) # rubocop:disable Metrics/PerceivedComplexity
           pred = TYPE_TO_PREDICATE.fetch(type) do
             if type.name.nil? || self.class.infer_predicate_by_class_name.equal?(false)
               nil

@@ -99,7 +99,7 @@ module Dry
     end
 
     # @api private
-    class Schema::Key
+    class Schema::Key # rubocop:disable Style/ClassAndModuleChildren
       # @api private
       def maybe
         __new__(type.maybe)

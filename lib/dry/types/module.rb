@@ -91,9 +91,11 @@ module Dry
           ns.to_sym unless path.empty?
         }.compact.uniq
 
-        (referenced.uniq - known).each do |name|
+        unknown = (referenced.uniq - known).first
+
+        if unknown
           raise ArgumentError,
-                "#{name.inspect} is not a known type namespace. "\
+                "#{unknown.inspect} is not a known type namespace. "\
                 "Supported options are #{known.map(&:inspect).join(", ")}"
         end
       end

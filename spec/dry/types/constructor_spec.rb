@@ -179,7 +179,7 @@ RSpec.describe Dry::Types::Constructor do
     context "wrapping" do
       context "simple case of wrapping contructor" do
         let(:type) do
-          super().constructor { |input, type| type.(input + 1) + "8" }
+          super().constructor { |input, type| "#{type.(input + 1)}8" }
         end
 
         it "wraps" do

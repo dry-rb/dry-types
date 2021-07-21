@@ -51,6 +51,7 @@ module Dry
 
       # @param [Array<CoercionError>] errors
       def initialize(errors)
+        super("")
         @errors = errors
       end
 
@@ -70,7 +71,10 @@ module Dry
       # @param [Object] value
       # @param [String, #to_s] result
       def initialize(key, value, result)
-        super("#{value.inspect} (#{value.class}) has invalid type for :#{key} violates constraints (#{result} failed)")
+        super(
+          "#{value.inspect} (#{value.class}) has invalid type "\
+          "for :#{key} violates constraints (#{result} failed)"
+        )
       end
     end
 

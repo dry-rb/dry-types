@@ -542,7 +542,7 @@ RSpec.describe Dry::Types::Schema do
 
     it "preserves key transformations from the caller schema" do
       schema1 = Dry::Types["hash"].schema(foo: "string").with_key_transform(&:to_sym)
-      transf2 = ->(key) { (key + "_").to_sym }
+      transf2 = ->(key) { :"#{key}_" }
       schema2 = Dry::Types["hash"].schema(bar: "string").with_key_transform(transf2)
 
       schema = schema1.merge(schema2)

@@ -92,7 +92,9 @@ module Dry
       # @return [Object] if coercion fails and a block is given
       #
       # @api public
-      def try(input) # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/PerceivedComplexity
+      def try(input)
         if primitive?(input)
           success = true
           output = {}
@@ -138,6 +140,8 @@ module Dry
           failure
         end
       end
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/PerceivedComplexity
 
       # @param meta [Boolean] Whether to dump the meta to the AST
       #
@@ -167,7 +171,7 @@ module Dry
       # @return [Schema]
       #
       # @api public
-      def strict(strict = true)
+      def strict(strict = true) # rubocop:disable Style/OptionalBooleanParameter
         with(strict: strict)
       end
 
@@ -368,7 +372,7 @@ module Dry
       # Try to add missing keys to the hash
       #
       # @api private
-      def resolve_missing_keys(hash, options)
+      def resolve_missing_keys(hash, options) # rubocop:disable Metrics/PerceivedComplexity
         skip_missing = options.fetch(:skip_missing, false)
         resolve_defaults = options.fetch(:resolve_defaults, true)
 

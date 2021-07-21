@@ -14,15 +14,17 @@ module Dry
     #   # => {1 => 'right'}
     #
     #   type.('1' => 'wrong')
-    #   # Dry::Types::MapError: "1" violates constraints (type?(Integer, "1") AND gteq?(1, "1") AND lteq?(10, "1") failed)
+    #   # Dry::Types::MapError: "1" violates constraints (type?(Integer, "1")
+    #   #                                                 AND gteq?(1, "1")
+    #   #                                                 AND lteq?(10, "1") failed)
     #
     #   type.(11 => 'wrong')
     #   # Dry::Types::MapError: 11 violates constraints (lteq?(10, 11) failed)
     #
     # @api public
     class Map < Nominal
-      def initialize(_primitive, key_type: Types["any"], value_type: Types["any"], meta: EMPTY_HASH)
-        super(_primitive, key_type: key_type, value_type: value_type, meta: meta)
+      def initialize(primitive, key_type: Types["any"], value_type: Types["any"], meta: EMPTY_HASH)
+        super(primitive, key_type: key_type, value_type: value_type, meta: meta)
       end
 
       # @return [Type]
@@ -100,6 +102,8 @@ module Dry
       private
 
       # @api private
+      # rubocop:disable Metrics/PerceivedComplexity
+      # rubocop:disable Metrics/AbcSize
       def coerce(input)
         unless primitive?(input)
           return failure(
@@ -131,6 +135,8 @@ module Dry
           failure(input, MultipleError.new(failures))
         end
       end
+      # rubocop:enable Metrics/PerceivedComplexity
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end

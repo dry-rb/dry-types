@@ -44,7 +44,7 @@ RSpec.describe Dry::Types::Array do
 
         it "an invalid type with a block" do
           expect(
-            array.try("X") { |x| "error: " + x.to_s }
+            array.try("X") { |x| "error: #{x}" }
           ).to eql("error: X is not an array")
         end
       end

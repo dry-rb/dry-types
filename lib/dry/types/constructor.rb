@@ -49,13 +49,12 @@ module Dry
 
       # @api private
       def self.wrapper_type
-        @wrapper_type ||= begin
+        @wrapper_type ||=
           if self < Wrapper
             self
           else
             const_set(:Wrapping, ::Class.new(self).include(Wrapper))
           end
-        end
       end
 
       # Instantiate a new constructor type instance
@@ -191,7 +190,7 @@ module Dry
         if type.respond_to?(method)
           response = type.public_send(method, *args, &block)
 
-          if response.is_a?(Type) && type.class.equal?(response.class)
+          if response.is_a?(Type) && response.instance_of?(type.class)
             response.constructor_type[response, **options]
           else
             response

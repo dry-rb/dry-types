@@ -72,7 +72,7 @@ module Dry
         # @return [Result,Logic::Result]
         #
         # @api public
-        def try(input, &block)
+        def try(input, &block) # rubocop:disable Metrics/PerceivedComplexity
           if primitive?(input)
             output = []
 

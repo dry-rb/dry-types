@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 module Dry
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/PerceivedComplexity
   module Types
     # @api private
     class Printer
-      MAPPING = {
+      MAPPING = { # rubocop:disable Style/MutableConstant
         Nominal => :visit_nominal,
         Constructor => :visit_constructor,
         Constrained => :visit_constrained,
@@ -94,13 +96,13 @@ module Dry
 
         strict_str = "strict " if options.delete(:strict)
 
-        if key_fn = options.delete(:key_transform_fn)
+        if (key_fn = options.delete(:key_transform_fn))
           visit_callable(key_fn) do |fn|
             key_fn_str = "key_fn=#{fn} "
           end
         end
 
-        if type_fn = options.delete(:type_transform_fn)
+        if (type_fn = options.delete(:type_transform_fn))
           visit_callable(type_fn) do |fn|
             type_fn_str = "type_fn=#{fn} "
           end
@@ -109,7 +111,7 @@ module Dry
         keys = options.delete(:keys)
 
         visit_options(options, schema.meta) do |opts|
-          opts = "#{opts[1..-1]} " unless opts.empty?
+          opts = "#{opts[1..]} " unless opts.empty?
           schema_parameters = "#{key_fn_str}#{type_fn_str}#{strict_str}#{opts}"
 
           header = "Schema<#{schema_parameters}keys={"
@@ -236,7 +238,7 @@ module Dry
         options = hash.options.dup
         type_fn_str = ""
 
-        if type_fn = options.delete(:type_transform_fn)
+        if (type_fn = options.delete(:type_transform_fn))
           visit_callable(type_fn) do |fn|
             type_fn_str = "type_fn=#{fn}"
           end
@@ -263,9 +265,9 @@ module Dry
           if line&.zero?
             yield ".#{path}"
           elsif path
-            yield "#{path.sub(Dir.pwd + "/", EMPTY_STRING)}:#{line}"
+            yield "#{path.sub("#{Dir.pwd}/", EMPTY_STRING)}:#{line}"
           else
-            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/)
+            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/) # rubocop:disable Lint/MixedRegexpCaptureTypes
 
             if match
               yield ".#{match[:name]}"
@@ -312,4 +314,6 @@ module Dry
 
     PRINTER = Printer.new.freeze
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/PerceivedComplexity
 end

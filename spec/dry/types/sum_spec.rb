@@ -193,7 +193,7 @@ RSpec.describe Dry::Types::Sum do
   end
 
   describe "#constructor" do
-    let(:type) { (Dry::Types["nominal.string"] | Dry::Types["nominal.nil"]).constructor { |input| input ? input.to_s + " world" : input } }
+    let(:type) { (Dry::Types["nominal.string"] | Dry::Types["nominal.nil"]).constructor { |input| input ? "#{input} world" : input } }
 
     it "returns the correct value" do
       expect(type.call("hello")).to eql("hello world")
