@@ -29,7 +29,7 @@ module Dry
           singleton_class.send(:define_method, :included) do |base|
             super(base)
             base.instance_exec(const_get(:Nominal, false)) do |nominal|
-              extend Dry::Core::Deprecations[:'dry-types']
+              extend Dry::Core::Deprecations[:"dry-types"]
               const_set(:Definition, nominal)
               deprecate_constant(:Definition, message: "Nominal")
             end

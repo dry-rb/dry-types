@@ -6,7 +6,7 @@ module Dry
   module Types
     # @api private
     class Compiler
-      extend ::Dry::Core::Deprecations[:'dry-types']
+      extend ::Dry::Core::Deprecations[:"dry-types"]
 
       attr_reader :registry
 

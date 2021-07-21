@@ -29,7 +29,7 @@ module Dry
   module Types
     extend Dry::Core::Extensions
     extend Dry::Core::ClassAttributes
-    extend Dry::Core::Deprecations[:'dry-types']
+    extend Dry::Core::Deprecations[:"dry-types"]
     include Dry::Core::Constants
 
     TYPE_SPEC_REGEX = /(.+)<(.+)>/.freeze

@@ -286,7 +286,7 @@ module Dry
         end
       end
 
-      def visit_options(options, meta = EMPTY_HASH)
+      def visit_options(options, meta = EMPTY_HASH) # rubocop:disable Metrics/PerceivedComplexity
         if options.empty? && meta.empty?
           yield ""
         else

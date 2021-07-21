@@ -8,7 +8,7 @@ module Dry
     #
     # @api public
     module Type
-      extend ::Dry::Core::Deprecations[:'dry-types']
+      extend ::Dry::Core::Deprecations[:"dry-types"]
 
       deprecate(:safe, :lax)
 

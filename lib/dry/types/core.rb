@@ -60,7 +60,8 @@ module Dry
 
     # Register {KERNEL_COERCIBLE} types
     KERNEL_COERCIBLE.each do |name, primitive|
-      register("coercible.#{name}", self["nominal.#{name}"].constructor(Kernel.method(primitive.name)))
+      register("coercible.#{name}",
+               self["nominal.#{name}"].constructor(Kernel.method(primitive.name)))
     end
 
     # Register {METHOD_COERCIBLE} types

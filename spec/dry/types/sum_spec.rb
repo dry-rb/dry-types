@@ -111,8 +111,7 @@ RSpec.describe Dry::Types::Sum do
 
       expect { type.([%i[foo]]) }.to raise_error(Dry::Types::ConstraintError, /\[:foo\]/)
 
-      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, /[1]/)
-      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, /[2]/)
+      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, /2, \[1\]/)
     end
   end
 
@@ -155,7 +154,7 @@ RSpec.describe Dry::Types::Sum do
 
     it "returns boolean" do
       expect(type.===("hello")).to eql(true)
-      expect(type.===(nil)).to eql(false)
+      expect(type.===(nil)).to eql(false) # rubocop:disable Style/NilComparison
     end
 
     context "in case statement" do

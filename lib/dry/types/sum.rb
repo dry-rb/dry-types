@@ -121,10 +121,10 @@ module Dry
 
       # @api private
       def failure(input, _error = nil)
-        if !left.valid?(input)
-          left.failure(input, left.try(input).error)
-        else
+        if left.valid?(input)
           right.failure(input, right.try(input).error)
+        else
+          left.failure(input, left.try(input).error)
         end
       end
 

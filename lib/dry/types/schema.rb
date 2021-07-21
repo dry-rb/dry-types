@@ -92,7 +92,7 @@ module Dry
       # @return [Object] if coercion fails and a block is given
       #
       # @api public
-      def try(input)
+      def try(input) # rubocop:disable Metrics/AbcSize
         if primitive?(input)
           success = true
           output = {}

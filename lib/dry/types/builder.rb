@@ -76,7 +76,7 @@ module Dry
             " value every time. Call `.freeze` when setting the default"\
             " or pass `shared: true` to discard this warning."\
             "\n#{where}",
-            tag: :'dry-types'
+            tag: :"dry-types"
           )
         end
 
@@ -105,7 +105,7 @@ module Dry
           if values.length == 1 && values[0].is_a?(::Hash)
             values[0]
           else
-            ::Hash[values.zip(values)]
+            values.zip(values).to_h
           end
 
         Enum.new(constrained(included_in: mapping.keys), mapping: mapping)
@@ -167,7 +167,7 @@ module Dry
             " value every time. Call `.freeze` when setting the fallback"\
             " or pass `shared: true` to discard this warning."\
             "\n#{where}",
-            tag: :'dry-types'
+            tag: :"dry-types"
           )
         end
 

@@ -6,7 +6,10 @@ eval_gemfile "Gemfile.devtools"
 
 gemspec
 
-gem "dry-logic", github: "dry-rb/dry-logic", branch: "master" if ENV["DRY_LOGIC_FROM_MASTER"].eql?("true")
+if ENV["DRY_LOGIC_FROM_MASTER"].eql?("true")
+  gem "dry-logic", github: "dry-rb/dry-logic",
+                   branch: "master"
+end
 
 group :test do
   gem "dry-struct"

@@ -199,7 +199,7 @@ module Dry
       end
     end
 
-    extend Dry::Core::Deprecations[:'dry-types']
+    extend Dry::Core::Deprecations[:"dry-types"]
     Definition = Nominal
     deprecate_constant(:Definition, message: "Nominal")
   end
