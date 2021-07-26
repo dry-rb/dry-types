@@ -26,7 +26,7 @@ module Dry
         extend(BuilderMethods)
 
         if constants.key?(:Nominal)
-          singleton_class.send(:define_method, :included) do |base|
+          singleton_class.define_method(:included) do |base|
             super(base)
             base.instance_exec(const_get(:Nominal, false)) do |nominal|
               extend Dry::Core::Deprecations[:"dry-types"]
