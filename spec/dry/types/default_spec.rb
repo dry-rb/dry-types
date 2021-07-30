@@ -10,6 +10,10 @@ RSpec.describe Dry::Types::Builder, "#default" do
       expect(type[]).to eql("foo")
     end
 
+    it "returns default value when Undefined is passed" do
+      expect(type[Undefined]).to eql("foo")
+    end
+
     it "aliases #[] as #call" do
       expect(type.call).to eql("foo")
     end
