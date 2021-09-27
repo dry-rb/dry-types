@@ -67,10 +67,18 @@ module Dry
     end
 
     class SchemaError < CoercionError
+      # @return [String, Symbol]
+      attr_reader :key
+
+      # @return [Object]
+      attr_reader :value
+
       # @param [String,Symbol] key
       # @param [Object] value
       # @param [String, #to_s] result
       def initialize(key, value, result)
+        @key = key
+        @value = value
         super(
           "#{value.inspect} (#{value.class}) has invalid type "\
           "for :#{key} violates constraints (#{result} failed)"
