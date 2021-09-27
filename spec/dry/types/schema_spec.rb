@@ -267,9 +267,12 @@ RSpec.describe Dry::Types::Schema do
       expect {
         hash.call(name: :Jane, age: "oops", active: true, phone: [])
       }.to raise_error(
-        Dry::Types::SchemaError,
-        '"oops" (String) has invalid type for :age violates '\
-        'constraints (type?(Integer, "oops") failed)'
+        an_instance_of(Dry::Types::SchemaError).and(having_attributes(
+                                                      message: '"oops" (String) has invalid type for :age violates '\
+                                                        'constraints (type?(Integer, "oops") failed)',
+                                                      key: :age,
+                                                      value: "oops"
+                                                    ))
       )
     end
 
@@ -277,9 +280,12 @@ RSpec.describe Dry::Types::Schema do
       expect {
         hash.schema(age: "coercible.integer").call(name: :Jane, age: nil, active: true, phone: [])
       }.to raise_error(
-        Dry::Types::SchemaError,
-        "nil (NilClass) has invalid type for :age violates constraints"\
-        " (can't convert nil into Integer failed)"
+        an_instance_of(Dry::Types::SchemaError).and(having_attributes(
+                                                      message: "nil (NilClass) has invalid type for :age violates constraints"\
+                                                      " (can't convert nil into Integer failed)",
+                                                      key: :age,
+                                                      value: nil
+                                                    ))
       )
     end
 
@@ -287,9 +293,12 @@ RSpec.describe Dry::Types::Schema do
       expect {
         hash.schema(age: "coercible.integer").call(name: :Jane, age: "oops", active: true, phone: [])
       }.to raise_error(
-        Dry::Types::SchemaError,
-        '"oops" (String) has invalid type for :age violates constraints'\
-        ' (invalid value for Integer(): "oops" failed)'
+        an_instance_of(Dry::Types::SchemaError).and(having_attributes(
+                                                      message: '"oops" (String) has invalid type for :age violates constraints'\
+                                                      ' (invalid value for Integer(): "oops" failed)',
+                                                      key: :age,
+                                                      value: "oops"
+                                                    ))
       )
     end
 
