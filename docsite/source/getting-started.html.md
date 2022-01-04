@@ -16,7 +16,7 @@ name: dry-types
 
     ``` ruby
     Types::Coercible::String
-    # => #<Dry::Types::Constructor type=#<Dry::Types::Definition primitive=String options={}>>
+    # => #<Dry::Types[Constructor<Nominal<String> fn=Kernel.String>]>
     ```
 
 ### Creating your first type
