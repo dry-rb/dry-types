@@ -7,6 +7,8 @@ name: dry-types
 A type with a default value will return the configured value when the input is not defined:
 
 ``` ruby
+Types = Dry.Types()
+
 PostStatus = Types::String.default('draft')
 
 PostStatus[] # "draft"

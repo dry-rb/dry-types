@@ -13,9 +13,8 @@ The [dry-monads gem](/gems/dry-monads/) provides approach to handling optional v
 require 'dry-types'
 
 Dry::Types.load_extensions(:maybe)
-module Types
-  include Dry.Types()
-end
+
+Types = Dry.Types()
 ```
 
 2. Append `.maybe` to a _Type_ to return a _Monad_ object  

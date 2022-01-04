@@ -28,9 +28,7 @@ sections:
 require 'dry-types'
 require 'dry-struct'
 
-module Types
-  include Dry.Types()
-end
+Types = Dry.Types()
 
 User = Dry.Struct(name: Types::String, age: Types::Integer)
 
@@ -111,7 +109,7 @@ User.schema.key(:age).meta
 # => {:info=>"extra info about age"}
 ```
 
-- Pass values directly to `Dry::Types` without creating an object using `[]`:
+- Pass values directly to types without creating an object using `[]`:
 
 ```ruby
 Types::Strict::String["foo"]

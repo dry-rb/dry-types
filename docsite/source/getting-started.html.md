@@ -6,15 +6,13 @@ name: dry-types
 
 ### Using `Dry::Types` in Your Application
 
-1. Make `Dry::Types` available to the application by creating a namespace that includes `Dry::Types`:
+1. Make the base types available to your application by defining your own module built from `Dry.Types()`:
 
     ```ruby
-    module Types
-     include Dry.Types()
-    end
+    Types = Dry.Types()
     ```
-   
-2. Reload the environment, & type `Types::Coercible::String` in the ruby console to confirm it worked:
+
+2. Reload the environment, & enter `Types::Coercible::String` in your ruby console to confirm it worked:
 
     ``` ruby
     Types::Coercible::String
@@ -31,15 +29,16 @@ name: dry-types
     end
     ```
 
-2. Define [Custom Types](docs::custom-types) in the `Types` module, then pass the name & type to `attribute`:
+2. Define [Custom Types](docs::custom-types) in your types module, then pass the name & type to `attribute`:
 
     ```ruby
+    Types = Dry.Types()
+
     module Types
-      include Dry.Types()
-    
       Email = String.constrained(format: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
       Age = Integer.constrained(gt: 18)
     end
+
     class User < Dry::Struct
       attribute :name, Types::String
       attribute :email, Types::Email

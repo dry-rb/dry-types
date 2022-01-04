@@ -11,6 +11,8 @@ There are a bunch of helpers for building your own types based on existing class
 `Types.Instance` builds a type that checks if a value has the given class.
 
 ```ruby
+Types = Dry.Types()
+
 range_type = Types.Instance(Range)
 range_type[1..2] # => 1..2
 ```
@@ -20,6 +22,8 @@ range_type[1..2] # => 1..2
 `Types.Value` builds a type that checks a value for equality (using `==`).
 
 ```ruby
+Types = Dry.Types()
+
 valid = Types.Value('valid')
 valid['valid'] # => 'valid'
 valid['invalid']
@@ -31,6 +35,8 @@ valid['invalid']
 `Types.Constant` builds a type that checks a value for identity (using `equal?`).
 
 ```ruby
+Types = Dry.Types()
+
 valid = Types.Constant(:valid)
 valid[:valid] # => :valid
 valid[:invalid]
@@ -42,6 +48,8 @@ valid[:invalid]
 `Types.Constructor` builds a new constructor type for the given class. By default uses the `new` method as a constructor.
 
 ```ruby
+Types = Dry.Types()
+
 user_type = Types.Constructor(User)
 
 # It is equivalent to User.new(name: 'John')
@@ -59,6 +67,8 @@ user_type = Types.Constructor(User) { |values| User.new(values) }
 `Types.Nominal` wraps the given class with a simple definition without any behavior attached.
 
 ```ruby
+Types = Dry.Types()
+
 int = Types.Nominal(Integer)
 int[1] # => 1
 
@@ -71,6 +81,8 @@ int['one'] # => 'one'
 `Types.Hash` builds a new hash schema.
 
 ```ruby
+Types = Dry.Types()
+
 # In the full form
 Types::Hash.schema(name: Types::String, age: Types::Coercible::Integer)
 
@@ -83,6 +95,8 @@ Types.Hash(name: Types::String, age: Types::Coercible::Integer)
 `Types.Array` is a shortcut for `Types::Array.of`
 
 ```ruby
+Types = Dry.Types()
+
 ListOfStrings = Types.Array(Types::String)
 ```
 
@@ -91,6 +105,8 @@ ListOfStrings = Types.Array(Types::String)
 `Types.Interface` builds a type that checks a value responds to given methods.
 
 ```ruby
+Types = Dry.Types()
+
 Callable = Types.Interface(:call)
 Contact = Types.Interface(:name, :phone)
 ```
