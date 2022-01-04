@@ -20,7 +20,7 @@ sections:
   - extensions
 ---
 
-`dry-types` is a simple and extendable type system for Ruby; useful for value coercions, applying constraints, defining complex structs or value objects and more. It was created as a successor to [Virtus](https://github.com/solnic/virtus).
+dry-types is a simple and extendable type system for Ruby; useful for value coercions, applying constraints, defining complex structs or value objects and more. It was created as a successor to [Virtus](https://github.com/solnic/virtus).
 
 ### Example usage
 
@@ -140,7 +140,7 @@ Types::Strict::String[10000]
 
 ### Use cases
 
-`dry-types` is suitable for many use-cases, for example:
+dry-types is suitable for many use-cases, for example:
 
   * Value coercions
   * Processing arrays
@@ -150,7 +150,7 @@ Types::Strict::String[10000]
 
 ### Other gems using dry-types
 
-`dry-types` is often used as a low-level abstraction. The following gems use it already:
+dry-types is often used as a low-level abstraction. The following gems use it already:
 
 * [dry-struct](/gems/dry-struct)
 * [dry-initializer](/gems/dry-initializer)

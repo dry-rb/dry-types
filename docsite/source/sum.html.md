@@ -7,7 +7,7 @@ order: 7
 
 You can specify sum types using `|` operator, it is an explicit way of defining what the valid types of a value are.
 
-For example `dry-types` defines the `Bool` type which is a sum consisting of the `True` and `False` types, expressed as `Types::True | Types::False`.
+For example dry-types defines the `Bool` type which is a sum consisting of the `True` and `False` types, expressed as `Types::True | Types::False`.
 
 Another common case is defining that something can be either `nil` or something else:
 
