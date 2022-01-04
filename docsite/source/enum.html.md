@@ -59,7 +59,6 @@ class Cell < Dry::Struct
   attribute :state, Types::String.enum('locked' => 0, 'open' => 1)
 end
 
-
 Cell.new(state: 'locked')
 # => #<Cell state="locked">
 

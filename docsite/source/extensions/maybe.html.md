@@ -17,7 +17,7 @@ Dry::Types.load_extensions(:maybe)
 Types = Dry.Types()
 ```
 
-2. Append `.maybe` to a _Type_ to return a _Monad_ object  
+2. Append `.maybe` to a _Type_ to return a _Monad_ object
 
 ```ruby
 x = Types::Maybe::Strict::Integer[nil]
