@@ -34,4 +34,4 @@ optional_string[123]
 
 ### Handle optional values using monads
 
-See [Maybe](docs::extensions/maybe) extension for another approach to handling optional values by returning a [_Monad_](/gems/dry-monads/) object.
+See the [Maybe](docs::extensions/maybe) extension for another approach to handling optional values by returning a [_monad_](/gems/dry-monads/) object.
