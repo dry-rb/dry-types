@@ -53,7 +53,7 @@ module Dry
       # @param [Object] value
       #
       # @api private
-      def initialize(type, value, **options)
+      def initialize(type, value, **)
         super
         @value = value
       end
@@ -65,8 +65,8 @@ module Dry
       # @return [Default]
       #
       # @api public
-      def constrained(*args)
-        type.constrained(*args).default(value)
+      def constrained(...)
+        type.constrained(...).default(value)
       end
 
       # @return [true]
