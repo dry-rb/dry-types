@@ -269,7 +269,7 @@ RSpec.describe Dry::Types::Schema do
       }.to raise_error(
         an_instance_of(Dry::Types::SchemaError).and(having_attributes(
                                                       message: '"oops" (String) has invalid type for :age violates '\
-                                                        'constraints (type?(Integer, "oops") failed)',
+                                                               'constraints (type?(Integer, "oops") failed)',
                                                       key: :age,
                                                       value: "oops"
                                                     ))
@@ -282,7 +282,7 @@ RSpec.describe Dry::Types::Schema do
       }.to raise_error(
         an_instance_of(Dry::Types::SchemaError).and(having_attributes(
                                                       message: "nil (NilClass) has invalid type for :age violates constraints"\
-                                                      " (can't convert nil into Integer failed)",
+                                                               " (can't convert nil into Integer failed)",
                                                       key: :age,
                                                       value: nil
                                                     ))
@@ -295,7 +295,7 @@ RSpec.describe Dry::Types::Schema do
       }.to raise_error(
         an_instance_of(Dry::Types::SchemaError).and(having_attributes(
                                                       message: '"oops" (String) has invalid type for :age violates constraints'\
-                                                      ' (invalid value for Integer(): "oops" failed)',
+                                                               ' (invalid value for Integer(): "oops" failed)',
                                                       key: :age,
                                                       value: "oops"
                                                     ))
