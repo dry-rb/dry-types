@@ -15,7 +15,7 @@ Built-in types are grouped under 6 categories:
 
 ### Categories
 
-Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) in a module called `Types`:
+Assuming you've defined your own `Types` module ([see instructions](docs::getting-started)):
 
 * Nominal types:
   - `Types::Nominal::Any`

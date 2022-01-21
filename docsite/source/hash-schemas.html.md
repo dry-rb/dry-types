@@ -7,6 +7,8 @@ name: dry-types
 It is possible to define a type for a hash with a known set of keys and corresponding value types. Let's say you want to describe a hash containing the name and the age of a user:
 
 ```ruby
+Types = Dry.Types()
+
 # using simple kernel coercions
 user_hash = Types::Hash.schema(name: Types::String, age: Types::Coercible::Integer)
 
@@ -78,6 +80,8 @@ The process of converting types to constructors like that can be automated, see 
 By default, all keys are required to present in the input. You can mark a key as optional by adding `?` to its name:
 
 ```ruby
+Types = Dry.Types()
+
 user_hash = Types::Hash.schema(name: Types::String, age?: Types::Integer)
 
 user_hash[name: 'Jane']
@@ -89,6 +93,8 @@ user_hash[name: 'Jane']
 All keys not declared in the schema are silently ignored. This behavior can be changed by calling `.strict` on the schema:
 
 ```ruby
+Types = Dry.Types()
+
 user_hash = Types::Hash.schema(name: Types::String).strict
 user_hash[name: 'Jane', age: 21]
 # => Dry::Types::UnknownKeysError: unexpected keys [:age] in Hash input
@@ -99,6 +105,8 @@ user_hash[name: 'Jane', age: 21]
 Keys are supposed to be symbols but you can attach a key tranformation to a schema, e.g. for converting strings into symbols:
 
 ```ruby
+Types = Dry.Types()
+
 user_hash = Types::Hash.schema(name: Types::String).with_key_transform(&:to_sym)
 user_hash['name' => 'Jane']
 
@@ -110,6 +118,8 @@ user_hash['name' => 'Jane']
 Hash schemas can be inherited in a sense you can define a new schema based on an existing one. Declared keys will be merged, key and type transformations will be preserved. The `strict` option is also passed to the new schema if present.
 
 ```ruby
+Types = Dry.Types()
+
 # Building an empty base schema
 StrictSymbolizingHash = Types::Hash.schema({}).strict.with_key_transform(&:to_sym)
 
@@ -131,6 +141,8 @@ The resulting schema will have the sum of both sets
 of attributes.
 
 ```ruby
+Types = Dry.Types()
+
 user_hash = Types::Hash.schema(
   name: Types::String
 )
@@ -153,6 +165,8 @@ while each attribute keeps the type transformations from its original hash.
 A schema can transform types with a block. For example, the following code makes all keys optional:
 
 ```ruby
+Types = Dry.Types()
+
 user_hash = Types::Hash.with_type_transform { |type| type.required(false) }.schema(
   name: Types::String,
   age: Types::Integer

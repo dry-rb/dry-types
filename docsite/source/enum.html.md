@@ -10,9 +10,7 @@ In many cases you may want to define an enum. For example, in a blog application
 require 'dry-types'
 require 'dry-struct'
 
-module Types
-  include Dry.Types()
-end
+Types = Dry.Types()
 
 class Post < Dry::Struct
   Statuses = Types::String.enum('draft', 'published', 'archived')
@@ -41,11 +39,13 @@ Post::Statuses[nil]
 Note that if you want to define an enum type with a default, you must call `.default` *before* calling `.enum`, not the other way around:
 
 ```ruby
+Types = Dry.Types()
+
 # this is the correct usage:
-Dry::Types::String.default('red').enum('blue', 'green', 'red')
+Types::String.default('red').enum('blue', 'green', 'red')
 
 # this will raise an error:
-Dry::Types::String.enum('blue', 'green', 'red').default('red')
+Types::String.enum('blue', 'green', 'red').default('red')
 ```
 
 ### Mappings
@@ -53,10 +53,11 @@ Dry::Types::String.enum('blue', 'green', 'red').default('red')
 A classic example is mapping integers coming from somewhere (API/database/etc) to something more understandable:
 
 ```ruby
+Types = Dry.Types()
+
 class Cell < Dry::Struct
   attribute :state, Types::String.enum('locked' => 0, 'open' => 1)
 end
-
 
 Cell.new(state: 'locked')
 # => #<Cell state="locked">

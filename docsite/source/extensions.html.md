@@ -7,7 +7,7 @@ sections:
   - monads
 ---
 
-`dry-types` can be extended with extension. Those extensions are loaded with `Dry::Types.load_extensions`.
+dry-types can be extended with extension. Those extensions are loaded with `Dry::Types.load_extensions`.
 
 Available extensions:
 
