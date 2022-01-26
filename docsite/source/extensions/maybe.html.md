@@ -4,7 +4,7 @@ layout: gem-single
 name: dry-types
 ---
 
-The [dry-monads gem](/gems/dry-monads/) provides approach to handling optional values by returning a [_Monad_](/gems/dry-monads/) object. This allows you to pass your type to a `Maybe(x)` block that only executes if `x` returns `Some` or `None`.
+The [dry-monads gem](/gems/dry-monads/) provides an approach to handling optional values by returning a [_Monad_](/gems/dry-monads/) object. This allows you to pass your type to a `Maybe(x)` block that only executes if `x` returns `Some` or `None`.
 
 > NOTE: Requires the [dry-monads gem](/gems/dry-monads/) to be loaded.
 1. Load the `:maybe` extension in your application.
