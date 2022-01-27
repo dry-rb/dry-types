@@ -41,7 +41,7 @@ Types::Strict::Integer.maybe["foo"]   # => raises Dry::Types::ConstraintError
 
 ```
 
-If you want to capture the errors (e.g. to return messages) instead of raising them, you may want to use the [`:monads` extension](docs::extension::monads) instead, which returns a `Result`.
+If you want to capture the errors (e.g. to return messages) instead of raising them, you may want to use the [`:monads` extension](docs::extensions/monads) instead, which returns a `Result`.
 
 Or, if you prefer, instead of calling `.maybe` you can use the `Maybe::` namespaced types instead.
 
