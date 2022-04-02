@@ -7,8 +7,7 @@ eval_gemfile "Gemfile.devtools"
 gemspec
 
 if ENV["DRY_LOGIC_FROM_MASTER"].eql?("true")
-  gem "dry-logic", github: "dry-rb/dry-logic",
-                   branch: "master"
+  gem "dry-logic", github: "dry-rb/dry-logic", branch: "main"
 end
 
 group :test do
