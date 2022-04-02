@@ -11,7 +11,7 @@
 [![CI Status](https://github.com/dry-rb/dry-types/workflows/ci/badge.svg)][actions]
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f2d71613195f4da993acb9ac9d6ea336)][codacy]
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f2d71613195f4da993acb9ac9d6ea336)][codacy]
-[![Inline docs](http://inch-ci.org/github/dry-rb/dry-types.svg?branch=master)][inchpages]
+[![Inline docs](http://inch-ci.org/github/dry-rb/dry-types.svg?branch=main)][inchpages]
 
 ## Links
 
