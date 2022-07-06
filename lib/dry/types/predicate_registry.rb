@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/logic/predicates"
-
 module Dry
   module Types
     # A registry with predicate objects from `Dry::Logic::Predicates`

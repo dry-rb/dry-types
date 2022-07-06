@@ -6,10 +6,9 @@ require "set"
 
 require "concurrent/map"
 
+require "dry/core"
 require "dry/container"
-require "dry/core/extensions"
-require "dry/core/constants"
-require "dry/core/class_attributes"
+require "dry/logic"
 
 require "dry/types/version"
 require "dry/types/container"
