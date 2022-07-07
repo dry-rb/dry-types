@@ -110,7 +110,6 @@ module Dry
         left_failed = false
 
         left_result = left.try(input) do |failure|
-
           left_failed = true
           if block_given?
             yield(failure)
@@ -173,7 +172,8 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        [:intersection, [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
+        [:intersection,
+         [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
       end
 
       # @param [Hash] options
