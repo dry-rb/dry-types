@@ -6,7 +6,7 @@ require "dry/types/meta"
 
 module Dry
   module Types
-    # Sum type
+    # Intersection type
     #
     # @api public
     class Intersection
@@ -178,7 +178,7 @@ module Dry
 
       # @param [Hash] options
       #
-      # @return [Constrained,Sum]
+      # @return [Constrained,Intersection]
       #
       # @see Builder#constrained
       #

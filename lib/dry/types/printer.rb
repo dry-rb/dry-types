@@ -191,38 +191,38 @@ module Dry
         end
       end
 
-      def visit_intersection(sum)
-        visit_intersection_constructors(sum) do |constructors|
-          visit_options(sum.options, sum.meta) do |opts|
-            yield "Sum<#{constructors}#{opts}>"
+      def visit_intersection(intersection)
+        visit_intersection_constructors(intersection) do |constructors|
+          visit_options(intersection.options, sum.meta) do |opts|
+            yield "Intersection<#{constructors}#{opts}>"
           end
         end
       end
 
-      def visit_intersection_constructors(sum)
-        case sum.left
-        when Sum
-          visit_intersection_constructors(sum.left) do |left|
-            case sum.right
-            when Sum
-              visit_intersection_constructors(sum.right) do |right|
+      def visit_intersection_constructors(intersection)
+        case intersection.left
+        when Intersection
+          visit_intersection_constructors(intersection.left) do |left|
+            case intersection.right
+            when Intersection
+              visit_intersection_constructors(intersection.right) do |right|
                 yield "#{left} & #{right}"
               end
             else
-              visit(sum.right) do |right|
+              visit(intersection.right) do |right|
                 yield "#{left} & #{right}"
               end
             end
           end
         else
-          visit(sum.left) do |left|
-            case sum.right
-            when Sum
-              visit_intersection_constructors(sum.right) do |right|
+          visit(intersection.left) do |left|
+            case intersection.right
+            when Intersection
+              visit_intersection_constructors(intersection.right) do |right|
                 yield "#{left} & #{right}"
               end
             else
-              visit(sum.right) do |right|
+              visit(intersection.right) do |right|
                 yield "#{left} & #{right}"
               end
             end
