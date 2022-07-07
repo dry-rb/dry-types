@@ -23,6 +23,8 @@ module Dry
         Default::Callable => :visit_default,
         Sum => :visit_sum,
         Sum::Constrained => :visit_sum,
+        Intersection => :visit_intersection,
+        Intersection::Constrained => :visit_intersection,
         Any.class => :visit_any
       }
 
@@ -183,6 +185,45 @@ module Dry
             else
               visit(sum.right) do |right|
                 yield "#{left} | #{right}"
+              end
+            end
+          end
+        end
+      end
+
+      def visit_intersection(intersection)
+        visit_intersection_constructors(intersection) do |constructors|
+          visit_options(intersection.options, intersection.meta) do |opts|
+            yield "Intersection<#{constructors}#{opts}>"
+          end
+        end
+      end
+
+      def visit_intersection_constructors(intersection)
+        case intersection.left
+        when Intersection
+          visit_intersection_constructors(intersection.left) do |left|
+            case intersection.right
+            when Intersection
+              visit_intersection_constructors(intersection.right) do |right|
+                yield "#{left} & #{right}"
+              end
+            else
+              visit(intersection.right) do |right|
+                yield "#{left} & #{right}"
+              end
+            end
+          end
+        else
+          visit(intersection.left) do |left|
+            case intersection.right
+            when Intersection
+              visit_intersection_constructors(intersection.right) do |right|
+                yield "#{left} & #{right}"
+              end
+            else
+              visit(intersection.right) do |right|
+                yield "#{left} & #{right}"
               end
             end
           end

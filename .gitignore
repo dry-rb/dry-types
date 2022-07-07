@@ -9,3 +9,7 @@
 /tmp/
 log/
 .vscode
+/bin
+!/bin/.gitkeep
+!/bin/console
+!/bin/setup
