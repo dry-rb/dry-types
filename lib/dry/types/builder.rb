@@ -36,6 +36,24 @@ module Dry
         klass.new(self, other)
       end
 
+      # Compose two types into an Intersection type
+      #
+      # @param [Type] other
+      #
+      # @return [Sum, Sum::Constrained]
+      #
+      # @api private
+      def &(other)
+        klass =
+          if constrained? && other.constrained?
+            Intersection::Constrained
+          else
+            Intersection
+          end
+
+        klass.new(self, other)
+      end
+
       # Turn a type into an optional type
       #
       # @return [Sum]
@@ -190,3 +208,4 @@ require "dry/types/constrained"
 require "dry/types/enum"
 require "dry/types/lax"
 require "dry/types/sum"
+require "dry/types/intersection"

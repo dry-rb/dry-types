@@ -9,3 +9,6 @@
 /tmp/
 log/
 .vscode
+/bin
+!/bin/console
+!/bin/setup
