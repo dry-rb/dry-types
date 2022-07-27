@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/deprecations"
-
 module Dry
   module Types
     # @api private

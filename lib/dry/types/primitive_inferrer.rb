@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
-
 module Dry
   module Types
     # PrimitiveInferrer returns the list of classes matching a type.

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/deprecations"
 require "dry/types/decorator"
 
 module Dry

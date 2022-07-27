@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
-require "dry/core/class_attributes"
 require "dry/types/predicate_registry"
 
 module Dry

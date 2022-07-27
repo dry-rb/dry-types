@@ -18,7 +18,6 @@ require "dry/types/spec/types"
 
 Undefined = Dry::Core::Constants::Undefined
 
-require "dry/core/deprecations"
 Dry::Core::Deprecations.set_logger!(SPEC_ROOT.join("../log/deprecations.log"))
 
 RSpec.configure do |config|
