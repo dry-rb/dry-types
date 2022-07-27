@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
 require "dry/types/builder"
 require "dry/types/result"
 require "dry/types/options"

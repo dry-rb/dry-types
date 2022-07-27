@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
-
 module Dry
   module Types
     # Schema is a hash with explicit member types defined

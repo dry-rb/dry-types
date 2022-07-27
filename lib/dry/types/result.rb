@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
-
 module Dry
   module Types
     # Result class used by {Type#try}
