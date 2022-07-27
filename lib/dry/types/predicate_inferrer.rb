@@ -139,7 +139,7 @@ module Dry
           left = visit(left_node)
           right = visit(right_node)
 
-          if left.eql?(NIL) # rubocop:disable Lint/DeprecatedConstants
+          if left.eql?(NIL)
             right
           else
             [[left, right]]

@@ -6,9 +6,9 @@ eval_gemfile "Gemfile.devtools"
 
 gemspec
 
+gem "dry-container", github: "dry-rb/dry-container", branch: "main"
 gem "dry-core", github: "dry-rb/dry-core", branch: "main"
 gem "dry-logic", github: "dry-rb/dry-logic", branch: "main"
-gem "dry-container", github: "dry-rb/dry-container", branch: "main"
 
 group :test do
   gem "dry-struct"
