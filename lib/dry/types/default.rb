@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/decorator"
-
 module Dry
   module Types
     # Default types are useful when a missing value should be replaced by a default one

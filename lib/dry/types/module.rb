@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/builder_methods"
-
 module Dry
   module Types
     # Export types registered in a container as module constants.

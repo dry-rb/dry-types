@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/decorator"
-
 module Dry
   module Types
     # Enum types can be used to define an enum on top of an existing type

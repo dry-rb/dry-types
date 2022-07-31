@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/array/constructor"
-
 module Dry
   module Types
     class Array < Nominal

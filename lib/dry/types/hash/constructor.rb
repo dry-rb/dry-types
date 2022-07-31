@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/constructor"
-
 module Dry
   module Types
     # Hash type exposes additional APIs for working with schema hashes

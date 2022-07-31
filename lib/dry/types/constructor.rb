@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/fn_container"
-require "dry/types/constructor/function"
-require "dry/types/constructor/wrapper"
-
 module Dry
   module Types
     # Constructor types apply a function to the input that is supposed to return

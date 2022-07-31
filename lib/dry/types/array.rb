@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/array/member"
-require "dry/types/array/constructor"
-
 module Dry
   module Types
     # Array type can be used to define an array with optional member type

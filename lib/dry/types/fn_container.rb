@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/container"
-
 module Dry
   module Types
     # Internal container for constructor functions used by the built-in types

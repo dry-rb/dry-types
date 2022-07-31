@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/options"
-require "dry/types/meta"
-
 module Dry
   module Types
     # Sum type

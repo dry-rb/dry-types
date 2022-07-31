@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/hash/constructor"
-
 module Dry
   module Types
     # Hash types can be used to define maps and schemas
@@ -132,6 +130,3 @@ module Dry
     end
   end
 end
-
-require "dry/types/schema/key"
-require "dry/types/schema"
