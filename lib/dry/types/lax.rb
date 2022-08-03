@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/decorator"
-
 module Dry
   module Types
     # Lax types rescue from type-related errors when constructors fail

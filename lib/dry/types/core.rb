@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/any"
-
 module Dry
   module Types
     # Primitives with {Kernel} coercion methods

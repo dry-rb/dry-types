@@ -13,8 +13,8 @@ module Dry
     def self.Rule(options)
       rule_compiler.(
         options.map { |key, val|
-          Logic::Rule::Predicate.build(
-            Logic::Predicates[:"#{key}?"]
+          ::Dry::Logic::Rule::Predicate.build(
+            ::Dry::Logic::Predicates[:"#{key}?"]
           ).curry(val).to_ast
         }
       ).reduce(:and)
@@ -24,7 +24,7 @@ module Dry
     #
     # @api private
     def self.rule_compiler
-      @rule_compiler ||= Logic::RuleCompiler.new(Logic::Predicates)
+      @rule_compiler ||= ::Dry::Logic::RuleCompiler.new(::Dry::Logic::Predicates)
     end
   end
 end

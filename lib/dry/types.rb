@@ -3,6 +3,7 @@
 require "bigdecimal"
 require "date"
 require "set"
+require "zeitwerk"
 
 require "concurrent/map"
 
@@ -10,28 +11,46 @@ require "dry/core"
 require "dry/container"
 require "dry/logic"
 
-require "dry/types/version"
-require "dry/types/container"
-require "dry/types/inflector"
-require "dry/types/type"
-require "dry/types/printable"
-require "dry/types/nominal"
-require "dry/types/constructor"
-require "dry/types/module"
-
+require "dry/types/constraints"
 require "dry/types/errors"
+require "dry/types/version"
 
 module Dry
   # Main library namespace
   #
   # @api public
   module Types
-    extend Dry::Core::Extensions
-    extend Dry::Core::ClassAttributes
-    extend Dry::Core::Deprecations[:"dry-types"]
-    include Dry::Core::Constants
+    extend ::Dry::Core::Extensions
+    extend ::Dry::Core::ClassAttributes
+    extend ::Dry::Core::Deprecations[:"dry-types"]
+    include ::Dry::Core::Constants
 
     TYPE_SPEC_REGEX = /(.+)<(.+)>/.freeze
+
+    def self.loader
+      @loader ||= ::Zeitwerk::Loader.new.tap do |loader|
+        root = ::File.expand_path("..", __dir__)
+        loader.tag = "dry-types"
+        loader.inflector = ::Zeitwerk::GemInflector.new("#{root}/dry-types.rb")
+        loader.inflector.inflect("json" => "JSON")
+        loader.push_dir(root)
+        loader.ignore(
+          "#{root}/dry-types.rb",
+          "#{root}/dry/types/{#{%w[
+            constraints
+            core
+            errors
+            extensions
+            json
+            params
+            printer
+            version
+          ].join(",")}}.rb"
+        )
+      end
+    end
+
+    loader.setup
 
     # @see Dry.Types
     def self.module(*namespaces, default: :nominal, **aliases)

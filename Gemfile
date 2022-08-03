@@ -11,7 +11,7 @@ gem "dry-core", github: "dry-rb/dry-core", branch: "main"
 gem "dry-logic", github: "dry-rb/dry-logic", branch: "main"
 
 group :test do
-  gem "dry-struct"
+  gem "dry-struct", github: "dry-rb/dry-struct", branch: "main"
 end
 
 group :tools do

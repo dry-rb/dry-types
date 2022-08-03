@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/builder"
-
 RSpec.describe Dry::Types::Builder do
   let(:base) { Dry::Types["string"].constrained(min_size: 4) }
 

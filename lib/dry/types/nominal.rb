@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/builder"
-require "dry/types/result"
-require "dry/types/options"
-require "dry/types/meta"
-
 module Dry
   module Types
     # Nominal types define a primitive class and do not apply any constructors or constraints
@@ -18,7 +13,7 @@ module Dry
       include Meta
       include Builder
       include Printable
-      include Dry::Equalizer(:primitive, :options, :meta, inspect: false, immutable: true)
+      include ::Dry::Equalizer(:primitive, :options, :meta, inspect: false, immutable: true)
 
       # @return [Class]
       attr_reader :primitive
@@ -197,12 +192,8 @@ module Dry
       end
     end
 
-    extend Dry::Core::Deprecations[:"dry-types"]
+    extend ::Dry::Core::Deprecations[:"dry-types"]
     Definition = Nominal
     deprecate_constant(:Definition, message: "Nominal")
   end
 end
-
-require "dry/types/array"
-require "dry/types/hash"
-require "dry/types/map"

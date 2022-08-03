@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/predicate_inferrer"
-require "dry/types/predicate_registry"
-
 RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
   subject(:inferrer) do
     Dry::Types::PredicateInferrer.new(Dry::Types::PredicateRegistry.new)

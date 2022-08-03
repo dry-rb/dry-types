@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/predicate_registry"
-
 module Dry
   module Types
     # PredicateInferrer returns the list of predicates used by a type.

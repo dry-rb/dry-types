@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/types/predicate_registry"
-
 RSpec.describe Dry::Types::PredicateRegistry do
   subject(:predicate_registry) { Dry::Types::PredicateRegistry.new }
 
