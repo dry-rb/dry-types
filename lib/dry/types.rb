@@ -37,6 +37,7 @@ module Dry
         loader.ignore(
           "#{root}/dry-types.rb",
           "#{root}/dry/types/{#{%w[
+            compat
             constraints
             core
             errors
