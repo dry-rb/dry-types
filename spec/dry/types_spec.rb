@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.describe Dry::Types do
+  describe ".loader" do
+    it "can eagerly load this library" do
+      Dry::Types.loader.eager_load
+    ensure
+      Dry::Types.loader.unload
+    end
+  end
+
   describe ".register" do
     it "registers a new type constructor" do
       module Test
