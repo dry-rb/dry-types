@@ -5,6 +5,7 @@ module Dry
     # Common API for building types and composition
     #
     # @api public
+    # rubocop:disable Metrics/ModuleLength
     module Builder
       include Dry::Core::Constants
 
@@ -30,8 +31,18 @@ module Dry
       #
       # @api private
       def |(other)
-        klass = constrained? && other.constrained? ? Sum::Constrained : Sum
-        klass.new(self, other)
+        compose(other, Sum)
+      end
+
+      # Compose two types into an Implication type
+      #
+      # @param [Type] other
+      #
+      # @return [Implication, Implication::Constrained]
+      #
+      # @api private
+      def >(other)
+        compose(other, Implication)
       end
 
       # Turn a type into an optional type
@@ -179,6 +190,21 @@ module Dry
           end
         end
       end
+
+      private
+
+      # @api private
+      def compose(other, composition_class)
+        klass =
+          if constrained? && other.constrained?
+            composition_class::Constrained
+          else
+            composition_class
+          end
+
+        klass.new(self, other)
+      end
     end
+    # rubocop:enable Metrics/ModuleLength
   end
 end

@@ -23,6 +23,8 @@ module Dry
         Default::Callable => :visit_default,
         Sum => :visit_sum,
         Sum::Constrained => :visit_sum,
+        Implication => :visit_implication,
+        Implication::Constrained => :visit_implication,
         Any.class => :visit_any
       }
 
@@ -183,6 +185,45 @@ module Dry
             else
               visit(sum.right) do |right|
                 yield "#{left} | #{right}"
+              end
+            end
+          end
+        end
+      end
+
+      def visit_implication(implication)
+        visit_implication_constructors(implication) do |constructors|
+          visit_options(implication.options, implication.meta) do |opts|
+            yield "Implication<#{constructors}#{opts}>"
+          end
+        end
+      end
+
+      def visit_implication_constructors(implication)
+        case implication.left
+        when Implication
+          visit_implication_constructors(implication.left) do |left|
+            case implication.right
+            when Implication
+              visit_implication_constructors(implication.right) do |right|
+                yield "#{left} > #{right}"
+              end
+            else
+              visit(implication.right) do |right|
+                yield "#{left} > #{right}"
+              end
+            end
+          end
+        else
+          visit(implication.left) do |left|
+            case implication.right
+            when Implication
+              visit_implication_constructors(implication.right) do |right|
+                yield "#{left} > #{right}"
+              end
+            else
+              visit(implication.right) do |right|
+                yield "#{left} > #{right}"
               end
             end
           end
