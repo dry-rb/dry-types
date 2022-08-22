@@ -45,6 +45,17 @@ module Dry
         compose(other, Intersection)
       end
 
+      # Compose two types into an Implication type
+      #
+      # @param [Type] other
+      #
+      # @return [Implication, Implication::Constrained]
+      #
+      # @api private
+      def >(other)
+        compose(other, Implication)
+      end
+
       # Turn a type into an optional type
       #
       # @return [Sum]
