@@ -54,39 +54,23 @@ module Dry
           end
         end
 
+        private
+
         def visit_constructors(composition)
-          case composition.left
-          when composition_class
-            visit_constructors(composition.left) do |left|
-              case composition.right
-              when composition_class
-                visit_constructors(composition.right) do |right|
-                  yield join(left, right)
-                end
-              else
-                printer.visit(composition.right) do |right|
-                  yield join(left, right)
-                end
-              end
-            end
-          else
-            printer.visit(composition.left) do |left|
-              case composition.right
-              when composition_class
-                visit_constructors(composition.right) do |right|
-                  yield join(left, right)
-                end
-              else
-                printer.visit(composition.right) do |right|
-                  yield join(left, right)
-                end
-              end
+          visit_constructor(composition.left) do |left|
+            visit_constructor(composition.right) do |right|
+              yield "#{left} #{@composition_class.operator} #{right}"
             end
           end
         end
 
-        def join(left, right)
-          [left, @composition_class.operator, right].join(" ")
+        def visit_constructor(type, &block)
+          case type
+          when composition_class
+            visit_constructors(type, &block)
+          else
+            printer.visit(type, &block)
+          end
         end
       end
 
