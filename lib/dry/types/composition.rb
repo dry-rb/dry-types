@@ -31,8 +31,10 @@ module Dry
       end
 
       def self.included(base)
-        ast_type = Inflector.underscore(Inflector.demodulize(base)).to_sym
+        composition_name = Inflector.demodulize(base)
+        ast_type = Inflector.underscore(composition_name).to_sym
         base.define_singleton_method(:ast_type) { ast_type }
+        base.define_singleton_method(:composition_name) { composition_name }
         base.const_set("Constrained", Class.new(base) { include Constrained })
       end
 

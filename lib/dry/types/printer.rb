@@ -43,13 +43,12 @@ module Dry
         def initialize(printer, composition_class)
           @printer = printer
           @composition_class = composition_class
-          @composition_name = Inflector.demodulize(composition_class)
         end
 
         def visit(composition)
           visit_constructors(composition) do |constructors|
             printer.visit_options(composition.options, composition.meta) do |opts|
-              yield "#{composition_name}<#{constructors}#{opts}>"
+              yield "#{@composition_class.composition_name}<#{constructors}#{opts}>"
             end
           end
         end

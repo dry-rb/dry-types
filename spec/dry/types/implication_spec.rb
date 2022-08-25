@@ -174,6 +174,18 @@ RSpec.describe Dry::Types::Implication do
       end
     end
 
+    context "constrained" do
+      let(:type) { t::Nominal::String.constrained(format: /foo/) > t::Nominal::String.constrained(min_size: 4) }
+
+      it "returns string representation of the type" do
+        expect(type.to_s).to eql(
+          "#<Dry::Types[Implication<" \
+            "Constrained<Nominal<String> rule=[format?(/foo/)]> > "\
+            "Constrained<Nominal<String> rule=[min_size?(4)]>>]>"
+        )
+      end
+    end
+
     context "implication tree" do
       let(:type) { t::Nominal::String > (t::Nominal::Integer > (t::Nominal::Date > t::Nominal::Time)) }
 
