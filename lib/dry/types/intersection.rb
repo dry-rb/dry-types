@@ -10,69 +10,10 @@ module Dry
     #
     # @api public
     class Intersection
-      include Type
-      include Builder
-      include Options
-      include Meta
-      include Printable
-      include Dry::Equalizer(:left, :right, :options, :meta, inspect: false, immutable: true)
+      include Composition
 
-      # @return [Type]
-      attr_reader :left
-
-      # @return [Type]
-      attr_reader :right
-
-      # @api private
-      class Constrained < Intersection
-        # @return [Dry::Logic::Operations::And]
-        def rule
-          left.rule & right.rule
-        end
-
-        # @return [true]
-        def constrained?
-          true
-        end
-      end
-
-      # @param [Type] left
-      # @param [Type] right
-      # @param [Hash] options
-      #
-      # @api private
-      def initialize(left, right, **options)
-        super
-        @left, @right = left, right
-        freeze
-      end
-
-      # @return [String]
-      #
-      # @api public
-      def name
-        [left, right].map(&:name).join(" & ")
-      end
-
-      # @return [false]
-      #
-      # @api public
-      def default?
-        false
-      end
-
-      # @return [false]
-      #
-      # @api public
-      def constrained?
-        false
-      end
-
-      # @return [Boolean]
-      #
-      # @api public
-      def optional?
-        false
+      def self.operator
+        :&
       end
 
       # @param [Object] input
@@ -106,21 +47,6 @@ module Dry
         end
       end
 
-      # @api private
-      def success(input)
-        result = try(input)
-        if result.success?
-          result
-        else
-          raise ArgumentError, "Invalid success value '#{input}' for #{inspect}"
-        end
-      end
-
-      # @api private
-      def failure(input, _error = nil)
-        Result::Failure.new(input, try(input).error)
-      end
-
       # @param [Object] value
       #
       # @return [Boolean]
@@ -128,23 +54,6 @@ module Dry
       # @api private
       def primitive?(value)
         left.primitive?(value) && right.primitive?(value)
-      end
-
-      # @see Nominal#to_ast
-      #
-      # @api public
-      def to_ast(meta: true)
-        [:intersection,
-         [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
-      end
-
-      # Wrap the type with a proc
-      #
-      # @return [Proc]
-      #
-      # @api public
-      def to_proc
-        proc { |value| self.(value) }
       end
 
       private
