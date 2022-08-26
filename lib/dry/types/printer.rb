@@ -31,8 +31,6 @@ module Dry
       }
 
       class CompositionPrinter
-        attr_reader :printer, :composition_class
-
         def initialize(printer, composition_class)
           @printer = printer
           @composition_class = composition_class
@@ -41,7 +39,7 @@ module Dry
 
         def visit(composition)
           visit_constructors(composition) do |constructors|
-            printer.visit_options(composition.options, composition.meta) do |opts|
+            @printer.visit_options(composition.options, composition.meta) do |opts|
               yield "#{@composition_class.composition_name}<#{constructors}#{opts}>"
             end
           end
@@ -59,10 +57,10 @@ module Dry
 
         def visit_constructor(type, &block)
           case type
-          when composition_class
+          when @composition_class
             visit_constructors(type, &block)
           else
-            printer.visit(type, &block)
+            @printer.visit(type, &block)
           end
         end
       end
