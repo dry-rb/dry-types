@@ -31,18 +31,12 @@ module Dry
       }
 
       class CompositionPrinter
-        attr_reader :printer, :composition_class, :composition_name
-
-        @printers = {}
-
-        def self.visit(printer, composition, &block)
-          @printers[composition.class] ||= new(printer, composition.class)
-          @printers.fetch(composition.class).visit(composition, &block)
-        end
+        attr_reader :printer, :composition_class
 
         def initialize(printer, composition_class)
           @printer = printer
           @composition_class = composition_class
+          freeze
         end
 
         def visit(composition)
@@ -71,6 +65,11 @@ module Dry
             printer.visit(type, &block)
           end
         end
+      end
+
+      def initialize
+        @composition_printers = {}
+        freeze
       end
 
       def call(type)
@@ -198,7 +197,8 @@ module Dry
       end
 
       def visit_composition(composition, &block)
-        CompositionPrinter.visit(self, composition, &block)
+        @composition_printers[composition.class] ||= CompositionPrinter.new(self, composition.class)
+        @composition_printers.fetch(composition.class).visit(composition, &block)
       end
 
       def visit_enum(enum)
@@ -324,7 +324,7 @@ module Dry
       end
     end
 
-    PRINTER = Printer.new.freeze
+    PRINTER = Printer.new
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/PerceivedComplexity
