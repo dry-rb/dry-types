@@ -66,7 +66,9 @@ module Dry
       end
 
       def initialize
-        @composition_printers = {}
+        @composition_printers = MAPPING.keys.each_with_object({}) do |klass, hash|
+          hash[klass] = new_composition_printer(klass) if klass < Composition
+        end
         freeze
       end
 
@@ -195,8 +197,8 @@ module Dry
       end
 
       def visit_composition(composition, &block)
-        @composition_printers[composition.class] ||= CompositionPrinter.new(self, composition.class)
-        @composition_printers.fetch(composition.class).visit(composition, &block)
+        @composition_printers[composition.class] ||= new_composition_printer(composition.class)
+        @composition_printers[composition.class].visit(composition, &block)
       end
 
       def visit_enum(enum)
@@ -319,6 +321,12 @@ module Dry
             yield "#{opts} meta={#{values.join(", ")}}"
           end
         end
+      end
+
+      private
+
+      def new_composition_printer(composition_class)
+        CompositionPrinter.new(self, composition_class)
       end
     end
 
