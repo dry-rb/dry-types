@@ -34,6 +34,7 @@ Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) i
   - `Types::Nominal::Time`
   - `Types::Nominal::Array`
   - `Types::Nominal::Hash`
+  - `Types::Nominal::Range`
 
 * `Strict` types will raise an error if passed a value of the wrong type:
   - `Types::Strict::Nil`
@@ -51,6 +52,7 @@ Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) i
   - `Types::Strict::Time`
   - `Types::Strict::Array`
   - `Types::Strict::Hash`
+  - `Types::Strict::Range`
 
 > All types in the `strict` category are [constrained](docs::constraints) by a type-check that is applied to make sure that the input is an instance of the primitive:
 
@@ -67,6 +69,7 @@ Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
   - `Types::Coercible::Decimal`
   - `Types::Coercible::Array`
   - `Types::Coercible::Hash`
+  - `Types::Coercible::Range`
 
 * Types suitable for `Params` param processing with coercions:
   - `Types::Params::Nil`
@@ -81,6 +84,7 @@ Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
   - `Types::Params::Decimal`
   - `Types::Params::Array`
   - `Types::Params::Hash`
+  - `Types::Params::Range`
 
 * Types suitable for `JSON` processing with coercions:
   - `Types::JSON::Nil`
@@ -91,6 +95,7 @@ Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
   - `Types::JSON::Decimal`
   - `Types::JSON::Array`
   - `Types::JSON::Hash`
+  - `Types::JSON::Range`
 
 * `Maybe` strict types:
   - `Types::Maybe::Strict::Class`
@@ -106,6 +111,7 @@ Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
   - `Types::Maybe::Strict::Time`
   - `Types::Maybe::Strict::Array`
   - `Types::Maybe::Strict::Hash`
+  - `Types::Maybe::Strict::Range`
 
 * `Maybe` coercible types:
   - `Types::Maybe::Coercible::String`
@@ -114,5 +120,6 @@ Types::Strict::Integer['1'] # => raises Dry::Types::ConstraintError
   - `Types::Maybe::Coercible::Decimal`
   - `Types::Maybe::Coercible::Array`
   - `Types::Maybe::Coercible::Hash`
+  - `Types::Maybe::Coercible::Range`
 
 > `Maybe` types are not available by default - they must be loaded using `Dry::Types.load_extensions(:maybe)`. See [Maybe extension](docs::extensions/maybe) for more information.

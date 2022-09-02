@@ -28,6 +28,8 @@ module Dry
           Types::Array
         elsif primitive == ::Hash
           Types::Hash
+        elsif primitive == ::Range
+          Types::Range
         else
           self
         end

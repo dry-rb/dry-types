@@ -96,6 +96,14 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
     expect(inferrer[type(:hash).schema(name: "string")]).to eql([:hash?])
   end
 
+  it "returns range? for an range type" do
+    expect(inferrer[type(:range)]).to eql([type?: Range])
+  end
+
+  it "returns range? for an range type with member" do
+    expect(inferrer[type(:range).of(type(:integer))]).to eql([type?: Range])
+  end
+
   context "constrained types" do
     it "extracts predicates from contrained types" do
       expect(inferrer[type(:integer).constrained(gteq: 18)]).to eql([:int?, gteq?: 18])

@@ -86,6 +86,14 @@ Types.Hash(name: Types::String, age: Types::Coercible::Integer)
 ListOfStrings = Types.Array(Types::String)
 ```
 
+### `Types.Range`
+
+`Types.Range` is a shortcut for `Types::Range.of`
+
+```ruby
+RangeOfIntegers = Types.Range(Types::Integer)
+```
+
 ### `Types.Interface`
 
 `Types.Interface` builds a type that checks a value responds to given methods.

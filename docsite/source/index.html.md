@@ -13,6 +13,7 @@ sections:
   - constraints
   - hash-schemas
   - array-with-member
+  - range-with-member
   - enum
   - map
   - custom-types
@@ -133,6 +134,7 @@ Types::Strict::String[10000]
 * Support for [enums](docs::enum)
 * Support for [hash type with type schemas](docs::hash-schemas)
 * Support for [array type with members](docs::array-with-member)
+* Support for [range type with members](docs::range-with-member)
 * Support for arbitrary meta information
 * Support for typed struct objects via [dry-struct](/gems/dry-struct)
 * Types are [categorized](docs::built-in-types), which is especially important for optimized and dedicated coercion logic

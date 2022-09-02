@@ -31,7 +31,7 @@ module Dry
       date: Date,
       date_time: DateTime,
       time: Time,
-      range: Range
+      range: ::Range
     }.freeze
 
     # All built-in primitives
@@ -64,9 +64,8 @@ module Dry
 
     # Register {METHOD_COERCIBLE} types
     METHOD_COERCIBLE.each_key do |name|
-      register(
-        "coercible.#{name}", self["nominal.#{name}"].constructor(&METHOD_COERCIBLE_METHODS[name])
-      )
+      register("coercible.#{name}",
+               self["nominal.#{name}"].constructor(&METHOD_COERCIBLE_METHODS[name]))
     end
 
     # Register optional strict {NON_NIL} types

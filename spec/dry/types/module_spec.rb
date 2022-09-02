@@ -52,6 +52,14 @@ RSpec.describe Dry::Types::Module do
       end
     end
 
+    describe ".Range" do
+      it "builds an range type" do
+        expect(mod.Range(mod::Strict::Integer)).to eql(
+          Dry::Types["strict.range<strict.integer>"]
+        )
+      end
+    end
+
     describe ".Map" do
       it "builds a map type" do
         expected = Dry::Types::Map.new(::Hash, key_type: Dry::Types["strict.integer"])

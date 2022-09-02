@@ -69,6 +69,12 @@ module Dry
         registry["nominal.hash"].with(**opts, meta: meta)
       end
 
+      def visit_range(node)
+        member, meta = node
+        member = member.is_a?(Class) ? member : visit(member)
+        registry["nominal.range"].of(member).meta(meta)
+      end
+
       def visit_schema(node)
         keys, options, meta = node
         registry["nominal.hash"].schema(keys.map { |key| visit(key) }).with(**options, meta: meta)
