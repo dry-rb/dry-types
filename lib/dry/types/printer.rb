@@ -23,6 +23,8 @@ module Dry
         Default::Callable => :visit_default,
         Sum => :visit_sum,
         Sum::Constrained => :visit_sum,
+        Range => :visit_range,
+        Range::Member => :visit_range_member,
         Any.class => :visit_any
       }
 
@@ -59,6 +61,20 @@ module Dry
         visit(array.member) do |type|
           visit_options(EMPTY_HASH, array.meta) do |opts|
             yield "Array<#{type}#{opts}>"
+          end
+        end
+      end
+
+      def visit_range(type)
+        visit_options(EMPTY_HASH, type.meta) do |opts|
+          yield "Range#{opts}"
+        end
+      end
+
+      def visit_range_member(range)
+        visit(range.member) do |type|
+          visit_options(EMPTY_HASH, range.meta) do |opts|
+            yield "Range<#{type}#{opts}>"
           end
         end
       end

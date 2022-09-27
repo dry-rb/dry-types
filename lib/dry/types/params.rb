@@ -52,6 +52,10 @@ module Dry
       self["nominal.hash"].constructor(Coercions::Params.method(:to_hash))
     end
 
+    register("params.range") do
+      self["nominal.range"].constructor(Coercions::Params.method(:to_range))
+    end
+
     register("params.symbol") do
       self["nominal.symbol"].constructor(Coercions::Params.method(:to_symbol))
     end

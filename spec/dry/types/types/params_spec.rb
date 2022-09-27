@@ -238,6 +238,24 @@ RSpec.describe Dry::Types::Nominal do
     end
   end
 
+  describe "params.range" do
+    subject(:type) { Dry::Types["params.range"].of(Dry::Types["params.integer"]) }
+
+    it_behaves_like "a constrained type", inputs: [
+      Object.new, "foo", "23asf", {}
+    ]
+
+    it "returns coerced range" do
+      range = "1".."2"
+      expect(type[range]).to eql(1..2)
+    end
+
+    it "coerces an empty string into nil" do
+      input = ""
+      expect(type[input]).to be nil
+    end
+  end
+
   describe "params.symbol" do
     subject(:type) { Dry::Types["params.symbol"] }
 

@@ -36,6 +36,20 @@ module Dry
         Strict(::Hash).schema(type_map)
       end
 
+      # Build an range type.
+      #
+      # Shortcut for Range#of.
+      #
+      # @example
+      #   Types::IntegerRange = Types.Range(Types::Integer)
+      #
+      # @param [Dry::Types::Type] type
+      #
+      # @return [Dry::Types::Range]
+      def Range(type)
+        Strict(::Range).of(type)
+      end
+
       # Build a type which values are instances of a given class
       # Values are checked using `is_a?` call
       #
@@ -102,6 +116,8 @@ module Dry
           Array.new(klass)
         elsif klass <= ::Hash
           Hash.new(klass)
+        elsif klass <= ::Range
+          Range.new(klass)
         else
           Nominal.new(klass)
         end

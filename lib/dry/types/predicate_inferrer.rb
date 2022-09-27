@@ -30,6 +30,8 @@ module Dry
 
       ARRAY = %i[array?].freeze
 
+      RANGE = [type?: ::Range].freeze
+
       NIL = %i[nil?].freeze
 
       # Compiler reduces type AST into a list of predicates
@@ -112,6 +114,11 @@ module Dry
         # @api private
         def visit_array(_)
           ARRAY
+        end
+
+        # @api private
+        def visit_range(_)
+          RANGE
         end
 
         # @api private

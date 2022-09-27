@@ -36,6 +36,11 @@ module Dry
         end
 
         # @api private
+        def visit_range(_)
+          ::Range
+        end
+
+        # @api private
         def visit_lax(node)
           visit(node)
         end

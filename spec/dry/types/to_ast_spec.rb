@@ -205,4 +205,46 @@ RSpec.describe Dry::Types, "#to_ast" do
       end
     end
   end
+
+  context "Range" do
+    subject(:type) { Dry::Types["nominal.range"] }
+
+    specify do
+      expect(type.to_ast).to eql([:nominal, [Range, {}]])
+    end
+
+    specify "with meta" do
+      expect(type_with_meta.to_ast).to eql([:nominal, [Range, key: :value]])
+    end
+
+    context "Member" do
+      subject(:type) do
+        Dry::Types["nominal.range"].of(Dry::Types["nominal.string"])
+      end
+
+      specify do
+        expect(type.to_ast).to eql([:range, [[:nominal, [String, {}]], {}]])
+      end
+
+      specify "with meta" do
+        expect(type_with_meta.to_ast).to eql(
+          [:range, [[:nominal, [String, {}]], key: :value]]
+        )
+      end
+    end
+
+    context "Member of structs" do
+      let(:struct) do
+        Test::Struct = Class.new { extend Dry::Types::Type }
+      end
+
+      subject(:type) do
+        Dry::Types["nominal.range"].of(struct)
+      end
+
+      specify do
+        expect(type.to_ast).to eql([:range, [struct, {}]])
+      end
+    end
+  end
 end

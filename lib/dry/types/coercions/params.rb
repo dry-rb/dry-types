@@ -162,6 +162,25 @@ module Dry
             raise CoercionError, "#{input.inspect} cannot be coerced to hash"
           end
         end
+
+        # @param [Range, String, Object] input
+        #
+        # @return [Range, Object]
+        #
+        # @raise CoercionError
+        #
+        # @api public
+        def self.to_range(input, &_block)
+          if empty_str?(input)
+            nil
+          elsif input.is_a?(::Range)
+            input
+          elsif block_given?
+            yield
+          else
+            raise CoercionError, "#{input.inspect} cannot be coerced to range"
+          end
+        end
       end
     end
   end

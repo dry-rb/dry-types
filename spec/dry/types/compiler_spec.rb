@@ -172,6 +172,37 @@ RSpec.describe Dry::Types::Compiler, "#call" do
     expect(arr[%w[1 2 3]]).to eql([1, 2, 3])
   end
 
+  it "builds an range" do
+    ast = Dry::Types["nominal.range"].of(Dry::Types["nominal.integer"]).to_ast
+
+    range = compiler.(ast)
+
+    expect(range).to be_a(Dry::Types::Range)
+
+    input = 1..2
+
+    expect(range[input]).to eql(1..2)
+  end
+
+  it "builds a lax params range" do
+    ast = Dry::Types["params.range"].lax.to_ast
+
+    range = compiler.(ast)
+
+    expect(range["oops"]).to eql("oops")
+    expect(range[""]).to be nil
+    expect(range[1..2]).to eql(1..2)
+  end
+
+  it "builds a lax params range with member" do
+    ast = Dry::Types["params.range"].of(Dry::Types["coercible.integer"]).lax.to_ast
+
+    range = compiler.(ast)
+
+    expect(range["oops"]).to eql("oops")
+    expect(range[1..2.0]).to eql(1..2)
+  end
+
   it "builds a safe params hash" do
     type = Dry::Types["params.hash"].schema(
       email: Dry::Types["nominal.string"],
