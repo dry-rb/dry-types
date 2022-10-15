@@ -15,6 +15,9 @@ require "dry/types/constraints"
 require "dry/types/errors"
 require "dry/types/version"
 
+# This must be required explicitly as it may conflict with dry-inflector
+require "dry/types/inflector"
+
 module Dry
   # Main library namespace
   #
