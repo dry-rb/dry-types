@@ -147,7 +147,7 @@ module Dry
     #
     # @return [String]
     def self.identifier(klass)
-      Inflector.underscore(klass).tr("/", ".")
+      Types::Inflector.underscore(klass).tr("/", ".")
     end
 
     # Cached type map
@@ -161,7 +161,7 @@ module Dry
 
     # @api private
     def self.const_missing(const)
-      underscored = Inflector.underscore(const)
+      underscored = Types::Inflector.underscore(const)
 
       if container.keys.any? { |key| key.split(".")[0] == underscored }
         raise ::NameError,
