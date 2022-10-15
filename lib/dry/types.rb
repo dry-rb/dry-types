@@ -17,6 +17,7 @@ require "dry/types/version"
 
 # This must be required explicitly as it may conflict with dry-inflector
 require "dry/types/inflector"
+require "dry/types/module"
 
 module Dry
   # Main library namespace
@@ -48,6 +49,7 @@ module Dry
             errors
             extensions
             inflector
+            module
             json
             params
             printer
