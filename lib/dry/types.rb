@@ -47,6 +47,7 @@ module Dry
             core
             errors
             extensions
+            inflector
             json
             params
             printer
