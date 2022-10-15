@@ -1,4 +1,8 @@
 ---
+- version: 1.6.1
+  date: 2022-10-15
+  changed:
+  - "Fix issues with internal const_missing and Inflector/Module constants (@flash-gordon + @solnic)"
 - version: 1.6.0
   date: 2022-10-15
   changed:
