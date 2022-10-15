@@ -15,7 +15,8 @@ require "dry/types/constraints"
 require "dry/types/errors"
 require "dry/types/version"
 
-# This must be required explicitly as it may conflict with global Module
+# This must be required explicitly as it may conflict with dry-inflector
+require "dry/types/inflector"
 require "dry/types/module"
 
 module Dry
@@ -47,6 +48,7 @@ module Dry
             core
             errors
             extensions
+            inflector
             module
             json
             params
