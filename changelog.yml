@@ -1,8 +1,13 @@
 ---
-- version: unreleased
-  date:
+- version: 1.6.1
+  date: 2022-10-15
+  changed:
+  - "Fix issues with internal const_missing and Inflector/Module constants (@flash-gordon + @solnic)"
+- version: 1.6.0
+  date: 2022-10-15
   changed:
   - "Optimize `PredicateRegistry` for Ruby 2.7+ (see #420 for more details) (@casperisfine)"
+  - "Use zeitwerk for auto-loading (@flash-gordon)"
 - version: 1.5.1
   date: '2021-02-16'
   fixed:

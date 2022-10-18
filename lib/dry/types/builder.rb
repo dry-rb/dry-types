@@ -44,6 +44,17 @@ module Dry
       def >(other)
         compose(other, Implication)
       end
+      
+      # Compose two types into an Intersection type
+      #
+      # @param [Type] other
+      #
+      # @return [Intersection, Intersection::Constrained]
+      #
+      # @api private
+      def &(other)
+        compose(other, Intersection)
+      end
 
       # Turn a type into an optional type
       #

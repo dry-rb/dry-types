@@ -15,6 +15,10 @@ require "dry/types/constraints"
 require "dry/types/errors"
 require "dry/types/version"
 
+# This must be required explicitly as it may conflict with dry-inflector
+require "dry/types/inflector"
+require "dry/types/module"
+
 module Dry
   # Main library namespace
   #
@@ -44,6 +48,8 @@ module Dry
             core
             errors
             extensions
+            inflector
+            module
             json
             params
             printer
@@ -141,7 +147,7 @@ module Dry
     #
     # @return [String]
     def self.identifier(klass)
-      Inflector.underscore(klass).tr("/", ".")
+      Types::Inflector.underscore(klass).tr("/", ".")
     end
 
     # Cached type map
@@ -155,7 +161,7 @@ module Dry
 
     # @api private
     def self.const_missing(const)
-      underscored = Inflector.underscore(const)
+      underscored = Types::Inflector.underscore(const)
 
       if container.keys.any? { |key| key.split(".")[0] == underscored }
         raise ::NameError,
