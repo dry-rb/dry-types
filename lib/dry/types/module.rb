@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "dry/types/builder_methods"
+
 module Dry
   module Types
     # Export types registered in a container as module constants.
@@ -44,7 +46,7 @@ module Dry
         elsif Undefined.equal?(default)
           default_ns = Undefined
         else
-          default_ns = Inflector.camelize(default).to_sym
+          default_ns = Types::Inflector.camelize(default).to_sym
         end
 
         tree = registry_tree
@@ -52,7 +54,9 @@ module Dry
         if namespaces.empty? && aliases.empty?
           modules = tree.select { |_, v| v.is_a?(::Hash) }.map(&:first)
         else
-          modules = (namespaces + aliases.keys).map { |n| Inflector.camelize(n).to_sym }
+          modules = (namespaces + aliases.keys).map { |n|
+            Types::Inflector.camelize(n).to_sym
+          }
         end
 
         tree.each_with_object({}) do |(key, value), constants|
@@ -73,7 +77,7 @@ module Dry
         @registry_tree ||= @registry.keys.each_with_object({}) { |key, tree|
           type = @registry[key]
           *modules, const_name = key.split(".").map { |part|
-            Inflector.camelize(part).to_sym
+            Types::Inflector.camelize(part).to_sym
           }
           next if modules.empty?
 
