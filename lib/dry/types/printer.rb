@@ -21,14 +21,53 @@ module Dry
         Enum => :visit_enum,
         Default => :visit_default,
         Default::Callable => :visit_default,
-        Sum => :visit_sum,
-        Sum::Constrained => :visit_sum,
-        Implication => :visit_implication,
-        Implication::Constrained => :visit_implication,
-        Intersection => :visit_intersection,
-        Intersection::Constrained => :visit_intersection,
+        Sum => :visit_composition,
+        Sum::Constrained => :visit_composition,
+        Intersection => :visit_composition,
+        Intersection::Constrained => :visit_composition,
+        Implication => :visit_composition,
+        Implication::Constrained => :visit_composition,
         Any.class => :visit_any
       }
+
+      class CompositionPrinter
+        def initialize(printer, composition_class)
+          @printer = printer
+          @composition_class = composition_class
+          freeze
+        end
+
+        def visit(composition)
+          visit_constructors(composition) do |constructors|
+            @printer.visit_options(composition.options, composition.meta) do |opts|
+              yield "#{@composition_class.composition_name}<#{constructors}#{opts}>"
+            end
+          end
+        end
+
+        private
+
+        def visit_constructors(composition)
+          visit_constructor(composition.left) do |left|
+            visit_constructor(composition.right) do |right|
+              yield "#{left} #{@composition_class.operator} #{right}"
+            end
+          end
+        end
+
+        def visit_constructor(type, &block)
+          case type
+          when @composition_class
+            visit_constructors(type, &block)
+          else
+            @printer.visit(type, &block)
+          end
+        end
+      end
+
+      def initialize
+        freeze
+      end
 
       def call(type)
         output = "".dup
@@ -154,121 +193,11 @@ module Dry
         end
       end
 
-      def visit_sum(sum)
-        visit_sum_constructors(sum) do |constructors|
-          visit_options(sum.options, sum.meta) do |opts|
-            yield "Sum<#{constructors}#{opts}>"
-          end
-        end
-      end
-
-      def visit_sum_constructors(sum)
-        case sum.left
-        when Sum
-          visit_sum_constructors(sum.left) do |left|
-            case sum.right
-            when Sum
-              visit_sum_constructors(sum.right) do |right|
-                yield "#{left} | #{right}"
-              end
-            else
-              visit(sum.right) do |right|
-                yield "#{left} | #{right}"
-              end
-            end
-          end
-        else
-          visit(sum.left) do |left|
-            case sum.right
-            when Sum
-              visit_sum_constructors(sum.right) do |right|
-                yield "#{left} | #{right}"
-              end
-            else
-              visit(sum.right) do |right|
-                yield "#{left} | #{right}"
-              end
-            end
-          end
-        end
-      end
-
-      def visit_implication(implication)
-        visit_implication_constructors(implication) do |constructors|
-          visit_options(implication.options, implication.meta) do |opts|
-            yield "Implication<#{constructors}#{opts}>"
-          end
-        end
-      end
-            
-      def visit_intersection(intersection)
-        visit_intersection_constructors(intersection) do |constructors|
-          visit_options(intersection.options, intersection.meta) do |opts|
-            yield "Intersection<#{constructors}#{opts}>"
-          end
-        end
-      end
-
-      def visit_implication_constructors(implication)
-        case implication.left
-        when Implication
-          visit_implication_constructors(implication.left) do |left|
-            case implication.right
-            when Implication
-              visit_implication_constructors(implication.right) do |right|
-                yield "#{left} > #{right}"
-              end
-            else
-              visit(implication.right) do |right|
-                yield "#{left} > #{right}"
-              end
-            end
-          end
-        else
-          visit(implication.left) do |left|
-            case implication.right
-            when Implication
-              visit_implication_constructors(implication.right) do |right|
-                yield "#{left} > #{right}"
-              end
-            else
-              visit(implication.right) do |right|
-                yield "#{left} > #{right}"
-              end
-            end
-          end
-        end
-      end
-
-      def visit_intersection_constructors(intersection)
-        case intersection.left
-        when Intersection
-          visit_intersection_constructors(intersection.left) do |left|
-            case intersection.right
-            when Intersection
-              visit_intersection_constructors(intersection.right) do |right|
-                yield "#{left} & #{right}"
-              end
-            else
-              visit(intersection.right) do |right|
-                yield "#{left} & #{right}"
-              end
-            end
-          end
-        else
-          visit(intersection.left) do |left|
-            case intersection.right
-            when Intersection
-              visit_intersection_constructors(intersection.right) do |right|
-                yield "#{left} & #{right}"
-              end
-            else
-              visit(intersection.right) do |right|
-                yield "#{left} & #{right}"
-              end
-            end
-          end
-        end
+      def visit_composition(composition, &block)
+        klass = composition.class
+        @composition_printers ||= {}
+        @composition_printers[klass] ||= CompositionPrinter.new(self, klass)
+        @composition_printers[klass].visit(composition, &block)
       end
 
       def visit_enum(enum)
@@ -394,7 +323,7 @@ module Dry
       end
     end
 
-    PRINTER = Printer.new.freeze
+    PRINTER = Printer.new
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/PerceivedComplexity

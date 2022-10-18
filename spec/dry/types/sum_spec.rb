@@ -257,6 +257,21 @@ RSpec.describe Dry::Types::Sum do
       end
     end
 
+    context "constrained" do
+      let(:type) do
+        Dry::Types["nominal.string"].constrained(format: /foo/) |
+          Dry::Types["nominal.string"].constrained(min_size: 4)
+      end
+
+      it "returns string representation of the type" do
+        expect(type.to_s).to eql(
+          "#<Dry::Types[Sum<" \
+            "Constrained<Nominal<String> rule=[format?(/foo/)]> | "\
+            "Constrained<Nominal<String> rule=[min_size?(4)]>>]>"
+        )
+      end
+    end
+
     context "sum tree" do
       let(:type) do
         Dry::Types["nominal.string"] | Dry::Types["nominal.integer"] |

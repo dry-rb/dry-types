@@ -6,62 +6,10 @@ module Dry
     #
     # @api public
     class Sum
-      include Type
-      include Builder
-      include Options
-      include Meta
-      include Printable
-      include Dry::Equalizer(:left, :right, :options, :meta, inspect: false, immutable: true)
+      include Composition
 
-      # @return [Type]
-      attr_reader :left
-
-      # @return [Type]
-      attr_reader :right
-
-      # @api private
-      class Constrained < Sum
-        # @return [Dry::Logic::Operations::Or]
-        def rule
-          left.rule | right.rule
-        end
-
-        # @return [true]
-        def constrained?
-          true
-        end
-      end
-
-      # @param [Type] left
-      # @param [Type] right
-      # @param [Hash] options
-      #
-      # @api private
-      def initialize(left, right, **options)
-        super
-        @left, @right = left, right
-        freeze
-      end
-
-      # @return [String]
-      #
-      # @api public
-      def name
-        [left, right].map(&:name).join(" | ")
-      end
-
-      # @return [false]
-      #
-      # @api public
-      def default?
-        false
-      end
-
-      # @return [false]
-      #
-      # @api public
-      def constrained?
-        false
+      def self.operator
+        :|
       end
 
       # @return [Boolean]
@@ -104,26 +52,6 @@ module Dry
         end
       end
 
-      # @api private
-      def success(input)
-        if left.valid?(input)
-          left.success(input)
-        elsif right.valid?(input)
-          right.success(input)
-        else
-          raise ArgumentError, "Invalid success value '#{input}' for #{inspect}"
-        end
-      end
-
-      # @api private
-      def failure(input, _error = nil)
-        if left.valid?(input)
-          right.failure(input, right.try(input).error)
-        else
-          left.failure(input, left.try(input).error)
-        end
-      end
-
       # @param [Object] value
       #
       # @return [Boolean]
@@ -149,13 +77,6 @@ module Dry
         end
       end
 
-      # @see Nominal#to_ast
-      #
-      # @api public
-      def to_ast(meta: true)
-        [:sum, [left.to_ast(meta: meta), right.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
-      end
-
       # @param [Hash] options
       #
       # @return [Constrained,Sum]
@@ -169,15 +90,6 @@ module Dry
         else
           super
         end
-      end
-
-      # Wrap the type with a proc
-      #
-      # @return [Proc]
-      #
-      # @api public
-      def to_proc
-        proc { |value| self.(value) }
       end
     end
   end
