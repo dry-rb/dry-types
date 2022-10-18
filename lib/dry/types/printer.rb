@@ -66,7 +66,7 @@ module Dry
       end
 
       def initialize
-        @composition_printers ||= {}
+        @composition_printers = {}
         freeze
       end
 
