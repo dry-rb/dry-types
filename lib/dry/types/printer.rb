@@ -66,6 +66,7 @@ module Dry
       end
 
       def initialize
+        @composition_printers ||= {}
         freeze
       end
 
@@ -195,8 +196,7 @@ module Dry
 
       def visit_composition(composition, &block)
         klass = composition.class
-        @composition_printers ||= {}
-        @composition_printers[klass] ||= CompositionPrinter.new(self, klass)
+        @composition_printers[klass] = CompositionPrinter.new(self, klass)
         @composition_printers[klass].visit(composition, &block)
       end
 
