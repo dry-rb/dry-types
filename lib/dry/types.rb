@@ -41,6 +41,7 @@ module Dry
         loader.ignore(
           "#{root}/dry-types.rb",
           "#{root}/dry/types/extensions",
+          "#{root}/dry/types/printer",
           "#{root}/dry/types/spec/types.rb",
           "#{root}/dry/types/{#{%w[
             compat

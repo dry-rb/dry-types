@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "dry/types/printer/composition"
+
 module Dry
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/PerceivedComplexity
@@ -9,9 +11,11 @@ module Dry
       MAPPING = { # rubocop:disable Style/MutableConstant
         Nominal => :visit_nominal,
         Constructor => :visit_constructor,
-        Constrained => :visit_constrained,
-        Constrained::Coercible => :visit_constrained,
-        Hash => :visit_hash,
+        [
+          Constrained,
+          Constrained::Coercible
+        ] => :visit_constrained,
+        Types::Hash => :visit_hash,
         Schema => :visit_schema,
         Schema::Key => :visit_key,
         Map => :visit_map,
@@ -19,51 +23,17 @@ module Dry
         Array::Member => :visit_array_member,
         Lax => :visit_lax,
         Enum => :visit_enum,
-        Default => :visit_default,
-        Default::Callable => :visit_default,
-        Sum => :visit_composition,
-        Sum::Constrained => :visit_composition,
-        Intersection => :visit_composition,
-        Intersection::Constrained => :visit_composition,
-        Implication => :visit_composition,
-        Implication::Constrained => :visit_composition,
+        [Default, Default::Callable] => :visit_default,
+        [
+          Sum,
+          Sum::Constrained,
+          Intersection,
+          Intersection::Constrained,
+          Implication,
+          Implication::Constrained
+        ] => :visit_composition,
         Any.class => :visit_any
-      }
-
-      class CompositionPrinter
-        def initialize(printer, composition_class)
-          @printer = printer
-          @composition_class = composition_class
-          freeze
-        end
-
-        def visit(composition)
-          visit_constructors(composition) do |constructors|
-            @printer.visit_options(composition.options, composition.meta) do |opts|
-              yield "#{@composition_class.composition_name}<#{constructors}#{opts}>"
-            end
-          end
-        end
-
-        private
-
-        def visit_constructors(composition)
-          visit_constructor(composition.left) do |left|
-            visit_constructor(composition.right) do |right|
-              yield "#{left} #{@composition_class.operator} #{right}"
-            end
-          end
-        end
-
-        def visit_constructor(type, &block)
-          case type
-          when @composition_class
-            visit_constructors(type, &block)
-          else
-            @printer.visit(type, &block)
-          end
-        end
-      end
+      }.flat_map { |k, v| Array(k).map { |kk| [kk, v] } }.to_h
 
       def initialize
         @composition_printers = {}
@@ -131,6 +101,92 @@ module Dry
         end
       end
 
+      def visit_composition(composition, &block)
+        klass = composition.class
+        @composition_printers[klass] = Composition.new(self, klass)
+        @composition_printers[klass].visit(composition, &block)
+      end
+
+      def visit_enum(enum)
+        visit(enum.type) do |type|
+          options = enum.options.dup
+          mapping = options.delete(:mapping)
+
+          visit_options(options) do |opts|
+            if mapping == enum.inverted_mapping
+              values = mapping.values.map(&:inspect).join(", ")
+              yield "Enum<#{type} values={#{values}}#{opts}>"
+            else
+              mapping_str = mapping.map { |key, value|
+                "#{key.inspect}=>#{value.inspect}"
+              }.join(", ")
+              yield "Enum<#{type} mapping={#{mapping_str}}#{opts}>"
+            end
+          end
+        end
+      end
+
+      def visit_default(default)
+        visit(default.type) do |type|
+          visit_options(default.options) do |opts|
+            if default.is_a?(Default::Callable)
+              visit_callable(default.value) do |fn|
+                yield "Default<#{type} value_fn=#{fn}#{opts}>"
+              end
+            else
+              yield "Default<#{type} value=#{default.value.inspect}#{opts}>"
+            end
+          end
+        end
+      end
+
+      def visit_nominal(type)
+        visit_options(type.options, type.meta) do |opts|
+          yield "Nominal<#{type.primitive}#{opts}>"
+        end
+      end
+
+      def visit_lax(lax)
+        visit(lax.type) do |type|
+          yield "Lax<#{type}>"
+        end
+      end
+
+      def visit_callable(callable)
+        fn = callable.is_a?(String) ? FnContainer[callable] : callable
+
+        case fn
+        when ::Method
+          yield "#{fn.receiver}.#{fn.name}"
+        when ::Proc
+          path, line = fn.source_location
+
+          if line&.zero?
+            yield ".#{path}"
+          elsif path
+            yield "#{path.sub("#{Dir.pwd}/", EMPTY_STRING)}:#{line}"
+          else
+            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/) # rubocop:disable Lint/MixedRegexpCaptureTypes
+
+            if match
+              yield ".#{match[:name]}"
+            elsif fn.lambda?
+              yield "(lambda)"
+            else
+              yield "(proc)"
+            end
+          end
+        else
+          call = fn.method(:call)
+
+          if call.owner == fn.class
+            yield "#{fn.class}#call"
+          else
+            yield "#{fn}.call"
+          end
+        end
+      end
+
       def visit_schema(schema)
         options = schema.options.dup
         size = schema.count
@@ -194,57 +250,6 @@ module Dry
         end
       end
 
-      def visit_composition(composition, &block)
-        klass = composition.class
-        @composition_printers[klass] = CompositionPrinter.new(self, klass)
-        @composition_printers[klass].visit(composition, &block)
-      end
-
-      def visit_enum(enum)
-        visit(enum.type) do |type|
-          options = enum.options.dup
-          mapping = options.delete(:mapping)
-
-          visit_options(options) do |opts|
-            if mapping == enum.inverted_mapping
-              values = mapping.values.map(&:inspect).join(", ")
-              yield "Enum<#{type} values={#{values}}#{opts}>"
-            else
-              mapping_str = mapping.map { |key, value|
-                "#{key.inspect}=>#{value.inspect}"
-              }.join(", ")
-              yield "Enum<#{type} mapping={#{mapping_str}}#{opts}>"
-            end
-          end
-        end
-      end
-
-      def visit_default(default)
-        visit(default.type) do |type|
-          visit_options(default.options) do |opts|
-            if default.is_a?(Default::Callable)
-              visit_callable(default.value) do |fn|
-                yield "Default<#{type} value_fn=#{fn}#{opts}>"
-              end
-            else
-              yield "Default<#{type} value=#{default.value.inspect}#{opts}>"
-            end
-          end
-        end
-      end
-
-      def visit_nominal(type)
-        visit_options(type.options, type.meta) do |opts|
-          yield "Nominal<#{type.primitive}#{opts}>"
-        end
-      end
-
-      def visit_lax(lax)
-        visit(lax.type) do |type|
-          yield "Lax<#{type}>"
-        end
-      end
-
       def visit_hash(hash)
         options = hash.options.dup
         type_fn_str = ""
@@ -260,41 +265,6 @@ module Dry
             yield "Hash"
           else
             yield "Hash<#{type_fn_str}#{opts}>"
-          end
-        end
-      end
-
-      def visit_callable(callable)
-        fn = callable.is_a?(String) ? FnContainer[callable] : callable
-
-        case fn
-        when ::Method
-          yield "#{fn.receiver}.#{fn.name}"
-        when ::Proc
-          path, line = fn.source_location
-
-          if line&.zero?
-            yield ".#{path}"
-          elsif path
-            yield "#{path.sub("#{Dir.pwd}/", EMPTY_STRING)}:#{line}"
-          else
-            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/) # rubocop:disable Lint/MixedRegexpCaptureTypes
-
-            if match
-              yield ".#{match[:name]}"
-            elsif fn.lambda?
-              yield "(lambda)"
-            else
-              yield "(proc)"
-            end
-          end
-        else
-          call = fn.method(:call)
-
-          if call.owner == fn.class
-            yield "#{fn.class}#call"
-          else
-            yield "#{fn}.call"
           end
         end
       end
