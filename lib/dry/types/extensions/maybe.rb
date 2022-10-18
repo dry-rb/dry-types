@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/monads/maybe"
+require "dry/monads"
+require "dry/monads/version"
+
+if Gem::Version.new(Dry::Monads::VERSION) < Gem::Version.new("1.5.0")
+  raise "dry-types requires dry-monads >= 1.5.0"
+end
 
 module Dry
   module Types
@@ -13,7 +18,7 @@ module Dry
       include Decorator
       include Builder
       include Printable
-      include ::Dry::Monads::Maybe::Mixin
+      include ::Dry::Monads[:maybe]
 
       # @param [Dry::Monads::Maybe, Object] input
       #
