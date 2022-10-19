@@ -8,7 +8,7 @@ module Dry
   module Types
     # @api private
     class Printer
-      MAPPING = { # rubocop:disable Style/MutableConstant
+      MAPPING = {
         Nominal => :visit_nominal,
         Constructor => :visit_constructor,
         [
