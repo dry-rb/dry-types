@@ -8,7 +8,6 @@ require "zeitwerk"
 require "concurrent/map"
 
 require "dry/core"
-require "dry/container"
 require "dry/logic"
 
 require "dry/types/constraints"
