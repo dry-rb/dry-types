@@ -1,4 +1,8 @@
 ---
+- version: 1.7.0
+  date: unreleased
+  changed:
+  - "This version uses dry-core 1.0 (@flash-gordon)"
 - version: 1.6.1
   date: 2022-10-15
   changed:
