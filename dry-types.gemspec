@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "concurrent-ruby", "~> 1.0"
   spec.add_runtime_dependency "dry-core", ">= 1.0.0.rc1", "< 2"
   spec.add_runtime_dependency "dry-inflector", "~> 0.1", ">= 0.1.2"
-  spec.add_runtime_dependency "dry-logic", "~> 1.3", ">= 1.3"
+  spec.add_runtime_dependency "dry-logic", "~> 1.4", ">= 1.4"
   spec.add_runtime_dependency "zeitwerk", "~> 2.6"
 
   spec.add_development_dependency "bundler"
