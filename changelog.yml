@@ -1,6 +1,6 @@
 ---
 - version: 1.7.0
-  date: unreleased
+  date:
   changed:
   - "This version is compatible with recently released dry-rb dependencies (@flash-gordon)"
 - version: 1.6.1
