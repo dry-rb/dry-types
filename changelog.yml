@@ -1,8 +1,10 @@
 ---
 - version: 1.7.0
-  date:
+  date: 2022-11-04
   changed:
   - "This version is compatible with recently released dry-rb dependencies (@flash-gordon)"
+  - "Updated to dry-core 1.0 (@flash-gordon + @solnic)"
+  - "Dependency on dry-container was dropped (@flash-gordon)"
 - version: 1.6.1
   date: 2022-10-15
   changed:
