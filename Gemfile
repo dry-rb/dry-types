@@ -6,9 +6,6 @@ eval_gemfile "Gemfile.devtools"
 
 gemspec
 
-gem "dry-core", github: "dry-rb/dry-core", branch: "main"
-gem "dry-inflector", github: "dry-rb/dry-inflector", branch: "main"
-gem "dry-logic", github: "dry-rb/dry-logic", branch: "main"
 gem "dry-monads", github: "dry-rb/dry-monads", branch: "main"
 
 group :test do
