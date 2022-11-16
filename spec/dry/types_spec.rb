@@ -6,6 +6,7 @@ RSpec.describe Dry::Types do
       Dry::Types.loader.eager_load
     ensure
       Dry::Types.loader.unload
+      Dry::Types.loader.setup
     end
   end
 
@@ -72,6 +73,8 @@ RSpec.describe Dry::Types do
       constructed = Dry::Types["integer"].or_nil
 
       expect(constructed.("123")).to be_nil
+    ensure
+      Dry::Types::Builder.remove_method(:or_nil)
     end
 
     it "has support for arguments" do
@@ -79,6 +82,8 @@ RSpec.describe Dry::Types do
       constructed = Dry::Types["integer"].or(300)
 
       expect(constructed.("123")).to eql(300)
+    ensure
+      Dry::Types::Builder.remove_method(:or)
     end
   end
 end
