@@ -49,7 +49,7 @@ module Dry
       # @api private
       def weak(*)
         raise "Support for old hash schemas was removed, please refer to the CHANGELOG "\
-              "on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/master/CHANGELOG.md"
+              "on how to proceed with the new API https://github.com/dry-rb/dry-types/blob/main/CHANGELOG.md"
       end
       alias_method :permissive, :weak
       alias_method :strict, :weak
