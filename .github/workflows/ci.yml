@@ -29,6 +29,8 @@ jobs:
         - "3.0"
         - "2.7"
         include:
+          - ruby: "jruby-9.4"
+            allow_failures: true
           - ruby: "3.1"
             coverage: "true"
     env:
