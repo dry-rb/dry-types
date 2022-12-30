@@ -39,7 +39,7 @@ jobs:
           Gemfile
           Rakefile
     - name: Check ${{ matrix.type }}
-      uses: action-hero/actions/rubocop@main
+      uses: repobot-app/actions/rubocop@main
       if: ${{ env.GIT_DIFF != '' }}
       with:
         diff: ${{ env.GIT_DIFF }}
