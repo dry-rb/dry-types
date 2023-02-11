@@ -22,7 +22,7 @@ module Dry
     #   (coercible_proc <= coercible_sym)['example'] # => #<Proc:(&:example)>
     #
     #   # the right-hand type is resulting when is built with {Builder#>=}
-    #   (coercible_proc >= coercible_sym)['example'] # => #<Proc:(&:example)>
+    #   (coercible_sym >= coercible_proc)['example'] # => #<Proc:(&:example)>
     #
     # @api public
     class Transition
