@@ -216,15 +216,14 @@ RSpec.describe Dry::Types::Implication do
   end
 
   describe "#meta" do
-    context "optional types" do
-      let(:meta) { {foo: :bar} }
+    let(:meta) { {foo: :bar} }
 
-      subject(:type) { t::Nominal::String.optional }
+    subject(:type) { t::Nominal::Hash > t.Hash(foo: t::Nominal::Integer) }
 
-      it "uses meta from the right branch" do
-        expect(type.meta(meta).meta).to eql(meta)
-        expect(type.meta(meta).right.meta).to eql(meta)
-      end
+    it "has no special meta handling" do
+      expect(type.meta(meta).meta).to eql(meta)
+      expect(type.meta(meta).left.meta).to eql({})
+      expect(type.meta(meta).right.meta).to eql({})
     end
   end
 end
