@@ -56,6 +56,28 @@ module Dry
         compose(other, Implication)
       end
 
+      # Compose two types into an Transition type
+      #
+      # @param [Type] right resulting type
+      #
+      # @return [Transition, Transition::Constrained]
+      #
+      # @api public
+      def >=(right)
+        compose(right, Transition)
+      end
+
+      # Compose two types into an Transition type
+      #
+      # @param [Type] left transitive type
+      #
+      # @return [Transition, Transition::Constrained]
+      #
+      # @api public
+      def <=(left)
+        left >= self
+      end
+
       # Turn a type into an optional type
       #
       # @return [Sum]
