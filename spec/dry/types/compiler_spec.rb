@@ -412,5 +412,11 @@ RSpec.describe Dry::Types::Compiler, "#call" do
       type = compiler.(ast)
       expect(type).to eql(Dry::Types['any'].constrained(type: Numeric) & Dry::Types['integer'])
     end
+
+    it 'builds a transition' do
+      ast = [:transition, [any_numeric_ast, strict_integer_ast, {}]]
+      type = compiler.(ast)
+      expect(type).to eql(Dry::Types['any'].constrained(type: Numeric) >= Dry::Types['integer'])
+    end
   end
 end
