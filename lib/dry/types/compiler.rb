@@ -113,6 +113,16 @@ module Dry
         registry["any"].meta(meta)
       end
 
+      def visit_intersection(node)
+        *types, meta = node
+        types.map { |type| visit(type) }.reduce(:&).meta(meta)
+      end
+
+      def visit_implication(node)
+        *types, meta = node
+        types.map { |type| visit(type) }.reduce(:>).meta(meta)
+      end
+
       def compile_fn(fn)
         type, *node = fn
 
