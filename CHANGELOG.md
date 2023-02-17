@@ -5,7 +5,7 @@
 
 ### Fixed
 
-- Warning from jruby about overrdden keyword (@flash-gordon + @klobuczek in #454)
+- Warning from jruby about overwritten keyword (@flash-gordon + @klobuczek in #454)
 
 
 [Compare v1.7.0...v1.7.1](https://github.com/dry-rb/dry-types/compare/v1.7.0...v1.7.1)
