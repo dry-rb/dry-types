@@ -16,8 +16,6 @@ rescue LoadError; end
 Dir[Pathname(__dir__).join("shared/*.rb")].sort.each(&method(:require))
 require "dry/types/spec/types"
 
-Undefined = Dry::Core::Constants::Undefined
-
 Dry::Core::Deprecations.set_logger!(SPEC_ROOT.join("../log/deprecations.log"))
 
 RSpec.configure do |config|
@@ -32,6 +30,12 @@ RSpec.configure do |config|
   config.before { stub_const("Test", Module.new) }
 
   config.order = "random"
+
+  config.include Module.new {
+    extend RSpec::SharedContext
+
+    let(:undefined) { Dry::Core::Constants::Undefined }
+  }
 end
 
 srand RSpec.configuration.seed

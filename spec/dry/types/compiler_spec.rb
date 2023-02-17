@@ -261,8 +261,8 @@ RSpec.describe Dry::Types::Compiler, "#call" do
       :constrained, [[:nominal, [Integer, {}]],
                      [:or,
                       [
-                        [:predicate, [:lt?, [[:num, 5], [:input, Undefined]]]],
-                        [:predicate, [:gt?, [[:num, 18], [:input, Undefined]]]]
+                        [:predicate, [:lt?, [[:num, 5], [:input, undefined]]]],
+                        [:predicate, [:gt?, [[:num, 18], [:input, undefined]]]]
                       ]], {}]
     ]
 
@@ -322,10 +322,10 @@ RSpec.describe Dry::Types::Compiler, "#call" do
       :map, [
         [:constrained,
          [[:nominal, [String, {}]],
-          [:predicate, [:type?, [[:type, String], [:input, Undefined]]]]]],
+          [:predicate, [:type?, [[:type, String], [:input, undefined]]]]]],
         [:constrained,
          [[:nominal, [Integer, {}]],
-          [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]]],
+          [:predicate, [:type?, [[:type, Integer], [:input, undefined]]]]]],
         abc: 123, foo: "bar"
       ]
     ])

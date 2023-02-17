@@ -56,7 +56,7 @@ RSpec.describe Dry::Types, "#to_ast" do
       expect(type.to_ast).to eql(
         [:constrained, [
           [:nominal, [Integer, {}]],
-          [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]
+          [:predicate, [:type?, [[:type, Integer], [:input, undefined]]]]
         ]]
       )
     end
@@ -65,7 +65,7 @@ RSpec.describe Dry::Types, "#to_ast" do
       expect(type_with_meta.to_ast).to eql(
         [:constrained, [
           [:nominal, [Integer, key: :value]],
-          [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]
+          [:predicate, [:type?, [[:type, Integer], [:input, undefined]]]]
         ]]
       )
     end
@@ -127,12 +127,12 @@ RSpec.describe Dry::Types, "#to_ast" do
                 [
                   [
                     :predicate,
-                    [:type?, [[:type, String], [:input, Undefined]]]
+                    [:type?, [[:type, String], [:input, undefined]]]
                   ],
                   [
                     :predicate,
                     [:included_in?,
-                     [[:list, %w[draft published archived]], [:input, Undefined]]]
+                     [[:list, %w[draft published archived]], [:input, undefined]]]
                   ]
                 ]
               ]

@@ -11,7 +11,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
     end
 
     it "returns default value when Undefined is passed" do
-      expect(type[Undefined]).to eql("foo")
+      expect(type[undefined]).to eql("foo")
     end
 
     it "aliases #[] as #call" do
@@ -169,7 +169,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
     end
 
     it "returns true if value is Undefined" do
-      expect(type.valid?(Undefined)).to eq true
+      expect(type.valid?(undefined)).to eq true
     end
 
     it "returns true if no value is passed" do
@@ -179,7 +179,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
 
   context "with a constructor" do
     describe "returning Undefined" do
-      let(:non_empty_string) { Dry::Types["nominal.string"].constructor { |str| str.empty? ? Undefined : str } }
+      let(:non_empty_string) { Dry::Types["nominal.string"].constructor { |str| str.empty? ? undefined : str } }
       subject(:type) { non_empty_string.default("empty") }
 
       it "returns default value on empty input" do
