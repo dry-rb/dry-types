@@ -22,9 +22,9 @@ module Dry
       # @param [#call, nil] block
       #
       # @api public
-      def self.new(input, **options, &block)
+      def self.new(input, fn: Undefined, **options, &block)
         type = input.is_a?(Builder) ? input : Nominal.new(input)
-        super(type, **options, fn: Function[options.fetch(:fn, block)])
+        super(type, **options, fn: Function[Undefined.default(fn, block)])
       end
 
       # @param [Builder, Object] input
