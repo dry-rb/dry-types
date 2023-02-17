@@ -6,10 +6,10 @@ eval_gemfile "Gemfile.devtools"
 
 gemspec
 
-gem "dry-monads", github: "dry-rb/dry-monads", branch: "main"
+gem "dry-monads"
 
 group :test do
-  gem "dry-struct", github: "dry-rb/dry-struct", branch: "main"
+  gem "dry-struct"
 end
 
 group :benchmarks do
