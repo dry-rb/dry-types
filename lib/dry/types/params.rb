@@ -20,6 +20,10 @@ module Dry
       self["nominal.time"].constructor(Coercions::Params.method(:to_time))
     end
 
+    register("params.file") do
+      self["nominal.file"].constructor(Coercions::Params.method(:to_file))
+    end
+
     register("params.true") do
       self["nominal.true"].constructor(Coercions::Params.method(:to_true))
     end

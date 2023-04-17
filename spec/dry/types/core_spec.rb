@@ -92,6 +92,20 @@ RSpec.describe Dry::Types::Nominal do
     end
   end
 
+  describe "with File" do
+    let(:file) { Dry::Types["strict.file"] }
+
+    it_behaves_like Dry::Types::Nominal do
+      let(:type) { file }
+    end
+
+    it "accepts a file object" do
+      input = File.open(__FILE__)
+
+      expect(file[input]).to be(input)
+    end
+  end
+
   describe "with Range" do
     let(:range) { Dry::Types["strict.range"] }
 
