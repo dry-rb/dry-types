@@ -4,6 +4,6 @@ jobs:
       matrix:
         include:
           - ruby: "3.1"
-            dry_logic_from_master: "true"
+            dry_logic_from_main: "true"
     env:
-      DRY_LOGIC_FROM_MASTER: ${{matrix.dry_logic_from_master}}
+      DRY_LOGIC_FROM_MAIN: ${{matrix.dry_logic_from_main}}
