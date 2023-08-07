@@ -28,7 +28,7 @@ module Dry
     extend ::Dry::Core::Deprecations[:"dry-types"]
     include ::Dry::Core::Constants
 
-    TYPE_SPEC_REGEX = /(.+)<(.+)>/.freeze
+    TYPE_SPEC_REGEX = /(.+)<(.+)>/
 
     def self.loader
       @loader ||= ::Zeitwerk::Loader.new.tap do |loader|

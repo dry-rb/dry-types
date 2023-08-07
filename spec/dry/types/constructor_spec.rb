@@ -289,7 +289,7 @@ RSpec.describe Dry::Types::Constructor do
   end
 
   describe "#name" do
-    subject(:type) { Dry::Types["nominal.string"].optional.constructor(-> v { v.nil? ? nil : v.to_s }) }
+    subject(:type) { Dry::Types["nominal.string"].optional.constructor(-> v { v&.to_s }) }
 
     it "works with sum types" do
       expect(type.name).to eql("NilClass | String")

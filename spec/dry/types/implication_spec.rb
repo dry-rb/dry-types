@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/YodaCondition
+
 RSpec.describe Dry::Types::Implication do
   let(:t) { Dry.Types }
 
@@ -228,3 +230,5 @@ RSpec.describe Dry::Types::Implication do
     end
   end
 end
+
+# rubocop:enable Style/YodaCondition
