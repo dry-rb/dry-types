@@ -2,7 +2,7 @@
 [gem]: https://rubygems.org/gems/dry-types
 [actions]: https://github.com/dry-rb/dry-types/actions
 
-# dry-types [![Gem Version](https://badge.fury.io/rb/dry-types.svg)][gem] [![CI Status](https://github.com/dry-rb/dry-types/workflows/ci/badge.svg)][actions]
+# dry-types [![Gem Version](https://badge.fury.io/rb/dry-types.svg)][gem] [![CI Status](https://github.com/dry-rb/dry-types/workflows/CI/badge.svg)][actions]
 
 ## Links
 
