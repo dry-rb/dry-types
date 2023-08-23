@@ -1,4 +1,5 @@
 <!--- this file is synced from dry-rb/template-gem project -->
+
 [gem]: https://rubygems.org/gems/dry-types
 [actions]: https://github.com/dry-rb/dry-types/actions
 
