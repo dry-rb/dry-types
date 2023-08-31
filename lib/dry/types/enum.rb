@@ -33,6 +33,10 @@ module Dry
         freeze
       end
 
+      def name
+        "#{super}[#{values.join('|')}]"
+      end
+
       # @return [Object]
       #
       # @api private
