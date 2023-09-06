@@ -188,4 +188,10 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
       expect(inferrer[custom_type]).to eql([type?: custom_type.primitive])
     end
   end
+
+  it "tells that map types are not supported" do
+    expect {
+      inferrer[type(:hash).map("integer", "string")]
+    }.to raise_error(NotImplementedError, /map types are not supported/)
+  end
 end
