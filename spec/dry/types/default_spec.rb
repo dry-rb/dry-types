@@ -216,6 +216,13 @@ RSpec.describe Dry::Types::Builder, "#default" do
       context "proc w/o source" do
         let(:value_constructor) { method(:Integer).to_proc }
 
+        before do
+          # Force the source_location to nil, since this specific object's source_location returns a
+          # real value since Ruby 3.3:
+          #   ["<internal:kernel>", 305]
+          allow(value_constructor).to receive(:source_location) { nil }
+        end
+
         it "returns string representation of the type" do
           expect(type.to_s).to eql(
             "#<Dry::Types[Default<Nominal<String> "\
