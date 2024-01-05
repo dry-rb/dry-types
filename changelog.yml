@@ -1,6 +1,6 @@
 ---
 - version: 1.7.2
-  date: 2024-01-04
+  date: 2024-01-05
   fixed:
   - "Fixed BigDecimal warning due to not being required in gemspec (@bkuhlmann in #464)"
 - version: 1.7.1
