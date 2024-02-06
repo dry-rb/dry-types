@@ -9,12 +9,12 @@ sections:
   - optional-values
   - default-values
   - fallbacks
-  - sum
   - constraints
   - hash-schemas
   - array-with-member
   - enum
   - map
+  - combining-types
   - custom-types
   - custom-type-builders
   - extensions
@@ -129,7 +129,7 @@ Types::Strict::String[10000]
 * Support for [constrained types](docs::constraints)
 * Support for [optional values](docs::optional-values)
 * Support for [default values](docs::default-values)
-* Support for [sum types](docs::sum)
+* Support for [sum types](docs::combining-types/sum)
 * Support for [enums](docs::enum)
 * Support for [hash type with type schemas](docs::hash-schemas)
 * Support for [array type with members](docs::array-with-member)

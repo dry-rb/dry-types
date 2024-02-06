@@ -2,7 +2,6 @@
 title: Intersection
 layout: gem-single
 name: dry-types
-order: 8
 ---
 
 Intersection types are specified using the `&` operator. It combines two
