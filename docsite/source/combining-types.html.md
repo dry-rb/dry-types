@@ -5,7 +5,6 @@ name: dry-types
 sections:
   - intersection
   - sum
-order: 11
 ---
 
 Types can be combined to create new types, using [intersection types](docs::combining-types/intersection)
