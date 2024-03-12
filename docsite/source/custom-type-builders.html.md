@@ -9,7 +9,7 @@ It is idiomatic to construct new types based on existing.
 ```ruby
 source_type = Dry::Types['integer']
 constructor_type = source_type.constructor(Kernel.method(:Integer))
-consrained_type = constructor_type.constrained(gteq: 18)
+constrained_type = constructor_type.constrained(gteq: 18)
 ```
 
 This API can be extended with `Dry::Types.define_builder`
