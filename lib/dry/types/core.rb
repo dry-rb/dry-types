@@ -31,6 +31,7 @@ module Dry
       date: Date,
       date_time: DateTime,
       time: Time,
+      file: File,
       range: Range
     }.freeze
 

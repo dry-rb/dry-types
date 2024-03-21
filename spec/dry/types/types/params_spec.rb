@@ -81,6 +81,23 @@ RSpec.describe Dry::Types::Nominal do
     end
   end
 
+  describe "params.file" do
+    subject(:type) { Dry::Types["params.file"] }
+
+    it_behaves_like "a constrained type", inputs: [
+      Object.new, "not-a-file"
+    ]
+
+    it "coerces to a file" do
+      expect(type[__FILE__].read).to eql(File.open(__FILE__).read)
+    end
+
+    it "accepts file" do
+      file = File.open(__FILE__)
+      expect(type[file]).to be(file)
+    end
+  end
+
   describe "params.bool" do
     subject(:type) { Dry::Types["params.bool"] }
 

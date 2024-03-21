@@ -32,6 +32,7 @@ Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) i
   - `Types::Nominal::Date`
   - `Types::Nominal::DateTime`
   - `Types::Nominal::Time`
+  - `Types::Nominal::File`
   - `Types::Nominal::Array`
   - `Types::Nominal::Hash`
 
@@ -51,6 +52,7 @@ Assuming you included `Dry::Types` ([see instructions](docs::getting-started)) i
   - `Types::Strict::Time`
   - `Types::Strict::Array`
   - `Types::Strict::Hash`
+  - `Types::Strict::File`
 
 > All types in the `strict` category are [constrained](docs::constraints) by a type-check that is applied to make sure that the input is an instance of the primitive:
 
