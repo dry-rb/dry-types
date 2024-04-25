@@ -176,6 +176,38 @@ RSpec.describe Dry::Types::Enum do
     end
   end
 
+  describe "#each_value" do
+    context "simple enumeration" do
+      subject(:type) { Dry::Types["nominal.integer"].enum(4, 5, 6) }
+
+      it "iterates over keys" do
+        expect(type.each_value.to_a).to eql([4, 5, 6])
+      end
+
+      it "returns enumerator" do
+        enumerator = type.each_value
+
+        expect(enumerator.next).to be(type.values.first)
+      end
+    end
+
+    context "mapping" do
+      let(:mapping) { {0 => "draft", 10 => "published", 20 => "archived"} }
+
+      subject(:type) { Dry::Types["nominal.integer"].enum(mapping) }
+
+      it "returns the enum values" do
+        expect(type.each_value.to_a).to eq([0, 10, 20])
+      end
+
+      it "returns enumerator" do
+        enumerator = type.each_value
+
+        expect(enumerator.next).to be(type.values.first)
+      end
+    end
+  end
+
   describe "#constructor" do
     subject(:type) { Dry::Types["nominal.integer"].enum(4, 5) }
 
