@@ -75,8 +75,9 @@ module Dry
         end
       end
 
-      # @param [Hash] options
-      #   The options hash provided to {Types.Rule} and combined
+      # @param *nullary_rules [Array<Symbol>] a list of rules that do not require an additional argument (e.g., :odd)
+      # @param **unary_rules [Hash] a list of rules that require an additional argument (e.g., gt: 0)
+      #   The parameters are merger to create a rules hash provided to {Types.Rule} and combined
       #   using {&} with previous {#rule}
       #
       # @return [Constrained]
