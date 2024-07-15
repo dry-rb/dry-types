@@ -101,13 +101,29 @@ RSpec.describe Dry::Types::PredicateInferrer, "#[]" do
       expect(inferrer[type(:integer).constrained(gteq: 18)]).to eql([:int?, gteq?: 18])
     end
 
-    it "works with rules without additional parameters" do
-      expect(inferrer[type(:integer).constrained([:odd])]).to eql([:int?, :odd?])
+    it "works with nullary rules" do
+      expect(inferrer[type(:integer).constrained(:odd, :even)]).to eql([:int?, :odd?, :even?])
     end
 
-    it "can extract many rules" do
+    it "works with array of nullary rules" do
+      expect(inferrer[type(:integer).constrained([:odd, :even])]).to eql([:int?, :odd?, :even?])
+    end
+
+    it "works with combination of nullary and unary rules" do
       expect(
-        inferrer[type(:integer).constrained(gteq: 18, lt: 100)]
+        inferrer[type(:integer).constrained(:odd, gteq: 18, lt: 100)]
+      ).to eql([:int?, :odd?, gteq?: 18, lt?: 100])
+    end
+
+    it "works with array of nullary rules with unary rules" do
+      expect(
+        inferrer[type(:integer).constrained([:odd, :even], gteq: 18, lt: 100)]
+      ).to eql([:int?, :odd?, :even?, gteq?: 18, lt?: 100])
+    end
+
+    it "works with hash of unary rules" do
+      expect(
+        inferrer[type(:integer).constrained({gteq: 18, lt: 100})]
       ).to eql([:int?, gteq?: 18, lt?: 100])
     end
 
