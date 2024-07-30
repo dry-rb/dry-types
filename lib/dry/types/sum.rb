@@ -84,9 +84,9 @@ module Dry
       # @see Builder#constrained
       #
       # @api public
-      def constrained(options)
+      def constrained(...)
         if optional?
-          right.constrained(options).optional
+          right.constrained(...).optional
         else
           super
         end
