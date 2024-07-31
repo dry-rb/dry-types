@@ -77,6 +77,29 @@ module Dry
         end
       end
 
+      # @param [#to_str, Object] input
+      #
+      # @return [File, Object]
+      #
+      # @see File.open
+      #
+      # @api public
+      def to_file(input, &block)
+        if input.is_a?(::File)
+          input
+        elsif input.respond_to?(:to_str)
+          begin
+            ::File.open(input)
+          rescue ArgumentError, Errno::ENOENT => e
+            CoercionError.handle(e, &block)
+          end
+        elsif block_given?
+          yield
+        else
+          raise CoercionError, "#{input.inspect} is not a string"
+        end
+      end
+
       # @param [#to_sym, Object] input
       #
       # @return [Symbol, Object]
