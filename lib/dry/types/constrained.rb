@@ -75,8 +75,11 @@ module Dry
         end
       end
 
-      # @param [Hash] options
-      #   The options hash provided to {Types.Rule} and combined
+      # @param *nullary_rules [Array<Symbol>] a list of rules that do not require an additional
+      #   argument (e.g., :odd)
+      # @param **unary_rules [Hash] a list of rules that require an additional argument
+      #   (e.g., gt: 0)
+      #   The parameters are merger to create a rules hash provided to {Types.Rule} and combined
       #   using {&} with previous {#rule}
       #
       # @return [Constrained]
@@ -84,8 +87,12 @@ module Dry
       # @see Dry::Logic::Operators#and
       #
       # @api public
-      def constrained(options)
-        with(rule: rule & Types.Rule(options))
+      def constrained(*nullary_rules, **unary_rules)
+        nullary_rules_hash = parse_arguments(nullary_rules)
+
+        rules = nullary_rules_hash.merge(unary_rules)
+
+        with(rule: rule & Types.Rule(rules))
       end
 
       # @return [true]
@@ -132,6 +139,17 @@ module Dry
       # @api private
       def decorate?(response)
         super || response.is_a?(Constructor)
+      end
+
+      # @param [Array] positional_args
+      #
+      # @return [Hash]
+      #
+      # @api private
+      def parse_arguments(positional_arguments)
+        return positional_arguments.first if positional_arguments.first.is_a?(::Hash)
+
+        positional_arguments.flatten.zip([]).to_h
       end
     end
   end
