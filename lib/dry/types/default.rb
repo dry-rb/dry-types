@@ -79,7 +79,7 @@ module Dry
       #
       # @api public
       def try(input)
-        success(call(input))
+        type.try(input)
       end
 
       # @return [Boolean]
