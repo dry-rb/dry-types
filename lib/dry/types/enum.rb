@@ -76,6 +76,16 @@ module Dry
       def to_s
         PRINTER.(self)
       end
+
+      # Iterate over each enum value
+      #
+      # @return [Array, Enumerator]
+      #
+      # @api public
+      def each_value(&block)
+        values.each(&block)
+      end
+
       alias_method :inspect, :to_s
 
       private
