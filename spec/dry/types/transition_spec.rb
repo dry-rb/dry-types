@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-RSpec.describe Dry::Types::Intersection do
+RSpec.describe Dry::Types::Transition do
   let(:t) { Dry.Types }
 
-  let(:callable_type) { t.Interface(:call) }
-  let(:procable_type) { t.Interface(:to_proc) }
-  let(:function_type) { callable_type & procable_type }
+  let(:role_id_schema) { t.Hash(id: t::Strict::String) }
+  let(:role_title_schema) { t.Hash(title: t::Strict::String) }
+  let(:role_schema) { role_id_schema >= role_title_schema }
+
+  let(:nonzero_transition) { t::Coercible::String.constrained(format: /\d+/) >= t::Coercible::Integer.constrained(type: Integer, gt: 0) }
 
   describe "common nominal behavior" do
-    subject(:type) { function_type }
+    subject(:type) { t.Constructor(Proc, &:to_proc) >= t.Interface(:call) }
 
     it_behaves_like "Dry::Types::Nominal#meta"
     it_behaves_like "Dry::Types::Nominal without primitive"
@@ -19,30 +21,24 @@ RSpec.describe Dry::Types::Intersection do
     end
   end
 
-  it_behaves_like "a constrained type" do
-    let(:type) { function_type }
-
-    it_behaves_like "a composable constructor"
-  end
-
   describe "#[]" do
     it "works with two pass-through types" do
-      type = t::Nominal::Hash & t.Hash(foo: t::Nominal::Integer)
+      type = t::Nominal::Hash >= t.Hash(foo: t::Nominal::Integer)
 
       expect(type[{foo: ""}]).to eq({foo: ""})
       expect(type[{foo: 312}]).to eq({foo: 312})
     end
 
     it "works with two strict types" do
-      type = t::Strict::Hash & t.Hash(foo: t::Strict::Integer)
+      type = t::Strict::Hash >= t.Hash(foo: t::Strict::Integer)
 
       expect(type[{foo: 312}]).to eq({foo: 312})
 
-      expect { type[312] }.to raise_error(Dry::Types::CoercionError)
+      expect { type[{foo: "312"}] }.to raise_error(Dry::Types::CoercionError)
     end
 
     it "is aliased as #call" do
-      type = t::Nominal::Hash & t.Hash(foo: t::Nominal::Integer)
+      type = t::Nominal::Hash >= t.Hash(foo: t::Nominal::Integer)
 
       expect(type.call({foo: ""})).to eq({foo: ""})
       expect(type.call({foo: 312})).to eq({foo: 312})
@@ -52,7 +48,7 @@ RSpec.describe Dry::Types::Intersection do
       left = t.Array(t::Strict::Hash)
       right = t.Array(t.Hash(foo: t::Nominal::Integer))
 
-      type = left & right
+      type = left >= right
 
       expect(type[[{foo: 312}]]).to eql([{foo: 312}])
     end
@@ -61,7 +57,7 @@ RSpec.describe Dry::Types::Intersection do
       type =
         t
           .Array(t.Array(t::Coercible::String.constrained(min_size: 5)).constrained(size: 2))
-          .constrained(min_size: 1) &
+          .constrained(min_size: 1) >=
         t
           .Array(t.Array(t::Coercible::String.constrained(format: /foo/)).constrained(size: 2))
           .constrained(min_size: 2)
@@ -70,64 +66,55 @@ RSpec.describe Dry::Types::Intersection do
         [%w[foofoo barfoo], %w[bazfoo fooqux]]
       )
 
-      expect { type[:oops] }.to raise_error(Dry::Types::ConstraintError, /:oops/)
+      expect { type[[["hello there", "my friend"]]] }.to raise_error(Dry::Types::ConstraintError, /min_size\?\(2/)
 
-      expect { type[[]] }.to raise_error(Dry::Types::ConstraintError, /\[\]/)
-
-      expect { type.([%i[foo]]) }.to raise_error(Dry::Types::ConstraintError, /\[:foo\]/)
-
-      expect { type.([[1], [2]]) }.to raise_error(Dry::Types::ConstraintError, /2, \[1\]/)
-
-      expect { type.([%w[foofoo barfoo], %w[bazfoo foo]]) }.to raise_error(
-        Dry::Types::ConstraintError,
-        /min_size\?\(5, "foo"\)/
-      )
+      expect { type[[%w[hello there], ["my good", "friend"]]] }.to raise_error(Dry::Types::ConstraintError, %r{/foo/})
     end
   end
 
   describe "#try" do
-    subject(:type) { function_type }
+    subject(:type) { nonzero_transition }
 
     it "returns success when value passed" do
-      expect(type.try(-> {})).to be_success
+      expect(type.try('1')).to be_success
     end
 
     it "returns failure when value did not pass" do
-      expect(type.try(:foo)).to be_failure
+      expect(type.try('false')).to be_failure
     end
   end
 
   describe "#success" do
-    subject(:type) { function_type }
+    subject(:type) { nonzero_transition }
 
     it "returns success when value passed" do
-      expect(type.success(-> {})).to be_success
+      expect(type.success('1')).to be_success
     end
 
     it "raises ArgumentError when non of the types have a valid input" do
-      expect { type.success("foo") }.to raise_error(ArgumentError, /Invalid success value 'foo' /)
+      expect { type.success('false') }.to raise_error(ArgumentError, /Invalid success value 'false' /)
     end
   end
 
   describe "#failure" do
-    subject(:type) { Dry::Types["integer"] & Dry::Types["string"] }
+    subject(:type) { nonzero_transition }
 
     it "returns failure when invalid value is passed" do
-      expect(type.failure(true)).to be_failure
+      expect(type.failure('false')).to be_failure
     end
   end
 
   describe "#===" do
-    subject(:type) { function_type }
+    subject(:type) { nonzero_transition }
 
     it "returns boolean" do
-      expect(type.===(-> {})).to eql(true)
-      expect(type.===(nil)).to eql(false) # rubocop:disable Style/NilComparison
+      expect(type.===('1')).to eql(true)
+      expect(type.===('false')).to eql(false)
     end
 
     context "in case statement" do
       let(:value) do
-        case -> {}
+        case :'1'
         when type
           "accepted"
         else
@@ -142,8 +129,8 @@ RSpec.describe Dry::Types::Intersection do
   end
 
   describe "#default" do
-    it "returns a default value intersection type" do
-      type = (t::Nominal::Nil & t::Nominal::Nil).default("foo")
+    it "returns a default value implication type" do
+      type = (t::Nominal::Nil >= t::Nominal::Nil).default("foo")
 
       expect(type.call).to eql("foo")
     end
@@ -151,7 +138,7 @@ RSpec.describe Dry::Types::Intersection do
 
   describe "#constructor" do
     let(:type) do
-      (t::Nominal::String & t::Nominal::Nil).constructor do |input|
+      (t::Nominal::String >= t::Nominal::Nil).constructor do |input|
         input ? "#{input} world" : input
       end
     end
@@ -170,46 +157,48 @@ RSpec.describe Dry::Types::Intersection do
   end
 
   describe "#rule" do
-    let(:type) { function_type }
+    let(:type) { nonzero_transition }
 
     it "returns a rule" do
       rule = type.rule
 
-      expect(rule.(-> {})).to be_success
-      expect(rule.(nil)).to be_failure
+      expect(rule.(:"1")).to be_success
+      expect(rule.("1")).to be_success
+      expect(rule.(1)).to be_success
+      expect(rule.('false')).to be_failure
     end
   end
 
   describe "#to_s" do
-    context "shallow intersection" do
-      let(:type) { t::Nominal::String & t::Nominal::Integer }
+    context "shallow transition" do
+      let(:type) { t::Nominal::String >= t::Nominal::Integer }
 
       it "returns string representation of the type" do
-        expect(type.to_s).to eql("#<Dry::Types[Intersection<Nominal<String> & Nominal<Integer>>]>")
+        expect(type.to_s).to eql("#<Dry::Types[Transition<Nominal<String> >= Nominal<Integer>>]>")
       end
     end
 
     context "constrained" do
-      let(:type) { t::Nominal::String.constrained(format: /foo/) & t::Nominal::String.constrained(min_size: 4) }
+      let(:type) { t::Nominal::String.constrained(format: /foo/) >= t::Nominal::String.constrained(min_size: 4) }
 
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
-          "#<Dry::Types[Intersection<" \
-            "Constrained<Nominal<String> rule=[format?(/foo/)]> & "\
+          "#<Dry::Types[Transition<" \
+            "Constrained<Nominal<String> rule=[format?(/foo/)]> >= "\
             "Constrained<Nominal<String> rule=[min_size?(4)]>>]>"
         )
       end
     end
 
-    context "intersection tree" do
-      let(:type) { t::Nominal::String & t::Nominal::Integer & t::Nominal::Date & t::Nominal::Time }
+    context "transition tree" do
+      let(:type) { t::Nominal::String >= (t::Nominal::Integer >= (t::Nominal::Date >= t::Nominal::Time)) }
 
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
-          "#<Dry::Types[Intersection<" \
-            "Nominal<String> & " \
-            "Nominal<Integer> & " \
-            "Nominal<Date> & " \
+          "#<Dry::Types[Transition<" \
+            "Nominal<String> >= " \
+            "Nominal<Integer> >= " \
+            "Nominal<Date> >= " \
             "Nominal<Time>" \
             ">]>"
         )
@@ -218,27 +207,25 @@ RSpec.describe Dry::Types::Intersection do
   end
 
   context "with map type" do
-    let(:map_type) { t::Nominal::Hash.map(t::Nominal::Symbol, t::Nominal::String) }
+    let(:map_type) { t::Nominal::Hash.map(t::Coercible::Symbol, t::Nominal::String) }
 
     let(:schema_type) { t.Hash(foo: t::Strict::String) }
 
-    subject(:type) { map_type & schema_type }
+    subject(:type) { map_type >= schema_type }
 
-    it "rejects invalid input" do
-      expect(type.valid?({foo: 1, bar: 1})).to be false
-      expect { type[{foo: 1, bar: 1}] }.to raise_error(Dry::Types::SchemaError)
+    it 'accepts coerced input' do
+      expect(type.valid?({ 'foo' => 'bar' })).to be true
     end
   end
 
   describe "#meta" do
     let(:meta) { {foo: :bar} }
 
-    subject(:type) { t::Nominal::Hash & t.Hash(foo: t::Nominal::Integer) }
+    subject(:type) { t::String >= t::Coercible::Symbol }
 
-    it "has no special meta handling" do
+    it "stores meta to & uses meta from the right branch" do
       expect(type.meta(meta).meta).to eql(meta)
-      expect(type.meta(meta).left.meta).to eql({})
-      expect(type.meta(meta).right.meta).to eql({})
+      expect(type.meta(meta).right.meta).to eql(meta)
     end
   end
 end
