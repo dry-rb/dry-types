@@ -30,7 +30,7 @@ module Dry
 
       # @api private
       def self.register_name(function)
-        "fn_#{function.object_id}"
+        "fn_#{function.__id__}"
       end
     end
   end
