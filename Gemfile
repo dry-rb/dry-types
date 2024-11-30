@@ -17,7 +17,7 @@ group :benchmarks do
     gem "attrio"
     gem "benchmark-ips"
     gem "fast_attributes"
-    gem "hotch"
+    # gem "hotch"
     gem "virtus"
   end
 end
