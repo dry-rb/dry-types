@@ -377,4 +377,40 @@ RSpec.describe Dry::Types::Compiler, "#call" do
       expect(type).to eql(source)
     end
   end
+
+  context "composites" do
+    let(:strict_nil_ast) do
+      [:constrained,
+       [[:nominal, [NilClass, {}]],
+        [:predicate, [:type?, [[:type, NilClass], [:input, Undefined]]]]]]
+    end
+
+    let(:strict_integer_ast) do
+      [:constrained,
+       [[:nominal, [Integer, {}]],
+        [:predicate, [:type?, [[:type, Integer], [:input, Undefined]]]]]]
+    end
+
+    let(:any_numeric_ast) do
+      [:constrained, [[:any, {}], [:predicate, [:type?, [[:type, Numeric], [:input, Undefined]]]]]]
+    end
+
+    it 'builds a sum' do
+      ast = [:sum, [strict_nil_ast, strict_integer_ast, {}]]
+      type = compiler.(ast)
+      expect(type).to eql(Dry::Types['integer'].optional)
+    end
+
+    it 'builds an implication' do
+      ast = [:implication, [any_numeric_ast, strict_integer_ast, {}]]
+      type = compiler.(ast)
+      expect(type).to eql(Dry::Types['any'].constrained(type: Numeric) > Dry::Types['integer'])
+    end
+
+    it 'builds an intersection' do
+      ast = [:intersection, [any_numeric_ast, strict_integer_ast, {}]]
+      type = compiler.(ast)
+      expect(type).to eql(Dry::Types['any'].constrained(type: Numeric) & Dry::Types['integer'])
+    end
+  end
 end
