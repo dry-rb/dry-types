@@ -125,6 +125,18 @@ RSpec.describe Dry::Types::Builder, "#default" do
     end
   end
 
+  describe "#try" do
+    subject(:type) { Dry::Types["integer"].default(1) }
+
+    it "returns a success result for valid input" do
+      expect(type.try(5)).to be_success
+    end
+
+    it "returns a failure result for invalid input" do
+      expect(type.try("five")).to be_failure
+    end
+  end
+
   describe "#with" do
     subject(:type) { Dry::Types["nominal.time"].default { Time.now }.meta(foo: :bar) }
 
