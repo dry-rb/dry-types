@@ -43,8 +43,8 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &block)
-        type.call_safe(map_value(input), &block)
+      def call_safe(input, &)
+        type.call_safe(map_value(input), &)
       end
 
       # @see Dry::Types::Constrained#try
@@ -56,7 +56,7 @@ module Dry
 
       # @api private
       def default(*)
-        raise ".enum(*values).default(value) is not supported. Call "\
+        raise ".enum(*values).default(value) is not supported. Call " \
               ".default(value).enum(*values) instead"
       end
 

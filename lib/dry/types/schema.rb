@@ -226,8 +226,8 @@ module Dry
       # @return [Array<Dry::Types::Schema::Key>,Enumerator]
       #
       # @api public
-      def each(&block)
-        keys.each(&block)
+      def each(&)
+        keys.each(&)
       end
 
       # Whether the schema has the given key
@@ -256,9 +256,9 @@ module Dry
       #   @return [Dry::Types::Schema::Key,Object] key type or block value if key is not in schema
       #
       # @api public
-      def key(name, fallback = Undefined, &block)
+      def key(name, fallback = Undefined, &)
         if Undefined.equal?(fallback)
-          name_key_map.fetch(name, &block)
+          name_key_map.fetch(name, &)
         else
           name_key_map.fetch(name, fallback)
         end

@@ -91,10 +91,10 @@ module Dry
         unless input.frozen? || options[:shared]
           where = Core::Deprecations::STACK.()
           Core::Deprecations.warn(
-            "#{input.inspect} is mutable."\
-            " Be careful: types will return the same instance of the default"\
-            " value every time. Call `.freeze` when setting the default"\
-            " or pass `shared: true` to discard this warning."\
+            "#{input.inspect} is mutable. " \
+            "Be careful: types will return the same instance of the default " \
+            "value every time. Call `.freeze` when setting the default " \
+            "or pass `shared: true` to discard this warning." \
             "\n#{where}",
             tag: :"dry-types"
           )
@@ -182,10 +182,10 @@ module Dry
         unless value.frozen? || shared
           where = Core::Deprecations::STACK.()
           Core::Deprecations.warn(
-            "#{value.inspect} is mutable."\
-            " Be careful: types will return the same instance of the fallback"\
-            " value every time. Call `.freeze` when setting the fallback"\
-            " or pass `shared: true` to discard this warning."\
+            "#{value.inspect} is mutable. " \
+            "Be careful: types will return the same instance of the fallback " \
+            "value every time. Call `.freeze` when setting the fallback " \
+            "or pass `shared: true` to discard this warning." \
             "\n#{where}",
             tag: :"dry-types"
           )

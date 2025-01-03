@@ -46,7 +46,7 @@ module Dry
         "#<Dry::Types[#{output}]>"
       end
 
-      def visit(type, &block)
+      def visit(type, &)
         print_with = MAPPING.fetch(type.class) do
           if type.class < Constructor
             :visit_constructor
@@ -56,7 +56,7 @@ module Dry
             raise ArgumentError, "Do not know how to print #{type.class}"
           end
         end
-        send(print_with, type, &block)
+        send(print_with, type, &)
       end
 
       def visit_any(_)
@@ -101,10 +101,10 @@ module Dry
         end
       end
 
-      def visit_composition(composition, &block)
+      def visit_composition(composition, &)
         klass = composition.class
         @composition_printers[klass] = Composition.new(self, klass)
-        @composition_printers[klass].visit(composition, &block)
+        @composition_printers[klass].visit(composition, &)
       end
 
       def visit_enum(enum)

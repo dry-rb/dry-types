@@ -26,7 +26,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_nil(input, &_block)
+        def self.to_nil(input, &)
           if input.nil? || empty_str?(input)
             nil
           elsif block_given?
@@ -46,7 +46,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_true(input, &_block)
+        def self.to_true(input, &)
           BOOLEAN_MAP.fetch(input.to_s) do
             if block_given?
               yield
@@ -66,7 +66,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_false(input, &_block)
+        def self.to_false(input, &)
           BOOLEAN_MAP.fetch(input.to_s) do
             if block_given?
               yield
@@ -83,14 +83,14 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_int(input, &block)
+        def self.to_int(input, &)
           if input.is_a? String
             Integer(input, 10)
           else
             Integer(input)
           end
         rescue ArgumentError, TypeError => e
-          CoercionError.handle(e, &block)
+          CoercionError.handle(e, &)
         end
 
         # @param [#to_f, Object] input
@@ -100,10 +100,10 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_float(input, &block)
+        def self.to_float(input, &)
           Float(input)
         rescue ArgumentError, TypeError => e
-          CoercionError.handle(e, &block)
+          CoercionError.handle(e, &)
         end
 
         # @param [#to_d, Object] input
@@ -113,7 +113,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_decimal(input, &_block)
+        def self.to_decimal(input, &)
           to_float(input) do
             if block_given?
               return yield
@@ -132,7 +132,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_ary(input, &_block)
+        def self.to_ary(input, &)
           if empty_str?(input)
             []
           elsif input.is_a?(::Array)
@@ -151,7 +151,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_hash(input, &_block)
+        def self.to_hash(input, &)
           if empty_str?(input)
             {}
           elsif input.is_a?(::Hash)

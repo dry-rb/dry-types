@@ -74,7 +74,7 @@ RSpec.shared_examples_for "Dry::Types::Nominal#meta" do
     end
 
     it "is locally immutable" do
-      expect(type.meta).to be_a ::Hash
+      expect(type.meta).to be_a Hash
       expect(type.meta).to be_frozen
       expect(type.meta).not_to have_key :immutable_test
       derived = type.meta(immutable_test: 1)

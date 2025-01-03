@@ -60,7 +60,7 @@ module Dry
 
       def visit_array(node)
         member, meta = node
-        member = member.is_a?(Class) ? member : visit(member)
+        member = visit(member) unless member.is_a?(Class)
         registry["nominal.array"].of(member).meta(meta)
       end
 

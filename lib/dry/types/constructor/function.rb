@@ -13,10 +13,10 @@ module Dry
         #
         # @api private
         class Safe < Function
-          def call(input, &block)
-            @fn.(input, &block)
+          def call(input, &)
+            @fn.(input, &)
           rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
-            CoercionError.handle(e, &block)
+            CoercionError.handle(e, &)
           end
         end
 
@@ -83,8 +83,8 @@ module Dry
           #
           # @api private
           class PrivateCall < MethodCall
-            def call(input, &block)
-              @target.send(@name, input, &block)
+            def call(input, &)
+              @target.send(@name, input, &)
             end
           end
 
@@ -92,10 +92,10 @@ module Dry
           #
           # @api private
           class PrivateSafeCall < PrivateCall
-            def call(input, &block)
+            def call(input, &)
               @target.send(@name, input)
             rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
-              CoercionError.handle(e, &block)
+              CoercionError.handle(e, &)
             end
           end
 
@@ -122,10 +122,10 @@ module Dry
 
         class Wrapper < Function
           # @return [Object]
-          def call(input, type, &block)
-            @fn.(input, type, &block)
+          def call(input, type, &)
+            @fn.(input, type, &)
           rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
-            CoercionError.handle(e, &block)
+            CoercionError.handle(e, &)
           end
           alias_method :[], :call
 
@@ -175,8 +175,8 @@ module Dry
         end
 
         # @return [Object]
-        def call(input, &block)
-          @fn.(input, &block)
+        def call(input, &)
+          @fn.(input, &)
         end
         alias_method :[], :call
 

@@ -30,8 +30,8 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &block)
-        try_sides(input, &block).input
+      def call_safe(input, &)
+        try_sides(input, &).input
       end
 
       # @param [Object] input

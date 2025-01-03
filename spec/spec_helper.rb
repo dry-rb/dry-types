@@ -13,7 +13,7 @@ require "dry-types"
 begin
   require "pry-byebug"
 rescue LoadError; end
-Dir[Pathname(__dir__).join("shared/*.rb")].sort.each(&method(:require))
+Dir[Pathname(__dir__).join("shared/*.rb")].each(&method(:require))
 require "dry/types/spec/types"
 
 Dry::Core::Deprecations.set_logger!(SPEC_ROOT.join("../log/deprecations.log"))

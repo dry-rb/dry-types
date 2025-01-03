@@ -80,7 +80,7 @@ module Dry
         @key = key
         @value = value
         super(
-          "#{value.inspect} (#{value.class}) has invalid type "\
+          "#{value.inspect} (#{value.class}) has invalid type " \
           "for :#{key} violates constraints (#{result} failed)"
         )
       end

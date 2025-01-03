@@ -62,7 +62,7 @@ RSpec.describe Dry::Types::Constrained do
 
     it "returns string representation of the type" do
       expect(type.to_s).to eql(
-        "#<Dry::Types[Constrained<Nominal<String> "\
+        "#<Dry::Types[Constrained<Nominal<String> " \
         "rule=[type?(String) AND size?(3..12)]>]>"
       )
     end

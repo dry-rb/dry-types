@@ -32,13 +32,13 @@ module Dry
             raise ArgumentError, "Schemas can only contain symbol keys, #{name.inspect} given"
           end
 
-          super(type, name, required: required, **options)
+          super
           @name = name
         end
 
         # @api private
-        def call_safe(input, &block)
-          type.call_safe(input, &block)
+        def call_safe(input, &)
+          type.call_safe(input, &)
         end
 
         # @api private
@@ -49,8 +49,8 @@ module Dry
         # @see Dry::Types::Nominal#try
         #
         # @api public
-        def try(input, &block)
-          type.try(input, &block)
+        def try(input, &)
+          type.try(input, &)
         end
 
         # Whether the key is required in schema input

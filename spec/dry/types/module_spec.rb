@@ -54,7 +54,7 @@ RSpec.describe Dry::Types::Module do
 
     describe ".Map" do
       it "builds a map type" do
-        expected = Dry::Types::Map.new(::Hash, key_type: Dry::Types["strict.integer"])
+        expected = Dry::Types::Map.new(Hash, key_type: Dry::Types["strict.integer"])
         expect(mod.Map(mod::Integer, "any")).to eql(expected)
       end
     end

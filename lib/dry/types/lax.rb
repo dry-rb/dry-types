@@ -35,8 +35,8 @@ module Dry
       # @return [Result,Logic::Result]
       #
       # @api public
-      def try(input, &block)
-        type.try(input, &block)
+      def try(input, &)
+        type.try(input, &)
       end
 
       # @see Nominal#to_ast

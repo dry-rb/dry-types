@@ -40,9 +40,9 @@ module Dry
       #   @return [Object]
       #
       # @api public
-      def call(input = Undefined, &block)
+      def call(input = Undefined, &)
         if block_given?
-          call_safe(input, &block)
+          call_safe(input, &)
         else
           call_unsafe(input)
         end

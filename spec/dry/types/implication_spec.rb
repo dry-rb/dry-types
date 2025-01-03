@@ -182,8 +182,8 @@ RSpec.describe Dry::Types::Implication do
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
           "#<Dry::Types[Implication<" \
-            "Constrained<Nominal<String> rule=[format?(/foo/)]> > "\
-            "Constrained<Nominal<String> rule=[min_size?(4)]>>]>"
+          "Constrained<Nominal<String> rule=[format?(/foo/)]> > " \
+          "Constrained<Nominal<String> rule=[min_size?(4)]>>]>"
         )
       end
     end
@@ -194,11 +194,11 @@ RSpec.describe Dry::Types::Implication do
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
           "#<Dry::Types[Implication<" \
-            "Nominal<String> > " \
-            "Nominal<Integer> > " \
-            "Nominal<Date> > " \
-            "Nominal<Time>" \
-            ">]>"
+          "Nominal<String> > " \
+          "Nominal<Integer> > " \
+          "Nominal<Date> > " \
+          "Nominal<Time>" \
+          ">]>"
         )
       end
     end

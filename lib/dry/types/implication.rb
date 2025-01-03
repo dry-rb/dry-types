@@ -30,9 +30,9 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &block)
+      def call_safe(input, &)
         if left.try(input).success?
-          right.call_safe(input, &block)
+          right.call_safe(input, &)
         else
           input
         end

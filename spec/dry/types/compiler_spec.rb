@@ -305,7 +305,7 @@ RSpec.describe Dry::Types::Compiler, "#call" do
     ast = Dry::Types["nominal.hash"].map("any", "any").to_ast
     expect(ast).to eql([:map, [any_ast, any_ast, {}]])
     type = compiler.(ast)
-    expect(type).to eql(Dry::Types::Map.new(::Hash))
+    expect(type).to eql(Dry::Types::Map.new(Hash))
   end
 
   it "builds a complex map" do

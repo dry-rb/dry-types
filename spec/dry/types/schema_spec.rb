@@ -183,7 +183,7 @@ RSpec.describe Dry::Types::Schema do
     end
 
     it "has a Hash primitive" do
-      expect(hash.primitive).to be(::Hash)
+      expect(hash.primitive).to be(Hash)
     end
 
     it "is callable via #[]" do
@@ -267,12 +267,14 @@ RSpec.describe Dry::Types::Schema do
       expect {
         hash.call(name: :Jane, age: "oops", active: true, phone: [])
       }.to raise_error(
-        an_instance_of(Dry::Types::SchemaError).and(having_attributes(
-                                                      message: '"oops" (String) has invalid type for :age violates '\
-                                                               'constraints (type?(Integer, "oops") failed)',
-                                                      key: :age,
-                                                      value: "oops"
-                                                    ))
+        an_instance_of(Dry::Types::SchemaError).and(
+          having_attributes(
+            message: '"oops" (String) has invalid type for :age violates ' \
+                     'constraints (type?(Integer, "oops") failed)',
+            key: :age,
+            value: "oops"
+          )
+        )
       )
     end
 
@@ -280,12 +282,14 @@ RSpec.describe Dry::Types::Schema do
       expect {
         hash.schema(age: "coercible.integer").call(name: :Jane, age: nil, active: true, phone: [])
       }.to raise_error(
-        an_instance_of(Dry::Types::SchemaError).and(having_attributes(
-                                                      message: "nil (NilClass) has invalid type for :age violates constraints"\
-                                                               " (can't convert nil into Integer failed)",
-                                                      key: :age,
-                                                      value: nil
-                                                    ))
+        an_instance_of(Dry::Types::SchemaError).and(
+          having_attributes(
+            message: "nil (NilClass) has invalid type for :age violates constraints " \
+                     "(can't convert nil into Integer failed)",
+            key: :age,
+            value: nil
+          )
+        )
       )
     end
 
@@ -293,12 +297,14 @@ RSpec.describe Dry::Types::Schema do
       expect {
         hash.schema(age: "coercible.integer").call(name: :Jane, age: "oops", active: true, phone: [])
       }.to raise_error(
-        an_instance_of(Dry::Types::SchemaError).and(having_attributes(
-                                                      message: '"oops" (String) has invalid type for :age violates constraints'\
-                                                               ' (invalid value for Integer(): "oops" failed)',
-                                                      key: :age,
-                                                      value: "oops"
-                                                    ))
+        an_instance_of(Dry::Types::SchemaError).and(
+          having_attributes(
+            message: '"oops" (String) has invalid type for :age violates constraints ' \
+                     '(invalid value for Integer(): "oops" failed)',
+            key: :age,
+            value: "oops"
+          )
+        )
       )
     end
 
@@ -473,8 +479,8 @@ RSpec.describe Dry::Types::Schema do
 
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
-          "#<Dry::Types[Constrained<Schema<"\
-          "keys={age: Constrained<Nominal<Integer> rule=[type?(Integer)]>"\
+          "#<Dry::Types[Constrained<Schema<" \
+          "keys={age: Constrained<Nominal<Integer> rule=[type?(Integer)]>" \
           "}> rule=[type?(Hash)]>]>"
         )
       end

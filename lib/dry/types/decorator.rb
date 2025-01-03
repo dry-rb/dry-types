@@ -24,8 +24,8 @@ module Dry
       # @return [Object] if block given and try fails
       #
       # @api public
-      def try(input, &block)
-        type.try(input, &block)
+      def try(input, &)
+        type.try(input, &)
       end
 
       # @return [Boolean]
@@ -79,9 +79,9 @@ module Dry
       # @param [#call, nil] block
       #
       # @api private
-      def method_missing(meth, *args, &block)
+      def method_missing(meth, ...)
         if type.respond_to?(meth)
-          response = type.public_send(meth, *args, &block)
+          response = type.public_send(meth, ...)
 
           if decorate?(response)
             __new__(response)
@@ -92,7 +92,6 @@ module Dry
           super
         end
       end
-      ruby2_keywords(:method_missing) if respond_to?(:ruby2_keywords, true)
 
       # Replace underlying type
       #

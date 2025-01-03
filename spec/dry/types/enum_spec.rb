@@ -155,7 +155,7 @@ RSpec.describe Dry::Types::Enum do
 
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
-          "#<Dry::Types[Enum<Constrained<Nominal<Integer> "\
+          "#<Dry::Types[Enum<Constrained<Nominal<Integer> " \
           "rule=[included_in?([4, 5, 6])]> values={4, 5, 6}>]>"
         )
       end
@@ -168,8 +168,8 @@ RSpec.describe Dry::Types::Enum do
 
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
-          "#<Dry::Types[Enum<Constrained<Nominal<Integer> "\
-          "rule=[included_in?([0, 10, 20])]> "\
+          "#<Dry::Types[Enum<Constrained<Nominal<Integer> " \
+          "rule=[included_in?([0, 10, 20])]> " \
           'mapping={0=>"draft", 10=>"published", 20=>"archived"}>]>'
         )
       end

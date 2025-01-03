@@ -136,7 +136,7 @@ module Dry
       end
 
       # @api private
-      def coerce(input, &_block)
+      def coerce(input, &)
         if primitive?(input)
           input
         elsif block_given?

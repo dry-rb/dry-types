@@ -8,8 +8,8 @@ module Dry
         # @return [Object]
         #
         # @api private
-        def call_safe(input, &block)
-          fn.(input, type, &block)
+        def call_safe(input, &)
+          fn.(input, type, &)
         end
 
         # @return [Object]
@@ -26,13 +26,13 @@ module Dry
         # @return [Object] if block given and try fails
         #
         # @api public
-        def try(input, &block)
+        def try(input, &)
           value = fn.(input, type)
         rescue CoercionError => e
           failure = failure(input, e)
           block_given? ? yield(failure) : failure
         else
-          type.try(value, &block)
+          type.try(value, &)
         end
 
         # Define a constructor for the type

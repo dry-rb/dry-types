@@ -30,12 +30,12 @@ module Dry
           end
         end
 
-        def visit_constructor(type, &block)
+        def visit_constructor(type, &)
           case type
           when @composition_class
-            visit_constructors(type, &block)
+            visit_constructors(type, &)
           else
-            @printer.visit(type, &block)
+            @printer.visit(type, &)
           end
         end
       end

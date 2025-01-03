@@ -207,7 +207,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
 
         it "returns string representation of the type" do
           expect(type.to_s).to eql(
-            "#<Dry::Types[Default<Nominal<String> "\
+            "#<Dry::Types[Default<Nominal<String> " \
             "value_fn=spec/dry/types/default_spec.rb:#{line_no}>]>"
           )
         end
@@ -225,7 +225,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
 
         it "returns string representation of the type" do
           expect(type.to_s).to eql(
-            "#<Dry::Types[Default<Nominal<String> "\
+            "#<Dry::Types[Default<Nominal<String> " \
             "value_fn=(lambda)>]>"
           )
         end
@@ -236,7 +236,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
 
         it "returns string representation of the type" do
           expect(type.to_s).to eql(
-            "#<Dry::Types[Default<Nominal<String> "\
+            "#<Dry::Types[Default<Nominal<String> " \
             "value_fn=Kernel.Integer>]>"
           )
         end
@@ -259,7 +259,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
 
         it "returns string representation of the type" do
           expect(type.to_s).to eql(
-            "#<Dry::Types[Default<Nominal<String> "\
+            "#<Dry::Types[Default<Nominal<String> " \
             "value_fn=callable.call>]>"
           )
         end

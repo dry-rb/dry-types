@@ -88,13 +88,13 @@ module Dry
       # @return [Object] if block given and try fails
       #
       # @api public
-      def try(input, &block)
+      def try(input, &)
         value = fn.(input)
       rescue CoercionError => e
         failure = failure(input, e)
         block_given? ? yield(failure) : failure
       else
-        type.try(value, &block)
+        type.try(value, &)
       end
 
       # Build a new constructor by appending a block to the coercion function
@@ -181,9 +181,9 @@ module Dry
       # @param [#call, nil] block
       #
       # @api private
-      def method_missing(method, *args, &block)
+      def method_missing(method, ...)
         if type.respond_to?(method)
-          response = type.public_send(method, *args, &block)
+          response = type.public_send(method, ...)
 
           if response.is_a?(Type) && response.instance_of?(type.class)
             response.constructor_type[response, **options]

@@ -21,7 +21,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_nil(input, &_block)
+        def self.to_nil(input, &)
           if input.nil?
             nil
           elsif block_given?
@@ -38,7 +38,7 @@ module Dry
         # @raise CoercionError
         #
         # @api public
-        def self.to_decimal(input, &_block)
+        def self.to_decimal(input, &)
           if input.is_a?(::Float)
             input.to_d
           else

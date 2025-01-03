@@ -15,12 +15,12 @@ module Dry
       # @see Date.parse
       #
       # @api public
-      def to_date(input, &block)
+      def to_date(input, &)
         if input.respond_to?(:to_str)
           begin
             ::Date.parse(input)
           rescue ArgumentError, RangeError => e
-            CoercionError.handle(e, &block)
+            CoercionError.handle(e, &)
           end
         elsif input.is_a?(::Date)
           input
@@ -38,12 +38,12 @@ module Dry
       # @see DateTime.parse
       #
       # @api public
-      def to_date_time(input, &block)
+      def to_date_time(input, &)
         if input.respond_to?(:to_str)
           begin
             ::DateTime.parse(input)
           rescue ArgumentError => e
-            CoercionError.handle(e, &block)
+            CoercionError.handle(e, &)
           end
         elsif input.is_a?(::DateTime)
           input
@@ -61,12 +61,12 @@ module Dry
       # @see Time.parse
       #
       # @api public
-      def to_time(input, &block)
+      def to_time(input, &)
         if input.respond_to?(:to_str)
           begin
             ::Time.parse(input)
           rescue ArgumentError => e
-            CoercionError.handle(e, &block)
+            CoercionError.handle(e, &)
           end
         elsif input.is_a?(::Time)
           input
@@ -84,10 +84,10 @@ module Dry
       # @raise CoercionError
       #
       # @api public
-      def to_symbol(input, &block)
+      def to_symbol(input, &)
         input.to_sym
       rescue NoMethodError => e
-        CoercionError.handle(e, &block)
+        CoercionError.handle(e, &)
       end
 
       private

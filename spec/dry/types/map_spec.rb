@@ -2,7 +2,7 @@
 
 RSpec.describe Dry::Types::Map do
   context "shared examples" do
-    let(:type) { Dry::Types::Map.new(::Hash) }
+    let(:type) { Dry::Types::Map.new(Hash) }
 
     it_behaves_like "Dry::Types::Nominal#meta"
     it_behaves_like Dry::Types::Nominal
@@ -11,13 +11,13 @@ RSpec.describe Dry::Types::Map do
   end
 
   context "options" do
-    let(:empty_map) { Dry::Types::Map.new(::Hash) }
-    let(:keyed_map) { Dry::Types::Map.new(::Hash, key_type: Dry::Types["strict.integer"]) }
-    let(:value_map) { Dry::Types::Map.new(::Hash, value_type: Dry::Types["strict.string"]) }
+    let(:empty_map) { Dry::Types::Map.new(Hash) }
+    let(:keyed_map) { Dry::Types::Map.new(Hash, key_type: Dry::Types["strict.integer"]) }
+    let(:value_map) { Dry::Types::Map.new(Hash, value_type: Dry::Types["strict.string"]) }
 
     let(:complex_map) do
       Dry::Types::Map.new(
-        ::Hash,
+        Hash,
         key_type: Dry::Types["strict.integer"],
         value_type: Dry::Types["strict.string"]
       )
@@ -52,10 +52,10 @@ RSpec.describe Dry::Types::Map do
 
     describe "#primitive" do
       it "is Hash" do
-        expect(empty_map.primitive).to eql ::Hash
-        expect(keyed_map.primitive).to eql ::Hash
-        expect(value_map.primitive).to eql ::Hash
-        expect(complex_map.primitive).to eql ::Hash
+        expect(empty_map.primitive).to eql Hash
+        expect(keyed_map.primitive).to eql Hash
+        expect(value_map.primitive).to eql Hash
+        expect(complex_map.primitive).to eql Hash
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.describe Dry::Types::Map do
 
     let(:map) do
       Dry::Types::Map.new(
-        ::Hash,
+        Hash,
         key_type: cleaned_string.constrained(format: /\Aopt_/),
         value_type: Dry::Types["strict.bool"]
       )

@@ -41,9 +41,9 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &block)
+      def call_safe(input, &)
         if rule[input]
-          type.call_safe(input, &block)
+          type.call_safe(input, &)
         else
           yield
         end
@@ -64,11 +64,11 @@ module Dry
       #   @return [Object]
       #
       # @api public
-      def try(input, &block)
+      def try(input, &)
         result = rule.(input)
 
         if result.success?
-          type.try(input, &block)
+          type.try(input, &)
         else
           failure = failure(input, ConstraintError.new(result, input))
           block_given? ? yield(failure) : failure

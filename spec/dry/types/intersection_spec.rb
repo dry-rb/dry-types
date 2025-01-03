@@ -122,7 +122,7 @@ RSpec.describe Dry::Types::Intersection do
 
     it "returns boolean" do
       expect(type.===(-> {})).to eql(true)
-      expect(type.===(nil)).to eql(false) # rubocop:disable Style/NilComparison
+      expect(type === (nil)).to eql(false)
     end
 
     context "in case statement" do
@@ -195,8 +195,8 @@ RSpec.describe Dry::Types::Intersection do
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
           "#<Dry::Types[Intersection<" \
-            "Constrained<Nominal<String> rule=[format?(/foo/)]> & "\
-            "Constrained<Nominal<String> rule=[min_size?(4)]>>]>"
+          "Constrained<Nominal<String> rule=[format?(/foo/)]> & " \
+          "Constrained<Nominal<String> rule=[min_size?(4)]>>]>"
         )
       end
     end
@@ -207,11 +207,11 @@ RSpec.describe Dry::Types::Intersection do
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
           "#<Dry::Types[Intersection<" \
-            "Nominal<String> & " \
-            "Nominal<Integer> & " \
-            "Nominal<Date> & " \
-            "Nominal<Time>" \
-            ">]>"
+          "Nominal<String> & " \
+          "Nominal<Integer> & " \
+          "Nominal<Date> & " \
+          "Nominal<Time>" \
+          ">]>"
         )
       end
     end
