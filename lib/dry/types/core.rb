@@ -35,13 +35,15 @@ module Dry
     }.freeze
 
     # All built-in primitives
-    ALL_PRIMITIVES = [KERNEL_COERCIBLE, METHOD_COERCIBLE, NON_COERCIBLE].reduce(&:merge).freeze
+    ALL_PRIMITIVES = [
+      KERNEL_COERCIBLE, METHOD_COERCIBLE, NON_COERCIBLE
+    ].reduce(&:merge).freeze
 
     # All coercible types
     COERCIBLE = KERNEL_COERCIBLE.merge(METHOD_COERCIBLE).freeze
 
     # All built-in primitives except {NilClass}
-    NON_NIL = ALL_PRIMITIVES.reject { |name, _| name == :nil }.freeze
+    NON_NIL = ALL_PRIMITIVES.except(:nil).freeze
 
     # Register generic types for {ALL_PRIMITIVES}
     ALL_PRIMITIVES.each do |name, primitive|
