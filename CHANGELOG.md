@@ -7,6 +7,10 @@
 
 - Added `Enum#each_value` to iterate over enum values (@CharlieWWW94 in #471)
 
+### Fixed
+
+- Fixed `Default#try` to return correct result (@elcuervo + @flash-gordon in #475)
+
 ### Changed
 
 - Set min Ruby version to 3.1 (@flash-gordon)
