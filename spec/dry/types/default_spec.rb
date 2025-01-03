@@ -135,6 +135,11 @@ RSpec.describe Dry::Types::Builder, "#default" do
     it "returns a failure result for invalid input" do
       expect(type.try("five")).to be_failure
     end
+
+    it "returns a success result for empty input" do
+      expect(type.try).to be_success
+      expect(type.try(undefined)).to be_success
+    end
   end
 
   describe "#with" do

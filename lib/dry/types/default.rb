@@ -78,8 +78,12 @@ module Dry
       # @return [Result::Success]
       #
       # @api public
-      def try(input)
-        type.try(input)
+      def try(input = Undefined)
+        if input.equal?(Undefined)
+          success(evaluate)
+        else
+          type.try(input)
+        end
       end
 
       # @return [Boolean]
