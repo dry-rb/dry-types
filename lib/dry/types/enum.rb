@@ -7,7 +7,7 @@ module Dry
     # @api public
     class Enum
       include Type
-      include Dry::Equalizer(:type, :mapping, inspect: false, immutable: true)
+      include ::Dry::Equalizer(:type, :mapping, inspect: false, immutable: true)
       include Decorator
       include Builder
 
@@ -82,8 +82,8 @@ module Dry
       # @return [Array, Enumerator]
       #
       # @api public
-      def each_value(&block)
-        values.each(&block)
+      def each_value(&)
+        values.each(&)
       end
 
       alias_method :inspect, :to_s
