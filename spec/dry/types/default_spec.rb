@@ -50,7 +50,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
       it_behaves_like "Dry::Types::Nominal without primitive"
 
       specify do
-        expect(type[]).to eq({})
+        expect(type[]).to eql({})
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe Dry::Types::Builder, "#default" do
       it_behaves_like "Dry::Types::Nominal without primitive"
 
       specify do
-        expect(type[]).to eq({})
+        expect(type[]).to eql({})
       end
     end
   end

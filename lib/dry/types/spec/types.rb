@@ -31,7 +31,7 @@ RSpec.shared_examples_for "Dry::Types::Nominal without primitive" do
 
   describe "#==" do
     it "has #== defined" do
-      expect(type).to eq(type)
+      expect(type).to eql(type)
     end
   end
 

@@ -532,7 +532,7 @@ RSpec.describe Dry::Types::Schema do
 
       schema = schema1.merge(schema2)
 
-      expect(schema.keys.map(&:name)).to eq([:name, :age])
+      expect(schema.keys.map(&:name)).to eql([:name, :age])
     end
 
     it "gives preference to given struct" do
@@ -541,7 +541,7 @@ RSpec.describe Dry::Types::Schema do
 
       schema = schema1.merge(schema2)
 
-      expect(schema[foo: 1]).to eq(foo: 1)
+      expect(schema[foo: 1]).to eql(foo: 1)
     end
 
     it "keeps type transformations from both schemas" do
@@ -552,7 +552,7 @@ RSpec.describe Dry::Types::Schema do
 
       schema = schema1.merge(schema2)
 
-      expect(schema[foo: "foo", bar: "bar"]).to eq(foo: "Transf 1", bar: "Transf 2")
+      expect(schema[foo: "foo", bar: "bar"]).to eql(foo: "Transf 1", bar: "Transf 2")
     end
 
     it "preserves key transformations from the caller schema" do
@@ -562,7 +562,7 @@ RSpec.describe Dry::Types::Schema do
 
       schema = schema1.merge(schema2)
 
-      expect(schema["foo" => "foo", "bar" => "bar"]).to eq(foo: "foo", bar: "bar")
+      expect(schema["foo" => "foo", "bar" => "bar"]).to eql(foo: "foo", bar: "bar")
     end
   end
 

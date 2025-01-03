@@ -197,7 +197,7 @@ RSpec.describe Dry::Types::Enum do
       subject(:type) { Dry::Types["nominal.integer"].enum(mapping) }
 
       it "returns the enum values" do
-        expect(type.each_value.to_a).to eq([0, 10, 20])
+        expect(type.each_value.to_a).to eql([0, 10, 20])
       end
 
       it "returns enumerator" do

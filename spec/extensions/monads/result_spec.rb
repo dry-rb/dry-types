@@ -24,7 +24,7 @@ RSpec.describe Dry::Types::Result do
 
         expect(monad).to be_a Dry::Monads::Result
         expect(monad).to be_success
-        expect(monad.value!).to eq(result.input)
+        expect(monad.value!).to eql(result.input)
       end
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe Dry::Types::Result do
 
         expect(monad).to be_a Dry::Monads::Result
         expect(monad).to be_failure
-        expect(monad.failure).to eq([result.error, result.input])
+        expect(monad.failure).to eql([result.error, result.input])
       end
     end
   end

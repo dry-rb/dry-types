@@ -29,14 +29,14 @@ RSpec.describe Dry::Types::Intersection do
     it "works with two pass-through types" do
       type = t::Nominal::Hash & t.Hash(foo: t::Nominal::Integer)
 
-      expect(type[{foo: ""}]).to eq({foo: ""})
-      expect(type[{foo: 312}]).to eq({foo: 312})
+      expect(type[{foo: ""}]).to eql({foo: ""})
+      expect(type[{foo: 312}]).to eql({foo: 312})
     end
 
     it "works with two strict types" do
       type = t::Strict::Hash & t.Hash(foo: t::Strict::Integer)
 
-      expect(type[{foo: 312}]).to eq({foo: 312})
+      expect(type[{foo: 312}]).to eql({foo: 312})
 
       expect { type[312] }.to raise_error(Dry::Types::CoercionError)
     end
@@ -44,8 +44,8 @@ RSpec.describe Dry::Types::Intersection do
     it "is aliased as #call" do
       type = t::Nominal::Hash & t.Hash(foo: t::Nominal::Integer)
 
-      expect(type.call({foo: ""})).to eq({foo: ""})
-      expect(type.call({foo: 312})).to eq({foo: 312})
+      expect(type.call({foo: ""})).to eql({foo: ""})
+      expect(type.call({foo: 312})).to eql({foo: 312})
     end
 
     it "works with two constructor & constrained types" do

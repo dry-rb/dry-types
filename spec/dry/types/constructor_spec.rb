@@ -275,8 +275,8 @@ RSpec.describe Dry::Types::Constructor do
       to_i = :to_i.to_proc
       to_s = :to_s.to_proc
 
-      expect(type.constructor(to_i)).to eq(type.constructor(to_i))
-      expect(type.constructor(to_i)).not_to eq(type.constructor(to_s))
+      expect(type.constructor(to_i)).to eql(type.constructor(to_i))
+      expect(type.constructor(to_i)).not_to eql(type.constructor(to_s))
 
       expect(type.constructor(to_i)).to eql(type.constructor(to_i))
       expect(type.constructor(to_i)).not_to eql(type.constructor(to_s))
