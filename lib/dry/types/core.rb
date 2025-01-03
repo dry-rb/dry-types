@@ -60,14 +60,17 @@ module Dry
 
     # Register {KERNEL_COERCIBLE} types
     KERNEL_COERCIBLE.each do |name, primitive|
-      register("coercible.#{name}",
-               self["nominal.#{name}"].constructor(Kernel.method(primitive.name)))
+      register(
+        "coercible.#{name}",
+        self["nominal.#{name}"].constructor(::Kernel.method(primitive.name))
+      )
     end
 
     # Register {METHOD_COERCIBLE} types
     METHOD_COERCIBLE.each_key do |name|
       register(
-        "coercible.#{name}", self["nominal.#{name}"].constructor(&METHOD_COERCIBLE_METHODS[name])
+        "coercible.#{name}",
+        self["nominal.#{name}"].constructor(&METHOD_COERCIBLE_METHODS[name])
       )
     end
 
@@ -80,7 +83,10 @@ module Dry
 
     # Register optional {COERCIBLE} types
     COERCIBLE.each_key do |name|
-      register("optional.coercible.#{name}", self["coercible.#{name}"].optional)
+      register(
+        "optional.coercible.#{name}",
+        self["coercible.#{name}"].optional
+      )
     end
 
     # Register `:bool` since it's common and not a built-in Ruby type :(

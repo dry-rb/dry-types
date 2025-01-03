@@ -125,7 +125,7 @@ module Dry
         @result = result
         @input = input
 
-        if result.is_a?(String)
+        if result.is_a?(::String)
           super(result)
         else
           super(to_s)

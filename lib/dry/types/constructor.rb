@@ -7,7 +7,7 @@ module Dry
     #
     # @api public
     class Constructor < Nominal
-      include Dry::Equalizer(:type, :options, inspect: false, immutable: true)
+      include ::Dry::Equalizer(:type, :options, inspect: false, immutable: true)
 
       # @return [#call]
       attr_reader :fn
@@ -160,7 +160,7 @@ module Dry
       #
       # @api public
       def to_proc
-        proc { |value| self.(value) }
+        proc { self.(_1) }
       end
 
       private

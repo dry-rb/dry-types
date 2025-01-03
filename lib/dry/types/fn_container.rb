@@ -12,8 +12,8 @@ module Dry
       end
 
       # @api private
-      def self.register(function = Dry::Core::Constants::Undefined, &block)
-        fn = Dry::Core::Constants::Undefined.default(function, block)
+      def self.register(function = ::Dry::Core::Constants::Undefined, &block)
+        fn = ::Dry::Core::Constants::Undefined.default(function, block)
         fn_name = register_name(fn)
         container.register(fn_name, fn) unless container.key?(fn_name)
         fn_name

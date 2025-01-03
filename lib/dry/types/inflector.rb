@@ -4,6 +4,6 @@ require "dry/inflector"
 
 module Dry
   module Types
-    Inflector = Dry::Inflector.new
+    Inflector = ::Dry::Inflector.new
   end
 end

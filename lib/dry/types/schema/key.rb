@@ -29,7 +29,8 @@ module Dry
           end
 
           unless name.is_a?(::Symbol)
-            raise ArgumentError, "Schemas can only contain symbol keys, #{name.inspect} given"
+            raise ::ArgumentError,
+                  "Schemas can only contain symbol keys, #{name.inspect} given"
           end
 
           super

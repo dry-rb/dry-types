@@ -44,7 +44,7 @@ module Dry
           else
             BigDecimal(input)
           end
-        rescue ArgumentError, TypeError
+        rescue ::ArgumentError, ::TypeError
           if block_given?
             yield
           else

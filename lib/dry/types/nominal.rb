@@ -119,7 +119,7 @@ module Dry
       #
       # @api public
       def failure(input, error)
-        raise ArgumentError, "error must be a CoercionError" unless error.is_a?(CoercionError)
+        raise ::ArgumentError, "error must be a CoercionError" unless error.is_a?(CoercionError)
 
         Result::Failure.new(input, error)
       end

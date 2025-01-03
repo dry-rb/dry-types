@@ -61,16 +61,16 @@ module Dry
                 ::Module.new do
                   if safe
                     module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
-                      def call(input, &block)              # def call(input, &block)
-                        @target.#{method}(input, &block)   #   @target.coerve(input, &block)
-                      end                                  # end
+                      def call(input, &)             # def call(input, &)
+                        @target.#{method}(input, &)  #   @target.coerce(input, &)
+                      end                            # end
                     RUBY
                   else
                     module_eval(<<~RUBY, __FILE__, __LINE__ + 1)
-                      def call(input, &block)                                        # def call(input, &block)
+                      def call(input, &)                                             # def call(input, &)
                         @target.#{method}(input)                                     #   @target.coerce(input)
                       rescue ::NoMethodError, ::TypeError, ::ArgumentError => error  # rescue ::NoMethodError, ::TypeError, ::ArgumentError => error
-                        CoercionError.handle(error, &block)                          #   CoercionError.handle(error, &block)
+                        CoercionError.handle(error, &)                               #   CoercionError.handle(error, &)
                       end                                                            # end
                     RUBY
                   end

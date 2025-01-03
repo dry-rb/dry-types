@@ -187,7 +187,7 @@ module Dry
 
         # @api private
         def visit_map(_node)
-          raise NotImplementedError, "map types are not supported yet"
+          raise ::NotImplementedError, "map types are not supported yet"
         end
 
         private

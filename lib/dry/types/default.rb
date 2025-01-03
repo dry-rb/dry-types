@@ -8,7 +8,7 @@ module Dry
     class Default
       # @api private
       class Callable < Default
-        include Dry::Equalizer(:type, inspect: false, immutable: true)
+        include ::Dry::Equalizer(:type, inspect: false, immutable: true)
 
         # Evaluates given callable
         # @return [Object]
@@ -26,7 +26,7 @@ module Dry
       include Decorator
       include Builder
       include Printable
-      include Dry::Equalizer(:type, :value, inspect: false, immutable: true)
+      include ::Dry::Equalizer(:type, :value, inspect: false, immutable: true)
 
       # @return [Object]
       attr_reader :value

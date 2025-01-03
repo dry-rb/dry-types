@@ -50,7 +50,7 @@ module Dry
       end
 
       def visit_rule(node)
-        Dry::Types.rule_compiler.([node])[0]
+        ::Dry::Types.rule_compiler.([node])[0]
       end
 
       def visit_sum(node)
@@ -60,7 +60,7 @@ module Dry
 
       def visit_array(node)
         member, meta = node
-        member = visit(member) unless member.is_a?(Class)
+        member = visit(member) unless member.is_a?(::Class)
         registry["nominal.array"].of(member).meta(meta)
       end
 
@@ -118,14 +118,14 @@ module Dry
 
         case type
         when :id
-          Dry::Types::FnContainer[node.fetch(0)]
+          ::Dry::Types::FnContainer[node.fetch(0)]
         when :callable
           node.fetch(0)
         when :method
           target, method = node
           target.method(method)
         else
-          raise ArgumentError, "Cannot build callable from #{fn.inspect}"
+          raise ::ArgumentError, "Cannot build callable from #{fn.inspect}"
         end
       end
     end

@@ -12,7 +12,11 @@ module Dry
       include Options
       include Meta
       include Printable
-      include Dry::Equalizer(:left, :right, :options, :meta, inspect: false, immutable: true)
+      include ::Dry::Equalizer(
+        :left, :right, :options, :meta,
+        inspect: false,
+        immutable: true
+      )
 
       # @return [Type]
       attr_reader :left
@@ -35,7 +39,7 @@ module Dry
         ast_type = Inflector.underscore(composition_name).to_sym
         base.define_singleton_method(:ast_type) { ast_type }
         base.define_singleton_method(:composition_name) { composition_name }
-        base.const_set("Constrained", Class.new(base) { include Constrained })
+        base.const_set("Constrained", ::Class.new(base) { include Constrained })
       end
 
       # @param [Type] left
@@ -83,7 +87,7 @@ module Dry
       #
       # @api private
       def call_unsafe(input)
-        raise NotImplementedError
+        raise ::NotImplementedError
       end
 
       # @param [Object] input
@@ -92,14 +96,14 @@ module Dry
       #
       # @api private
       def call_safe(input, &)
-        raise NotImplementedError
+        raise ::NotImplementedError
       end
 
       # @param [Object] input
       #
       # @api public
       def try(input)
-        raise NotImplementedError
+        raise ::NotImplementedError
       end
 
       # @api private
@@ -108,7 +112,7 @@ module Dry
         if result.success?
           result
         else
-          raise ArgumentError, "Invalid success value '#{input}' for #{inspect}"
+          raise ::ArgumentError, "Invalid success value '#{input}' for #{inspect}"
         end
       end
 
@@ -118,7 +122,7 @@ module Dry
         if result.failure?
           result
         else
-          raise ArgumentError, "Invalid failure value '#{input}' for #{inspect}"
+          raise ::ArgumentError, "Invalid failure value '#{input}' for #{inspect}"
         end
       end
 
@@ -128,7 +132,7 @@ module Dry
       #
       # @api private
       def primitive?(value)
-        raise NotImplementedError
+        raise ::NotImplementedError
       end
 
       # @see Nominal#to_ast

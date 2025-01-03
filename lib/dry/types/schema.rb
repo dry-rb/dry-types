@@ -17,8 +17,8 @@ module Dry
     #
     # @api public
     class Schema < Hash
-      NO_TRANSFORM = Dry::Types::FnContainer.register { |x| x }
-      SYMBOLIZE_KEY = Dry::Types::FnContainer.register(:to_sym.to_proc)
+      NO_TRANSFORM = ::Dry::Types::FnContainer.register { |x| x }
+      SYMBOLIZE_KEY = ::Dry::Types::FnContainer.register(:to_sym.to_proc)
 
       include ::Enumerable
 
@@ -46,7 +46,7 @@ module Dry
 
         key_fn = options.fetch(:key_transform_fn, NO_TRANSFORM)
 
-        @transform_key = Dry::Types::FnContainer[key_fn]
+        @transform_key = ::Dry::Types::FnContainer[key_fn]
 
         super
       end
@@ -184,9 +184,9 @@ module Dry
       def with_key_transform(proc = nil, &block)
         fn = proc || block
 
-        raise ArgumentError, "a block or callable argument is required" if fn.nil?
+        raise ::ArgumentError, "a block or callable argument is required" if fn.nil?
 
-        handle = Dry::Types::FnContainer.register(fn)
+        handle = ::Dry::Types::FnContainer.register(fn)
         with(key_transform_fn: handle)
       end
 

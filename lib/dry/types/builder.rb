@@ -7,7 +7,7 @@ module Dry
     # @api public
     # rubocop:disable Metrics/ModuleLength
     module Builder
-      include Dry::Core::Constants
+      include ::Dry::Core::Constants
 
       # @return [Class]
       #
@@ -191,7 +191,7 @@ module Dry
           )
         end
 
-        constructor do |input, type, &_block|
+        constructor do |input, type, &|
           type.(input) do |output = input|
             if block_given?
               yield(output)

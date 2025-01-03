@@ -84,12 +84,12 @@ module Dry
         #
         # @api public
         def self.to_int(input, &)
-          if input.is_a? String
+          if input.is_a?(::String)
             Integer(input, 10)
           else
             Integer(input)
           end
-        rescue ArgumentError, TypeError => e
+        rescue ::ArgumentError, ::TypeError => e
           CoercionError.handle(e, &)
         end
 
@@ -102,7 +102,7 @@ module Dry
         # @api public
         def self.to_float(input, &)
           Float(input)
-        rescue ArgumentError, TypeError => e
+        rescue ::ArgumentError, ::TypeError => e
           CoercionError.handle(e, &)
         end
 

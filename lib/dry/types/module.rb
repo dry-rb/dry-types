@@ -38,7 +38,6 @@ module Dry
 
       # @api private
       # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/CyclomaticComplexity
       # rubocop:disable Metrics/PerceivedComplexity
       def type_constants(*namespaces, default: Undefined, **aliases)
         if namespaces.empty? && aliases.empty? && Undefined.equal?(default)
@@ -52,7 +51,7 @@ module Dry
         tree = registry_tree
 
         if namespaces.empty? && aliases.empty?
-          modules = tree.select { |_, v| v.is_a?(::Hash) }.map(&:first)
+          modules = tree.select { _2.is_a?(::Hash) }.map(&:first)
         else
           modules = (namespaces + aliases.keys).map { |n|
             Types::Inflector.camelize(n).to_sym
@@ -69,7 +68,6 @@ module Dry
         end
       end
       # rubocop:enable Metrics/AbcSize
-      # rubocop:enable Metrics/CyclomaticComplexity
       # rubocop:enable Metrics/PerceivedComplexity
 
       # @api private
@@ -101,7 +99,7 @@ module Dry
         unknown = (referenced.uniq - known).first
 
         if unknown
-          raise ArgumentError,
+          raise ::ArgumentError,
                 "#{unknown.inspect} is not a known type namespace. " \
                 "Supported options are #{known.map(&:inspect).join(", ")}"
         end

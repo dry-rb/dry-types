@@ -94,9 +94,7 @@ module Dry
       def merge_results(left_result, right_result)
         case left_result
         when ::Array
-          left_result
-            .zip(right_result)
-            .map { |lhs, rhs| merge_results(lhs, rhs) }
+          left_result.zip(right_result).map { merge_results(_1, _2) }
         when ::Hash
           left_result.merge(right_result)
         else

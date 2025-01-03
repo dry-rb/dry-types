@@ -10,7 +10,7 @@ module Dry
       include Decorator
       include Builder
       include Printable
-      include Dry::Equalizer(:type, :rule, inspect: false, immutable: true)
+      include ::Dry::Equalizer(:type, :rule, inspect: false, immutable: true)
 
       # @return [Dry::Logic::Rule]
       attr_reader :rule

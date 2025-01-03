@@ -67,9 +67,9 @@ module Dry
       def with_type_transform(proc = nil, &block)
         fn = proc || block
 
-        raise ArgumentError, "a block or callable argument is required" if fn.nil?
+        raise ::ArgumentError, "a block or callable argument is required" if fn.nil?
 
-        handle = Dry::Types::FnContainer.register(fn)
+        handle = ::Dry::Types::FnContainer.register(fn)
         with(type_transform_fn: handle)
       end
 
@@ -93,7 +93,9 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        [:hash, [options.slice(:type_transform_fn), meta ? self.meta : EMPTY_HASH]]
+        [:hash,
+         [options.slice(:type_transform_fn),
+          meta ? self.meta : EMPTY_HASH]]
       end
 
       private
@@ -101,7 +103,7 @@ module Dry
       # @api private
       def build_keys(type_map)
         type_fn = options.fetch(:type_transform_fn, Schema::NO_TRANSFORM)
-        type_transform = Dry::Types::FnContainer[type_fn]
+        type_transform = ::Dry::Types::FnContainer[type_fn]
 
         type_map.map do |map_key, type|
           name, options = key_name(map_key)
