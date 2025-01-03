@@ -1,4 +1,10 @@
 ---
+- version: 1.8.0
+  date: 2025-01-03
+  changed:
+  - "Set min Ruby version to 3.1 (@flash-gordon)"
+  added:
+  - "Added `Enum#each_value` to iterate over enum values (@CharlieWWW94 in #471)"
 - version: 1.7.2
   date: 2024-01-05
   fixed:
