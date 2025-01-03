@@ -42,6 +42,14 @@ valid[:invalid]
 `Types.Constructor` builds a new constructor type for the given class. By default uses the `new` method as a constructor.
 
 ```ruby
+class User
+  def initialize(attributes)
+    @attributes = attributes
+  end
+
+  def name = @attributes.fetch(:name)
+end
+
 user_type = Types.Constructor(User)
 
 # It is equivalent to User.new(name: 'John')
