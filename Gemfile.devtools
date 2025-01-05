@@ -16,4 +16,5 @@ end
 group :tools do
   gem "rubocop", "~> 1.69.2"
   gem "byebug"
+  gem "yard"
 end
