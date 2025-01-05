@@ -155,8 +155,30 @@ RSpec.describe Dry::Types::Enum do
 
       it "returns string representation of the type" do
         expect(type.to_s).to eql(
-          "#<Dry::Types[Enum<Constrained<Nominal<Integer> " \
-          "rule=[included_in?([4, 5, 6])]> values={4, 5, 6}>]>"
+          "#<Dry::Types[Enum(4|5|6)<Constrained<Nominal<Integer> " \
+          "rule=[included_in?([4, 5, 6])]>>]>"
+        )
+      end
+    end
+
+    context "symbols" do
+      subject(:type) { Dry::Types["nominal.symbol"].enum(:draft, :published, :archived) }
+
+      it "returns string representation of the type" do
+        expect(type.to_s).to eql(
+          "#<Dry::Types[Enum(:draft|:published|:archived)<Constrained<Nominal<Symbol> " \
+          "rule=[included_in?([:draft, :published, :archived])]>>]>"
+        )
+      end
+    end
+
+    context "strings" do
+      subject(:type) { Dry::Types["nominal.string"].enum("draft", "published", "archived") }
+
+      it "returns string representation of the type" do
+        expect(type.to_s).to eql(
+          "#<Dry::Types[Enum(draft|published|archived)<Constrained<Nominal<String> " \
+          "rule=[included_in?([\"draft\", \"published\", \"archived\"])]>>]>"
         )
       end
     end
@@ -213,6 +235,24 @@ RSpec.describe Dry::Types::Enum do
 
     it "builds a constructor type" do
       expect(type.constructor(&:to_i).mapping).to eql(4 => 4, 5 => 5)
+    end
+  end
+
+  describe "#name" do
+    subject(:type) { Dry::Types["nominal.integer"].enum(4, 5, 6) }
+
+    it "returns the name of the type" do
+      expect(type.name).to eql("Integer(4|5|6)")
+    end
+
+    context "with mapping" do
+      let(:mapping) { {0 => "draft", 10 => "published", 20 => "archived"} }
+
+      subject(:type) { Dry::Types["nominal.integer"].enum(mapping) }
+
+      it "returns the name of the type" do
+        expect(type.name).to eql("Integer(0|10|20)")
+      end
     end
   end
 end

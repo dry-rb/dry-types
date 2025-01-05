@@ -114,8 +114,7 @@ module Dry
 
           visit_options(options) do |opts|
             if mapping == enum.inverted_mapping
-              values = mapping.values.map(&:inspect).join(", ")
-              yield "Enum<#{type} values={#{values}}#{opts}>"
+              yield "Enum(#{enum.joined_values})<#{type}#{opts}>"
             else
               mapping_str = mapping.map { |key, value|
                 "#{key.inspect}=>#{value.inspect}"

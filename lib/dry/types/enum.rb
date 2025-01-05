@@ -88,6 +88,26 @@ module Dry
 
       alias_method :inspect, :to_s
 
+      # @return [String]
+      #
+      # @api public
+      def name
+        "#{super}(#{joined_values})"
+      end
+
+      # @return [String]
+      #
+      # @api private
+      def joined_values
+        mapping.keys.map { |value|
+          if value.is_a?(::String)
+            value
+          else
+            value.inspect
+          end
+        }.join("|")
+      end
+
       private
 
       # Maps a value
