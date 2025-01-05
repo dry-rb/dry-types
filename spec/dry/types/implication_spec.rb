@@ -92,7 +92,11 @@ RSpec.describe Dry::Types::Implication do
     end
 
     it "raises ArgumentError when non of the types have a valid input" do
-      expect { type.success({id: "id"}) }.to raise_error(ArgumentError, /Invalid success value '{:id=>"id"}' /)
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect { type.success({id: "id"}) }.to raise_error(ArgumentError, /Invalid success value '{id: "id"}'/)
+      else
+        expect { type.success({id: "id"}) }.to raise_error(ArgumentError, /Invalid success value '\{:id=>"id"\}':/)
+      end
     end
   end
 
