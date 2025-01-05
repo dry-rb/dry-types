@@ -95,7 +95,7 @@ RSpec.describe Dry::Types::Implication do
       if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
         expect { type.success({id: "id"}) }.to raise_error(ArgumentError, /Invalid success value '{id: "id"}'/)
       else
-        expect { type.success({id: "id"}) }.to raise_error(ArgumentError, /Invalid success value '\{:id=>"id"\}':/)
+        expect { type.success({id: "id"}) }.to raise_error(ArgumentError, /Invalid success value '\{:id=>"id"\}'/)
       end
     end
   end
