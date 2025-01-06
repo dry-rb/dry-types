@@ -3,6 +3,7 @@
   date: 2025-01-03
   changed:
   - "Set min Ruby version to 3.1 (@flash-gordon)"
+  - "Better representation of Enum types (@flash-gordon, see #460)"
   added:
   - "Added `Enum#each_value` to iterate over enum values (@CharlieWWW94 in #471)"
   fixed:
