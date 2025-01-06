@@ -14,6 +14,7 @@
 ### Changed
 
 - Set min Ruby version to 3.1 (@flash-gordon)
+- Better representation of Enum types (@flash-gordon, see #460)
 
 [Compare v1.7.2...v1.8.0](https://github.com/dry-rb/dry-types/compare/v1.7.2...v1.8.0)
 
