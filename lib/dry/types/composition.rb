@@ -56,55 +56,41 @@ module Dry
       # @return [String]
       #
       # @api public
-      def name
-        [left, right].map(&:name).join(" #{self.class.operator} ")
-      end
+      def name = "#{left.name} #{self.class.operator} #{right.name}"
 
       # @return [false]
       #
       # @api public
-      def default?
-        false
-      end
+      def default? = false
 
       # @return [false]
       #
       # @api public
-      def constrained?
-        false
-      end
+      def constrained? = false
 
       # @return [Boolean]
       #
       # @api public
-      def optional?
-        false
-      end
+      def optional? = false
 
       # @param [Object] input
       #
       # @return [Object]
       #
       # @api private
-      def call_unsafe(input)
-        raise ::NotImplementedError
-      end
+      def call_unsafe(input) = raise ::NotImplementedError
 
       # @param [Object] input
       #
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &)
-        raise ::NotImplementedError
-      end
+      def call_safe(input, &) = raise ::NotImplementedError
 
       # @param [Object] input
       #
       # @api public
-      def try(input)
-        raise ::NotImplementedError
-      end
+      def try(input) = raise ::NotImplementedError
 
       # @api private
       def success(input)
@@ -131,9 +117,7 @@ module Dry
       # @return [Boolean]
       #
       # @api private
-      def primitive?(value)
-        raise ::NotImplementedError
-      end
+      def primitive?(value) = raise ::NotImplementedError
 
       # @see Nominal#to_ast
       #
@@ -148,9 +132,7 @@ module Dry
       # @return [Proc]
       #
       # @api public
-      def to_proc
-        proc { |value| self.(value) }
-      end
+      def to_proc = proc { |value| self.(value) }
     end
   end
 end

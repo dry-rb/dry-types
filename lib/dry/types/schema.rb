@@ -77,9 +77,7 @@ module Dry
       # @return [Hash{Symbol => Object}]
       #
       # @api public
-      def apply(hash, options = EMPTY_HASH)
-        call_unsafe(hash, options)
-      end
+      def apply(hash, options = EMPTY_HASH) = call_unsafe(hash, options)
 
       # @param input [Hash] hash
       #

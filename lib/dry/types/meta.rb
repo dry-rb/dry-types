@@ -16,9 +16,7 @@ module Dry
       # @return [Type]
       #
       # @api public
-      def with(**options)
-        super(meta: @meta, **options)
-      end
+      def with(**options) = super(meta: @meta, **options)
 
       # @overload meta
       #   @return [Hash] metadata associated with type
@@ -43,9 +41,7 @@ module Dry
       # @return [Dry::Types::Type]
       #
       # @api public
-      def pristine
-        with(meta: EMPTY_HASH)
-      end
+      def pristine = with(meta: EMPTY_HASH)
     end
   end
 end

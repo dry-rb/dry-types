@@ -35,23 +35,17 @@ module Dry
       # @return [Result,Logic::Result]
       #
       # @api public
-      def try(input, &)
-        type.try(input, &)
-      end
+      def try(input, &) = type.try(input, &)
 
       # @see Nominal#to_ast
       #
       # @api public
-      def to_ast(meta: true)
-        [:lax, type.to_ast(meta: meta)]
-      end
+      def to_ast(meta: true) = [:lax, type.to_ast(meta: meta)]
 
       # @return [Lax]
       #
       # @api public
-      def lax
-        self
-      end
+      def lax = self
 
       private
 

@@ -26,9 +26,7 @@ module Dry
       end
 
       # @api private
-      def [](name)
-        predicates[name]
-      end
+      def [](name) = predicates[name]
     end
   end
 end

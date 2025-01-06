@@ -48,48 +48,36 @@ module Dry
       # @return [String]
       #
       # @api public
-      def name
-        primitive.name
-      end
+      def name = primitive.name
 
       # @return [false]
       #
       # @api public
-      def default?
-        false
-      end
+      def default? = false
 
       # @return [false]
       #
       # @api public
-      def constrained?
-        false
-      end
+      def constrained? = false
 
       # @return [false]
       #
       # @api public
-      def optional?
-        false
-      end
+      def optional? = false
 
       # @param [BasicObject] input
       #
       # @return [BasicObject]
       #
       # @api private
-      def call_unsafe(input)
-        input
-      end
+      def call_unsafe(input) = input
 
       # @param [BasicObject] input
       #
       # @return [BasicObject]
       #
       # @api private
-      def call_safe(input)
-        input
-      end
+      def call_safe(input) = input
 
       # @param [Object] input
       #
@@ -100,18 +88,14 @@ module Dry
       # @return [nil] otherwise
       #
       # @api public
-      def try(input)
-        success(input)
-      end
+      def try(input) = success(input)
 
       # @param (see Dry::Types::Success#initialize)
       #
       # @return [Result::Success]
       #
       # @api public
-      def success(input)
-        Result::Success.new(input)
-      end
+      def success(input) = Result::Success.new(input)
 
       # @param (see Failure#initialize)
       #
@@ -131,9 +115,7 @@ module Dry
       # @return [Boolean]
       #
       # @api public
-      def primitive?(value)
-        value.is_a?(primitive)
-      end
+      def primitive?(value) = value.is_a?(primitive)
 
       # @api private
       def coerce(input, &)
@@ -178,18 +160,14 @@ module Dry
       # @return [Nominal]
       #
       # @api public
-      def lax
-        self
-      end
+      def lax = self
 
       # Wrap the type with a proc
       #
       # @return [Proc]
       #
       # @api public
-      def to_proc
-        ALWAYS
-      end
+      def to_proc = ALWAYS
     end
 
     extend ::Dry::Core::Deprecations[:"dry-types"]

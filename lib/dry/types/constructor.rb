@@ -77,9 +77,7 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_unsafe(input)
-        type.call_unsafe(fn.(input))
-      end
+      def call_unsafe(input) = type.call_unsafe(fn.(input))
 
       # @param [Object] input
       # @param [#call,nil] block
@@ -121,9 +119,7 @@ module Dry
       # @return [Class]
       #
       # @api private
-      def constrained_type
-        Constrained::Coercible
-      end
+      def constrained_type = Constrained::Coercible
 
       # @see Nominal#to_ast
       #
@@ -150,18 +146,14 @@ module Dry
       #
       # @return [Lax]
       # @api public
-      def lax
-        Lax.new(constructor_type[type.lax, **options])
-      end
+      def lax = Lax.new(constructor_type[type.lax, **options])
 
       # Wrap the type with a proc
       #
       # @return [Proc]
       #
       # @api public
-      def to_proc
-        proc { self.(_1) }
-      end
+      def to_proc = proc { self.(_1) }
 
       private
 

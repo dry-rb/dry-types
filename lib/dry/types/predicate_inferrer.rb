@@ -157,9 +157,7 @@ module Dry
         end
 
         # @api private
-        def visit_any(_)
-          EMPTY_ARRAY
-        end
+        def visit_any(_) = EMPTY_ARRAY
 
         # @api private
         def visit_and(node)

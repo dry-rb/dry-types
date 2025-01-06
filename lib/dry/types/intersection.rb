@@ -12,9 +12,7 @@ module Dry
     class Intersection
       include Composition
 
-      def self.operator
-        :&
-      end
+      def self.operator = :&
 
       # @param [Object] input
       #
@@ -30,9 +28,7 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &)
-        try_sides(input, &).input
-      end
+      def call_safe(input, &) = try_sides(input, &).input
 
       # @param [Object] input
       #

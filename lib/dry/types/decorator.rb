@@ -24,23 +24,17 @@ module Dry
       # @return [Object] if block given and try fails
       #
       # @api public
-      def try(input, &)
-        type.try(input, &)
-      end
+      def try(input, &) = type.try(input, &)
 
       # @return [Boolean]
       #
       # @api public
-      def default?
-        type.default?
-      end
+      def default? = type.default?
 
       # @return [Boolean]
       #
       # @api public
-      def constrained?
-        type.constrained?
-      end
+      def constrained? = type.constrained?
 
       # @param [Symbol] meth
       # @param [Boolean] include_private
@@ -57,9 +51,7 @@ module Dry
       # @return [Proc]
       #
       # @api public
-      def to_proc
-        proc { |value| self.(value) }
-      end
+      def to_proc = proc { |value| self.(value) }
 
       private
 
@@ -68,9 +60,7 @@ module Dry
       # @return [Boolean]
       #
       # @api private
-      def decorate?(response)
-        response.is_a?(type.class)
-      end
+      def decorate?(response) = response.is_a?(type.class)
 
       # Delegates missing methods to {#type}
       #

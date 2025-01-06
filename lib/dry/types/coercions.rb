@@ -99,9 +99,7 @@ module Dry
       # @return [Boolean]
       #
       # @api private
-      def empty_str?(value)
-        EMPTY_STRING.eql?(value)
-      end
+      def empty_str?(value) = EMPTY_STRING.eql?(value)
     end
   end
 end

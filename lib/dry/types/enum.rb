@@ -36,23 +36,17 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_unsafe(input)
-        type.call_unsafe(map_value(input))
-      end
+      def call_unsafe(input) = type.call_unsafe(map_value(input))
 
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &)
-        type.call_safe(map_value(input), &)
-      end
+      def call_safe(input, &) = type.call_safe(map_value(input), &)
 
       # @see Dry::Types::Constrained#try
       #
       # @api public
-      def try(input)
-        super(map_value(input))
-      end
+      def try(input) = super(map_value(input))
 
       # @api private
       def default(*)
@@ -73,9 +67,7 @@ module Dry
       # @return [String]
       #
       # @api public
-      def to_s
-        PRINTER.(self)
-      end
+      def to_s = PRINTER.(self)
 
       # Iterate over each enum value
       #
@@ -91,9 +83,7 @@ module Dry
       # @return [String]
       #
       # @api public
-      def name
-        "#{super}(#{joined_values})"
-      end
+      def name = "#{super}(#{joined_values})"
 
       # @return [String]
       #

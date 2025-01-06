@@ -83,9 +83,7 @@ module Dry
           #
           # @api private
           class PrivateCall < MethodCall
-            def call(input, &)
-              @target.send(@name, input, &)
-            end
+            def call(input, &) = @target.send(@name, input, &)
           end
 
           # Coercion via an unsafe private method call
@@ -115,9 +113,7 @@ module Dry
             @name = fn.name
           end
 
-          def to_ast
-            [:method, target, name]
-          end
+          def to_ast = [:method, target, name]
         end
 
         class Wrapper < Function
@@ -129,9 +125,7 @@ module Dry
           end
           alias_method :[], :call
 
-          def arity
-            2
-          end
+          def arity = 2
         end
 
         # Choose or build specialized invokation code for a callable
@@ -175,19 +169,13 @@ module Dry
         end
 
         # @return [Object]
-        def call(input, &)
-          @fn.(input, &)
-        end
+        def call(input, &) = @fn.(input, &)
         alias_method :[], :call
 
         # @return [Integer]
-        def arity
-          1
-        end
+        def arity = 1
 
-        def wrapper?
-          arity.equal?(2)
-        end
+        def wrapper? = arity.equal?(2)
 
         # @return [Array]
         def to_ast

@@ -12,9 +12,7 @@ module Dry
         @registry = registry
       end
 
-      def call(ast)
-        visit(ast)
-      end
+      def call(ast) = visit(ast)
 
       def visit(node)
         type, body = node

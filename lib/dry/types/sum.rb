@@ -8,16 +8,12 @@ module Dry
     class Sum
       include Composition
 
-      def self.operator
-        :|
-      end
+      def self.operator = :|
 
       # @return [Boolean]
       #
       # @api public
-      def optional?
-        primitive?(nil)
-      end
+      def optional? = primitive?(nil)
 
       # @param [Object] input
       #

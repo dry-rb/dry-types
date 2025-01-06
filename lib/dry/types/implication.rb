@@ -8,9 +8,7 @@ module Dry
     class Implication
       include Composition
 
-      def self.operator
-        :>
-      end
+      def self.operator = :>
 
       # @param [Object] input
       #

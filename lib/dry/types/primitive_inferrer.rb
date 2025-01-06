@@ -25,20 +25,14 @@ module Dry
         end
 
         # @api private
-        def visit_hash(_)
-          ::Hash
-        end
+        def visit_hash(_) = ::Hash
         alias_method :visit_schema, :visit_hash
 
         # @api private
-        def visit_array(_)
-          ::Array
-        end
+        def visit_array(_) = ::Array
 
         # @api private
-        def visit_lax(node)
-          visit(node)
-        end
+        def visit_lax(node) = visit(node)
 
         # @api private
         def visit_constructor(node)
@@ -66,9 +60,7 @@ module Dry
         end
 
         # @api private
-        def visit_any(_)
-          ::Object
-        end
+        def visit_any(_) = ::Object
       end
 
       # @return [Compiler]

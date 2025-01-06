@@ -59,9 +59,7 @@ module Dry
         send(print_with, type, &)
       end
 
-      def visit_any(_)
-        yield "Any"
-      end
+      def visit_any(_) = yield "Any"
 
       def visit_array(type)
         visit_options(EMPTY_HASH, type.meta) do |opts|

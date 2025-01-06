@@ -38,30 +38,22 @@ module Dry
         end
 
         # @api private
-        def call_safe(input, &)
-          type.call_safe(input, &)
-        end
+        def call_safe(input, &) = type.call_safe(input, &)
 
         # @api private
-        def call_unsafe(input)
-          type.call_unsafe(input)
-        end
+        def call_unsafe(input) = type.call_unsafe(input)
 
         # @see Dry::Types::Nominal#try
         #
         # @api public
-        def try(input, &)
-          type.try(input, &)
-        end
+        def try(input, &) = type.try(input, &)
 
         # Whether the key is required in schema input
         #
         # @return [Boolean]
         #
         # @api public
-        def required?
-          options.fetch(:required)
-        end
+        def required? = options.fetch(:required)
 
         # Control whether the key is required
         #
@@ -88,27 +80,21 @@ module Dry
         # @return [Dry::Types::Schema::Key]
         #
         # @api public
-        def omittable
-          required(false)
-        end
+        def omittable = required(false)
 
         # Turn key into a lax type. Lax types are not strict hence such keys are not required
         #
         # @return [Lax]
         #
         # @api public
-        def lax
-          __new__(type.lax).required(false)
-        end
+        def lax = __new__(type.lax).required(false)
 
         # Make wrapped type optional
         #
         # @return [Key]
         #
         # @api public
-        def optional
-          __new__(type.optional)
-        end
+        def optional = __new__(type.optional)
 
         # Dump to internal AST representation
         #
@@ -145,9 +131,7 @@ module Dry
         private
 
         # @api private
-        def decorate?(response)
-          response.is_a?(Type)
-        end
+        def decorate?(response) = response.is_a?(Type)
       end
     end
   end

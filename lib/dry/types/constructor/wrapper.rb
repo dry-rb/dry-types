@@ -8,16 +8,12 @@ module Dry
         # @return [Object]
         #
         # @api private
-        def call_safe(input, &)
-          fn.(input, type, &)
-        end
+        def call_safe(input, &) = fn.(input, type, &)
 
         # @return [Object]
         #
         # @api private
-        def call_unsafe(input)
-          fn.(input, type)
-        end
+        def call_unsafe(input) = fn.(input, type)
 
         # @param [Object] input
         # @param [#call,nil] block
@@ -85,9 +81,7 @@ module Dry
         # Replace underlying type
         #
         # @api private
-        def __new__(type)
-          self.class.new(type, *@__args__.drop(1), **@options)
-        end
+        def __new__(type) = self.class.new(type, *@__args__.drop(1), **@options)
       end
     end
   end

@@ -25,16 +25,12 @@ module Dry
         # @return [true]
         #
         # @api public
-        def success?
-          true
-        end
+        def success? = true
 
         # @return [false]
         #
         # @api public
-        def failure?
-          false
-        end
+        def failure? = false
       end
 
       # Failure result
@@ -59,23 +55,17 @@ module Dry
         # @return [String]
         #
         # @api private
-        def to_s
-          error.to_s
-        end
+        def to_s = error.to_s
 
         # @return [false]
         #
         # @api public
-        def success?
-          false
-        end
+        def success? = false
 
         # @return [true]
         #
         # @api public
-        def failure?
-          true
-        end
+        def failure? = true
       end
     end
   end

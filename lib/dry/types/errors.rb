@@ -56,14 +56,10 @@ module Dry
       end
 
       # @return string
-      def message
-        errors.map(&:message).join(", ")
-      end
+      def message = errors.map(&:message).join(", ")
 
       # @return [Array]
-      def meta
-        errors.map(&:meta)
-      end
+      def meta = errors.map(&:meta)
     end
 
     class SchemaError < CoercionError

@@ -23,18 +23,14 @@ module Dry
       # @param [Dry::Types::Type] type
       #
       # @return [Dry::Types::Array]
-      def Array(type)
-        Strict(::Array).of(type)
-      end
+      def Array(type) = Strict(::Array).of(type)
 
       # Build a hash schema
       #
       # @param [Hash{Symbol => Dry::Types::Type}] type_map
       #
       # @return [Dry::Types::Array]
-      def Hash(type_map)
-        Strict(::Hash).schema(type_map)
-      end
+      def Hash(type_map) = Strict(::Hash).schema(type_map)
 
       # Build a type which values are instances of a given class
       # Values are checked using `is_a?` call
@@ -47,9 +43,7 @@ module Dry
       # @param [Class,Module] klass Class or module
       #
       # @return [Dry::Types::Type]
-      def Instance(klass)
-        Nominal(klass).constrained(type: klass)
-      end
+      def Instance(klass) = Nominal(klass).constrained(type: klass)
       alias_method :Strict, :Instance
 
       # Build a type with a single value
@@ -58,9 +52,7 @@ module Dry
       # @param [Object] value
       #
       # @return [Dry::Types::Type]
-      def Value(value)
-        Nominal(value.class).constrained(eql: value)
-      end
+      def Value(value) = Nominal(value.class).constrained(eql: value)
 
       # Build a type with a single value
       # The equality check done with `equal?`
@@ -68,9 +60,7 @@ module Dry
       # @param [Object] object
       #
       # @return [Dry::Types::Type]
-      def Constant(object)
-        Nominal(object.class).constrained(is: object)
-      end
+      def Constant(object) = Nominal(object.class).constrained(is: object)
 
       # Build a constructor type
       # If no constructor block given it uses .new method

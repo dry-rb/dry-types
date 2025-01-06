@@ -30,23 +30,17 @@ module Dry
       # @return [Type]
       #
       # @api public
-      def key_type
-        options[:key_type]
-      end
+      def key_type = options[:key_type]
 
       # @return [Type]
       #
       # @api public
-      def value_type
-        options[:value_type]
-      end
+      def value_type = options[:value_type]
 
       # @return [String]
       #
       # @api public
-      def name
-        "Map"
-      end
+      def name = "Map"
 
       # @param [Hash] hash
       #
@@ -64,9 +58,7 @@ module Dry
       # @return [Hash]
       #
       # @api private
-      def call_safe(hash)
-        try(hash) { return yield }.input
-      end
+      def call_safe(hash) = try(hash) { return yield }.input
 
       # @param [Hash] hash
       #
@@ -95,48 +87,48 @@ module Dry
       # @return [Boolean]
       #
       # @api public
-      def constrained?
-        value_type.constrained?
-      end
+      def constrained? = value_type.constrained?
 
       private
 
       # @api private
-      # rubocop:disable Metrics/PerceivedComplexity
       # rubocop:disable Metrics/AbcSize
       def coerce(input)
-        unless primitive?(input)
-          return failure(
-            input, CoercionError.new("#{input.inspect} must be an instance of #{primitive}")
-          )
-        end
+        assert_primitive(input) do
+          output = {}
+          failures = []
 
-        output = {}
-        failures = []
+          input.each do |k, v|
+            res_k = key_type.try(k)
+            res_v = value_type.try(v)
 
-        input.each do |k, v|
-          res_k = key_type.try(k)
-          res_v = value_type.try(v)
+            if res_k.failure?
+              failures << res_k.error
+            elsif output.key?(res_k.input)
+              failures << CoercionError.new("duplicate coerced hash key #{res_k.input.inspect}")
+            elsif res_v.failure?
+              failures << res_v.error
+            else
+              output[res_k.input] = res_v.input
+            end
+          end
 
-          if res_k.failure?
-            failures << res_k.error
-          elsif output.key?(res_k.input)
-            failures << CoercionError.new("duplicate coerced hash key #{res_k.input.inspect}")
-          elsif res_v.failure?
-            failures << res_v.error
+          if failures.empty?
+            success(output)
           else
-            output[res_k.input] = res_v.input
+            failure(input, MultipleError.new(failures))
           end
         end
+      end
+      # rubocop:enable Metrics/AbcSize
 
-        if failures.empty?
-          success(output)
+      def assert_primitive(input)
+        if primitive?(input)
+          yield
         else
-          failure(input, MultipleError.new(failures))
+          failure(input, CoercionError.new("#{input.inspect} must be an instance of #{primitive}"))
         end
       end
-      # rubocop:enable Metrics/PerceivedComplexity
-      # rubocop:enable Metrics/AbcSize
     end
   end
 end

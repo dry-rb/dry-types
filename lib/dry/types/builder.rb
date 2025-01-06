@@ -5,23 +5,18 @@ module Dry
     # Common API for building types and composition
     #
     # @api public
-    # rubocop:disable Metrics/ModuleLength
     module Builder
       include ::Dry::Core::Constants
 
       # @return [Class]
       #
       # @api private
-      def constrained_type
-        Constrained
-      end
+      def constrained_type = Constrained
 
       # @return [Class]
       #
       # @api private
-      def constructor_type
-        Constructor
-      end
+      def constructor_type = Constructor
 
       # Compose two types into a Sum type
       #
@@ -30,9 +25,7 @@ module Dry
       # @return [Sum, Sum::Constrained]
       #
       # @api private
-      def |(other)
-        compose(other, Sum)
-      end
+      def |(other) = compose(other, Sum)
 
       # Compose two types into an Intersection type
       #
@@ -41,9 +34,7 @@ module Dry
       # @return [Intersection, Intersection::Constrained]
       #
       # @api private
-      def &(other)
-        compose(other, Intersection)
-      end
+      def &(other) = compose(other, Intersection)
 
       # Compose two types into an Implication type
       #
@@ -52,18 +43,14 @@ module Dry
       # @return [Implication, Implication::Constrained]
       #
       # @api private
-      def >(other)
-        compose(other, Implication)
-      end
+      def >(other) = compose(other, Implication)
 
       # Turn a type into an optional type
       #
       # @return [Sum]
       #
       # @api public
-      def optional
-        Types["nil"] | self
-      end
+      def optional = Types["nil"] | self
 
       # Turn a type into a constrained type
       #
@@ -137,9 +124,7 @@ module Dry
       # @return [Lax]
       #
       # @api public
-      def lax
-        Lax.new(self)
-      end
+      def lax = Lax.new(self)
 
       # Define a constructor for the type
       #
@@ -216,6 +201,5 @@ module Dry
         klass.new(self, other)
       end
     end
-    # rubocop:enable Metrics/ModuleLength
   end
 end

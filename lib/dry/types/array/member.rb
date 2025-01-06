@@ -113,9 +113,7 @@ module Dry
         end
 
         # @api private
-        def constructor_type
-          ::Dry::Types::Array::Constructor
-        end
+        def constructor_type = ::Dry::Types::Array::Constructor
       end
     end
   end

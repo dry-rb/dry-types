@@ -62,16 +62,12 @@ module Dry
       # @return [Default]
       #
       # @api public
-      def constrained(...)
-        type.constrained(...).default(value)
-      end
+      def constrained(...) = type.constrained(...).default(value)
 
       # @return [true]
       #
       # @api public
-      def default?
-        true
-      end
+      def default? = true
 
       # @param [Object] input
       #
@@ -89,9 +85,7 @@ module Dry
       # @return [Boolean]
       #
       # @api public
-      def valid?(value = Undefined)
-        Undefined.equal?(value) || super
-      end
+      def valid?(value = Undefined) = Undefined.equal?(value) || super
 
       # @param [Object] input
       #
@@ -122,9 +116,7 @@ module Dry
       # @return [false]
       #
       # @api private
-      def callable?
-        false
-      end
+      def callable? = false
     end
   end
 end

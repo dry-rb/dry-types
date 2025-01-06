@@ -8,23 +8,17 @@ module Dry
     class Hash < Nominal
       class Constructor < ::Dry::Types::Constructor
         # @api private
-        def constructor_type
-          ::Dry::Types::Hash::Constructor
-        end
+        def constructor_type = ::Dry::Types::Hash::Constructor
 
         # @return [Lax]
         #
         # @api public
-        def lax
-          type.lax.constructor(fn, meta: meta)
-        end
+        def lax = Lax.new(type.lax.constructor(fn, meta: meta))
 
         # @see Dry::Types::Array#of
         #
         # @api public
-        def schema(...)
-          type.schema(...).constructor(fn, meta: meta)
-        end
+        def schema(...) = type.schema(...).constructor(fn, meta: meta)
       end
     end
   end

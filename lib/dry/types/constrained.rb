@@ -98,26 +98,20 @@ module Dry
       # @return [true]
       #
       # @api public
-      def constrained?
-        true
-      end
+      def constrained? = true
 
       # @param [Object] value
       #
       # @return [Boolean]
       #
       # @api public
-      def ===(value)
-        valid?(value)
-      end
+      def ===(value) = valid?(value)
 
       # Build lax type. Constraints are not applicable to lax types hence unwrapping
       #
       # @return [Lax]
       # @api public
-      def lax
-        type.lax
-      end
+      def lax = type.lax
 
       # @see Nominal#to_ast
       # @api public
@@ -126,9 +120,7 @@ module Dry
       end
 
       # @api private
-      def constructor_type
-        type.constructor_type
-      end
+      def constructor_type = type.constructor_type
 
       private
 
@@ -137,9 +129,7 @@ module Dry
       # @return [Boolean]
       #
       # @api private
-      def decorate?(response)
-        super || response.is_a?(Constructor)
-      end
+      def decorate?(response) = super || response.is_a?(Constructor)
 
       # @param [Array] positional_args
       #

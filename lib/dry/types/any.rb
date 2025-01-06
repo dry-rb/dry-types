@@ -9,9 +9,7 @@ module Dry
     #
     # @api public
     class AnyClass < Nominal
-      def self.name
-        "Any"
-      end
+      def self.name = "Any"
 
       # @api private
       def initialize(**options)
@@ -21,9 +19,7 @@ module Dry
       # @return [String]
       #
       # @api public
-      def name
-        "Any"
-      end
+      def name = "Any"
 
       # @param [Hash] new_options
       #
@@ -37,9 +33,7 @@ module Dry
       # @return [Array]
       #
       # @api public
-      def to_ast(meta: true)
-        [:any, meta ? self.meta : EMPTY_HASH]
-      end
+      def to_ast(meta: true) = [:any, meta ? self.meta : EMPTY_HASH]
     end
 
     Any = AnyClass.new

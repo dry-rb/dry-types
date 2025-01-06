@@ -70,9 +70,7 @@ module Dry
       # @return [true]
       #
       # @api public
-      def default?
-        true
-      end
+      def default? = true
 
       # @param [Object] value
       #
@@ -96,17 +94,13 @@ module Dry
       # @return [Maybe]
       #
       # @api public
-      def maybe
-        Maybe.new(Types["nil"] | self)
-      end
+      def maybe = Maybe.new(Types["nil"] | self)
     end
 
     # @api private
     class Schema::Key # rubocop:disable Style/ClassAndModuleChildren
       # @api private
-      def maybe
-        __new__(type.maybe)
-      end
+      def maybe = __new__(type.maybe)
     end
 
     # @api private
