@@ -1,6 +1,6 @@
 ---
 - version: 1.8.0
-  date: 2025-01-03
+  date: 2025-01-06
   changed:
   - "Set min Ruby version to 3.1 (@flash-gordon)"
   - "Better representation of Enum types (@flash-gordon, see #460)"
