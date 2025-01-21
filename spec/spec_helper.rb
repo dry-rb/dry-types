@@ -10,11 +10,18 @@ SPEC_ROOT = Pathname(__FILE__).dirname
 
 require "dry-types"
 
-begin
-  require "pry-byebug"
-rescue LoadError; end
+%w[debug pry-byebug pry].each do |gem|
+  require gem
+rescue LoadError
+  # ignore
+else
+  break
+end
+
 Dir[Pathname(__dir__).join("shared/*.rb")].each(&method(:require))
 require "dry/types/spec/types"
+
+Warning.process { raise _1 }
 
 Dry::Core::Deprecations.set_logger!(SPEC_ROOT.join("../log/deprecations.log"))
 

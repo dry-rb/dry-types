@@ -90,7 +90,7 @@ module Dry
       # @param [Object] input
       #
       # @api public
-      def try(input) = raise ::NotImplementedError
+      def try(input, &) = raise ::NotImplementedError
 
       # @api private
       def success(input)

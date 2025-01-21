@@ -57,7 +57,7 @@ module Dry
       # @return [Result::Success]
       #
       # @api public
-      def try(input = Undefined)
+      def try(input = Undefined, &)
         result = type.try(input)
 
         if result.success?

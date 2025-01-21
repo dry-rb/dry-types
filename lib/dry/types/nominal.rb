@@ -77,7 +77,7 @@ module Dry
       # @return [BasicObject]
       #
       # @api private
-      def call_safe(input) = input
+      def call_safe(input, &) = input
 
       # @param [Object] input
       #
@@ -88,7 +88,7 @@ module Dry
       # @return [nil] otherwise
       #
       # @api public
-      def try(input) = success(input)
+      def try(input, &) = success(input)
 
       # @param (see Dry::Types::Success#initialize)
       #

@@ -37,7 +37,7 @@ module Dry
         # @see Dry::Types::Constrained#try
         #
         # @api public
-        def try(input, &block)
+        def try(input, &)
           result = type.try(input)
 
           if result.success?
@@ -47,10 +47,10 @@ module Dry
               result
             else
               failure = failure(result.input, ConstraintError.new(validation, input))
-              block ? yield(failure) : failure
+              block_given? ? yield(failure) : failure
             end
           else
-            block ? yield(result) : result
+            block_given? ? yield(result) : result
           end
         end
       end

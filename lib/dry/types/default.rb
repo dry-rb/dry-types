@@ -74,7 +74,7 @@ module Dry
       # @return [Result::Success]
       #
       # @api public
-      def try(input = Undefined)
+      def try(input = Undefined, &)
         if input.equal?(Undefined)
           success(evaluate)
         else
@@ -105,11 +105,11 @@ module Dry
       # @return [Object] value passed through {#type} or {#default} value
       #
       # @api private
-      def call_safe(input = Undefined, &block)
+      def call_safe(input = Undefined, &)
         if input.equal?(Undefined)
           evaluate
         else
-          Undefined.default(type.call_safe(input, &block)) { evaluate }
+          Undefined.default(type.call_safe(input, &)) { evaluate }
         end
       end
 

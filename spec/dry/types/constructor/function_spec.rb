@@ -12,7 +12,7 @@ RSpec.describe Dry::Types::Constructor::Function do
       end
 
       it "extends accepts a fallback block" do
-        expect(fun.("a") { :fallback }).to be(:fallback)
+        expect(fun.("a") { |&| :fallback }).to be(:fallback)
       end
     end
 
@@ -44,10 +44,10 @@ RSpec.describe Dry::Types::Constructor::Function do
       let(:obj) do
         obj = Object.new
 
-        def obj.coerce(value, &block)
+        def obj.coerce(value, &)
           Integer(value)
         rescue ArgumentError => e
-          Dry::Types::CoercionError.handle(e, &block)
+          Dry::Types::CoercionError.handle(e, &)
         end
 
         obj
@@ -86,10 +86,10 @@ RSpec.describe Dry::Types::Constructor::Function do
       include_examples "well-behaving coercion function" do
         subject(:fun) do
           fn = Class.new {
-            def call(value, &block)
+            def call(value, &)
               Integer(value)
             rescue ArgumentError => e
-              Dry::Types::CoercionError.handle(e, &block)
+              Dry::Types::CoercionError.handle(e, &)
             end
           }.new
 

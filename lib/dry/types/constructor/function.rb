@@ -14,7 +14,7 @@ module Dry
         # @api private
         class Safe < Function
           def call(input, &)
-            @fn.(input, &)
+            @fn.(input)
           rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
             CoercionError.handle(e, &)
           end

@@ -39,9 +39,9 @@ module Dry
       # @param [Object] input
       #
       # @api public
-      def try(input)
+      def try(input, &)
         if left.try(input).success?
-          right.try(input)
+          right.try(input, &)
         else
           Result::Success.new(input)
         end

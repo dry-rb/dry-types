@@ -7,7 +7,7 @@ module Dry
       # @return [String]
       #
       # @api private
-      def to_s = PRINTER.(self) { super }
+      def to_s = PRINTER.(self)
       alias_method :inspect, :to_s
     end
   end

@@ -46,7 +46,7 @@ module Dry
       # @see Dry::Types::Constrained#try
       #
       # @api public
-      def try(input) = super(map_value(input))
+      def try(input, &) = super(map_value(input))
 
       # @api private
       def default(*)
