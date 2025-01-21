@@ -1,4 +1,8 @@
 ---
+- version: 1.8.1
+  date: 2025-01-21
+  fixed:
+  - "Warnings about unused block arguments (@flash-gordon, #477)"
 - version: 1.8.0
   date: 2025-01-06
   changed:
