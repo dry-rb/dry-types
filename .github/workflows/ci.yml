@@ -29,6 +29,9 @@ jobs:
         ruby:
         - "3.4"
         - "3.3"
+        # ensure 3.3.0 passes
+        # see https://github.com/dry-rb/dry-types/issues/478
+        - "3.3.0"
         - "3.2"
         - "3.1"
         include:

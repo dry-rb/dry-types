@@ -29,8 +29,8 @@ module Dry
       # @return [Object]
       #
       # @api private
-      def call_safe(input, &)
-        left.call_safe(input) { right.call_safe(input, &) }
+      def call_safe(input, &block)
+        left.call_safe(input) { right.call_safe(input, &block) }
       end
 
       # @param [Object] input
