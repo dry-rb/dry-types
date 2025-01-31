@@ -9,7 +9,7 @@ gemspec
 gem "dry-monads"
 
 group :test do
-  gem "dry-struct"
+  gem "dry-struct", github: "dry-rb/dry-struct", branch: "main"
 end
 
 group :benchmarks do
