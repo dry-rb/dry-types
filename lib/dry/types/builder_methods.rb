@@ -43,7 +43,14 @@ module Dry
       # @param [Class,Module] klass Class or module
       #
       # @return [Dry::Types::Type]
-      def Instance(klass) = Nominal(klass).constrained(type: klass)
+      def Instance(klass)
+        unless klass.is_a?(::Module)
+          raise ::ArgumentError, "Expected a class or module, got #{klass.inspect}"
+        end
+
+        Nominal(klass).constrained(type: klass)
+      end
+
       alias_method :Strict, :Instance
 
       # Build a type with a single value

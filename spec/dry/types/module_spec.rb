@@ -24,6 +24,13 @@ RSpec.describe Dry::Types::Module do
           Dry::Types::Nominal.new(foo_type).constrained(type: foo_type)
         )
       end
+
+      it "raises an error if the argument is not a class or module" do
+        expect { mod.Instance(1) }.to raise_error(ArgumentError, "Expected a class or module, got 1")
+        expect {
+          mod.Instance(mod.Instance(Integer))
+        }.to raise_error(ArgumentError, /Expected a class or module, got #<Dry::Types\[Constrained/)
+      end
     end
 
     describe ".Value" do
