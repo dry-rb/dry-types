@@ -50,6 +50,26 @@ RSpec.describe Dry::Types::Nominal do
     end
   end
 
+  describe "with Boolean" do
+    let(:boolean) { Dry::Types["strict.boolean"] }
+
+    it_behaves_like "Dry::Types::Nominal without primitive" do
+      let(:type) { boolean }
+    end
+
+    it "accepts true object" do
+      expect(boolean[true]).to be(true)
+    end
+
+    it "accepts false object" do
+      expect(boolean[false]).to be(false)
+    end
+
+    it "raises when input is not true or false" do
+      expect { boolean["false"] }.to raise_error(Dry::Types::ConstraintError, /"false" violates constraints/)
+    end
+  end
+
   describe "with Date" do
     let(:date) { Dry::Types["strict.date"] }
 
