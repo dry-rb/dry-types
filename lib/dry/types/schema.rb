@@ -167,7 +167,7 @@ module Dry
       # @return [Schema]
       #
       # @api public
-      def strict(strict = true) # rubocop:disable Style/OptionalBooleanParameter
+      def strict(strict = true)
         with(strict: strict)
       end
 
@@ -326,10 +326,10 @@ module Dry
           if type
             begin
               result[k] = type.call_unsafe(value)
-            rescue ConstraintError => e
-              raise SchemaError.new(type.name, value, e.result)
-            rescue CoercionError => e
-              raise SchemaError.new(type.name, value, e.message)
+            rescue ConstraintError => exception
+              raise SchemaError.new(type.name, value, exception.result)
+            rescue CoercionError => exception
+              raise SchemaError.new(type.name, value, exception.message)
             end
           elsif strict?
             raise unexpected_keys(hash.keys)

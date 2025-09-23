@@ -46,8 +46,8 @@ RSpec.describe Dry::Types::Constructor::Function do
 
         def obj.coerce(value, &)
           Integer(value)
-        rescue ArgumentError => e
-          Dry::Types::CoercionError.handle(e, &)
+        rescue ArgumentError => exception
+          Dry::Types::CoercionError.handle(exception, &)
         end
 
         obj
@@ -88,8 +88,8 @@ RSpec.describe Dry::Types::Constructor::Function do
           fn = Class.new {
             def call(value, &)
               Integer(value)
-            rescue ArgumentError => e
-              Dry::Types::CoercionError.handle(e, &)
+            rescue ArgumentError => exception
+              Dry::Types::CoercionError.handle(exception, &)
             end
           }.new
 

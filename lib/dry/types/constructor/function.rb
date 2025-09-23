@@ -15,8 +15,8 @@ module Dry
         class Safe < Function
           def call(input, &)
             @fn.(input)
-          rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
-            CoercionError.handle(e, &)
+          rescue ::NoMethodError, ::TypeError, ::ArgumentError => exception
+            CoercionError.handle(exception, &)
           end
         end
 
@@ -92,8 +92,8 @@ module Dry
           class PrivateSafeCall < PrivateCall
             def call(input, &)
               @target.send(@name, input)
-            rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
-              CoercionError.handle(e, &)
+            rescue ::NoMethodError, ::TypeError, ::ArgumentError => exception
+              CoercionError.handle(exception, &)
             end
           end
 
@@ -120,8 +120,8 @@ module Dry
           # @return [Object]
           def call(input, type, &)
             @fn.(input, type, &)
-          rescue ::NoMethodError, ::TypeError, ::ArgumentError => e
-            CoercionError.handle(e, &)
+          rescue ::NoMethodError, ::TypeError, ::ArgumentError => exception
+            CoercionError.handle(exception, &)
           end
           alias_method :[], :call
 

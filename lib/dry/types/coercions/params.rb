@@ -89,8 +89,8 @@ module Dry
           else
             Integer(input)
           end
-        rescue ::ArgumentError, ::TypeError => e
-          CoercionError.handle(e, &)
+        rescue ::ArgumentError, ::TypeError => exception
+          CoercionError.handle(exception, &)
         end
 
         # @param [#to_f, Object] input
@@ -102,8 +102,8 @@ module Dry
         # @api public
         def self.to_float(input, &)
           Float(input)
-        rescue ::ArgumentError, ::TypeError => e
-          CoercionError.handle(e, &)
+        rescue ::ArgumentError, ::TypeError => exception
+          CoercionError.handle(exception, &)
         end
 
         # @param [#to_d, Object] input

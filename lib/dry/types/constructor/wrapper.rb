@@ -24,8 +24,8 @@ module Dry
         # @api public
         def try(input, &)
           value = fn.(input, type)
-        rescue CoercionError => e
-          failure = failure(input, e)
+        rescue CoercionError => exception
+          failure = failure(input, exception)
           block_given? ? yield(failure) : failure
         else
           type.try(value, &)

@@ -117,7 +117,7 @@ module Dry
         case type
         when Type then type
         when ::Class, ::String then Types[type]
-        else type # rubocop:disable Lint/DuplicateBranch
+        else type
         end
       end
 
