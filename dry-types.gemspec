@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# this file is synced from dry-rb/template-gem project
+# This file is synced from hanakai-rb/repo-sync. To update it, edit repo-sync.yml.
 
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -8,8 +8,8 @@ require "dry/types/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "dry-types"
-  spec.authors       = ["Piotr Solnica"]
-  spec.email         = ["piotr.solnica@gmail.com"]
+  spec.authors       = ["Hanakai team"]
+  spec.email         = ["info@hanakai.org"]
   spec.license       = "MIT"
   spec.version       = Dry::Types::VERSION.dup
 
@@ -21,19 +21,22 @@ Gem::Specification.new do |spec|
   spec.executables   = []
   spec.require_paths = ["lib"]
 
-  spec.metadata["allowed_push_host"]     = "https://rubygems.org"
-  spec.metadata["changelog_uri"]         = "https://github.com/dry-rb/dry-types/blob/main/CHANGELOG.md"
-  spec.metadata["source_code_uri"]       = "https://github.com/dry-rb/dry-types"
-  spec.metadata["bug_tracker_uri"]       = "https://github.com/dry-rb/dry-types/issues"
-  spec.metadata["rubygems_mfa_required"] = "true"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["changelog_uri"]     = "https://github.com/dry-rb/dry-types/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"]   = "https://github.com/dry-rb/dry-types"
+  spec.metadata["bug_tracker_uri"]   = "https://github.com/dry-rb/dry-types/issues"
+  spec.metadata["funding_uri"]       = "https://github.com/sponsors/hanami"
 
-  spec.required_ruby_version = ">= 3.1"
+  spec.required_ruby_version = ">= 3.1.0"
 
-  # to update dependencies edit project.yml
-  spec.add_dependency "bigdecimal", "~> 3.0"
-  spec.add_dependency "concurrent-ruby", "~> 1.0"
-  spec.add_dependency "dry-core", "~> 1.0"
-  spec.add_dependency "dry-inflector", "~> 1.0"
-  spec.add_dependency "dry-logic", "~> 1.4"
-  spec.add_dependency "zeitwerk", "~> 2.6"
+  spec.add_runtime_dependency "bigdecimal", "~> 3.0"
+  spec.add_runtime_dependency "concurrent-ruby", "~> 1.0"
+  spec.add_runtime_dependency "dry-core", "~> 1.0"
+  spec.add_runtime_dependency "dry-inflector", "~> 1.0"
+  spec.add_runtime_dependency "dry-logic", "~> 1.4"
+  spec.add_runtime_dependency "zeitwerk", "~> 2.6"
+  spec.add_development_dependency "bundler"
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
 end
+
