@@ -12,6 +12,7 @@ gemspec:
     - bundler
     - rake
     - rspec
+    - yard
   runtime_dependencies:
     - [bigdecimal, "~> 3.0"]
     - [concurrent-ruby, "~> 1.0"]
