@@ -2,11 +2,10 @@
 
 require_relative "support/coverage"
 require_relative "support/warnings"
-require_relative "support/rspec_options"
 
 require "pathname"
 
-SPEC_ROOT = Pathname(__FILE__).dirname
+SPEC_ROOT = Pathname(__dir__)
 
 require "dry-types"
 
@@ -18,7 +17,8 @@ else
   break
 end
 
-Dir[Pathname(__dir__).join("shared/*.rb")].each(&method(:require))
+Dir[SPEC_ROOT.join("support", "**", "*.rb")].each(&method(:require))
+Dir[SPEC_ROOT.join("shared", "**", "*.rb")].each(&method(:require))
 require "dry/types/spec/types"
 
 Warning.process { raise _1 }

@@ -1,9 +1,0 @@
-jobs:
-  tests:
-    strategy:
-      matrix:
-        include:
-          - ruby: "3.1"
-            dry_logic_from_main: "true"
-    env:
-      DRY_LOGIC_FROM_MAIN: ${{matrix.dry_logic_from_main}}

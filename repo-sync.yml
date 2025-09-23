@@ -1,14 +1,21 @@
-name: dry-types
-custom_ci: true
-codacy_id: f2d71613195f4da993acb9ac9d6ea336
+name:
+  gem: dry-types
+  constant: Dry::Types
+github_org: dry-rb
 gemspec:
-  authors: ["Piotr Solnica"]
-  email: ["piotr.solnica@gmail.com"]
+  authors: ["Hanakai team"]
+  email: ["info@hanakai.org"]
   summary: "Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc"
+  homepage: "https://dry-rb.org/gems/dry-types"
+  required_ruby_version: ">= 3.1.0"
+  development_dependencies:
+    - bundler
+    - rake
+    - rspec
   runtime_dependencies:
     - [bigdecimal, "~> 3.0"]
     - [concurrent-ruby, "~> 1.0"]
-    - [zeitwerk, "~> 2.6"]
     - [dry-core, "~> 1.0"]
     - [dry-inflector, "~> 1.0"]
     - [dry-logic, "~> 1.4"]
+    - [zeitwerk, "~> 2.6"]
