@@ -7,6 +7,9 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix Sum type `to_s` with Dry::Struct types (fixes #482) (@baweaver)
 
 ## [1.8.3] - 2025-06-09
 
