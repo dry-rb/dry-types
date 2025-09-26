@@ -7,6 +7,9 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING**: `params.*.optional` now handles empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error (fixes #419) (@baweaver)
 
 ## [1.8.3] - 2025-06-09
 
