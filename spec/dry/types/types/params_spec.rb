@@ -272,5 +272,14 @@ RSpec.describe Dry::Types::Nominal do
     it "raises an error on random strings" do
       expect { type["abc"] }.to raise_error(Dry::Types::CoercionError)
     end
+
+    context "consistency between .optional and Optional::" do
+      it "handles empty strings the same way" do
+        optional_namespace = Dry::Types["optional.params.integer"]
+        dot_optional = Dry::Types["params.integer"].optional
+
+        expect(optional_namespace[""]).to eq(dot_optional[""])
+      end
+    end
   end
 end

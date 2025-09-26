@@ -50,7 +50,13 @@ module Dry
       # @return [Sum]
       #
       # @api public
-      def optional = Types["nil"] | self
+      def optional
+        if params_type?
+          Types["params.nil"] | self
+        else
+          Types["nil"] | self
+        end
+      end
 
       # Turn a type into a constrained type
       #
@@ -199,6 +205,15 @@ module Dry
           end
 
         klass.new(self, other)
+      end
+
+      private
+
+      def params_type?
+        return false unless is_a?(Constructor)
+        return false unless fn.is_a?(Constructor::Function::MethodCall)
+        
+        fn.target == Dry::Types::Coercions::Params
       end
     end
   end
