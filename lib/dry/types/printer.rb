@@ -105,6 +105,22 @@ module Dry
         @composition_printers[klass].visit(composition, &)
       end
 
+      def visit_sum_constructors(sum)
+        visit_sum_constructor(sum.left) do |left|
+          visit_sum_constructor(sum.right) do |right|
+            yield "#{left} #{sum.class.operator} #{right}"
+          end
+        end
+      end
+
+      def visit_sum_constructor(type, &)
+        if type.is_a?(Dry::Types::Sum)
+          visit_sum_constructors(type, &)
+        else
+          visit(type, &)
+        end
+      end
+
       def visit_enum(enum)
         visit(enum.type) do |type|
           options = enum.options.dup
