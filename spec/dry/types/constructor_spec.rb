@@ -163,6 +163,13 @@ RSpec.describe Dry::Types::Constructor do
     end
   end
 
+  describe "#primitive?" do
+    it "delegates to its type" do
+      expect(type.primitive?("hello")).to be(true)
+      expect(type.primitive?(123)).to be(false)
+    end
+  end
+
   describe "#constructor" do
     it "returns a new constructor" do
       upcaser = type.constructor(-> s { s.upcase }, id: :upcaser)
