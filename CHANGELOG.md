@@ -7,6 +7,9 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ## [Unreleased]
 
+### Added
+
+- Improve sum type error handling documentation (addresses #439) (@baweaver)
 
 ## [1.8.3] - 2025-06-09
 
