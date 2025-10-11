@@ -177,6 +177,14 @@ module Dry
         super || type.respond_to?(meth)
       end
 
+      # Delegate primitive? to the underlying type
+      #
+      # @param [Object] value
+      # @return [Boolean]
+      def primitive?(value)
+        type.primitive?(value)
+      end
+
       # Delegates missing methods to {#type}
       #
       # @param [Symbol] method

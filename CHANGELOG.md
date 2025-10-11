@@ -7,6 +7,10 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix `Constructor#primitive?` delegation for sum types (fixes #483) (@baweaver)
+
 ### Added
 
 - Improve sum type error handling documentation (addresses #439) (@baweaver)
