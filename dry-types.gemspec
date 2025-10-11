@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
   spec.version       = Dry::Types::VERSION.dup
 
-  spec.summary       = "Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc"
+  spec.summary       = "Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc" # rubocop:disable Layout/LineLength
   spec.description   = spec.summary
   spec.homepage      = "https://dry-rb.org/gems/dry-types"
   spec.files         = Dir["CHANGELOG.md", "LICENSE", "README.md", "dry-types.gemspec", "lib/**/*"]
@@ -38,8 +38,8 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "dry-logic", "~> 1.4"
   spec.add_runtime_dependency "zeitwerk", "~> 2.6"
   spec.add_development_dependency "bundler"
+  spec.add_development_dependency "lefthook"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "yard"
 end
-
