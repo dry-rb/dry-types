@@ -18,3 +18,14 @@ nil_or_string["hello"] # => "hello"
 
 nil_or_string[123] # raises Dry::Types::ConstraintError
 ```
+
+## Error Handling
+
+Sum types try each type from left to right. If all types fail, the error from the rightmost type is raised:
+
+``` ruby
+Value = FixedAmount | Percentage
+
+# Raises error from Percentage (rightmost), not FixedAmount
+Value.call(type: "fixed", value: -1.1)
+```

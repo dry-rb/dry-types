@@ -4,6 +4,16 @@ module Dry
   module Types
     # Sum type
     #
+    # Sum types try each constituent type from left to right and return the result
+    # from the first successful type. If all types fail, the error from the rightmost
+    # (last attempted) type is raised, not necessarily the most "relevant" error.
+    #
+    # @example
+    #   # Given: FixedAmount | Percentage
+    #   # Input: { type: "fixed", value: -1.1 }
+    #   # FixedAmount fails on value constraint, Percentage fails on type mismatch
+    #   # Error raised will be from Percentage (rightmost), not FixedAmount
+    #
     # @api public
     class Sum
       include Composition
@@ -18,6 +28,9 @@ module Dry
       # @param [Object] input
       #
       # @return [Object]
+      #
+      # @note Tries left type first, then right type. If both fail, raises the
+      #   error from the right (last attempted) type for performance reasons.
       #
       # @api private
       def call_unsafe(input)
