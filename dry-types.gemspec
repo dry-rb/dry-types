@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
   spec.version       = Dry::Types::VERSION.dup
 
-  spec.summary       = "Type system for Ruby supporting coercions, constraints and complex types"
+  spec.summary       = "Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc" # rubocop:disable Layout/LineLength
   spec.description   = spec.summary
   spec.homepage      = "https://dry-rb.org/gems/dry-types"
   spec.files         = Dir["CHANGELOG.md", "LICENSE", "README.md", "dry-types.gemspec", "lib/**/*"]
