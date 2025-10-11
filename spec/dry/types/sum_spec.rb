@@ -210,14 +210,14 @@ RSpec.describe Dry::Types::Sum do
     it "works with sum of complex constructors" do
       a = Dry::Types["string"].constrained(size: 2) | Dry::Types["hash"]
       b = Dry::Types["string"].constrained(size: 1) | Dry::Types["hash"]
-      
+
       c = (a.constructor { |x| x.is_a?(Hash) ? x : x.downcase }) |
           (b.constructor { |x| x.is_a?(Hash) ? x : x.upcase })
-      
+
       expect(c.call({})).to eq({})
       expect(c.call("A")).to eq("A")
       expect(c.call("aa")).to eq("aa")
-      
+
       expect { c.call("aaa") }.to raise_error(Dry::Types::ConstraintError)
     end
   end
