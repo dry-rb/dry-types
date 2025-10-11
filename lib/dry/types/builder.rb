@@ -50,7 +50,13 @@ module Dry
       # @return [Sum]
       #
       # @api public
-      def optional = Types["nil"] | self
+      def optional
+        if is_a?(Constructor) && params_type?
+          Types["params.nil"] | self
+        else
+          Types["nil"] | self
+        end
+      end
 
       # Turn a type into a constrained type
       #

@@ -155,6 +155,17 @@ module Dry
       # @api public
       def to_proc = proc { self.(_1) }
 
+      # Check if this is a params type constructor
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      def params_type?
+        return false unless fn.is_a?(Constructor::Function::MethodCall)
+
+        fn.target == Dry::Types::Coercions::Params
+      end
+
       private
 
       # @param [Symbol] meth
