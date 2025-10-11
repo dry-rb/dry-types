@@ -303,6 +303,31 @@ RSpec.describe Dry::Types::Sum do
         )
       end
     end
+
+    context "with dry-struct types" do
+      before { require "dry-struct" }
+
+      let(:struct_a) do
+        Class.new(Dry::Struct) do
+          def self.name
+            "TestStructA"
+          end
+        end
+      end
+
+      let(:struct_b) do
+        Class.new(Dry::Struct) do
+          def self.name
+            "TestStructB"
+          end
+        end
+      end
+
+      it "works with sum of two structs" do
+        sum_type = struct_a | struct_b
+        expect { sum_type.to_s }.not_to raise_error
+      end
+    end
   end
 
   context "with map type" do

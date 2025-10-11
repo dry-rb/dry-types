@@ -15,6 +15,9 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 - Improve sum type error handling documentation (addresses #439) (@baweaver)
 
+### Fixed
+
+- Fix Sum type `to_s` with Dry::Struct types (fixes #482) (@baweaver)
 ### Changed
 
 - **BREAKING**: `params.*.optional` now handles empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error (fixes #419) (@baweaver)
