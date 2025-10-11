@@ -1,0 +1,6 @@
+pre-commit:
+  commands:
+    rubocop:
+      glob: "*.{rb,gemspec}"
+      run: bundle exec rubocop --autocorrect {staged_files}
+      stage_fixed: true
