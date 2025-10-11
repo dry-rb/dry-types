@@ -291,7 +291,7 @@ RSpec.describe Dry::Types::Sum do
     end
 
     context "with dry-struct types" do
-      before { require 'dry-struct' }
+      before { require "dry-struct" }
 
       let(:struct_a) do
         Class.new(Dry::Struct) do
@@ -304,7 +304,7 @@ RSpec.describe Dry::Types::Sum do
       let(:struct_b) do
         Class.new(Dry::Struct) do
           def self.name
-            "TestStructB"  
+            "TestStructB"
           end
         end
       end
