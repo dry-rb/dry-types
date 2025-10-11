@@ -8,6 +8,10 @@ gemspec
 
 gem "dry-monads"
 
+group :development do
+  gem "lefthook"
+end
+
 group :test do
   gem "dry-struct", github: "dry-rb/dry-struct", branch: "main"
 end
