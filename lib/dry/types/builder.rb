@@ -207,12 +207,10 @@ module Dry
         klass.new(self, other)
       end
 
-      private
-
       def params_type?
         return false unless is_a?(Constructor)
         return false unless fn.is_a?(Constructor::Function::MethodCall)
-        
+
         fn.target == Dry::Types::Coercions::Params
       end
     end
