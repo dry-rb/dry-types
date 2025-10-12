@@ -148,8 +148,8 @@ module Dry
         [
           :schema,
           [keys.map { |key| key.to_ast(meta: meta) },
-           options.slice(:key_transform_fn, :type_transform_fn, :strict),
-           meta ? self.meta : EMPTY_HASH]
+           options.slice(:key_transform_fn, :type_transform_fn, :strict, :namespace),
+           meta_ast(meta)]
         ]
       end
 

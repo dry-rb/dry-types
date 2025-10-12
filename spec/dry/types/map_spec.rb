@@ -70,16 +70,17 @@ RSpec.describe Dry::Types::Map do
 
     describe "#to_ast" do
       let(:any_ast) { Dry::Types::Any.to_ast }
+
       it "decomposes the map into an ast array" do
         expect(empty_map.to_ast).to eql [:map, [any_ast, any_ast, {}]]
         expect(complex_map.to_ast).to eql(
           [:map, [
             [:constrained, [
-              [:nominal, [Integer, {}]],
+              [:nominal, [Integer, {}, {}]],
               [:predicate, [:type?, [[:type, Integer], [:input, Dry::Types::Undefined]]]]
             ]],
             [:constrained, [
-              [:nominal, [String, {}]],
+              [:nominal, [String, {}, {}]],
               [:predicate, [:type?, [[:type, String], [:input, Dry::Types::Undefined]]]]
             ]],
             {}

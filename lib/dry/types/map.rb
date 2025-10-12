@@ -81,7 +81,7 @@ module Dry
         [:map,
          [key_type.to_ast(meta: true),
           value_type.to_ast(meta: true),
-          meta ? self.meta : EMPTY_HASH]]
+          meta_ast(meta)]]
       end
 
       # @return [Boolean]

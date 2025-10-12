@@ -154,7 +154,7 @@ RSpec.describe Dry::Types::Sum do
 
     it "returns boolean" do
       expect(type.===("hello")).to eql(true)
-      expect(type === (nil)).to eql(false)
+      expect(type.nil?).to eql(false)
     end
 
     context "in case statement" do
@@ -211,8 +211,8 @@ RSpec.describe Dry::Types::Sum do
       a = Dry::Types["string"].constrained(size: 2) | Dry::Types["hash"]
       b = Dry::Types["string"].constrained(size: 1) | Dry::Types["hash"]
 
-      c = (a.constructor { |x| x.is_a?(Hash) ? x : x.downcase }) |
-          (b.constructor { |x| x.is_a?(Hash) ? x : x.upcase })
+      c = a.constructor { |x| x.is_a?(Hash) ? x : x.downcase } |
+          b.constructor { |x| x.is_a?(Hash) ? x : x.upcase }
 
       expect(c.call({})).to eq({})
       expect(c.call("A")).to eq("A")

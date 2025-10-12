@@ -9,11 +9,11 @@ RSpec.describe Dry::Types, "#to_ast" do
     subject(:type) { Dry::Types::Nominal.new(String) }
 
     specify do
-      expect(type.to_ast).to eql([:nominal, [String, {}]])
+      expect(type.to_ast).to eql([:nominal, [String, {}, {}]])
     end
 
     specify "with meta" do
-      expect(type_with_meta.to_ast).to eql([:nominal, [String, key: :value]])
+      expect(type_with_meta.to_ast).to eql([:nominal, [String, {}, {key: :value}]])
     end
 
     specify "without meta" do
@@ -26,15 +26,15 @@ RSpec.describe Dry::Types, "#to_ast" do
 
     specify do
       expect(type.to_ast).to eql(
-        [:sum, [[:nominal, [String, {}]], [:nominal, [Integer, {}]], {}]]
+        [:sum, [[:nominal, [String, {}, {}]], [:nominal, [Integer, {}, {}]], {}]]
       )
     end
 
     specify "with meta" do
       expect(type_with_meta.to_ast).to eql(
         [:sum, [
-          [:nominal, [String, {}]],
-          [:nominal, [Integer, {}]],
+          [:nominal, [String, {}, {}]],
+          [:nominal, [Integer, {}, {}]],
           key: :value
         ]]
       )
@@ -55,7 +55,7 @@ RSpec.describe Dry::Types, "#to_ast" do
     specify do
       expect(type.to_ast).to eql(
         [:constrained, [
-          [:nominal, [Integer, {}]],
+          [:nominal, [Integer, {}, {}]],
           [:predicate, [:type?, [[:type, Integer], [:input, undefined]]]]
         ]]
       )
@@ -64,7 +64,7 @@ RSpec.describe Dry::Types, "#to_ast" do
     specify "with meta" do
       expect(type_with_meta.to_ast).to eql(
         [:constrained, [
-          [:nominal, [Integer, key: :value]],
+          [:nominal, [Integer, {}, {key: :value}]],
           [:predicate, [:type?, [[:type, Integer], [:input, undefined]]]]
         ]]
       )
@@ -121,7 +121,7 @@ RSpec.describe Dry::Types, "#to_ast" do
           [
             :constrained,
             [
-              [:nominal, [String, key: :value]],
+              [:nominal, [String, {}, {key: :value}]],
               [
                 :and,
                 [
@@ -148,7 +148,7 @@ RSpec.describe Dry::Types, "#to_ast" do
     subject(:type) { Dry::Types["string"].constrained(min_size: 5).lax.meta(key: :value) }
 
     specify do
-      expect(type.to_ast).to eql([:nominal, [String, key: :value]])
+      expect(type.to_ast).to eql([:nominal, [String, {}, {key: :value}]])
     end
   end
 
@@ -159,7 +159,7 @@ RSpec.describe Dry::Types, "#to_ast" do
 
     specify do
       expect(type.to_ast).to eql(
-        [:constructor, [[:nominal, [String, key: :value]], [:method, Kernel, :String]]]
+        [:constructor, [[:nominal, [String, {}, {key: :value}]], [:method, Kernel, :String]]]
       )
     end
   end
@@ -168,11 +168,11 @@ RSpec.describe Dry::Types, "#to_ast" do
     subject(:type) { Dry::Types["nominal.array"] }
 
     specify do
-      expect(type.to_ast).to eql([:nominal, [Array, {}]])
+      expect(type.to_ast).to eql([:nominal, [Array, {}, {}]])
     end
 
     specify "with meta" do
-      expect(type_with_meta.to_ast).to eql([:nominal, [Array, key: :value]])
+      expect(type_with_meta.to_ast).to eql([:nominal, [Array, {}, {key: :value}]])
     end
 
     context "Member" do
@@ -181,12 +181,12 @@ RSpec.describe Dry::Types, "#to_ast" do
       end
 
       specify do
-        expect(type.to_ast).to eql([:array, [[:nominal, [String, {}]], {}]])
+        expect(type.to_ast).to eql([:array, [[:nominal, [String, {}, {}]], {}]])
       end
 
       specify "with meta" do
         expect(type_with_meta.to_ast).to eql(
-          [:array, [[:nominal, [String, {}]], key: :value]]
+          [:array, [[:nominal, [String, {}, {}]], {key: :value}]]
         )
       end
     end

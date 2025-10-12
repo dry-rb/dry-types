@@ -23,7 +23,11 @@ module Dry
       #
       # @api private
       def with(**new_options)
-        self.class.new(*@__args__, **options, **new_options)
+        if new_options.empty?
+          self
+        else
+          self.class.new(*@__args__, **options, **new_options)
+        end
       end
     end
   end

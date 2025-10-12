@@ -16,7 +16,13 @@ module Dry
       # @return [Type]
       #
       # @api public
-      def with(**options) = super(meta: @meta, **options)
+      def with(**options)
+        if options.empty?
+          self
+        else
+          super(meta: @meta, **options)
+        end
+      end
 
       # @overload meta
       #   @return [Hash] metadata associated with type

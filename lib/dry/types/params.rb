@@ -4,64 +4,35 @@ require "dry/types/coercions/params"
 
 module Dry
   module Types
-    register("params.nil") do
-      self["nominal.nil"].constructor(Coercions::Params.method(:to_nil))
-    end
+    options = {namespace: "params"}
 
-    register("params.date") do
-      self["nominal.date"].constructor(Coercions::Params.method(:to_date))
-    end
-
-    register("params.date_time") do
-      self["nominal.date_time"].constructor(Coercions::Params.method(:to_date_time))
-    end
-
-    register("params.time") do
-      self["nominal.time"].constructor(Coercions::Params.method(:to_time))
-    end
-
-    register("params.true") do
-      self["nominal.true"].constructor(Coercions::Params.method(:to_true))
-    end
-
-    register("params.false") do
-      self["nominal.false"].constructor(Coercions::Params.method(:to_false))
+    {
+      "nil" => :to_nil,
+      "date" => :to_date,
+      "date_time" => :to_date_time,
+      "time" => :to_time,
+      "true" => :to_true,
+      "false" => :to_false,
+      "integer" => :to_int,
+      "float" => :to_float,
+      "decimal" => :to_decimal,
+      "array" => :to_ary,
+      "hash" => :to_hash,
+      "symbol" => :to_symbol
+    }.each do |name, method|
+      register("params.#{name}") do
+        self["nominal.#{name}"].with(**options).constructor(Coercions::Params.method(method))
+      end
     end
 
     register("params.bool") do
       self["params.true"] | self["params.false"]
     end
 
-    register("params.integer") do
-      self["nominal.integer"].constructor(Coercions::Params.method(:to_int))
-    end
-
-    register("params.float") do
-      self["nominal.float"].constructor(Coercions::Params.method(:to_float))
-    end
-
-    register("params.decimal") do
-      self["nominal.decimal"].constructor(Coercions::Params.method(:to_decimal))
-    end
-
-    register("params.array") do
-      self["nominal.array"].constructor(Coercions::Params.method(:to_ary))
-    end
-
-    register("params.hash") do
-      self["nominal.hash"].constructor(Coercions::Params.method(:to_hash))
-    end
-
-    register("params.symbol") do
-      self["nominal.symbol"].constructor(Coercions::Params.method(:to_symbol))
-    end
-
-    register("params.string", self["string"])
+    register("params.string", self["string"].with(**options))
 
     COERCIBLE.each_key do |name|
-      next if name.equal?(:string)
-
-      register("optional.params.#{name}", self["params.nil"] | self["params.#{name}"])
+      register("optional.params.#{name}", self["params.#{name}"].optional)
     end
   end
 end

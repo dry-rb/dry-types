@@ -122,7 +122,7 @@ RSpec.describe Dry::Types::Intersection do
 
     it "returns boolean" do
       expect(type.===(-> {})).to eql(true)
-      expect(type === (nil)).to eql(false)
+      expect(type.nil?).to eql(false)
     end
 
     context "in case statement" do
