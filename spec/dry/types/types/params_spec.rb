@@ -274,11 +274,25 @@ RSpec.describe Dry::Types::Nominal do
     end
 
     context "consistency between .optional and Optional::" do
-      it "handles empty strings the same way" do
-        optional_namespace = Dry::Types["optional.params.integer"]
-        dot_optional = Dry::Types["params.integer"].optional
+      def using_namespaced_optionals
+        Dry::Types.use_namespaced_optionals(true)
+        yield
+      ensure
+        Dry::Types.use_namespaced_optionals(false)
+      end
 
-        expect(optional_namespace[""]).to eq(dot_optional[""])
+      it "can be controlled" do
+        optional_namespace = Dry::Types["optional.params.integer"]
+        raising_type = Dry::Types["params.integer"].optional
+        coercing_type = using_namespaced_optionals do
+          Dry::Types["params.integer"].optional
+        end
+
+        expect(optional_namespace[""]).to eql(coercing_type[""])
+
+        expect {
+          raising_type[""]
+        }.to raise_error(Dry::Types::CoercionError)
       end
     end
   end

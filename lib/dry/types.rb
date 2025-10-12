@@ -43,23 +43,25 @@ module Dry
           "#{root}/dry/types/printer",
           "#{root}/dry/types/spec/types.rb",
           "#{root}/dry/types/{#{%w[
-            compat
-            constraints
-            core
-            errors
-            extensions
-            inflector
-            module
-            json
-            params
-            printer
-            version
+            compat constraints core
+            errors extensions inflector
+            module json params
+            printer version
           ].join(",")}}.rb"
         )
       end
     end
 
     loader.setup
+
+    # Whether Type#optional should reach for Types["params.nil"]
+    # instead of Types["nil"] when called on a Params type.
+    # When use_namespaced_optionals is set to true
+    # Types["params.integer"].optional will be identical to
+    # Types["optional.params.integer"], that is an empty string
+    # will be treated as nil
+    defines :use_namespaced_optionals
+    use_namespaced_optionals false
 
     # @see Dry.Types
     def self.module(*namespaces, default: :nominal, **aliases)
@@ -70,9 +72,7 @@ module Dry
     DEPRECATION
 
     # @api private
-    def self.included(*)
-      raise "Import Dry.Types, not Dry::Types"
-    end
+    def self.included(*) = raise "Import Dry.Types, not Dry::Types"
 
     # Return container with registered built-in type objects
     #

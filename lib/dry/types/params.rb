@@ -32,7 +32,7 @@ module Dry
     register("params.string", self["string"].with(**options))
 
     COERCIBLE.each_key do |name|
-      register("optional.params.#{name}", self["params.#{name}"].optional)
+      register("optional.params.#{name}", self["params.nil"] | self["params.#{name}"])
     end
   end
 end

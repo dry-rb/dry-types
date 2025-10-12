@@ -20,7 +20,15 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 - Fix Sum type `to_s` with Dry::Struct types (fixes #482) (@baweaver)
 ### Changed
 
-- **BREAKING**: `params.*.optional` now handles empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error (fixes #419) (@baweaver)
+- `params.*`.optional now can handle empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error. (fixes #419) (@baweaver + @flash-gordon)
+
+  This behavior is not enabled by default because it's a breaking change, to enable it, you can set `Dry::Types.use_namespaced_optionals(true)`.
+  ```ruby
+  Dry::Types['params.integer'].optional.('') # => CoercionError
+  # Activate namespaced optionals
+  Dry::Types.use_namespaced_optionals true
+  Dry::Types['params.integer'].optional.('') # => nil
+  ```
 
 ## [1.8.3] - 2025-06-09
 

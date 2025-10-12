@@ -52,7 +52,7 @@ module Dry
       # @api public
       def optional
         nil_type =
-          if respond_to?(:namespace) && namespace
+          if Types.use_namespaced_optionals && respond_to?(:namespace) && namespace
             Types["#{namespace}.nil"]
           else
             Types["nil"]
