@@ -19,10 +19,7 @@ module Dry
         end
 
         # @api private
-        def visit_nominal(node)
-          type, _ = node
-          type
-        end
+        def visit_nominal(node) = node[0]
 
         # @api private
         def visit_hash(_) = ::Hash
@@ -35,16 +32,10 @@ module Dry
         def visit_lax(node) = visit(node)
 
         # @api private
-        def visit_constructor(node)
-          other, * = node
-          visit(other)
-        end
+        def visit_constructor(node) = visit(node[0])
 
         # @api private
-        def visit_enum(node)
-          other, * = node
-          visit(other)
-        end
+        def visit_enum(node) = visit(node[0])
 
         # @api private
         def visit_sum(node)
@@ -54,10 +45,7 @@ module Dry
         end
 
         # @api private
-        def visit_constrained(node)
-          other, * = node
-          visit(other)
-        end
+        def visit_constrained(node) = visit(node[0])
 
         # @api private
         def visit_any(_) = ::Object
