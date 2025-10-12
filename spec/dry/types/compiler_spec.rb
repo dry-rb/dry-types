@@ -4,6 +4,13 @@ RSpec.describe Dry::Types::Compiler, "#call" do
   subject(:compiler) { Dry::Types::Compiler.new(Dry::Types) }
 
   it "returns existing nominal" do
+    ast = [:nominal, [Hash, {}, {}]]
+    type = compiler.(ast)
+
+    expect(type).to be(Dry::Types["nominal.hash"])
+  end
+
+  it "returns existing nominal" do
     ast = [:nominal, [Hash, {}]]
     type = compiler.(ast)
 
@@ -11,7 +18,7 @@ RSpec.describe Dry::Types::Compiler, "#call" do
   end
 
   it "builds a plain nominal" do
-    ast = [:nominal, [Set, {}]]
+    ast = [:nominal, [Set, {}, {}]]
     type = compiler.(ast)
     expected = Dry::Types::Nominal.new(Set)
 
@@ -19,7 +26,7 @@ RSpec.describe Dry::Types::Compiler, "#call" do
   end
 
   it "builds a nominal with meta" do
-    ast = [:nominal, [Set, key: :value]]
+    ast = [:nominal, [Set, {}, {key: :value}]]
     type = compiler.(ast)
     expected = Dry::Types::Nominal.new(Set, meta: {key: :value})
 
@@ -183,6 +190,8 @@ RSpec.describe Dry::Types::Compiler, "#call" do
 
     hash = compiler.(ast)
 
+    expect(ast).to eql(hash.to_ast)
+
     expect(type).to eql(hash)
 
     expect(hash["oops"]).to eql("oops")
@@ -231,7 +240,7 @@ RSpec.describe Dry::Types::Compiler, "#call" do
   end
 
   it "builds a json array from a :json_array node" do
-    ast = [:json_array, [[:nominal, [String, {}]], {}]]
+    ast = [:json_array, [[:nominal, [String, {}, {}]], {}]]
 
     array = compiler.(ast)
 
@@ -321,10 +330,10 @@ RSpec.describe Dry::Types::Compiler, "#call" do
     expect(ast).to eql([
       :map, [
         [:constrained,
-         [[:nominal, [String, {}]],
+         [[:nominal, [String, {}, {}]],
           [:predicate, [:type?, [[:type, String], [:input, undefined]]]]]],
         [:constrained,
-         [[:nominal, [Integer, {}]],
+         [[:nominal, [Integer, {}, {}]],
           [:predicate, [:type?, [[:type, Integer], [:input, undefined]]]]]],
         abc: 123, foo: "bar"
       ]

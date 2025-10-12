@@ -33,7 +33,7 @@ module Dry
       # @return [Array]
       #
       # @api public
-      def to_ast(meta: true) = [:any, meta ? self.meta : EMPTY_HASH]
+      def to_ast(meta: true) = [:any, meta_ast(meta)]
     end
 
     Any = AnyClass.new

@@ -97,18 +97,16 @@ module Dry
         # @return [Lax]
         #
         # @api public
-        def lax
-          Lax.new(Member.new(primitive, **options, member: member.lax, meta: meta))
-        end
+        def lax = Lax.new(Member.new(primitive, **options, member: member.lax, meta: meta))
 
         # @see Nominal#to_ast
         #
         # @api public
         def to_ast(meta: true)
           if member.respond_to?(:to_ast)
-            [:array, [member.to_ast(meta: meta), meta ? self.meta : EMPTY_HASH]]
+            [:array, [member.to_ast(meta: meta), meta_ast(meta)]]
           else
-            [:array, [member, meta ? self.meta : EMPTY_HASH]]
+            [:array, [member, meta_ast(meta)]]
           end
         end
 

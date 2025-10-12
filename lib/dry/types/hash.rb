@@ -94,8 +94,8 @@ module Dry
       # @api public
       def to_ast(meta: true)
         [:hash,
-         [options.slice(:type_transform_fn),
-          meta ? self.meta : EMPTY_HASH]]
+         [options.slice(:type_transform_fn, :namespace),
+          meta_ast(meta)]]
       end
 
       private

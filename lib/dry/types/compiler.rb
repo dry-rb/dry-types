@@ -37,13 +37,20 @@ module Dry
       deprecate(:visit_safe, :visit_lax)
 
       def visit_nominal(node)
-        type, meta = node
+        type, options, meta =
+          case node
+          in [type, options, meta]
+            node
+          in [type, meta]
+            [type, EMPTY_HASH, meta]
+          end
+
         nominal_name = "nominal.#{Types.identifier(type)}"
 
         if registry.registered?(nominal_name)
-          registry[nominal_name].meta(meta)
+          registry[nominal_name].with(**options).meta(meta)
         else
-          Nominal.new(type, meta: meta)
+          Nominal.new(type, meta: meta, **options)
         end
       end
 

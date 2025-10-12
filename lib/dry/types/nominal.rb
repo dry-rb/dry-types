@@ -18,6 +18,9 @@ module Dry
       # @return [Class]
       attr_reader :primitive
 
+      # @return [String, nil]
+      attr_reader :namespace
+
       # @param [Class] primitive
       #
       # @return [Type]
@@ -42,6 +45,7 @@ module Dry
       def initialize(primitive, **options)
         super
         @primitive = primitive
+        @namespace = options[:namespace]
         freeze
       end
 
@@ -152,7 +156,7 @@ module Dry
       #
       # @api public
       def to_ast(meta: true)
-        [:nominal, [primitive, meta ? self.meta : EMPTY_HASH]]
+        [:nominal, [primitive, namespace_ast, meta_ast(meta)]]
       end
 
       # Return self. Nominal types are lax by definition
@@ -168,6 +172,26 @@ module Dry
       #
       # @api public
       def to_proc = ALWAYS
+
+      private
+
+      # @api private
+      def namespace_ast
+        if @namespace
+          {namespace: @namespace}
+        else
+          EMPTY_HASH
+        end
+      end
+
+      # @api private
+      def meta_ast(meta)
+        if meta
+          self.meta
+        else
+          EMPTY_HASH
+        end
+      end
     end
 
     extend ::Dry::Core::Deprecations[:"dry-types"]

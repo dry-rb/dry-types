@@ -253,8 +253,8 @@ RSpec.describe Dry::Types::Nominal do
   describe "params.string" do
     subject(:type) { Dry::Types["params.string"] }
 
-    it "is equal to strict.string" do
-      expect(type).to be(Dry::Types["string"])
+    it "is acts as strict.string with namespace" do
+      expect(type).to eql(Dry::Types["string"].with(namespace: "params"))
     end
   end
 

@@ -51,11 +51,14 @@ module Dry
       #
       # @api public
       def optional
-        if is_a?(Constructor) && params_type?
-          Types["params.nil"] | self
-        else
-          Types["nil"] | self
-        end
+        nil_type =
+          if respond_to?(:namespace) && namespace
+            Types["#{namespace}.nil"]
+          else
+            Types["nil"]
+          end
+
+        nil_type | self
       end
 
       # Turn a type into a constrained type

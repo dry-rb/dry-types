@@ -15,7 +15,7 @@ module Dry
       # @return [Type]
       attr_reader :type
 
-      undef :constrained?, :meta, :optional?, :primitive, :default?, :name
+      undef :constrained?, :meta, :optional?, :primitive, :default?, :name, :namespace
 
       # @param [Builder, Object] input
       # @param [Hash] options
@@ -55,7 +55,7 @@ module Dry
       # Instantiate a new constructor type instance
       #
       # @param [Type] type
-      # @param [Function] fn
+      # @option [Function] fn
       # @param [Hash] options
       #
       # @api private
@@ -154,17 +154,6 @@ module Dry
       #
       # @api public
       def to_proc = proc { self.(_1) }
-
-      # Check if this is a params type constructor
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      def params_type?
-        return false unless fn.is_a?(Constructor::Function::MethodCall)
-
-        fn.target == Dry::Types::Coercions::Params
-      end
 
       private
 
