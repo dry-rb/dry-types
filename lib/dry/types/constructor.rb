@@ -15,7 +15,7 @@ module Dry
       # @return [Type]
       attr_reader :type
 
-      undef :constrained?, :meta, :optional?, :primitive, :default?, :name, :namespace
+      undef :constrained?, :meta, :optional?, :primitive, :primitive?, :default?, :name, :namespace
 
       # @param [Builder, Object] input
       # @param [Hash] options
@@ -164,14 +164,6 @@ module Dry
       # @api private
       def respond_to_missing?(meth, include_private = false)
         super || type.respond_to?(meth)
-      end
-
-      # Delegate primitive? to the underlying type
-      #
-      # @param [Object] value
-      # @return [Boolean]
-      def primitive?(value)
-        type.primitive?(value)
       end
 
       # Delegates missing methods to {#type}
