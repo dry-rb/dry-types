@@ -9,7 +9,6 @@ gemspec:
   email: ["info@hanakai.org"]
   summary: "Type system for Ruby supporting coercions, constraints and complex types like structs, value objects, enums etc"
   homepage: "https://dry-rb.org/gems/dry-types"
-  required_ruby_version: ">= 3.1.0"
   development_dependencies:
     - bundler
     - rake
