@@ -2,7 +2,6 @@
 
 require "bigdecimal"
 require "date"
-require "set"
 require "zeitwerk"
 
 require "concurrent/map"
