@@ -86,8 +86,15 @@ module Dry
       def default(input = Undefined, options = EMPTY_HASH, &block)
         unless input.frozen? || options[:shared]
           where = Core::Deprecations::STACK.()
+
+          # There is a weird behaviour in JRuby where the source_location is mutated upon
+          # calling `inspect` on proc (see: https://github.com/jruby/jruby/issues/9110)
+          # To bypass this, we call inspect on the clone (but only for proc and JRuby).
+          # This should be fixes in JRuby 10.0.3.0.
+          obj = input.is_a?(Proc) && RUBY_ENGINE == "jruby" ? input.dup : input
+
           Core::Deprecations.warn(
-            "#{input.inspect} is mutable. " \
+            "#{obj.inspect} is mutable. " \
             "Be careful: types will return the same instance of the default " \
             "value every time. Call `.freeze` when setting the default " \
             "or pass `shared: true` to discard this warning." \
