@@ -13,7 +13,7 @@ on:
 
 jobs:
   tests:
-    name: Tests (${{ matrix.ruby }})
+    name: Tests (Ruby ${{ matrix.ruby }})
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
@@ -36,7 +36,7 @@ jobs:
             optional: true
     env:
       COVERAGE: ${{matrix.coverage}}
-    steps:
+      steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install package dependencies
@@ -46,7 +46,7 @@ jobs:
         with:
           ruby-version: ${{matrix.ruby}}
           bundler-cache: true
-      - name: Run all tests
+        - name: Run all tests
         id: test
         run: |
           status=0
@@ -58,7 +58,7 @@ jobs:
             exit 0  # Ignore error here to keep the green checkmark
           fi
           exit ${status}
-      - name: Add comment for optional failures
+        - name: Add comment for optional failures
         uses: thollander/actions-comment-pull-request@v3
         if: ${{ matrix.optional && github.event.pull_request }}
         with:
@@ -95,4 +95,4 @@ jobs:
         run: |
           tag=$(echo $GITHUB_REF | cut -d / -f 3)
           ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"sha\":\"${{github.sha}}\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\",\"repo_name\":\"${{github.event.repository.name}}\"}"
-
+  
