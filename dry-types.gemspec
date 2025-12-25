@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 3.2"
 
-  spec.add_runtime_dependency "bigdecimal", ">= 3.0"
+  spec.add_runtime_dependency "bigdecimal", "~> 3.0"
   spec.add_runtime_dependency "concurrent-ruby", "~> 1.0"
   spec.add_runtime_dependency "dry-core", "~> 1.0"
   spec.add_runtime_dependency "dry-inflector", "~> 1.0"
