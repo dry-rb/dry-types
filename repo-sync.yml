@@ -15,7 +15,7 @@ gemspec:
     - rspec
     - yard
   runtime_dependencies:
-    - [bigdecimal, "~> 3.0"]
+    - [bigdecimal, ">= 3.0"]
     - [concurrent-ruby, "~> 1.0"]
     - [dry-core, "~> 1.0"]
     - [dry-inflector, "~> 1.0"]
