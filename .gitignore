@@ -13,3 +13,4 @@ log/
 !/bin/.gitkeep
 !/bin/console
 !/bin/setup
+/.rubocop-*

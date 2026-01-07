@@ -179,7 +179,7 @@ module Dry
           elsif path
             yield "#{path.sub("#{Dir.pwd}/", EMPTY_STRING)}:#{line}"
           else
-            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/) # rubocop:disable Lint/MixedRegexpCaptureTypes
+            match = fn.to_s.match(/\A#<Proc:0x\h+\(&:(?<name>\w+)\)(:? \(lambda\))?>\z/)
 
             if match
               yield ".#{match[:name]}"
