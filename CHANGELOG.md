@@ -25,7 +25,7 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ### Added
 
-- `params.*` with `.optional` now handles empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error. (@baweaver in #487, @flash-gordon in #490)
+- `params.*` with `.optional` can now handle empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error. (@baweaver in #487, @flash-gordon in #490)
 
   This behavior is not enabled by default because it's a breaking change. Set `Dry::Types.use_namespaced_optionals(true)` to enable it.
 
