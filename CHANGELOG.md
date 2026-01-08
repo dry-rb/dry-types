@@ -9,19 +9,7 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ### Added
 
-- Improve sum type error handling documentation (addresses #439) (@baweaver)
-
 ### Changed
-
-- `params.*`.optional now can handle empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error. (fixes #419) (@baweaver + @flash-gordon)
-
-  This behavior is not enabled by default because it's a breaking change, to enable it, you can set `Dry::Types.use_namespaced_optionals(true)`.
-  ```ruby
-  Dry::Types['params.integer'].optional.('') # => CoercionError
-  # Activate namespaced optionals
-  Dry::Types.use_namespaced_optionals true
-  Dry::Types['params.integer'].optional.('') # => nil
-  ```
 
 ### Deprecated
 
@@ -29,12 +17,54 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ### Fixed
 
-- Fix `Constructor#primitive?` delegation for sum types (fixes #483) (@baweaver)
-- Fix Sum type `to_s` with Dry::Struct types (fixes #482) (@baweaver)
-
 ### Security
 
-[Unreleased]: https://github.com/dry-rb/dry-types/compare/v1.8.3...main
+[Unreleased]: https://github.com/dry-rb/dry-types/compare/v1.9.0...main
+
+## [1.9.0] - 2026-01-09
+
+### Added
+
+- `params.*` with `.optional` now handles empty strings consistently with `optional.params.*` by returning `nil` instead of raising an error. (@baweaver in #487, @flash-gordon in #490)
+
+  This behavior is not enabled by default because it's a breaking change. Set `Dry::Types.use_namespaced_optionals(true)` to enable it.
+
+  ```ruby
+  Dry::Types["params.integer"].optional.("") # => CoercionError
+  # Activate namespaced optionals
+  Dry::Types.use_namespaced_optionals true
+  Dry::Types["params.integer"].optional.("") # => nil
+  ```
+
+### Changed
+
+- Require Ruby 3.2 or later.
+- Support bigdecimal version 4.0 as well as 3.0, improving compatibility with other gems that require 4.0 only. (@rus-max in #492)
+- Improve sum type error handling documentation. (@baweaver in #486)
+
+### Fixed
+
+- Fix `Constructor#primitive?` delegation for sum types. (@baweaver in #484)
+
+  This now works without error:
+  ```ruby
+  a = Types::String.constrained(size: 2) | Types::Hash
+  b = Types::String.constrained(size: 1) | Types::Hash
+  
+  c = (a.constructor { |x| x.is_a?(Hash) ? x : x.downcase }) |
+      (b.constructor { |x| x.is_a?(Hash) ? x : x.upcase })
+  ```
+- Fix Sum type `to_s` with Dry::Struct types. (@baweaver in #485)
+
+  This now works without error:
+  ```ruby
+  class A < Dry::Struct; end
+  class B < Dry::Struct; end
+  
+  (A | B).to_s
+  ```
+
+[1.9.0]: https://github.com/dry-rb/dry-types/compare/v1.8.3...v1.9.0
 
 ## [1.8.3] - 2025-06-09
 
