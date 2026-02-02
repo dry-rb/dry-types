@@ -110,4 +110,21 @@ RSpec.describe Dry::Types::Nominal, "#lax" do
       expect(type.lax).to be(type)
     end
   end
+
+  context "with lax sum type containing array" do
+    # Regression spec for JRuby bug where yield + &block + each_with_object
+    # causes incorrect block argument passing (returns first element instead of array)
+    # see: https://github.com/jruby/jruby/issues/9208
+    it "returns partial coercion result when array member coercion fails" do
+      int_type = Dry::Types["params.integer"]
+      array_type = Dry::Types["params.array"].of(Dry::Types["params.integer"])
+      sum_type = int_type | array_type
+      lax_type = sum_type.lax
+
+      input = ["1", nil, "3"]
+      result = lax_type.call(input)
+
+      expect(result).to eq([1, nil, 3])
+    end
+  end
 end
