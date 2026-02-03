@@ -70,14 +70,14 @@ module Dry
       #
       # @api private
       def call_safe(input, &block)
-        coerced = fn.call(input) { |output = input| return block.call(output) }
+        coerced = fn.(input) { |output = input| return block.call(output) }
         type.call_safe(coerced) { |output = coerced| block.call(output) }
       end
 
       # @return [Object]
       #
       # @api private
-      def call_unsafe(input) = type.call_unsafe(fn.call(input))
+      def call_unsafe(input) = type.call_unsafe(fn.(input))
 
       # @param [Object] input
       # @param [#call,nil] block
@@ -87,7 +87,7 @@ module Dry
       #
       # @api public
       def try(input, &)
-        value = fn.call(input)
+        value = fn.(input)
       rescue CoercionError => exception
         failure = failure(input, exception)
         block_given? ? yield(failure) : failure
@@ -153,7 +153,7 @@ module Dry
       # @return [Proc]
       #
       # @api public
-      def to_proc = proc { call(it) }
+      def to_proc = proc { self.(_1) }
 
       private
 
