@@ -42,7 +42,7 @@ module Dry
         # @return [Array]
         #
         # @api private
-        def call_safe(input)
+        def call_safe(input, &block)
           if primitive?(input)
             failed = false
 
@@ -55,9 +55,9 @@ module Dry
               output << coerced unless Undefined.equal?(coerced)
             end
 
-            failed ? yield(result) : result
+            failed ? block.call(result) : result
           else
-            yield
+            block.call
           end
         end
 

@@ -16,6 +16,7 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 ### Removed
 
 ### Fixed
+- Add workaround for JRuby bug (https://github.com/jruby/jruby/issues/9208). (@katafrakt in #493)
 
 ### Security
 
