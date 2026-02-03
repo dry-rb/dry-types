@@ -70,6 +70,10 @@ module Dry
       #
       # @api private
       def call_safe(input, &block)
+        # block.call is slower in JRuby than yield, but in JRuby 10.0.2.0 there is a bug
+        # with default block arguments, so block.call is chosen for correctness.
+        # This was introduced in PR https://github.com/dry-rb/dry-types/pull/493, might be reverted
+        # in the bug is fixed in JRuby. 
         coerced = fn.(input) { |output = input| return block.call(output) }
         type.call_safe(coerced) { |output = coerced| block.call(output) }
       end
