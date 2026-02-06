@@ -16,11 +16,18 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 ### Removed
 
 ### Fixed
-- Add workaround for JRuby bug (https://github.com/jruby/jruby/issues/9208). (@katafrakt in #493)
 
 ### Security
 
-[Unreleased]: https://github.com/dry-rb/dry-types/compare/v1.9.0...main
+[Unreleased]: https://github.com/dry-rb/dry-types/compare/v1.9.1...main
+
+## [1.9.1] - 2026-02-06
+
+### Fixed
+
+- Add workaround for a [JRuby bug](https://github.com/jruby/jruby/issues/9208). (@katafrakt in #493)
+
+[1.9.1]: https://github.com/dry-rb/dry-types/compare/v1.9.0...v1.9.1
 
 ## [1.9.0] - 2026-01-09
 
