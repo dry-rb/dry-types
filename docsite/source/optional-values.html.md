@@ -1,5 +1,5 @@
 ---
-title: Type Attributes
+title: Optional Values
 layout: gem-single
 name: dry-types
 ---
