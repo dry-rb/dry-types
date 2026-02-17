@@ -30,7 +30,9 @@ module Dry
           Intersection,
           Intersection::Constrained,
           Implication,
-          Implication::Constrained
+          Implication::Constrained,
+          Transition,
+          Transition::Constrained
         ] => :visit_composition,
         Any.class => :visit_any
       }.flat_map { |k, v| Array(k).map { |kk| [kk, v] } }.to_h
