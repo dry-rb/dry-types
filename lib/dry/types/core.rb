@@ -95,6 +95,9 @@ module Dry
     register("strict.bool", bool)
     register("bool", bool)
 
+    register("boolean", bool)
+    register("strict.boolean", bool)
+
     register("any", Any)
     register("nominal.any", Any)
     register("strict.any", Any)
