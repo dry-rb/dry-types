@@ -99,7 +99,7 @@ module Dry
           if !predicate.empty? && registry.key?(predicate[0])
             predicate
           else
-            [type?: type]
+            [{type?: type}]
           end
         end
 
@@ -178,7 +178,7 @@ module Dry
             if values.empty?
               [pred]
             else
-              [pred => values[0]]
+              [{pred => values[0]}]
             end
           end
         end
