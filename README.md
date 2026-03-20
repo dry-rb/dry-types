@@ -1,9 +1,14 @@
 <!--- This file is synced from hanakai-rb/repo-sync -->
 
-[rubygem]: https://rubygems.org/gems/dry-types
 [actions]: https://github.com/dry-rb/dry-types/actions
+[chat]: https://discord.gg/naQApPAsZB
+[forum]: https://discourse.hanamirb.org
+[rubygem]: https://rubygems.org/gems/dry-types
 
 # dry-types [![Gem Version](https://badge.fury.io/rb/dry-types.svg)][rubygem] [![CI Status](https://github.com/dry-rb/dry-types/workflows/CI/badge.svg)][actions]
+
+[![Forum](https://img.shields.io/badge/Forum-dc360f?logo=discourse&logoColor=white)][forum]
+[![Chat](https://img.shields.io/badge/Chat-717cf8?logo=discord&logoColor=white)][chat]
 
 ## Links
 
