@@ -167,9 +167,9 @@ RSpec.describe Dry::Types::Schema do
     context "members with default values" do
       let(:hash) do
         primitive.schema({
-                           **hash_schema,
-                           age: Dry::Types["strict.integer"].default(21)
-                         })
+          **hash_schema,
+          age: Dry::Types["strict.integer"].default(21)
+        })
       end
 
       it "resolves missing keys with default values" do

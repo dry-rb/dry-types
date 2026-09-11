@@ -100,8 +100,8 @@ module Dry
 
         if unknown
           raise ::ArgumentError,
-                "#{unknown.inspect} is not a known type namespace. " \
-                "Supported options are #{known.map(&:inspect).join(", ")}"
+            "#{unknown.inspect} is not a known type namespace. " \
+            "Supported options are #{known.map(&:inspect).join(", ")}"
         end
       end
 
