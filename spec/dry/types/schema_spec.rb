@@ -146,7 +146,7 @@ RSpec.describe Dry::Types::Schema do
       type.meta(my: :metadata)
     end
 
-    subject(:hash) { primitive.schema(hash_schema) }
+    subject(:schema) { primitive.schema(hash_schema) }
 
     let(:valid_input) { {name: "John", age: 23, active: true, phone: phone_struct.new(1, 23)} }
 
@@ -165,7 +165,7 @@ RSpec.describe Dry::Types::Schema do
     end
 
     context "members with default values" do
-      let(:hash) do
+      let(:schema) do
         primitive.schema({
           **hash_schema,
           age: Dry::Types["strict.integer"].default(21)
@@ -174,25 +174,25 @@ RSpec.describe Dry::Types::Schema do
 
       it "resolves missing keys with default values" do
         params = {name: "Jane", active: true, phone: []}
-        expect(hash[params][:age]).to eql(21)
+        expect(schema[params][:age]).to eql(21)
       end
     end
 
     it "preserves metadata" do
-      expect(hash.meta[:my]).to eql(:metadata)
+      expect(schema.meta[:my]).to eql(:metadata)
     end
 
     it "has a Hash primitive" do
-      expect(hash.primitive).to be(Hash)
+      expect(schema.primitive).to be(Hash)
     end
 
     it "is callable via #[]" do
       params = {name: :Jane, age: 21, active: true, phone: []}
-      expect(hash[params]).to eql(hash.call(params))
+      expect(schema[params]).to eql(schema.call(params))
     end
 
     it "builds hash using provided schema" do
-      user_hash = hash.call(
+      user_hash = schema.call(
         name: :Jane, age: 21, active: true,
         phone: ["+48", "123-456-789"]
       )
@@ -205,7 +205,7 @@ RSpec.describe Dry::Types::Schema do
 
     it "applies member types" do
       input = {name: :John, age: 21, active: "true", phone: %w[1 234]}
-      result = hash.try(input)
+      result = schema.try(input)
 
       expect(result).to be_success
       expect(result.input).to eql(name: "John", age: 21, active: true, phone: phone.new("1", "234"))
@@ -213,7 +213,7 @@ RSpec.describe Dry::Types::Schema do
 
     it "keeps original values when applying a member type fails" do
       input = {age: "twenty one", active: "0", name: "John", phone: %w[1 234]}
-      result = hash.try(input)
+      result = schema.try(input)
 
       expect(result).to be_failure
       expect(result.input).to eql(age: "twenty one", active: false, name: "John", phone: phone.new("1", "234"))
@@ -224,11 +224,11 @@ RSpec.describe Dry::Types::Schema do
 
       # assert that a failed #try yields a failure result
       expect { |rspec_probe|
-        hash.try(input, &rspec_probe)
+        schema.try(input, &rspec_probe)
       }.to yield_with_args(instance_of(Dry::Types::Result::Failure))
 
       # assert that the failure result provides context for the failing input
-      hash.try(input) do |failure|
+      schema.try(input) do |failure|
         expect(failure.error.meta[:age].success?).to be(false)
       end
     end
@@ -236,28 +236,28 @@ RSpec.describe Dry::Types::Schema do
     it "returns failure on #try when a member is missing" do
       input = {active: "0", name: "John", phone: %w[1 234]}
 
-      result = hash.try(input)
+      result = schema.try(input)
 
       expect(result).to be_failure
     end
 
     describe "#valid?" do
       it "returns boolean" do
-        expect(hash.valid?(name: "John", age: 23, active: 1, phone: 1)).to eql(true)
-        expect(hash.valid?(name: "John", age: "23", active: 1, phone: 1)).to eql(false)
+        expect(schema.valid?(name: "John", age: 23, active: 1, phone: 1)).to eql(true)
+        expect(schema.valid?(name: "John", age: "23", active: 1, phone: 1)).to eql(false)
       end
     end
 
     describe "#===" do
       it "returns boolean" do
-        expect(hash.===(name: "John", age: 23, active: 1, phone: 1)).to eql(true)
-        expect(hash.===(name: "John", age: "23", active: 1, phone: 1)).to eql(false)
+        expect(schema.===(name: "John", age: 23, active: 1, phone: 1)).to eql(true)
+        expect(schema.===(name: "John", age: "23", active: 1, phone: 1)).to eql(false)
       end
     end
 
     it "raises MissingKeyError if input is missing a key" do
       expect {
-        hash.call(name: :Jane, active: true, phone: ["+48", "123-456-789"])
+        schema.call(name: :Jane, active: true, phone: ["+48", "123-456-789"])
       }.to raise_error(
         Dry::Types::MissingKeyError, /:age is missing in Hash input/
       )
@@ -265,7 +265,7 @@ RSpec.describe Dry::Types::Schema do
 
     it "fails if any coercions are unsuccessful" do
       expect {
-        hash.call(name: :Jane, age: "oops", active: true, phone: [])
+        schema.call(name: :Jane, age: "oops", active: true, phone: [])
       }.to raise_error(
         an_instance_of(Dry::Types::SchemaError).and(
           having_attributes(
@@ -280,7 +280,7 @@ RSpec.describe Dry::Types::Schema do
 
     it "provides a key for type errors" do
       expect {
-        hash.schema(age: "coercible.integer").call(name: :Jane, age: nil, active: true, phone: [])
+        schema.schema(age: "coercible.integer").call(name: :Jane, age: nil, active: true, phone: [])
       }.to raise_error(
         an_instance_of(Dry::Types::SchemaError).and(
           having_attributes(
@@ -295,7 +295,7 @@ RSpec.describe Dry::Types::Schema do
 
     it "provides a key for argument errors" do
       expect {
-        hash.schema(age: "coercible.integer").call(name: :Jane, age: "oops", active: true, phone: [])
+        schema.schema(age: "coercible.integer").call(name: :Jane, age: "oops", active: true, phone: [])
       }.to raise_error(
         an_instance_of(Dry::Types::SchemaError).and(
           having_attributes(
@@ -321,11 +321,11 @@ RSpec.describe Dry::Types::Schema do
         end
       end
       stub_const("Bool", bool)
-      expect(hash.schema(bool: bool).key(:bool).type).to be(bool)
+      expect(schema.schema(bool: bool).key(:bool).type).to be(bool)
     end
 
     describe "#strict" do
-      subject { hash.strict }
+      subject { schema.strict }
 
       it "makes the schema strict" do
         expected_input = {name: :Jane, age: 21, active: true, phone: %w[1 2]}
@@ -403,7 +403,7 @@ RSpec.describe Dry::Types::Schema do
       it "accepts only symbol keys" do
         ["string_key", 42, Object.new, {}, []].each do |invalid_key|
           expect {
-            hash.schema(valid: "symbol", invalid_key => "integer")
+            schema.schema(valid: "symbol", invalid_key => "integer")
           }.to raise_error(
             ArgumentError, /Schemas can only contain symbol keys/
           )
