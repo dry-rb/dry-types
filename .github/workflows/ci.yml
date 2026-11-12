@@ -18,7 +18,7 @@ permissions:
 jobs:
   tests:
     name: Tests (Ruby ${{ matrix.ruby }})
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner || 'ubuntu-latest' }}
     continue-on-error: ${{ matrix.optional || false }}
     strategy:
       fail-fast: false
@@ -30,6 +30,8 @@ jobs:
           - "3.3.0"
           - "jruby"
         include:
+          - ruby: "3.3.0"
+            runner: "ubuntu-24.04"
           - ruby: "4.0"
             coverage: "true"
     env:
