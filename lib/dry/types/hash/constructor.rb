@@ -18,7 +18,7 @@ module Dry
         # @see Dry::Types::Array#of
         #
         # @api public
-        def schema(...) = type.schema(...).constructor(fn, meta: meta)
+        def schema(*, **, &) = type.schema(*, **, &).constructor(fn, meta: meta)
       end
     end
   end

@@ -173,9 +173,9 @@ module Dry
       # @param [#call, nil] block
       #
       # @api private
-      def method_missing(method, ...)
+      def method_missing(method, *, **, &)
         if type.respond_to?(method)
-          response = type.public_send(method, ...)
+          response = type.public_send(method, *, **, &)
 
           if response.is_a?(Type) && response.instance_of?(type.class)
             response.constructor_type[response, **options]

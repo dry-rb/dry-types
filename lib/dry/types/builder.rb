@@ -68,8 +68,8 @@ module Dry
       # @return [Constrained]
       #
       # @api public
-      def constrained(...)
-        constrained_type.new(self, rule: Types.Rule(...))
+      def constrained(*, **, &)
+        constrained_type.new(self, rule: Types.Rule(*, **, &))
       end
 
       # Turn a type into a type with a default value
